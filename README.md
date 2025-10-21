@@ -4,6 +4,7 @@
 
 - [ ] Un joc inspirat din titluri precum SoulKnight, The Binding of Isaac (posibil arena League of Legends). 
 - [ ] Shooter cu view top-down, mouse-aimed, organizat pe 3 nivele, fiecare avand camere generate random si accesibile doar pe rand (accesul liber printr-o camera se deblocheaza dupa eliminarea inamicilor).
+- [ ] Trecerea de la un nivel la altul se face printr-o camera cu un Boss.
 - [ ] Focusul principal va fi pe evitarea gloantelor inamicilor, HP-ul fiind singura resursa limitata si greu recuperabila.
 
 ## Tema 0
