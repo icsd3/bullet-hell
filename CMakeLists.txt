@@ -61,6 +61,7 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     headers/GameLogic.h
     source/GameLogic.cpp
     headers/GameStates.h
+    source/GameStates.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
@@ -97,3 +98,4 @@ copy_files(FILES tastatura.txt)
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 # copy_files(DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
 copy_files(DIRECTORY textures)
+copy_files(DIRECTORY fonts)
