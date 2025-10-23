@@ -81,6 +81,16 @@ void Game::loadLevel()
     
 }
 
+void Game::loadDefeat()
+{
+
+}
+
+void Game::loadVictory()
+{
+
+}
+
 void Game::handleMainMenuInput(const sf::Event& event)
 {
     if(event.is<sf::Event::MouseButtonPressed>())
@@ -120,8 +130,33 @@ void Game::handleNewState(gameStates newState)
             loadAugment();
             std::cout << "augment_1\n";
             break;
+        case augment_2:
+            loadAugment();
+            std::cout << "augment_2\n";
+            break;
+        case augment_3:
+            loadAugment();
+            std::cout << "augment_3\n";
+            break;
         case level_1:
+            loadLevel();
             std::cout << "level_1\n";
+            break;
+        case level_2:
+            loadLevel();
+            std::cout << "level_2\n";
+            break;
+        case level_3:
+            loadLevel();
+            std::cout << "level_3\n";
+            break;
+        case defeat:
+            loadDefeat();
+            std::cout << "defeat\n";
+            break;
+        case victory:
+            loadVictory();
+            std::cout << "victory\n";
             break;
         default:
             break;
@@ -142,7 +177,6 @@ bool Game::handleInputs()
             else if (event->is<sf::Event::KeyPressed>()) 
             {
                 const auto* keyPressed = event->getIf<sf::Event::KeyPressed>();
-                std::cout << "Received key " << (keyPressed->scancode == sf::Keyboard::Scancode::X ? "X" : "(other)") << "\n";
                 if(keyPressed->scancode == sf::Keyboard::Scancode::Escape) 
                 {
                     shouldExit = true;
@@ -185,9 +219,14 @@ void Game::drawLevel()
     m_window.clear(sf::Color::Green);
 }
 
+void Game::drawDefeat()
+{
+
+}
+
 void Game::drawVictory()
 {
-    m_window.clear(sf::Color::Red);
+    
 }
 
 void Game::draw()
@@ -197,7 +236,6 @@ void Game::draw()
         switch (m_currentState)
         {
             case menu:
-            case game_over:
                 drawMenu();
                 break;
 
@@ -211,6 +249,10 @@ void Game::draw()
             case level_2:
             case level_3:
                 drawLevel();
+                break;
+            
+            case defeat:
+                drawDefeat();
                 break;
 
             case victory:

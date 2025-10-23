@@ -9,7 +9,7 @@ enum gameStates
     level_2 = 5,
     augment_3 = 6,
     level_3 = 7,
-    game_over = 8,
+    defeat = 8,
     victory = 9
 };
 

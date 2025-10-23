@@ -40,7 +40,7 @@ void Progress::selectGameState(int& gameState)
             std::cout << "Transition: level_3 → victory\n";
             break;
 
-        case game_over:
+        case defeat:
         case victory:
         default:
             gameState = menu;

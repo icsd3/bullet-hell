@@ -34,6 +34,8 @@ class Game
     void loadMainMenu();
     void loadAugment();
     void loadLevel();
+    void loadDefeat();
+    void loadVictory();
 
     bool handleInputs();
     void handleMainMenuInput(const sf::Event& event);
@@ -42,6 +44,7 @@ class Game
     void drawMenu();
     void drawAugment();
     void drawLevel();
+    void drawDefeat();
     void drawVictory();
     
     void handleNewState(gameStates newState);
