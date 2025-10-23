@@ -13,21 +13,19 @@ class Game
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 
-    sf::RenderWindow m_window;
+    sf::RenderWindow window;
 
-    sf::Texture m_menuBackgroundTexture;
-    std::optional<sf::Sprite> m_menuBackgroundSprite;
+    sf::Texture menuBackgroundTexture;
+    std::optional<sf::Sprite> menuBackgroundSprite;
+    sf::Texture menuButtonTexture[2];
+    std::optional<sf::Sprite> menuButtonSprite[2];
 
-    sf::Texture m_startButtonTexture;
-    std::optional<sf::Sprite> m_startButtonSprite;
+    sf::Texture augmentBackgroundTexture;
+    std::optional<sf::Sprite> augmentBackgroundSprite;
+    sf::Texture augmentButtonTexture[3];
+    std::optional<sf::Sprite> augmentButtonSprite[3];
 
-    sf::Texture m_augmentBackgroundTexture;
-    std::optional<sf::Sprite> m_augmentBackgroundSprite;
-
-    sf::Texture m_augmentButtonTexture[3];
-    std::optional<sf::Sprite> m_augmentButtonSprite[3];
-
-    gameStates m_currentState;
+    gameStates currentState;
 
     void setup();
 
@@ -38,7 +36,7 @@ class Game
     void loadVictory();
 
     bool handleInputs();
-    void handleMainMenuInput(const sf::Event& event);
+    bool handleMainMenuInput(const sf::Event& event);
 
     void draw();
     void drawMenu();

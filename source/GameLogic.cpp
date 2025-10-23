@@ -2,7 +2,7 @@
 #include <iostream>
 
 Game::Game()
-    :m_window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
+    :window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
 {
     setup();
 }
@@ -16,60 +16,73 @@ Game& Game::getInstance()
 void Game::setup()
 {
     handleNewState(menu);
-    m_window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(true);
 }
 
 void Game::loadMainMenu()
 {
-    if (!m_menuBackgroundTexture.loadFromFile("textures/menu_background.png"))
+    if (!menuBackgroundTexture.loadFromFile("textures/menu_background.png"))
     {
         std::cerr << "Error loading menu_background.png\n";
     }
-    m_menuBackgroundSprite.emplace(m_menuBackgroundTexture);
+    menuBackgroundSprite.emplace(menuBackgroundTexture);
 
-    if(m_menuBackgroundSprite)
+    if(menuBackgroundSprite)
     {
-        const sf::Vector2u windowSize = m_window.getSize();
-        const sf::Vector2u textureSize = m_menuBackgroundTexture.getSize();
-        m_menuBackgroundSprite->setScale(sf::Vector2f(
+        const sf::Vector2u windowSize = window.getSize();
+        const sf::Vector2u textureSize = menuBackgroundTexture.getSize();
+        menuBackgroundSprite->setScale(sf::Vector2f(
             static_cast<float>(windowSize.x) / static_cast<float>(textureSize.x),
             static_cast<float>(windowSize.y) / static_cast<float>(textureSize.y)
         ));
     }
-
-    if (!m_startButtonTexture.loadFromFile("textures/start_button.png"))
+    for(int i = 0; i<2; i++)
     {
-        std::cerr << "Error loading start_button.png\n";
-    }
-    m_startButtonSprite.emplace(m_startButtonTexture);
+        if(i==0)
+        {
+            if (!menuButtonTexture[i].loadFromFile("textures/start_button.png"))
+            {
+                std::cerr << "Error loading start_button.png\n";
+            }
+        }
+        else
+        {
+            if (!menuButtonTexture[i].loadFromFile("textures/exit_button.png"))
+            {
+                std::cerr << "Error loading exit_button.png\n";
+            }
+        }
+        menuButtonSprite[i].emplace(menuButtonTexture[i]);
 
-    if(m_startButtonSprite)
-    {
-        const sf::Vector2u windowSize = m_window.getSize();
-        const sf::Vector2u startButtonSize = m_startButtonTexture.getSize();
-        const float scaleX = static_cast<float>(windowSize.x) / static_cast<float>(startButtonSize.x) /4.f;
-        const float scaleY = static_cast<float>(windowSize.y) / static_cast<float>(startButtonSize.y) /2.25f;
-        m_startButtonSprite->setScale(sf::Vector2f(scaleX, scaleY));
-        m_startButtonSprite->setPosition(sf::Vector2f(
-            (windowSize.x - startButtonSize.x * scaleX) / 2.f,
-            (windowSize.y - startButtonSize.y * scaleY) / 2.f
-        ));
+        if(menuButtonSprite[i])
+        {
+            const sf::Vector2u windowSize = window.getSize();
+            const sf::Vector2u startButtonSize = menuButtonTexture[i].getSize();
+            const float scaleX = static_cast<float>(windowSize.x) / static_cast<float>(startButtonSize.x) /4.f;
+            const float scaleY = static_cast<float>(windowSize.y) / static_cast<float>(startButtonSize.y) /4.5f;
+            menuButtonSprite[i]->setScale(sf::Vector2f(scaleX, scaleY));
+            menuButtonSprite[i]->setPosition(sf::Vector2f(
+                (windowSize.x - startButtonSize.x * scaleX) / 2.f,
+                (windowSize.y - startButtonSize.y * scaleY) / 4.f * (2*i+1)
+            ));
+        }
     }
+    
 }
 
 void Game::loadAugment()
 {
-    if (!m_augmentBackgroundTexture.loadFromFile("textures/augment_background.png"))
+    if (!augmentBackgroundTexture.loadFromFile("textures/augment_background.png"))
     {
         std::cerr << "Error loading augment_background.png\n";
     }
-    m_augmentBackgroundSprite.emplace(m_augmentBackgroundTexture);
+    augmentBackgroundSprite.emplace(augmentBackgroundTexture);
 
-    if(m_augmentBackgroundSprite)
+    if(augmentBackgroundSprite)
     {
-        const sf::Vector2u windowSize = m_window.getSize();
-        const sf::Vector2u textureSize = m_augmentBackgroundTexture.getSize();
-        m_augmentBackgroundSprite->setScale(sf::Vector2f(
+        const sf::Vector2u windowSize = window.getSize();
+        const sf::Vector2u textureSize = augmentBackgroundTexture.getSize();
+        augmentBackgroundSprite->setScale(sf::Vector2f(
             static_cast<float>(windowSize.x) / static_cast<float>(textureSize.x),
             static_cast<float>(windowSize.y) / static_cast<float>(textureSize.y)
         ));
@@ -91,36 +104,43 @@ void Game::loadVictory()
 
 }
 
-void Game::handleMainMenuInput(const sf::Event& event)
+bool Game::handleMainMenuInput(const sf::Event& event)
 {
     if(event.is<sf::Event::MouseButtonPressed>())
     {
-        if (!m_startButtonSprite) 
-            return;
+        if (!menuButtonSprite[0] || !menuButtonSprite[1]) 
+            return false;
 
-        auto mousePos = sf::Mouse::getPosition(m_window);
-        const auto bounds = m_startButtonSprite->getGlobalBounds();
+        auto mousePos = sf::Mouse::getPosition(window);
+        const auto startButtonBounds = menuButtonSprite[0]->getGlobalBounds();
+        const auto exitButtonBounds = menuButtonSprite[1]->getGlobalBounds();
 
-        if (bounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
+        if (startButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
         {
             std::cout << "Start button clicked!\n";
-            Progress::selectGameState(reinterpret_cast<int&>(m_currentState));
-            handleNewState(m_currentState);
+            Progress::selectGameState(reinterpret_cast<int&>(currentState));
+            handleNewState(currentState);
+        }
+        else if(exitButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))))
+        {
+            std::cout << "Exit button clicked!\n";
+            return true;
         }
     }
     else
     {
         std::cout << "Enter key pressed!\n";
-        Progress::selectGameState(reinterpret_cast<int&>(m_currentState));
-        handleNewState(m_currentState);
+        Progress::selectGameState(reinterpret_cast<int&>(currentState));
+        handleNewState(currentState);
     }
+    return false;
 }
 
 void Game::handleNewState(gameStates newState)
 {
-    m_currentState = newState;
+    currentState = newState;
 
-    switch (m_currentState)
+    switch (currentState)
     {
         case menu:
             loadMainMenu();
@@ -167,23 +187,19 @@ bool Game::handleInputs()
 {
     bool shouldExit = false;
 
-        while(const std::optional event = m_window.pollEvent()) 
+        while(const std::optional event = window.pollEvent()) 
         {
             if (event->is<sf::Event::Closed>()) 
             {
-                m_window.close();
-                std::cout << "Fereastra a fost închisă\n";
+                window.close();
+                std::cout << "Fereastra a fost închisă fortat\n";
             }
             else if (event->is<sf::Event::KeyPressed>()) 
             {
                 const auto* keyPressed = event->getIf<sf::Event::KeyPressed>();
-                if(keyPressed->scancode == sf::Keyboard::Scancode::Escape) 
+                if(keyPressed->scancode == sf::Keyboard::Scancode::Enter) 
                 {
-                    shouldExit = true;
-                }
-                else if(keyPressed->scancode == sf::Keyboard::Scancode::Enter) 
-                {
-                    if (m_currentState == menu)
+                    if (currentState == menu)
                         handleMainMenuInput(*event);
                 }
             }
@@ -192,8 +208,8 @@ bool Game::handleInputs()
                 const auto* mouseEvent = event->getIf<sf::Event::MouseButtonPressed>();
                 if (mouseEvent->button == sf::Mouse::Button::Left)
                 {
-                    if (m_currentState == menu)
-                        handleMainMenuInput(*event);
+                    if (currentState == menu)
+                        shouldExit = handleMainMenuInput(*event);
                 }
             }
         }
@@ -202,21 +218,23 @@ bool Game::handleInputs()
 
 void Game::drawMenu()
 {
-    if(m_menuBackgroundSprite) 
-        m_window.draw(*m_menuBackgroundSprite);
-    if(m_startButtonSprite)
-        m_window.draw(*m_startButtonSprite);
+    if(menuBackgroundSprite) 
+        window.draw(*menuBackgroundSprite);
+    if(menuButtonSprite[0])
+        window.draw(*menuButtonSprite[0]);
+    if(menuButtonSprite[1])
+        window.draw(*menuButtonSprite[1]);
 }
 
 void Game::drawAugment()
 {
-    if(m_augmentBackgroundSprite) 
-        m_window.draw(*m_augmentBackgroundSprite);
+    if(augmentBackgroundSprite) 
+        window.draw(*augmentBackgroundSprite);
 }
 
 void Game::drawLevel()
 {
-    m_window.clear(sf::Color::Green);
+    window.clear(sf::Color::Green);
 }
 
 void Game::drawDefeat()
@@ -231,9 +249,9 @@ void Game::drawVictory()
 
 void Game::draw()
 {
-    m_window.clear();
+    window.clear();
         
-        switch (m_currentState)
+        switch (currentState)
         {
             case menu:
                 drawMenu();
@@ -263,17 +281,17 @@ void Game::draw()
                 break;
         }
 
-    m_window.display();
+    window.display();
 }
 
 void Game::Play()
 {
-    while(m_window.isOpen()) {
+    while(window.isOpen()) {
         bool shouldExit = handleInputs();
 
         if(shouldExit) 
         {
-            m_window.close();
+            window.close();
             std::cout << "Fereastra a fost închisă (shouldExit == true)\n";
             break;
         }
