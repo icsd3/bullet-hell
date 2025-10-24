@@ -1,7 +1,7 @@
 #include "../headers/GameStates.h"
 #include <iostream>
 
-void Progress::selectGameState(int& gameState)
+void Progress::selectGameState(gameStates& gameState)
 {
     switch (gameState)
     {

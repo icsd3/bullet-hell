@@ -62,6 +62,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/GameLogic.cpp
     headers/GameStates.h
     source/GameStates.cpp
+    headers/AssetLoader.h
+    source/AssetLoader.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
