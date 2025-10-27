@@ -33,7 +33,7 @@ class Player : public Entity
     int current_health;
 
     void loadPlayer(sf::RenderWindow&);
-    void updatePlayer();
+    // void updatePlayer();
 public:
     static Player& getInstance();
     ~Player() = default;

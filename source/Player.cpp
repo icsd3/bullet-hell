@@ -21,15 +21,13 @@ std::ostream& operator<<(std::ostream& os, const Player& player)
     return os;
 }
 
-void Player::updatePlayer()
-{
+// void Player::updatePlayer()
+// {
     
-}
+// }
 
 void Player::loadPlayer(sf::RenderWindow& window)
 {
-    sf::Vector2u windowSize = window.getSize();
-    sf::Vector2u textureSize = texture.getSize();
     sf::FloatRect bounds = sprite->getLocalBounds();
     sprite->setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite->setPosition(position);
