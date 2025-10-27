@@ -21,7 +21,7 @@ std::ostream& operator<<(std::ostream& os, const Player& player)
     return os;
 }
 
-void Player::updatePlayer(sf::Clock& clock, sf::Vector2f& target)
+void Player::updatePlayer(sf::Clock& clock, const sf::Vector2f& target)
 {
     float dt = clock.restart().asSeconds();
     sf::Vector2f dir = target - position;
