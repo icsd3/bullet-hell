@@ -21,10 +21,22 @@ std::ostream& operator<<(std::ostream& os, const Player& player)
     return os;
 }
 
-// void Player::updatePlayer()
-// {
-    
-// }
+void Player::updatePlayer(Player& player, sf::Clock& clock, sf::Vector2f& target)
+{
+    float dt = clock.restart().asSeconds();
+    sf::Vector2f dir = target - player.position;
+    float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+
+    if (distance > 50.0f) 
+    {
+        dir /= distance;
+        player.sprite->move(sf::Vector2f(dir * player.speed * dt));
+        player.position = player.sprite->getPosition();
+    }
+
+    sf::Angle angle = sf::degrees(std::atan2(dir.y, dir.x) * 180.f / 3.14159265f + 180.f);
+    player.sprite->setRotation(angle);
+}
 
 void Player::loadPlayer()
 {

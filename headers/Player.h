@@ -3,6 +3,8 @@
 #include "../headers/Entities.h"
 #include "../headers/AssetLoader.h"
 
+#include <cmath>
+
 class Weapon
 {
     const std::string name;
@@ -33,7 +35,7 @@ class Player : public Entity
     int current_health;
 
     void loadPlayer();
-    // void updatePlayer();
+    void updatePlayer(Player&, sf::Clock&, sf::Vector2f&);
 public:
     static Player& getInstance();
     ~Player() = default;

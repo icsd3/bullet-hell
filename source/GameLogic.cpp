@@ -183,19 +183,6 @@ void Game::handleLevelInput(const sf::Event& event)
         if(mouseEvent->button == sf::Mouse::Button::Right)
         {
             target = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-            float dt = clock.restart().asSeconds();
-            sf::Vector2f dir = target - player.position;
-            float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
-
-            if (distance > 50.0f) 
-            {
-            dir /= distance;
-            player.sprite->move(sf::Vector2f(dir * player.speed * dt));
-            player.position = player.sprite->getPosition();
-            }
-
-            sf::Angle angle = sf::degrees(std::atan2(dir.y, dir.x) * 180.f / 3.14159265f + 180.f);
-            player.sprite->setRotation(angle);
         }
     }
 }
@@ -286,9 +273,8 @@ void Game::Play()
             std::cout << "Fereastra a fost inchisa (shouldExit == true)\n";
             break;
         }
-
+        player.updatePlayer(player, clock, target);
         draw();
-        std::cout << "Frame drawn\n";
     }
 }
 

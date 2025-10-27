@@ -8,7 +8,6 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Audio/Music.hpp>
 #include <optional>
-#include <cmath>
 
 class Game
 {
@@ -40,6 +39,8 @@ class Game
     void drawVictory();
     
     void handleNewState();
+
+    friend void Player::updatePlayer(Player&, sf::Clock&, sf::Vector2f&);
 
 public:
     void Play();
