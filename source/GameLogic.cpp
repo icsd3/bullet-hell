@@ -43,7 +43,7 @@ void Game::handleNewState()
             break;
         case level_1:
             Loader.loadLevel(window);
-            player.loadPlayer(window);
+            player.loadPlayer();
             std::cout << "level_1\n";
             break;
         case level_2:
