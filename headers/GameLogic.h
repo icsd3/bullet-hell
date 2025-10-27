@@ -40,7 +40,7 @@ class Game
     
     void handleNewState();
 
-    friend void Player::updatePlayer(Player&, sf::Clock&, sf::Vector2f&);
+    friend void Player::updatePlayer(sf::Clock&, sf::Vector2f&);
 
 public:
     void Play();

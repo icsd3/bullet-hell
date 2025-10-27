@@ -1,7 +1,7 @@
 #include "../headers/Player.h"
 
 Player::Player()
-    :Entity(sf::Vector2f(400.f, 300.f), sf::degrees(0), "textures/player.png", 100.f), max_health(100), current_health(100)
+    :Entity(sf::Vector2f(1000.f, 1000.f), false, "textures/player.png", 175.f), max_health(100), current_health(100)
 {
     weapons.emplace_back("Basic Gun", 10, 1, 0.5f, 0.f, 500.f);
 }
@@ -21,21 +21,30 @@ std::ostream& operator<<(std::ostream& os, const Player& player)
     return os;
 }
 
-void Player::updatePlayer(Player& player, sf::Clock& clock, sf::Vector2f& target)
+void Player::updatePlayer(sf::Clock& clock, sf::Vector2f& target)
 {
     float dt = clock.restart().asSeconds();
-    sf::Vector2f dir = target - player.position;
+    sf::Vector2f dir = target - position;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
-    if (distance > 50.0f) 
+    if (distance > 1.0f) 
     {
         dir /= distance;
-        player.sprite->move(sf::Vector2f(dir * player.speed * dt));
-        player.position = player.sprite->getPosition();
-    }
+        sprite->move(sf::Vector2f(dir * speed * dt));
+        position = sprite->getPosition();
+        if (dir.x > 0.f)
+        {
+            orientation = true;
+            sprite->setScale(sf::Vector2f(-std::abs(sprite->getScale().x), sprite->getScale().y));
+        }
+        else
+        {
+            orientation = false;
+            sprite->setScale(sf::Vector2f(std::abs(sprite->getScale().x), sprite->getScale().y));
+        }
 
-    sf::Angle angle = sf::degrees(std::atan2(dir.y, dir.x) * 180.f / 3.14159265f + 180.f);
-    player.sprite->setRotation(angle);
+        std::cout << "Player updated to position: " << position.x << ", " << position.y << " orientation: " << orientation << "\n";
+    }
 }
 
 void Player::loadPlayer()
@@ -43,8 +52,15 @@ void Player::loadPlayer()
     sf::FloatRect bounds = sprite->getLocalBounds();
     sprite->setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite->setPosition(position);
-    sprite->setRotation(angle);
     sprite->setScale(sf::Vector2f(0.1f, 0.1f));
+    if(orientation)
+    {
+        sprite->setScale(sf::Vector2f(-std::abs(sprite->getScale().x), sprite->getScale().y));
+    }
+    else
+    {
+        sprite->setScale(sf::Vector2f(std::abs(sprite->getScale().x), sprite->getScale().y));
+    }
     
     std::cout << "Player loaded at position: " << position.x << ", " << position.y << " origin: " << sprite->getOrigin().x << ", " << sprite->getOrigin().y << "\n";
 }

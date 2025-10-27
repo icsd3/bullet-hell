@@ -35,7 +35,7 @@ class Player : public Entity
     int current_health;
 
     void loadPlayer();
-    void updatePlayer(Player&, sf::Clock&, sf::Vector2f&);
+    void updatePlayer(sf::Clock&, sf::Vector2f&);
 public:
     static Player& getInstance();
     ~Player() = default;

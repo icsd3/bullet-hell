@@ -12,7 +12,7 @@ class Object
 
 protected:
     sf::Vector2f position;
-    sf::Angle angle;
+    bool orientation = false; // false = left, true = right
 
     sf::Texture texture;
     std::optional<sf::Sprite> sprite;
@@ -20,7 +20,7 @@ protected:
     void loadObject(const std::string& textureFile);
 
 public:
-    Object(const sf::Vector2f& pos, sf::Angle ang, const std::string& textureFile);
+    Object(const sf::Vector2f& pos, const bool& ori, const std::string& textureFile);
     Object(const Object&);
     Object& operator=(const Object&);
     ~Object() = default;
@@ -35,7 +35,7 @@ protected:
     float speed;
 
 public:
-    Entity(const sf::Vector2f& pos, sf::Angle ang, const std::string& textureFile, float spd);
+    Entity(const sf::Vector2f& pos, const bool& ori, const std::string& textureFile, float spd);
     Entity(const Entity&);
     Entity& operator=(const Entity&);
     ~Entity() = default;

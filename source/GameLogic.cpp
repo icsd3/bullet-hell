@@ -43,6 +43,8 @@ void Game::handleNewState()
             break;
         case level_1:
             Loader.loadLevel(window);
+            player.position = sf::Vector2f(window.getSize().x / 2.f, window.getSize().y / 2.f);
+            target = player.position;
             player.loadPlayer();
             std::cout << "level_1\n";
             break;
@@ -273,7 +275,8 @@ void Game::Play()
             std::cout << "Fereastra a fost inchisa (shouldExit == true)\n";
             break;
         }
-        player.updatePlayer(player, clock, target);
+        if(currentState == level_1 || currentState == level_2 || currentState == level_3)
+            player.updatePlayer(clock, target);
         draw();
     }
 }
