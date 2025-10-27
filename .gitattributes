@@ -1,1 +1,4 @@
 ext/** linguist-vendored
+.github/** linguist-vendored
+cmake/** linguist-vendored
+scripts/** linguist-vendored
