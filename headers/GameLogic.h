@@ -24,6 +24,7 @@ class Game
 
     bool handleInputs();
     bool handleMainMenuInput(const sf::Event& event);
+    void handleAugmentInput(const sf::Event& event);
 
     void draw();
     void drawMenu();
@@ -32,7 +33,7 @@ class Game
     void drawDefeat();
     void drawVictory();
     
-    void handleNewState(gameStates newState);
+    void handleNewState();
 
 public:
     void Play();

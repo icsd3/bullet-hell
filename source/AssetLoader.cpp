@@ -12,7 +12,7 @@ AssetLoader& AssetLoader::getInstance()
     return instance;
 }
 
-void AssetLoader::loadMainMenu(sf::RenderWindow& window)
+void AssetLoader::LoadStaticAssets()
 {
     if (!menuBackgroundTexture.loadFromFile("textures/menu_background.png"))
     {
@@ -20,18 +20,9 @@ void AssetLoader::loadMainMenu(sf::RenderWindow& window)
     }
     menuBackgroundSprite.emplace(menuBackgroundTexture);
 
-    if(menuBackgroundSprite)
-    {
-        const sf::Vector2u windowSize = window.getSize();
-        const sf::Vector2u textureSize = menuBackgroundTexture.getSize();
-        menuBackgroundSprite->setScale(sf::Vector2f(
-            static_cast<float>(windowSize.x) / static_cast<float>(textureSize.x),
-            static_cast<float>(windowSize.y) / static_cast<float>(textureSize.y)
-        ));
-    }
     for(int i = 0; i<2; i++)
     {
-        if(i==0)
+         if(i==0)
         {
             if (!menuButtonTexture[i].loadFromFile("textures/start_button.png"))
             {
@@ -46,7 +37,43 @@ void AssetLoader::loadMainMenu(sf::RenderWindow& window)
             }
         }
         menuButtonSprite[i].emplace(menuButtonTexture[i]);
+    }
 
+    if (!augmentBackgroundTexture.loadFromFile("textures/augment_background.png"))
+    {
+        std::cerr << "Error loading augment_background.png\n";
+    }
+    augmentBackgroundSprite.emplace(augmentBackgroundTexture);
+
+    for(int i = 0; i<3; i++)
+    {
+        if (!augmentButtonTexture[i].loadFromFile("textures/augment_button.png"))
+        {
+            std::cerr << "Error loading augment_button.png\n";
+        }
+        augmentButtonSprite[i].emplace(augmentButtonTexture[i]);
+    }
+
+    if(!levelBackgroundTexture.loadFromFile("textures/level_background.png"))
+    {
+        std::cerr << "Error loading level_background.png\n";
+    }
+    levelBackgroundSprite.emplace(levelBackgroundTexture);
+}
+
+void AssetLoader::loadMainMenu(sf::RenderWindow& window)
+{
+    if(menuBackgroundSprite)
+    {
+        const sf::Vector2u windowSize = window.getSize();
+        const sf::Vector2u textureSize = menuBackgroundTexture.getSize();
+        menuBackgroundSprite->setScale(sf::Vector2f(
+            static_cast<float>(windowSize.x) / static_cast<float>(textureSize.x),
+            static_cast<float>(windowSize.y) / static_cast<float>(textureSize.y)
+        ));
+    }
+    for(int i = 0; i<2; i++)
+    {
         if(menuButtonSprite[i])
         {
             const sf::Vector2u windowSize = window.getSize();
@@ -64,13 +91,7 @@ void AssetLoader::loadMainMenu(sf::RenderWindow& window)
 }
 
 void AssetLoader::loadAugment(sf::RenderWindow& window)
-{
-    if (!augmentBackgroundTexture.loadFromFile("textures/augment_background.png"))
-    {
-        std::cerr << "Error loading augment_background.png\n";
-    }
-    augmentBackgroundSprite.emplace(augmentBackgroundTexture);
-    
+{ 
     if(augmentBackgroundSprite)
     {
         const sf::Vector2u windowSize = window.getSize();
@@ -83,13 +104,6 @@ void AssetLoader::loadAugment(sf::RenderWindow& window)
 
     for(int i = 0; i<3; i++)
     {
-        if (!augmentButtonTexture[i].loadFromFile("textures/augment_button.png"))
-        {
-            std::cerr << "Error loading augment_button.png\n";
-        }
-
-        augmentButtonSprite[i].emplace(augmentButtonTexture[i]);
-
         if(augmentButtonSprite[i])
         {
             const sf::Vector2u windowSize = window.getSize();
@@ -107,8 +121,15 @@ void AssetLoader::loadAugment(sf::RenderWindow& window)
 
 void AssetLoader::loadLevel(sf::RenderWindow& window)
 {
-    auto a = window.getSize();
-    std::cout<<a.x;
+    if(levelBackgroundSprite)
+    {
+        const sf::Vector2u windowSize = window.getSize();
+        const sf::Vector2u textureSize = levelBackgroundTexture.getSize();
+        levelBackgroundSprite->setScale(sf::Vector2f(
+            static_cast<float>(windowSize.x) / static_cast<float>(textureSize.x),
+            static_cast<float>(windowSize.y) / static_cast<float>(textureSize.y)
+        ));
+    }
 }
 
 void AssetLoader::loadDefeat(sf::RenderWindow& window)

@@ -15,46 +15,14 @@ Game& Game::getInstance()
 
 void Game::setup()
 {
-    handleNewState(menu);
+    Loader.LoadStaticAssets();
+    currentState = menu;
+    handleNewState();
     window.setVerticalSyncEnabled(true);
 }
 
-bool Game::handleMainMenuInput(const sf::Event& event)
+void Game::handleNewState()
 {
-    if(event.is<sf::Event::MouseButtonPressed>())
-    {
-        if (!Loader.menuButtonSprite[0] || !Loader.menuButtonSprite[1]) 
-            return false;
-
-        auto mousePos = sf::Mouse::getPosition(window);
-        const auto startButtonBounds = Loader.menuButtonSprite[0]->getGlobalBounds();
-        const auto exitButtonBounds = Loader.menuButtonSprite[1]->getGlobalBounds();
-
-        if (startButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
-        {
-            std::cout << "Start button clicked!\n";
-            Progress::selectGameState(currentState);
-            handleNewState(currentState);
-        }
-        else if(exitButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))))
-        {
-            std::cout << "Exit button clicked!\n";
-            return true;
-        }
-    }
-    else
-    {
-        std::cout << "Enter key pressed!\n";
-        Progress::selectGameState(currentState);
-        handleNewState(currentState);
-    }
-    return false;
-}
-
-void Game::handleNewState(gameStates newState)
-{
-    currentState = newState;
-
     switch (currentState)
     {
         case menu:
@@ -107,7 +75,7 @@ bool Game::handleInputs()
             if (event->is<sf::Event::Closed>()) 
             {
                 window.close();
-                std::cout << "Fereastra a fost închisă fortat\n";
+                std::cout << "Fereastra a fost inchisa fortat\n";
             }
             else if (event->is<sf::Event::KeyPressed>()) 
             {
@@ -130,10 +98,69 @@ bool Game::handleInputs()
                 {
                     if (currentState == menu)
                         shouldExit = handleMainMenuInput(*event);
+                    else if(currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
+                    {
+                        handleAugmentInput(*event);
+                    }
                 }
             }
         }
         return shouldExit;
+}
+
+bool Game::handleMainMenuInput(const sf::Event& event)
+{
+    if(event.is<sf::Event::MouseButtonPressed>())
+    {
+        if (!Loader.menuButtonSprite[0] || !Loader.menuButtonSprite[1]) 
+            return false;
+
+        auto mousePos = sf::Mouse::getPosition(window);
+        const auto startButtonBounds = Loader.menuButtonSprite[0]->getGlobalBounds();
+        const auto exitButtonBounds = Loader.menuButtonSprite[1]->getGlobalBounds();
+
+        if (startButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
+        {
+            std::cout << "Start button clicked!\n";
+            Progress::selectGameState(currentState);
+            handleNewState();
+        }
+        else if(exitButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))))
+        {
+            std::cout << "Exit button clicked!\n";
+            return true;
+        }
+    }
+    else
+    {
+        std::cout << "Enter key pressed!\n";
+        Progress::selectGameState(currentState);
+        handleNewState();
+    }
+    return false;
+}
+
+void Game::handleAugmentInput(const sf::Event& event)
+{
+    if(event.is<sf::Event::MouseButtonPressed>())
+    {
+        if (!Loader.augmentButtonSprite[0] || !Loader.augmentButtonSprite[1] || !Loader.augmentButtonSprite[2]) 
+            return;
+
+        auto mousePos = sf::Mouse::getPosition(window);
+        for(int i=0; i<3; i++)
+        {
+            const auto buttonBounds = Loader.augmentButtonSprite[i]->getGlobalBounds();
+
+            if (buttonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
+            {
+                std::cout << "Augment button " << i+1 << " clicked!\n";
+                Progress::selectGameState(currentState);
+                handleNewState();
+                break;
+            }
+        }
+    }
 }
 
 void Game::drawMenu()
@@ -157,7 +184,8 @@ void Game::drawAugment()
 
 void Game::drawLevel()
 {
-    window.clear(sf::Color::Green);
+    if(Loader.levelBackgroundSprite) 
+        window.draw(*Loader.levelBackgroundSprite);
 }
 
 void Game::drawDefeat()
@@ -209,13 +237,14 @@ void Game::draw()
 
 void Game::Play()
 {
-    while(window.isOpen()) {
+    while(window.isOpen()) 
+    {
         bool shouldExit = handleInputs();
 
         if(shouldExit) 
         {
             window.close();
-            std::cout << "Fereastra a fost închisă (shouldExit == true)\n";
+            std::cout << "Fereastra a fost inchisa (shouldExit == true)\n";
             break;
         }
 

@@ -25,6 +25,10 @@ class AssetLoader
     sf::Texture augmentButtonTexture[3];
     std::optional<sf::Sprite> augmentButtonSprite[3];
 
+    sf::Texture levelBackgroundTexture;
+    std::optional<sf::Sprite> levelBackgroundSprite;
+
+    void LoadStaticAssets();
     void loadMainMenu(sf::RenderWindow&);
     void loadAugment(sf::RenderWindow&);
     void loadLevel(sf::RenderWindow&);
