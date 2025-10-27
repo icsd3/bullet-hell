@@ -32,7 +32,7 @@ class Player : public Entity
     int max_health;
     int current_health;
 
-    void loadPlayer(sf::RenderWindow&);
+    void loadPlayer();
     // void updatePlayer();
 public:
     static Player& getInstance();

@@ -26,7 +26,7 @@ std::ostream& operator<<(std::ostream& os, const Player& player)
     
 // }
 
-void Player::loadPlayer(sf::RenderWindow& window)
+void Player::loadPlayer()
 {
     sf::FloatRect bounds = sprite->getLocalBounds();
     sprite->setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
