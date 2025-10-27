@@ -64,6 +64,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/GameStates.cpp
     headers/AssetLoader.h
     source/AssetLoader.cpp
+    headers/Entities.h
+    source/Entities.cpp
+    headers/Player.h
+    source/Player.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

@@ -15,7 +15,7 @@ Game& Game::getInstance()
 
 void Game::setup()
 {
-    Loader.LoadStaticAssets();
+    Loader.loadStaticAssets();
     currentState = menu;
     handleNewState();
     window.setVerticalSyncEnabled(true);
@@ -43,6 +43,7 @@ void Game::handleNewState()
             break;
         case level_1:
             Loader.loadLevel(window);
+            player.loadPlayer(window);
             std::cout << "level_1\n";
             break;
         case level_2:
@@ -101,6 +102,13 @@ bool Game::handleInputs()
                     else if(currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
                     {
                         handleAugmentInput(*event);
+                    }
+                }
+                else if (mouseEvent->button == sf::Mouse::Button::Right)
+                {
+                    if(currentState == level_1 || currentState == level_2 || currentState == level_3)
+                    {
+                        handleLevelInput(*event);
                     }
                 }
             }
@@ -163,6 +171,35 @@ void Game::handleAugmentInput(const sf::Event& event)
     }
 }
 
+void Game::handleLevelInput(const sf::Event& event)
+{
+    if(event.is<sf::Event::MouseButtonPressed>())
+    {
+        const auto* mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
+
+        if (!player.sprite) 
+            return;
+
+        if(mouseEvent->button == sf::Mouse::Button::Right)
+        {
+            target = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            float dt = clock.restart().asSeconds();
+            sf::Vector2f dir = target - player.position;
+            float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+
+            if (distance > 50.0f) 
+            {
+            dir /= distance;
+            player.sprite->move(sf::Vector2f(dir * player.speed * dt));
+            player.position = player.sprite->getPosition();
+            }
+
+            sf::Angle angle = sf::degrees(std::atan2(dir.y, dir.x) * 180.f / 3.14159265f + 180.f);
+            player.sprite->setRotation(angle);
+        }
+    }
+}
+
 void Game::drawMenu()
 {
     if(Loader.menuBackgroundSprite) 
@@ -186,6 +223,8 @@ void Game::drawLevel()
 {
     if(Loader.levelBackgroundSprite) 
         window.draw(*Loader.levelBackgroundSprite);
+    if(player.sprite)
+        window.draw(*player.sprite);
 }
 
 void Game::drawDefeat()
@@ -249,5 +288,12 @@ void Game::Play()
         }
 
         draw();
+        std::cout << "Frame drawn\n";
     }
+}
+
+std::ostream& operator<<(std::ostream& os, const Game& game)
+{
+    os << "Current Game State: " << game.currentState << "\n";
+    return os;
 }

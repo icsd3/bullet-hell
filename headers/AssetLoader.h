@@ -28,7 +28,7 @@ class AssetLoader
     sf::Texture levelBackgroundTexture;
     std::optional<sf::Sprite> levelBackgroundSprite;
 
-    void LoadStaticAssets();
+    void loadStaticAssets();
     void loadMainMenu(sf::RenderWindow&);
     void loadAugment(sf::RenderWindow&);
     void loadLevel(sf::RenderWindow&);

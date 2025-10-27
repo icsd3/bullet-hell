@@ -12,7 +12,7 @@ AssetLoader& AssetLoader::getInstance()
     return instance;
 }
 
-void AssetLoader::LoadStaticAssets()
+void AssetLoader::loadStaticAssets()
 {
     if (!menuBackgroundTexture.loadFromFile("textures/menu_background.png"))
     {
