@@ -7,7 +7,7 @@ Game::Game()
     setup();
 }
 
-Game& Game::getInstance()
+Game& Game::getInstance() 
 {
     static Game instance;
     return instance;
@@ -15,7 +15,9 @@ Game& Game::getInstance()
 
 void Game::setup()
 {
-    Loader.loadStaticAssets();
+    window.clear(sf::Color::Black);
+    window.display();
+    loader.loadStaticAssets();
     currentState = menu;
     handleNewState();
     window.setVerticalSyncEnabled(true);
@@ -26,42 +28,43 @@ void Game::handleNewState()
     switch (currentState)
     {
         case menu:
-            Loader.loadMainMenu(window);
+            loader.loadMainMenu(window);
             std::cout << "menu\n";
             break;
         case augment_1:
-            Loader.loadAugment(window);
+            loader.loadAugment(window);
             std::cout << "augment_1\n";
             break;
         case augment_2:
-            Loader.loadAugment(window);
+            loader.loadAugment(window);
             std::cout << "augment_2\n";
             break;
         case augment_3:
-            Loader.loadAugment(window);
+            loader.loadAugment(window);
             std::cout << "augment_3\n";
             break;
         case level_1:
-            Loader.loadLevel(window);
+            loader.loadLevel(window);
             player.position = sf::Vector2f(window.getSize().x / 2.f, window.getSize().y / 2.f);
             target = player.position;
             player.loadPlayer();
+            gui.loadGUI();
             std::cout << "level_1\n";
             break;
         case level_2:
-            Loader.loadLevel(window);
+            loader.loadLevel(window);
             std::cout << "level_2\n";
             break;
         case level_3:
-            Loader.loadLevel(window);
+            loader.loadLevel(window);
             std::cout << "level_3\n";
             break;
         case defeat:
-            Loader.loadDefeat(window);;
+            // loader.loadDefeat(window);
             std::cout << "defeat\n";
             break;
         case victory:
-            Loader.loadVictory(window);
+            // loader.loadVictory(window);
             std::cout << "victory\n";
             break;
         default:
@@ -122,12 +125,12 @@ bool Game::handleMainMenuInput(const sf::Event& event)
 {
     if(event.is<sf::Event::MouseButtonPressed>())
     {
-        if (!Loader.menuButtonSprite[0] || !Loader.menuButtonSprite[1]) 
+        if (!loader.menuButtonSprite[0] || !loader.menuButtonSprite[1]) 
             return false;
 
         auto mousePos = sf::Mouse::getPosition(window);
-        const auto startButtonBounds = Loader.menuButtonSprite[0]->getGlobalBounds();
-        const auto exitButtonBounds = Loader.menuButtonSprite[1]->getGlobalBounds();
+        const auto startButtonBounds = loader.menuButtonSprite[0]->getGlobalBounds();
+        const auto exitButtonBounds = loader.menuButtonSprite[1]->getGlobalBounds();
 
         if (startButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
         {
@@ -154,13 +157,13 @@ void Game::handleAugmentInput(const sf::Event& event)
 {
     if(event.is<sf::Event::MouseButtonPressed>())
     {
-        if (!Loader.augmentButtonSprite[0] || !Loader.augmentButtonSprite[1] || !Loader.augmentButtonSprite[2]) 
+        if (!loader.augmentButtonSprite[0] || !loader.augmentButtonSprite[1] || !loader.augmentButtonSprite[2]) 
             return;
 
         auto mousePos = sf::Mouse::getPosition(window);
         for(int i=0; i<3; i++)
         {
-            const auto buttonBounds = Loader.augmentButtonSprite[i]->getGlobalBounds();
+            const auto buttonBounds = loader.augmentButtonSprite[i]->getGlobalBounds();
 
             if (buttonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
             {
@@ -191,40 +194,47 @@ void Game::handleLevelInput(const sf::Event& event)
 
 void Game::drawMenu()
 {
-    if(Loader.menuBackgroundSprite) 
-        window.draw(*Loader.menuBackgroundSprite);
-    if(Loader.menuButtonSprite[0])
-        window.draw(*Loader.menuButtonSprite[0]);
-    if(Loader.menuButtonSprite[1])
-        window.draw(*Loader.menuButtonSprite[1]);
+    if(loader.menuBackgroundSprite) 
+        window.draw(*loader.menuBackgroundSprite);
+    if(loader.menuButtonSprite[0])
+        window.draw(*loader.menuButtonSprite[0]);
+    if(loader.menuButtonSprite[1])
+        window.draw(*loader.menuButtonSprite[1]);
 }
 
 void Game::drawAugment()
 {
-    if(Loader.augmentBackgroundSprite) 
-        window.draw(*Loader.augmentBackgroundSprite);
+    if(loader.augmentBackgroundSprite) 
+        window.draw(*loader.augmentBackgroundSprite);
     for(int i=0; i<3; i++)
-        if(Loader.augmentButtonSprite[i])
-            window.draw(*(Loader.augmentButtonSprite[i]));
+        if(loader.augmentButtonSprite[i])
+            window.draw(*(loader.augmentButtonSprite[i]));
 }
 
 void Game::drawLevel()
 {
-    if(Loader.levelBackgroundSprite) 
-        window.draw(*Loader.levelBackgroundSprite);
+    if(loader.levelBackgroundSprite) 
+        window.draw(*loader.levelBackgroundSprite);
     if(player.sprite)
         window.draw(*player.sprite);
+    drawGUI();
 }
 
-void Game::drawDefeat()
+void Game::drawGUI()
 {
-
+    gui.updateGUI(player.currentHealth, player.maxHealth);
+    window.draw(gui.health);
 }
 
-void Game::drawVictory()
-{
+// void Game::drawDefeat()
+// {
+
+// }
+
+// void Game::drawVictory()
+// {
     
-}
+// }
 
 void Game::draw()
 {
@@ -249,11 +259,11 @@ void Game::draw()
                 break;
             
             case defeat:
-                drawDefeat();
+                // drawDefeat();
                 break;
 
             case victory:
-                drawVictory();
+                // drawVictory();
                 break;
 
             default:

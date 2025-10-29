@@ -3,6 +3,7 @@
 #include "../headers/GameStates.h"
 #include "../headers/AssetLoader.h"
 #include "../headers/Player.h"
+#include "../headers/GUI.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -15,8 +16,9 @@ class Game
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 
-    AssetLoader& Loader = AssetLoader::getInstance();
+    AssetLoader& loader = AssetLoader::getInstance();
     Player& player = Player::getInstance();
+    GUI& gui = GUI::getInstance();
 
     sf::RenderWindow window;
     sf::Clock clock;
@@ -35,8 +37,9 @@ class Game
     void drawMenu();
     void drawAugment();
     void drawLevel();
-    void drawDefeat();
-    void drawVictory();
+    void drawGUI();
+    // void drawDefeat();
+    // void drawVictory();
     
     void handleNewState();
 

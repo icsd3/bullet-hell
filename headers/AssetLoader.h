@@ -32,8 +32,8 @@ class AssetLoader
     void loadMainMenu(sf::RenderWindow&);
     void loadAugment(sf::RenderWindow&);
     void loadLevel(sf::RenderWindow&);
-    void loadDefeat(sf::RenderWindow&);
-    void loadVictory(sf::RenderWindow&);
+    // void loadDefeat(sf::RenderWindow&);
+    // void loadVictory(sf::RenderWindow&);
 
 public:
     static AssetLoader& getInstance();

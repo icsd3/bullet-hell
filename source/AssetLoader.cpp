@@ -78,12 +78,15 @@ void AssetLoader::loadMainMenu(sf::RenderWindow& window)
         {
             const sf::Vector2u windowSize = window.getSize();
             const sf::Vector2u startButtonSize = menuButtonTexture[i].getSize();
-            const float scaleX = static_cast<float>(windowSize.x) / static_cast<float>(startButtonSize.x) /4.f;
-            const float scaleY = static_cast<float>(windowSize.y) / static_cast<float>(startButtonSize.y) /4.5f;
-            menuButtonSprite[i]->setScale(sf::Vector2f(scaleX, scaleY));
+            const float scale = static_cast<float>(windowSize.x) / static_cast<float>(startButtonSize.x) /4.f;
+            menuButtonSprite[i]->setScale(sf::Vector2f(scale, scale));
+            menuButtonSprite[i]->setOrigin(sf::Vector2f(
+                startButtonSize.x / 2.f,
+                startButtonSize.y / 2.f
+            ));
             menuButtonSprite[i]->setPosition(sf::Vector2f(
-                (windowSize.x - startButtonSize.x * scaleX) / 2.f,
-                (windowSize.y / 3.f * (i+1) - startButtonSize.y * scaleY / 2.f)
+                windowSize.x / 2.f,
+                windowSize.y / 3.f * (i+1)
             ));
         }
     }
@@ -111,9 +114,13 @@ void AssetLoader::loadAugment(sf::RenderWindow& window)
             const float scaleX = static_cast<float>(windowSize.x) / static_cast<float>(augmentButtonSize.x) /13.f * 3;
             const float scaleY = static_cast<float>(windowSize.y) / static_cast<float>(augmentButtonSize.y) / 10.f * 7.5f;
             augmentButtonSprite[i]->setScale(sf::Vector2f(scaleX, scaleY));
+            augmentButtonSprite[i]->setOrigin(sf::Vector2f(
+                augmentButtonSize.x / 2.f,
+                augmentButtonSize.y / 2.f
+            ));
             augmentButtonSprite[i]->setPosition(sf::Vector2f(
-                (windowSize.x / 26.f * (8*i+5) - augmentButtonSize.x * scaleX / 2.f),
-                (windowSize.y - augmentButtonSize.y * scaleY) / 2.f
+                windowSize.x / 26.f * (8*i+5),
+                windowSize.y / 2.f
             ));
         }
     }
@@ -132,14 +139,12 @@ void AssetLoader::loadLevel(sf::RenderWindow& window)
     }
 }
 
-void AssetLoader::loadDefeat(sf::RenderWindow& window)
-{
-    auto a = window.getSize();
-    std::cout<<a.x;
-}
+// void AssetLoader::loadDefeat(sf::RenderWindow& window)
+// {
+//    
+// }
 
-void AssetLoader::loadVictory(sf::RenderWindow& window)
-{
-    auto a = window.getSize();
-    std::cout<<a.x;
-}
+// void AssetLoader::loadVictory(sf::RenderWindow& window)
+// {
+    
+// }

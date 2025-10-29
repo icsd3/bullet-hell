@@ -68,6 +68,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Entities.cpp
     headers/Player.h
     source/Player.cpp
+    headers/Weapons.h
+    source/Weapons.cpp
+    headers/GUI.h
+    source/GUI.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
