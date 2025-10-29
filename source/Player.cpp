@@ -27,7 +27,7 @@ void Player::updatePlayer(sf::Clock& clock, const sf::Vector2f& target)
     sf::Vector2f dir = target - position;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
-    if (distance > 1.0f) 
+    if (distance > 5.0f) 
     {
         dir /= distance;
         sprite->move(sf::Vector2f(dir * speed * dt));
