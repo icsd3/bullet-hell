@@ -48,7 +48,7 @@ void Game::handleNewState()
             player.position = sf::Vector2f(window.getSize().x / 2.f, window.getSize().y / 2.f);
             target = player.position;
             player.loadPlayer();
-            // gui.loadGUI();
+            gui.loadGUI();
             std::cout << "level_1\n";
             break;
         case level_2:

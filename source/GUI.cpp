@@ -3,7 +3,10 @@
 GUI::GUI()
     :health(font)
 {
-    this->font = sf::Font("fonts/arial.ttf");
+    if(!font.openFromFile("fonts/arial.ttf"))
+    {
+        std::cerr << "Error loading arial.ttf\n";
+    }
 }
 
 GUI& GUI::getInstance()
@@ -14,11 +17,6 @@ GUI& GUI::getInstance()
 
 void GUI::loadGUI()
 {
-    // if(!font.openFromFile("fonts/arial.ttf"))
-    // {
-    //     std::cerr << "Error loading arial.ttf\n";
-    // }
-    health.setFont(font);
     health.setCharacterSize(40);
     health.setFillColor(sf::Color::Red);
     health.setPosition(sf::Vector2f(10.f, 10.f));

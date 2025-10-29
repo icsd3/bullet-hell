@@ -14,8 +14,8 @@ class GUI
 
     friend class Game;
 
-    sf::Text health;
     sf::Font font;
+    sf::Text health;
 
     void loadGUI();
     void updateGUI(int, int);
