@@ -7,6 +7,7 @@ GUI::GUI()
     {
         std::cerr << "Error loading arial.ttf\n";
     }
+    health.setFont(font);
 }
 
 GUI& GUI::getInstance()
