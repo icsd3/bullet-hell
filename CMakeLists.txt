@@ -103,6 +103,4 @@ if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-include (cmake/CopyHelper.cmake)
-
 copy_files(FILES tastatura.txt DIRECTORY textures fonts COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
