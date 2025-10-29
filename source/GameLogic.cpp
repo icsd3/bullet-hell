@@ -48,7 +48,7 @@ void Game::handleNewState()
             player.position = sf::Vector2f(window.getSize().x / 2.f, window.getSize().y / 2.f);
             target = player.position;
             player.loadPlayer();
-            gui.loadGUI();
+            // gui.loadGUI();
             std::cout << "level_1\n";
             break;
         case level_2:
@@ -217,14 +217,14 @@ void Game::drawLevel()
         window.draw(*loader.levelBackgroundSprite);
     if(player.sprite)
         window.draw(*player.sprite);
-    drawGUI();
+    // drawGUI();
 }
 
-void Game::drawGUI()
-{
-    gui.updateGUI(player.currentHealth, player.maxHealth);
-    window.draw(gui.health);
-}
+// void Game::drawGUI()
+// {
+//     gui.updateGUI(player.currentHealth, player.maxHealth);
+//     window.draw(gui.health);
+// }
 
 // void Game::drawDefeat()
 // {
