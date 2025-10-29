@@ -25,7 +25,9 @@ function(copy_files)
             # ${CMAKE_CURRENT_BINARY_DIR}/${dir})
     endforeach()
 
-    # copy files and folders to install dir
-    install(FILES ${ARG_FILES} DESTINATION ${DESTINATION_DIR})
-    install(DIRECTORY ${ARG_DIRECTORY} DESTINATION ${DESTINATION_DIR})
+    if(ARG_COPY_TO_DESTINATION)
+        # copy files and folders to install dir
+        install(FILES ${ARG_FILES} DESTINATION ${DESTINATION_DIR})
+        install(DIRECTORY ${ARG_DIRECTORY} DESTINATION ${DESTINATION_DIR})
+    endif()
 endfunction()
