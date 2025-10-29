@@ -106,4 +106,4 @@ endif()
 include (cmake/CopyHelper.cmake)
 
 copy_files(FILES tastatura.txt DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
-copy_files(DIRECTORY textures fonts images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+copy_files(DIRECTORY textures fonts COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
