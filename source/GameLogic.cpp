@@ -217,14 +217,14 @@ void Game::drawLevel()
         window.draw(*loader.levelBackgroundSprite);
     if(player.sprite)
         window.draw(*player.sprite);
-    // drawGUI();
+    drawGUI();
 }
 
-// void Game::drawGUI()
-// {
-//     gui.updateGUI(player.currentHealth, player.maxHealth);
-//     window.draw(gui.health);
-// }
+void Game::drawGUI()
+{
+    gui.updateGUI(player.currentHealth, player.maxHealth);
+    window.draw(gui.health);
+}
 
 // void Game::drawDefeat()
 // {

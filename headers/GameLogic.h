@@ -18,7 +18,7 @@ class Game
 
     AssetLoader& loader = AssetLoader::getInstance();
     Player& player = Player::getInstance();
-    // GUI& gui = GUI::getInstance();
+    GUI& gui = GUI::getInstance();
 
     sf::RenderWindow window;
     sf::Clock clock;
@@ -37,7 +37,7 @@ class Game
     void drawMenu();
     void drawAugment();
     void drawLevel();
-    // void drawGUI();
+    void drawGUI();
     // void drawDefeat();
     // void drawVictory();
     
