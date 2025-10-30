@@ -98,10 +98,10 @@ bool Game::handleInputs()
             if (event->is<sf::Event::KeyPressed>())
             {
                 const auto* keyPressed = event->getIf<sf::Event::KeyPressed>();
-                if(keyPressed->scancode == sf::Keyboard::Scancode::Escape) 
+                if(keyPressed->scancode == sf::Keyboard::Scancode::Backspace) 
                 {
                     shouldExit=true;
-                    std::cout<<"Escape pressed bye bye!\n";
+                    std::cout<<"Backspace pressed bye bye!\n";
                 }
             }
             else if (currentState == menu)
