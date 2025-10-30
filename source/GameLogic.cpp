@@ -76,79 +76,81 @@ bool Game::handleInputs()
 {
     bool shouldExit = false;
 
-        while(const std::optional event = window.pollEvent()) 
+    if(currentState == level_1 || currentState == level_2 || currentState == level_3)
+    {
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
-            if (event->is<sf::Event::Closed>()) 
-            {
-                window.close();
-                std::cout << "Fereastra a fost inchisa fortat\n";
-            }
-            else if (event->is<sf::Event::KeyPressed>()) 
+            if (!player.sprite) 
+                return false;
+            target = sf::Vector2f(sf::Mouse::getPosition());
+        }
+    }
+
+    while(const std::optional event = window.pollEvent()) 
+    {
+        if (event->is<sf::Event::Closed>()) 
+        {
+            window.close();
+            std::cout << "Fereastra a fost inchisa fortat\n";
+        }
+        else if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>()) 
+        {
+            if (event->is<sf::Event::KeyPressed>())
             {
                 const auto* keyPressed = event->getIf<sf::Event::KeyPressed>();
-                if(keyPressed->scancode == sf::Keyboard::Scancode::Enter) 
-                {
-                    if (currentState == menu)
-                        handleMainMenuInput(*event);
-                }
                 if(keyPressed->scancode == sf::Keyboard::Scancode::Escape) 
                 {
                     shouldExit=true;
                     std::cout<<"Escape pressed bye bye!\n";
                 }
             }
-            else if (event->is<sf::Event::MouseButtonPressed>())
-            {
-                const auto* mouseEvent = event->getIf<sf::Event::MouseButtonPressed>();
-                if (mouseEvent->button == sf::Mouse::Button::Left)
-                {
-                    if (currentState == menu)
-                        shouldExit = handleMainMenuInput(*event);
-                    else if(currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
-                    {
-                        handleAugmentInput(*event);
-                    }
-                }
-                else if (mouseEvent->button == sf::Mouse::Button::Right)
-                {
-                    if(currentState == level_1 || currentState == level_2 || currentState == level_3)
-                    {
-                        handleLevelInput(*event);
-                    }
-                }
-            }
+            else if (currentState == menu)
+                shouldExit = handleMainMenuInput(*event);
+            else if (currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
+                handleAugmentInput(*event);
+            else if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+                handleLevelInput(*event);
         }
-        return shouldExit;
+    }
+    return shouldExit;
 }
 
 bool Game::handleMainMenuInput(const sf::Event& event)
 {
     if(event.is<sf::Event::MouseButtonPressed>())
     {
-        if (!loader.menuButtonSprite[0] || !loader.menuButtonSprite[1]) 
-            return false;
+        const auto* mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
 
-        auto mousePos = sf::Mouse::getPosition(window);
-        const auto startButtonBounds = loader.menuButtonSprite[0]->getGlobalBounds();
-        const auto exitButtonBounds = loader.menuButtonSprite[1]->getGlobalBounds();
-
-        if (startButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
+        if(mouseEvent->button == sf::Mouse::Button::Left)
         {
-            std::cout << "Start button clicked!\n";
+            if (!loader.menuButtonSprite[0] || !loader.menuButtonSprite[1]) 
+                return false;
+
+            const auto startButtonBounds = loader.menuButtonSprite[0]->getGlobalBounds();
+            const auto exitButtonBounds = loader.menuButtonSprite[1]->getGlobalBounds();
+
+            if (startButtonBounds.contains(sf::Vector2f(mouseEvent->position))) 
+            {
+                std::cout << "Start button clicked!\n";
+                Progress::selectGameState(currentState);
+                handleNewState();
+            }
+            else if(exitButtonBounds.contains(sf::Vector2f(mouseEvent->position)))
+            {
+                std::cout << "Exit button clicked!\n";
+                return true;
+            }
+        }
+    }
+    else if(event.is<sf::Event::KeyPressed>())
+    {
+        const auto* keyboardEvent = event.getIf<sf::Event::KeyPressed>();
+        if(keyboardEvent->scancode == sf::Keyboard::Scancode::Enter)
+        {
+            std::cout << "Enter key pressed!\n";
             Progress::selectGameState(currentState);
             handleNewState();
         }
-        else if(exitButtonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))))
-        {
-            std::cout << "Exit button clicked!\n";
-            return true;
-        }
-    }
-    else
-    {
-        std::cout << "Enter key pressed!\n";
-        Progress::selectGameState(currentState);
-        handleNewState();
     }
     return false;
 }
@@ -157,20 +159,24 @@ void Game::handleAugmentInput(const sf::Event& event)
 {
     if(event.is<sf::Event::MouseButtonPressed>())
     {
-        if (!loader.augmentButtonSprite[0] || !loader.augmentButtonSprite[1] || !loader.augmentButtonSprite[2]) 
+        const auto* mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
+
+        if(mouseEvent->button == sf::Mouse::Button::Left)
+        {
+            if (!loader.augmentButtonSprite[0] || !loader.augmentButtonSprite[1] || !loader.augmentButtonSprite[2]) 
             return;
 
-        auto mousePos = sf::Mouse::getPosition(window);
-        for(int i=0; i<3; i++)
-        {
-            const auto buttonBounds = loader.augmentButtonSprite[i]->getGlobalBounds();
-
-            if (buttonBounds.contains(sf::Vector2f(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))) 
+            for(int i=0; i<3; i++)
             {
-                std::cout << "Augment button " << i+1 << " clicked!\n";
-                Progress::selectGameState(currentState);
-                handleNewState();
-                break;
+                const auto buttonBounds = loader.augmentButtonSprite[i]->getGlobalBounds();
+
+                if (buttonBounds.contains(sf::Vector2f(mouseEvent->position)))
+                {
+                    std::cout << "Augment button " << i+1 << " clicked!\n";
+                    Progress::selectGameState(currentState);
+                    handleNewState();
+                    break;
+                }
             }
         }
     }
@@ -187,8 +193,15 @@ void Game::handleLevelInput(const sf::Event& event)
 
         if(mouseEvent->button == sf::Mouse::Button::Right)
         {
-            target = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            target = sf::Vector2f(mouseEvent->position);
         }
+    }
+    if(event.is<sf::Event::KeyPressed>())
+    {
+        // const auto* keyBoardEvent = event.getIf<sf::Event::KeyPressed>();
+
+        if (!player.sprite) 
+            return;
     }
 }
 
