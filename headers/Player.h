@@ -19,7 +19,7 @@ class Player : public Entity
     int currentHealth;
 
     void loadPlayer();
-    void updatePlayer(sf::Clock&, const sf::Vector2f&);
+    void updatePlayer(const float& dt, const sf::Vector2f&);
 
 public:
     static Player& getInstance();

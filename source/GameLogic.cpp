@@ -299,7 +299,10 @@ void Game::Play()
             break;
         }
         if(currentState == level_1 || currentState == level_2 || currentState == level_3)
-            player.updatePlayer(clock, target);
+        {
+            float dt = clock.restart().asSeconds();
+            player.updatePlayer(dt, target);
+        }
         draw();
     }
 }

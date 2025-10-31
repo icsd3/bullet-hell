@@ -43,8 +43,6 @@ class Game
     
     void handleNewState();
 
-    friend void Player::updatePlayer(sf::Clock&, const sf::Vector2f&);
-
 public:
     void Play();
     static Game& getInstance();

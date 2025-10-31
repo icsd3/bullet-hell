@@ -1,7 +1,7 @@
 #include "../headers/Player.h"
 
 Player::Player()
-    :Entity(sf::Vector2f(1000.f, 1000.f), false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100)
+    :Entity(false, sf::Vector2f(1000.f, 1000.f), false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100)
 {
     weapons.emplace_back("Basic Gun", 10, 1, 0.5f, 0.f, 500.f);
 }
@@ -21,9 +21,8 @@ std::ostream& operator<<(std::ostream& os, const Player& player)
     return os;
 }
 
-void Player::updatePlayer(sf::Clock& clock, const sf::Vector2f& target)
+void Player::updatePlayer(const float& dt, const sf::Vector2f& target)
 {
-    float dt = clock.restart().asSeconds();
     sf::Vector2f dir = target - position;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
