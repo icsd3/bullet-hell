@@ -3,7 +3,7 @@
 GUI::GUI()
     :health(font)
 {
-    if(!font.openFromFile("fonts/arial.ttf"))
+    if(!font.openFromFile(fontPath))
     {
         std::cerr << "Error loading arial.ttf\n";
     }
@@ -15,6 +15,13 @@ GUI& GUI::getInstance()
     return instance;
 }
 
+std::ostream& operator<<(std::ostream& os, const GUI& gui)
+{
+    os << "    GUI Font loaded: " << (gui.font.getInfo().family.empty() ? "No" : gui.fontPath) << "\n";
+    os << "    Health Text: " << gui.health.getString().toAnsiString();
+    return os;
+}
+
 void GUI::loadGUI()
 {
     health.setCharacterSize(40);
@@ -22,7 +29,12 @@ void GUI::loadGUI()
     health.setPosition(sf::Vector2f(10.f, 10.f));
 }
 
-void GUI::updateGUI(int currentHealth, int maxHealth)
+void GUI::updateGUI(sf::Vector2i HP)
 {
-    health.setString("HP: " + std::to_string(currentHealth) + " / " + std::to_string(maxHealth));
+    health.setString("HP: " + std::to_string(HP.x) + " / " + std::to_string(HP.y));
+}
+
+void GUI::draw(sf::RenderWindow& window)
+{
+    window.draw(health);
 }

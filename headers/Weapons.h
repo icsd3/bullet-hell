@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/Audio/Music.hpp>
 
 class Weapon
 {
-    friend class Game;
-
     const std::string name;
     int damage;
     int bullet_nr;
@@ -13,7 +14,7 @@ class Weapon
     float spread_angle;
     float range;
 
-    void fire(sf::Vector2f&);
+    // void fire(sf::Vector2f&);
 public:
     Weapon(const std::string& nm, int dmg, int bnr, float fr, float sa, float rg);
     Weapon(const Weapon&);

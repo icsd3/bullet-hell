@@ -16,6 +16,10 @@
 
 - [ ] Movement - Right click (press/hold) / WASD (NOT DONE)
 
+#### Debugging
+
+- [ ] Output in consola date despre starea curenta a programului - i
+
 ## Tema 0
 
 - [ ] Nume proiect (poate fi schimbat ulterior)

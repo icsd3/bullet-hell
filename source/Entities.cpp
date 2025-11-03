@@ -1,14 +1,14 @@
 #include "../headers/Entities.h"
 #include <iostream>
 
-Object::Object(const bool& pc, const sf::Vector2f& pos, const bool& ori, const std::string& textureFile)
-    :entityCollision(pc), position(pos), orientation(ori)
+Object::Object(const bool& pc, const sf::Vector2f& pos, const bool& ori, const std::string& tf)
+    :entityCollision(pc), position(pos), orientation(ori), textureFile(tf)
 {
-    loadObject(textureFile);
+    loadObject();
 }
 
 Object::Object(const Object& other)
-    :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), texture(other.texture)
+    :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(other.textureFile), texture(other.texture)
 {
     if(other.sprite)
     {
@@ -23,6 +23,7 @@ Object& Object::operator=(const Object& other)
         entityCollision = other.entityCollision;
         position = other.position;
         orientation = other.orientation;
+        textureFile = other.textureFile;
         texture = other.texture;
         if(other.sprite)
         {
@@ -34,11 +35,11 @@ Object& Object::operator=(const Object& other)
 
 std::ostream& operator<<(std::ostream& os, const Object& object)
 {
-    os << "Object(Position: (" << object.position.x << ", " << object.position.y << "), Angle: " << object.orientation << ")";
+    os << "Object (Position: (" << object.position.x << ", " << object.position.y << "), Orientation: " << (object.orientation ? "right" : "left") << ", Texture: " << object.textureFile << ")";
     return os;
 }
 
-void Object::loadObject(const std::string& textureFile)
+void Object::loadObject()
 {
     if (!texture.loadFromFile(textureFile))
     {
@@ -47,8 +48,8 @@ void Object::loadObject(const std::string& textureFile)
     sprite.emplace(texture);
 }
 
-Entity::Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& textureFile, float spd)
-    :Object(ec, pos, ori, textureFile), speed(spd)
+Entity::Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, float spd)
+    :Object(ec, pos, ori, tf), speed(spd)
 {
 
 }
@@ -71,7 +72,7 @@ Entity& Entity::operator=(const Entity& other)
 
 std::ostream& operator<<(std::ostream& os, const Entity& entity)
 {
-    os << "Entity(";
+    os << "    Entity (";
     os << static_cast<const Object&>(entity);
     os << ", Speed: " << entity.speed << ")";
     return os;

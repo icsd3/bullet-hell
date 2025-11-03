@@ -28,7 +28,7 @@ Weapon& Weapon::operator=(const Weapon& other)
 
 std::ostream& operator<<(std::ostream& os, const Weapon& weapon)
 {
-    os << "Weapon(Name: " << weapon.name 
+    os << "Weapon (Name: " << weapon.name 
        << ", Damage: " << weapon.damage 
        << ", Bullet Number: " << weapon.bullet_nr
        << ", Fire Rate: " << weapon.fire_rate 

@@ -14,10 +14,14 @@ Player& Player::getInstance()
 
 std::ostream& operator<<(std::ostream& os, const Player& player)
 {
-    os << static_cast<const Entity&>(player) 
-       << ", Max Health: " << player.maxHealth 
-       << ", Current Health: " << player.currentHealth 
-       << ", Weapons Count: " << player.weapons.size();
+    os << static_cast<const Entity&>(player);
+    os << ", Max Health: " << player.maxHealth;
+    os << ", Current Health: " << player.currentHealth;
+    os << ", Weapons Count: " << player.weapons.size();
+    for(unsigned int i = 0; i < player.weapons.size(); i++)
+    {
+        os << "\n        Weapon " << i + 1 << ": " << player.weapons[i];
+    }
     return os;
 }
 
@@ -41,8 +45,6 @@ void Player::updatePlayer(const float& dt, const sf::Vector2f& target)
             orientation = false;
             sprite->setScale(sf::Vector2f(std::abs(sprite->getScale().x), sprite->getScale().y));
         }
-
-        // std::cout << "Player updated to position: " << position.x << ", " << position.y << " orientation: " << orientation << "\n";
     }
 }
 
@@ -60,6 +62,28 @@ void Player::loadPlayer()
     {
         sprite->setScale(sf::Vector2f(std::abs(sprite->getScale().x), sprite->getScale().y));
     }
-    
-    std::cout << "Player loaded at position: " << position.x << ", " << position.y << " origin: " << sprite->getOrigin().x << ", " << sprite->getOrigin().y << "\n";
+}
+
+bool Player::hasSprite()
+{
+    return sprite.has_value();
+}
+
+void Player::drawPlayer(sf::RenderWindow& window)
+{
+    if(hasSprite())
+    {
+        window.draw(*sprite);
+    }
+}
+
+sf::Vector2i Player::getHealthStatus() const
+{
+    return sf::Vector2i(currentHealth, maxHealth);
+}
+
+sf::Vector2f Player::startPosition(const sf::Vector2f& pos)
+{
+    position = pos;
+    return position;
 }

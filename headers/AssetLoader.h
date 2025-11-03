@@ -13,7 +13,14 @@ class AssetLoader
     AssetLoader(const AssetLoader&) = delete;
     AssetLoader& operator=(const AssetLoader&) = delete;
 
-    friend class Game;
+    std::string menuBackgroundPath = "textures/menu_background.png";
+    std::string menuButtonPath[2] = {
+        "textures/start_button.png",
+        "textures/exit_button.png"
+    };
+    std::string augmentBackgroundPath = "textures/augment_background.png";
+    std::string augmentButtonPath = "textures/augment_button.png";
+    std::string levelBackgroundPath = "textures/level_background.png";
 
     sf::Texture menuBackgroundTexture;
     std::optional<sf::Sprite> menuBackgroundSprite;
@@ -28,6 +35,11 @@ class AssetLoader
     sf::Texture levelBackgroundTexture;
     std::optional<sf::Sprite> levelBackgroundSprite;
 
+public:
+    static AssetLoader& getInstance();
+    ~AssetLoader() = default;
+    friend std::ostream& operator<<(std::ostream& os, const AssetLoader& loader);
+
     void loadStaticAssets();
     void loadMainMenu(sf::RenderWindow&);
     void loadAugment(sf::RenderWindow&);
@@ -35,7 +47,16 @@ class AssetLoader
     // void loadDefeat(sf::RenderWindow&);
     // void loadVictory(sf::RenderWindow&);
 
-public:
-    static AssetLoader& getInstance();
-    ~AssetLoader() = default;
+    bool hasMenuBackgroundSprite();
+    bool hasAugmentBackgroundSprite();
+    bool hasLevelBackgroundSprite();
+    bool hasMenuButtonSprites();
+    bool hasAugmentButtonSprites();
+
+    sf::FloatRect getMenuButtonBounds(int);
+    sf::FloatRect getAugmentButtonBounds(int);
+
+    void drawMenu(sf::RenderWindow&);
+    void drawAugment(sf::RenderWindow&);
+    void drawLevelBackground(sf::RenderWindow&);
 };

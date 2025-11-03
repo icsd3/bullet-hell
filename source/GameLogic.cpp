@@ -45,8 +45,7 @@ void Game::handleNewState()
             break;
         case level_1:
             loader.loadLevel(window);
-            player.position = sf::Vector2f(window.getSize().x / 2.f, window.getSize().y / 2.f);
-            target = player.position;
+            target = player.startPosition(sf::Vector2f(window.getSize().x / 2.f, window.getSize().y * 0.8f));
             player.loadPlayer();
             gui.loadGUI();
             std::cout << "level_1\n";
@@ -80,7 +79,7 @@ bool Game::handleInputs()
     {
         if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
-            if (!player.sprite) 
+            if (!player.hasSprite()) 
                 return false;
             target = sf::Vector2f(sf::Mouse::getPosition());
         }
@@ -103,6 +102,10 @@ bool Game::handleInputs()
                     shouldExit=true;
                     std::cout<<"Backspace pressed bye bye!\n";
                 }
+                else if(keyPressed->scancode == sf::Keyboard::Scancode::I)
+                {
+                    std::cout << *this;
+                }
             }
             else if (currentState == menu)
                 shouldExit = handleMainMenuInput(*event);
@@ -123,11 +126,11 @@ bool Game::handleMainMenuInput(const sf::Event& event)
 
         if(mouseEvent->button == sf::Mouse::Button::Left)
         {
-            if (!loader.menuButtonSprite[0] || !loader.menuButtonSprite[1]) 
+            if (!loader.hasMenuButtonSprites()) 
                 return false;
 
-            const auto startButtonBounds = loader.menuButtonSprite[0]->getGlobalBounds();
-            const auto exitButtonBounds = loader.menuButtonSprite[1]->getGlobalBounds();
+            const auto startButtonBounds = loader.getMenuButtonBounds(0);
+            const auto exitButtonBounds = loader.getMenuButtonBounds(1);
 
             if (startButtonBounds.contains(sf::Vector2f(mouseEvent->position))) 
             {
@@ -163,12 +166,12 @@ void Game::handleAugmentInput(const sf::Event& event)
 
         if(mouseEvent->button == sf::Mouse::Button::Left)
         {
-            if (!loader.augmentButtonSprite[0] || !loader.augmentButtonSprite[1] || !loader.augmentButtonSprite[2]) 
+            if (!loader.hasAugmentButtonSprites()) 
             return;
 
             for(int i=0; i<3; i++)
             {
-                const auto buttonBounds = loader.augmentButtonSprite[i]->getGlobalBounds();
+                const auto buttonBounds = loader.getAugmentButtonBounds(i);
 
                 if (buttonBounds.contains(sf::Vector2f(mouseEvent->position)))
                 {
@@ -188,7 +191,7 @@ void Game::handleLevelInput(const sf::Event& event)
     {
         const auto* mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
 
-        if (!player.sprite) 
+        if (!player.hasSprite()) 
             return;
 
         if(mouseEvent->button == sf::Mouse::Button::Right)
@@ -200,43 +203,22 @@ void Game::handleLevelInput(const sf::Event& event)
     {
         // const auto* keyBoardEvent = event.getIf<sf::Event::KeyPressed>();
 
-        if (!player.sprite) 
+        if (!player.hasSprite()) 
             return;
     }
 }
 
-void Game::drawMenu()
-{
-    if(loader.menuBackgroundSprite) 
-        window.draw(*loader.menuBackgroundSprite);
-    if(loader.menuButtonSprite[0])
-        window.draw(*loader.menuButtonSprite[0]);
-    if(loader.menuButtonSprite[1])
-        window.draw(*loader.menuButtonSprite[1]);
-}
-
-void Game::drawAugment()
-{
-    if(loader.augmentBackgroundSprite) 
-        window.draw(*loader.augmentBackgroundSprite);
-    for(int i=0; i<3; i++)
-        if(loader.augmentButtonSprite[i])
-            window.draw(*(loader.augmentButtonSprite[i]));
-}
-
 void Game::drawLevel()
 {
-    if(loader.levelBackgroundSprite) 
-        window.draw(*loader.levelBackgroundSprite);
-    if(player.sprite)
-        window.draw(*player.sprite);
+    loader.drawLevelBackground(window);
+    player.drawPlayer(window);
     drawGUI();
 }
 
 void Game::drawGUI()
 {
-    gui.updateGUI(player.currentHealth, player.maxHealth);
-    window.draw(gui.health);
+    gui.updateGUI(player.getHealthStatus());
+    gui.draw(window);
 }
 
 // void Game::drawDefeat()
@@ -256,13 +238,13 @@ void Game::draw()
         switch (currentState)
         {
             case menu:
-                drawMenu();
+                loader.drawMenu(window);
                 break;
 
             case augment_1:
             case augment_2:
             case augment_3:
-                drawAugment();
+                loader.drawAugment(window);
                 break;
 
             case level_1:
@@ -309,6 +291,13 @@ void Game::Play()
 
 std::ostream& operator<<(std::ostream& os, const Game& game)
 {
-    os << "Current Game State: " << game.currentState << "\n";
+    os << "\n####################################################################################################################################\n";
+    os << "Loader status:\n" << game.loader << "\n\n"; 
+    os << "Player status:\n" << game.player << "\n\n";
+    os << "GUI status:\n" << game.gui << "\n\n";
+    os << "Window size: " << game.window.getSize().x << "x" << game.window.getSize().y << "\n\n";
+    os << "Current State: " << game.currentState << "\n\n";
+    os << "Target Position: (" << game.target.x << ", " << game.target.y << ")\n";
+    os << "####################################################################################################################################\n\n";
     return os;
 }

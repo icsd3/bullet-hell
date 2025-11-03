@@ -34,8 +34,6 @@ class Game
     void handleLevelInput(const sf::Event& event);
 
     void draw();
-    void drawMenu();
-    void drawAugment();
     void drawLevel();
     void drawGUI();
     // void drawDefeat();

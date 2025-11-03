@@ -12,15 +12,16 @@ class GUI
     GUI(const GUI&) = delete;
     GUI& operator=(const GUI&) = delete;
 
-    friend class Game;
-
+    std:: string fontPath = "fonts/arial.ttf";
     sf::Font font;
     sf::Text health;
-
-    void loadGUI();
-    void updateGUI(int, int);
 
 public:
     static GUI& getInstance();
     ~GUI() = default;
+    friend std::ostream& operator<<(std::ostream& os, const GUI& gui);
+
+    void loadGUI();
+    void updateGUI(sf::Vector2i);
+    void draw(sf::RenderWindow&);
 }; 

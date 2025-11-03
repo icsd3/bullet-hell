@@ -8,20 +8,20 @@
 
 class Object
 {
-    friend class Game;
     bool entityCollision;
 
 protected:
     sf::Vector2f position;
     bool orientation = false; // false = left, true = right
 
+    std::string textureFile;
     sf::Texture texture;
     std::optional<sf::Sprite> sprite;
 
-    void loadObject(const std::string& textureFile);
+    void loadObject();
 
 public:
-    Object(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& textureFile);
+    Object(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf);
     Object(const Object&);
     Object& operator=(const Object&);
     ~Object() = default;
@@ -30,7 +30,6 @@ public:
 
 class Entity : public Object
 {
-    friend class Game;
 
 protected:
     float speed;
