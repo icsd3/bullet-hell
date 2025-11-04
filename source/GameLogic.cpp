@@ -86,11 +86,10 @@ bool Game::handleInputs()
             float dt = weaponClock.getElapsedTime().asSeconds();
             if(player.canFireCurrentWeapon(dt))
             {
-                dt = weaponClock.restart().asSeconds();
+                weaponClock.restart();
                 sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
                 playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
                 playerProjectiles.back().loadProjectile(window);
-                std::cout<<"fired\n";
             }
         }
     }

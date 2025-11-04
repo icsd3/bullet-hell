@@ -74,7 +74,7 @@ sf::Vector2i Player::getHealthStatus() const
     return sf::Vector2i(currentHealth, maxHealth);
 }
 
-Projectile Player::fireCurrentWeapon(sf::Vector2f& target)
+Projectile Player::fireCurrentWeapon(const sf::Vector2f& target)
 {
     return currentWeapon.fire(position, target);
 }

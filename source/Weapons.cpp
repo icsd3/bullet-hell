@@ -45,7 +45,7 @@ Weapon::~Weapon()
     std::cout<<"Weapon destroyed: "<<name<<"\n";
 }
 
-Projectile Weapon::fire(sf::Vector2f& position, sf::Vector2f& target)
+Projectile Weapon::fire(const sf::Vector2f& position, const sf::Vector2f& target)
 {
     Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", bulletSpeed, damage, target);
     return projectile;

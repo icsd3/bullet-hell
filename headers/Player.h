@@ -26,6 +26,6 @@ public:
     void updatePlayer(const float& dt, const sf::Vector2f&);
     void drawPlayer(sf::RenderWindow&);
     sf::Vector2i getHealthStatus() const;
-    Projectile fireCurrentWeapon(sf::Vector2f&);
+    Projectile fireCurrentWeapon(const sf::Vector2f&);
     bool canFireCurrentWeapon(const float& dt);
 };
