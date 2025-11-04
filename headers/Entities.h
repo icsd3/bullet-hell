@@ -35,7 +35,7 @@ protected:
     float speed;
 
 public:
-    Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, float spd);
+    Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& textureFile, float spd);
     Entity(const Entity&);
     Entity& operator=(const Entity&);
     ~Entity() = default;

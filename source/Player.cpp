@@ -1,14 +1,14 @@
 #include "../headers/Player.h"
 
-Player::Player(const sf::Vector2f& start)
-    :Entity(false, start, false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100)
+Player::Player()
+    :Entity(false, sf::Vector2f(1000.f, 1000.f), false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100)
 {
     weapons.emplace_back("Basic Gun", 10, 1, 0.5f, 0.f, 500.f);
 }
 
-Player& Player::getInstance(const sf::Vector2f& start)
+Player& Player::getInstance()
 {
-    static Player instance(start);
+    static Player instance;
     return instance;
 }
 
@@ -48,12 +48,12 @@ void Player::updatePlayer(const float& dt, const sf::Vector2f& target)
     }
 }
 
-void Player::loadPlayer(sf::RenderWindow& window)
+void Player::loadPlayer()
 {
     sf::FloatRect bounds = sprite->getLocalBounds();
     sprite->setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite->setPosition(position);
-    sprite->setScale(sf::Vector2f(window.getSize().x / texture.getSize().y / 20.f, window.getSize().x / texture.getSize().y / 20.f));
+    sprite->setScale(sf::Vector2f(0.1f, 0.1f));
     if(orientation)
     {
         sprite->setScale(sf::Vector2f(-std::abs(sprite->getScale().x), sprite->getScale().y));
@@ -80,4 +80,10 @@ void Player::drawPlayer(sf::RenderWindow& window)
 sf::Vector2i Player::getHealthStatus() const
 {
     return sf::Vector2i(currentHealth, maxHealth);
+}
+
+sf::Vector2f Player::startPosition(const sf::Vector2f& pos)
+{
+    position = pos;
+    return position;
 }

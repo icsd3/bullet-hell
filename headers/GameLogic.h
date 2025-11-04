@@ -4,7 +4,6 @@
 #include "../headers/AssetLoader.h"
 #include "../headers/Player.h"
 #include "../headers/GUI.h"
-#include "../headers/Projectiles.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -17,16 +16,15 @@ class Game
     Game(const Game&) = delete;
     Game& operator=(const Game&) = delete;
 
+    AssetLoader& loader = AssetLoader::getInstance();
+    Player& player = Player::getInstance();
+    GUI& gui = GUI::getInstance();
+
     sf::RenderWindow window;
     sf::Clock clock;
     sf::Vector2f target;
 
     gameStates currentState;
-
-    AssetLoader& loader = AssetLoader::getInstance();
-    Player& player = Player::getInstance(target);
-    GUI& gui = GUI::getInstance();
-    std::vector<Projectile> projectiles;
     
     void setup();
 

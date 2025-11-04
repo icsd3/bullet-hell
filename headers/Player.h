@@ -7,7 +7,7 @@
 
 class Player : public Entity
 {
-    Player(const sf::Vector2f&);
+    Player();
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
 
@@ -17,13 +17,14 @@ class Player : public Entity
     int currentHealth;
 
 public:
-    static Player& getInstance(const sf::Vector2f&);
+    static Player& getInstance();
     ~Player() = default;
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
 
     bool hasSprite();
-    void loadPlayer(sf::RenderWindow&);
+    void loadPlayer();
     void updatePlayer(const float& dt, const sf::Vector2f&);
     void drawPlayer(sf::RenderWindow&);
     sf::Vector2i getHealthStatus() const;
+    sf::Vector2f startPosition(const sf::Vector2f&);
 };

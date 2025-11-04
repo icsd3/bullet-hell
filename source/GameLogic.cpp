@@ -2,8 +2,7 @@
 #include <iostream>
 
 Game::Game()
-    :window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen),
-    target(sf::Vector2f(window.getSize().x / 2.f, window.getSize().y * 0.8f))
+    :window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
 {
     setup();
 }
@@ -46,7 +45,8 @@ void Game::handleNewState()
             break;
         case level_1:
             loader.loadLevel(window);
-            player.loadPlayer(window);
+            target = player.startPosition(sf::Vector2f(window.getSize().x / 2.f, window.getSize().y * 0.8f));
+            player.loadPlayer();
             gui.loadGUI();
             std::cout << "level_1\n";
             break;
