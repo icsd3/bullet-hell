@@ -210,7 +210,7 @@ void Game::handleLevelInput(const sf::Event& event)
             float dt = weaponClock.getElapsedTime().asSeconds();
             if(player.canFireCurrentWeapon(dt))
             {
-                weaponClock.restart().asSeconds();
+                weaponClock.restart();
                 sf::Vector2f projectileTarget = sf::Vector2f(mouseEvent->position);
                 playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
                 playerProjectiles.back().loadProjectile(window);
