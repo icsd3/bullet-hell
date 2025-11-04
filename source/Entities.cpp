@@ -2,16 +2,23 @@
 #include <iostream>
 
 Object::Object(const bool& pc, const sf::Vector2f& pos, const bool& ori, const std::string& tf)
-    :entityCollision(pc), position(pos), orientation(ori), textureFile(tf), texture(textureFile), sprite(texture)
+    :entityCollision(pc), position(pos), orientation(ori), textureFile(std::move(tf)), texture(loadTexture(textureFile)), sprite(texture)
 {
     
 }
 
-Object::Object(const Object& other)
-    :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(other.textureFile), texture(textureFile), sprite(texture)
+sf::Texture Object::loadTexture(const std::string& file) 
 {
-    texture = sf::Texture("textures/player.png");
-    sprite.setTexture(texture);
+    sf::Texture t;
+    if (!t.loadFromFile(file)) {
+        std::cerr << "Failed to load texture: " << file << '\n';
+    }
+    return t;
+}
+
+Object::Object(const Object& other)
+    :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(std::move(other.textureFile)), texture(loadTexture(textureFile)), sprite(texture)
+{
     sprite.setOrigin(other.sprite.getOrigin());
     sprite.setPosition(other.sprite.getPosition());
     sprite.setScale(other.sprite.getScale());
@@ -25,9 +32,13 @@ Object& Object::operator=(const Object& other)
         entityCollision = other.entityCollision;
         position = other.position;
         orientation = other.orientation;
-        textureFile = other.textureFile;
-        texture = other.texture;
-        sprite = other.sprite;
+        textureFile = std::move(other.textureFile);
+        texture = loadTexture(textureFile);
+        sprite = sf::Sprite(texture);
+        sprite.setOrigin(other.sprite.getOrigin());
+        sprite.setPosition(other.sprite.getPosition());
+        sprite.setScale(other.sprite.getScale());
+        sprite.setRotation(other.sprite.getRotation());
     }
     return *this;
 }

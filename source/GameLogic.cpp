@@ -81,6 +81,18 @@ bool Game::handleInputs()
         {
             target = sf::Vector2f(sf::Mouse::getPosition());
         }
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            float dt = weaponClock.getElapsedTime().asSeconds();
+            if(player.canFireCurrentWeapon(dt))
+            {
+                dt = weaponClock.restart().asSeconds();
+                sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
+                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
+                playerProjectiles.back().loadProjectile(window);
+                std::cout<<"fired\n";
+            }
+        }
     }
 
     while(const std::optional event = window.pollEvent()) 
@@ -196,9 +208,15 @@ void Game::handleLevelInput(const sf::Event& event)
 
         if(mouseEvent->button == sf::Mouse::Button::Left)
         {
-            sf::Vector2f projectileTarget = sf::Vector2f(mouseEvent->position);
-            playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
-            playerProjectiles.back().loadProjectile(window);
+            float dt = weaponClock.getElapsedTime().asSeconds();
+            if(player.canFireCurrentWeapon(dt))
+            {
+                dt = weaponClock.restart().asSeconds();
+                sf::Vector2f projectileTarget = sf::Vector2f(mouseEvent->position);
+                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
+                playerProjectiles.back().loadProjectile(window);
+                std::cout<<"fired\n";
+            }
         }
     }
     if(event.is<sf::Event::KeyPressed>())
@@ -285,20 +303,14 @@ void Game::Play()
         }
         if(currentState == level_1 || currentState == level_2 || currentState == level_3)
         {
-            float dt = clock.restart().asSeconds();
+            float dt = updateClock.restart().asSeconds();
             player.updatePlayer(dt, target);
             for(size_t i = 0; i < playerProjectiles.size(); )
             {
-                bool toRemove = playerProjectiles[i].updateProjectile(dt, window);
-                if(toRemove)
-                {
+                if(playerProjectiles[i].updateProjectile(dt, window))
                     playerProjectiles.erase(playerProjectiles.begin() + i);
-                }
                 else
-                {
                     i++;
-                }
-                std::cout << "Projectiles count: " << playerProjectiles.size() << "\n";
             }
         }
         draw();

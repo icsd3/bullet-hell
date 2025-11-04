@@ -50,3 +50,10 @@ Projectile Weapon::fire(sf::Vector2f& position, sf::Vector2f& target)
     Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", bulletSpeed, damage, target);
     return projectile;
 }
+
+bool Weapon::canFire(const float& dt)
+{
+    if(dt>=1/fire_rate)
+        return true;
+    return false;
+}

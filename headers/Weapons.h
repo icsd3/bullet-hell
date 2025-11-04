@@ -17,7 +17,6 @@ class Weapon
     float range;
     float bulletSpeed;
 
-    // void fire(sf::Vector2f&);
 public:
     Weapon(const std::string& nm, int dmg, int bnr, float fr, float sa, float rg, float bs);
     Weapon(const Weapon&);
@@ -26,4 +25,5 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Weapon& weapon);
 
     Projectile fire(sf::Vector2f&, sf::Vector2f&);
+    bool canFire(const float& dt);
 };

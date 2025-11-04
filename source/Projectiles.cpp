@@ -14,7 +14,7 @@ void Projectile::loadProjectile(sf::RenderWindow& window)
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
-    sprite.setScale(sf::Vector2f(window.getSize().x / texture.getSize().y / 200.f, window.getSize().x / texture.getSize().y / 200.f));
+    sprite.setScale(sf::Vector2f(window.getSize().x / texture.getSize().x / 50.f, window.getSize().x / texture.getSize().x / 50.f));
     sprite.setRotation(rotation);
 }
 

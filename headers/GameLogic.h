@@ -18,7 +18,8 @@ class Game
     Game& operator=(const Game&) = delete;
 
     sf::RenderWindow window;
-    sf::Clock clock;
+    sf::Clock weaponClock;
+    sf::Clock updateClock;
     sf::Vector2f target;
 
     gameStates currentState;
