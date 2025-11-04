@@ -1,14 +1,15 @@
 #include "../headers/Weapons.h"
+#include <iostream>
 
-Weapon::Weapon(const std::string& nm, int dmg, int bnr, float fr, float sa, float rg)
-    :name(nm), damage(dmg), bullet_nr(bnr), fire_rate(fr), spread_angle(sa), range(rg)
+Weapon::Weapon(const std::string& nm, int dmg, int bnr, float fr, float sa, float rg, float bs)
+    :name(nm), damage(dmg), bullet_nr(bnr), fire_rate(fr), spread_angle(sa), range(rg), bulletSpeed(bs)
 {
 
 }
 
 Weapon::Weapon(const Weapon& other)
     :name(other.name), damage(other.damage), bullet_nr(other.bullet_nr),
-     fire_rate(other.fire_rate), spread_angle(other.spread_angle), range(other.range)
+     fire_rate(other.fire_rate), spread_angle(other.spread_angle), range(other.range), bulletSpeed(other.bulletSpeed)
 {
 
 }
@@ -22,6 +23,7 @@ Weapon& Weapon::operator=(const Weapon& other)
         fire_rate = other.fire_rate;
         spread_angle = other.spread_angle;
         range = other.range;
+        bulletSpeed = other.bulletSpeed;
     }
     return *this;
 }
@@ -33,11 +35,18 @@ std::ostream& operator<<(std::ostream& os, const Weapon& weapon)
        << ", Bullet Number: " << weapon.bullet_nr
        << ", Fire Rate: " << weapon.fire_rate 
        << ", Spread Angle: " << weapon.spread_angle 
-       << ", Range: " << weapon.range << ")";
+       << ", Range: " << weapon.range
+       << ", Bullet Speed: " << weapon.bulletSpeed << ")";
     return os;
 }
 
 Weapon::~Weapon()
 {
     std::cout<<"Weapon destroyed: "<<name<<"\n";
+}
+
+Projectile Weapon::fire(sf::Vector2f& position, sf::Vector2f& target)
+{
+    Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", bulletSpeed, damage, target);
+    return projectile;
 }

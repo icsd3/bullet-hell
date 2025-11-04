@@ -72,6 +72,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Weapons.cpp
     headers/GUI.h
     source/GUI.cpp
+    headers/Projectiles.h
+    source/Projectiles.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

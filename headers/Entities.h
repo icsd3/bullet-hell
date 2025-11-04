@@ -16,9 +16,7 @@ protected:
 
     std::string textureFile;
     sf::Texture texture;
-    std::optional<sf::Sprite> sprite;
-
-    void loadObject();
+    sf::Sprite sprite;
 
 public:
     Object(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf);

@@ -2,18 +2,20 @@
 #include <iostream>
 
 Object::Object(const bool& pc, const sf::Vector2f& pos, const bool& ori, const std::string& tf)
-    :entityCollision(pc), position(pos), orientation(ori), textureFile(tf)
+    :entityCollision(pc), position(pos), orientation(ori), textureFile(tf), texture(textureFile), sprite(texture)
 {
-    loadObject();
+    
 }
 
 Object::Object(const Object& other)
-    :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(other.textureFile), texture(other.texture)
+    :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(other.textureFile), texture(textureFile), sprite(texture)
 {
-    if(other.sprite)
-    {
-        sprite.emplace(texture);
-    }
+    texture = sf::Texture("textures/player.png");
+    sprite.setTexture(texture);
+    sprite.setOrigin(other.sprite.getOrigin());
+    sprite.setPosition(other.sprite.getPosition());
+    sprite.setScale(other.sprite.getScale());
+    sprite.setRotation(other.sprite.getRotation());
 }
 
 Object& Object::operator=(const Object& other)
@@ -25,10 +27,7 @@ Object& Object::operator=(const Object& other)
         orientation = other.orientation;
         textureFile = other.textureFile;
         texture = other.texture;
-        if(other.sprite)
-        {
-            sprite.emplace(texture);
-        }
+        sprite = other.sprite;
     }
     return *this;
 }
@@ -37,15 +36,6 @@ std::ostream& operator<<(std::ostream& os, const Object& object)
 {
     os << "Object (Position: (" << object.position.x << ", " << object.position.y << "), Orientation: " << (object.orientation ? "right" : "left") << ", Texture: " << object.textureFile << ")";
     return os;
-}
-
-void Object::loadObject()
-{
-    if (!texture.loadFromFile(textureFile))
-    {
-        std::cerr << "Error loading texture: " << textureFile << "\n";
-    }
-    sprite.emplace(texture);
 }
 
 Entity::Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, float spd)

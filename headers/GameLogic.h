@@ -26,7 +26,8 @@ class Game
     AssetLoader& loader = AssetLoader::getInstance();
     Player& player = Player::getInstance(target);
     GUI& gui = GUI::getInstance();
-    std::vector<Projectile> projectiles;
+    std::vector<Projectile> playerProjectiles;
+    std::vector<Projectile> enemyProjectiles;
     
     void setup();
 

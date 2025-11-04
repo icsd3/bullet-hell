@@ -1,9 +1,9 @@
 #include "../headers/Player.h"
 
 Player::Player(const sf::Vector2f& start)
-    :Entity(false, start, false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100)
+    :Entity(false, start, false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 10, 1, 0.5f, 0.f, 500.f, 300.f)
 {
-    weapons.emplace_back("Basic Gun", 10, 1, 0.5f, 0.f, 500.f);
+    weapons.emplace_back(currentWeapon);
 }
 
 Player& Player::getInstance(const sf::Vector2f& start)
@@ -33,51 +33,48 @@ void Player::updatePlayer(const float& dt, const sf::Vector2f& target)
     if (distance > 5.0f) 
     {
         dir /= distance;
-        sprite->move(sf::Vector2f(dir * speed * dt));
-        position = sprite->getPosition();
+        sprite.move(sf::Vector2f(dir * speed * dt));
+        position = sprite.getPosition();
         if (dir.x > 0.f)
         {
             orientation = true;
-            sprite->setScale(sf::Vector2f(-std::abs(sprite->getScale().x), sprite->getScale().y));
+            sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
         }
         else
         {
             orientation = false;
-            sprite->setScale(sf::Vector2f(std::abs(sprite->getScale().x), sprite->getScale().y));
+            sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
         }
     }
 }
 
 void Player::loadPlayer(sf::RenderWindow& window)
 {
-    sf::FloatRect bounds = sprite->getLocalBounds();
-    sprite->setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
-    sprite->setPosition(position);
-    sprite->setScale(sf::Vector2f(window.getSize().x / texture.getSize().y / 20.f, window.getSize().x / texture.getSize().y / 20.f));
+    sf::FloatRect bounds = sprite.getLocalBounds();
+    sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
+    sprite.setPosition(position);
+    sprite.setScale(sf::Vector2f(window.getSize().x / texture.getSize().y / 20.f, window.getSize().x / texture.getSize().y / 20.f));
     if(orientation)
     {
-        sprite->setScale(sf::Vector2f(-std::abs(sprite->getScale().x), sprite->getScale().y));
+        sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
     }
     else
     {
-        sprite->setScale(sf::Vector2f(std::abs(sprite->getScale().x), sprite->getScale().y));
+        sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
     }
-}
-
-bool Player::hasSprite()
-{
-    return sprite.has_value();
 }
 
 void Player::drawPlayer(sf::RenderWindow& window)
 {
-    if(hasSprite())
-    {
-        window.draw(*sprite);
-    }
+    window.draw(sprite);
 }
 
 sf::Vector2i Player::getHealthStatus() const
 {
     return sf::Vector2i(currentHealth, maxHealth);
+}
+
+Projectile Player::fireCurrentWeapon(sf::Vector2f& target)
+{
+    return currentWeapon.fire(position, target);
 }

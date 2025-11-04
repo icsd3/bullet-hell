@@ -79,8 +79,6 @@ bool Game::handleInputs()
     {
         if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
-            if (!player.hasSprite()) 
-                return false;
             target = sf::Vector2f(sf::Mouse::getPosition());
         }
     }
@@ -191,20 +189,21 @@ void Game::handleLevelInput(const sf::Event& event)
     {
         const auto* mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
 
-        if (!player.hasSprite()) 
-            return;
-
         if(mouseEvent->button == sf::Mouse::Button::Right)
         {
             target = sf::Vector2f(mouseEvent->position);
+        }
+
+        if(mouseEvent->button == sf::Mouse::Button::Left)
+        {
+            sf::Vector2f projectileTarget = sf::Vector2f(mouseEvent->position);
+            playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
+            playerProjectiles.back().loadProjectile(window);
         }
     }
     if(event.is<sf::Event::KeyPressed>())
     {
         // const auto* keyBoardEvent = event.getIf<sf::Event::KeyPressed>();
-
-        if (!player.hasSprite()) 
-            return;
     }
 }
 
@@ -212,6 +211,10 @@ void Game::drawLevel()
 {
     loader.drawLevelBackground(window);
     player.drawPlayer(window);
+    for(auto& projectile : playerProjectiles)
+    {
+        projectile.drawProjectile(window);
+    }
     drawGUI();
 }
 
@@ -284,6 +287,19 @@ void Game::Play()
         {
             float dt = clock.restart().asSeconds();
             player.updatePlayer(dt, target);
+            for(size_t i = 0; i < playerProjectiles.size(); )
+            {
+                bool toRemove = playerProjectiles[i].updateProjectile(dt, window);
+                if(toRemove)
+                {
+                    playerProjectiles.erase(playerProjectiles.begin() + i);
+                }
+                else
+                {
+                    i++;
+                }
+                std::cout << "Projectiles count: " << playerProjectiles.size() << "\n";
+            }
         }
         draw();
     }
