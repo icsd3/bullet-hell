@@ -79,9 +79,18 @@ bool Game::handleInputs()
     {
         if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
-            if (!player.hasSprite()) 
-                return false;
             target = sf::Vector2f(sf::Mouse::getPosition());
+        }
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            float dt = weaponClock.getElapsedTime().asSeconds();
+            if(player.canFireCurrentWeapon(dt))
+            {
+                weaponClock.restart();
+                sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
+                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
+                playerProjectiles.back().loadProjectile(window);
+            }
         }
     }
 
@@ -191,20 +200,27 @@ void Game::handleLevelInput(const sf::Event& event)
     {
         const auto* mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
 
-        if (!player.hasSprite()) 
-            return;
-
         if(mouseEvent->button == sf::Mouse::Button::Right)
         {
             target = sf::Vector2f(mouseEvent->position);
+        }
+
+        if(mouseEvent->button == sf::Mouse::Button::Left)
+        {
+            float dt = weaponClock.getElapsedTime().asSeconds();
+            if(player.canFireCurrentWeapon(dt))
+            {
+                weaponClock.restart();
+                sf::Vector2f projectileTarget = sf::Vector2f(mouseEvent->position);
+                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
+                playerProjectiles.back().loadProjectile(window);
+                std::cout<<"fired\n";
+            }
         }
     }
     if(event.is<sf::Event::KeyPressed>())
     {
         // const auto* keyBoardEvent = event.getIf<sf::Event::KeyPressed>();
-
-        if (!player.hasSprite()) 
-            return;
     }
 }
 
@@ -212,6 +228,10 @@ void Game::drawLevel()
 {
     loader.drawLevelBackground(window);
     player.drawPlayer(window);
+    for(auto& projectile : playerProjectiles)
+    {
+        projectile.drawProjectile(window);
+    }
     drawGUI();
 }
 
@@ -282,8 +302,15 @@ void Game::Play()
         }
         if(currentState == level_1 || currentState == level_2 || currentState == level_3)
         {
-            float dt = clock.restart().asSeconds();
+            float dt = updateClock.restart().asSeconds();
             player.updatePlayer(dt, target);
+            for(size_t i = 0; i < playerProjectiles.size(); )
+            {
+                if(playerProjectiles[i].updateProjectile(dt, window))
+                    playerProjectiles.erase(playerProjectiles.begin() + i);
+                else
+                    i++;
+            }
         }
         draw();
     }

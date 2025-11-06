@@ -18,7 +18,8 @@ class Game
     Game& operator=(const Game&) = delete;
 
     sf::RenderWindow window;
-    sf::Clock clock;
+    sf::Clock weaponClock;
+    sf::Clock updateClock;
     sf::Vector2f target;
 
     gameStates currentState;
@@ -26,7 +27,8 @@ class Game
     AssetLoader& loader = AssetLoader::getInstance();
     Player& player = Player::getInstance(target);
     GUI& gui = GUI::getInstance();
-    std::vector<Projectile> projectiles;
+    std::vector<Projectile> playerProjectiles;
+    std::vector<Projectile> enemyProjectiles;
     
     void setup();
 

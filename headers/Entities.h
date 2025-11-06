@@ -16,11 +16,10 @@ protected:
 
     std::string textureFile;
     sf::Texture texture;
-    std::optional<sf::Sprite> sprite;
-
-    void loadObject();
+    sf::Sprite sprite;
 
 public:
+    static sf::Texture loadTexture(const std::string& file);
     Object(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf);
     Object(const Object&);
     Object& operator=(const Object&);
