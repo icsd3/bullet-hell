@@ -34,6 +34,11 @@ bool Projectile::updateProjectile(const float& dt, sf::RenderWindow& window)
     return false;
 }
 
+int Projectile::getDamage() const
+{
+    return damage;
+}
+
 std::ostream& operator<<(std::ostream& os, const Projectile& projectile)
 {
     os << static_cast<const Entity&>(projectile);

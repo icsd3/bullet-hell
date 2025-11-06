@@ -17,6 +17,7 @@ public:
     void loadProjectile(sf::RenderWindow&);
     void drawProjectile(sf::RenderWindow&);
     bool updateProjectile(const float&, sf::RenderWindow&);     // Returns true if projectile is out of bounds or has hit something
+    int getDamage() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Projectile& projectile);
 };

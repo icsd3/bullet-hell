@@ -16,6 +16,11 @@ sf::Texture Object::loadTexture(const std::string& file)
     return t;
 }
 
+bool Object::collidesWith(const Object& other) const
+{
+    return (sprite.getGlobalBounds().findIntersection(other.sprite.getGlobalBounds())).has_value();
+}
+
 Object::Object(const Object& other)
     :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(std::move(other.textureFile)), texture(loadTexture(textureFile)), sprite(texture)
 {
@@ -52,13 +57,13 @@ std::ostream& operator<<(std::ostream& os, const Object& object)
 Entity::Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, float spd)
     :Object(ec, pos, ori, tf), speed(spd)
 {
-
+    isEntity=true;
 }
 
 Entity::Entity(const Entity& other)
     :Object(other), speed(other.speed)
 {
-
+    isEntity=true;
 }
 
 Entity& Entity::operator=(const Entity& other)
@@ -67,6 +72,7 @@ Entity& Entity::operator=(const Entity& other)
     {
         Object::operator=(other);
         speed = other.speed;
+        isEntity=true;
     }
     return *this;
 }

@@ -5,6 +5,7 @@
 #include "../headers/Player.h"
 #include "../headers/GUI.h"
 #include "../headers/Projectiles.h"
+#include "../headers/Enemies.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -29,6 +30,7 @@ class Game
     GUI& gui = GUI::getInstance();
     std::vector<Projectile> playerProjectiles;
     std::vector<Projectile> enemyProjectiles;
+    std::vector<Enemy> enemies;
     
     void setup();
 
@@ -44,6 +46,8 @@ class Game
     // void drawVictory();
     
     void handleNewState();
+
+    void spawnEnemies(const int&);
 
 public:
     void Play();

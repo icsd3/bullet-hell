@@ -23,9 +23,9 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
 
     void loadPlayer(sf::RenderWindow&);
-    void updatePlayer(const float& dt, const sf::Vector2f&);
+    void updatePlayer(const float&, const sf::Vector2f&);
     void drawPlayer(sf::RenderWindow&);
     sf::Vector2i getHealthStatus() const;
     Projectile fireCurrentWeapon(const sf::Vector2f&);
-    bool canFireCurrentWeapon(const float& dt);
+    bool canFireCurrentWeapon(const float&);
 };

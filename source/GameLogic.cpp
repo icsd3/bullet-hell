@@ -48,6 +48,7 @@ void Game::handleNewState()
             loader.loadLevel(window);
             player.loadPlayer(window);
             gui.loadGUI();
+            spawnEnemies(5);
             std::cout << "level_1\n";
             break;
         case level_2:
@@ -224,6 +225,16 @@ void Game::handleLevelInput(const sf::Event& event)
     }
 }
 
+void Game::spawnEnemies(const int& numberOfEnemies)
+{
+    for(int i=0; i<numberOfEnemies; i++)
+    {
+        enemies.push_back(Enemy::spawnEnemy(sf::Vector2f(100.f + i * 100.f, 100.f), 100.f, 100, Weapon("EnemyGun", 10, 1, 1.f, 0.f, 500.f, 300.f)));
+        enemies.back().loadEnemy(window);
+        std::cout<<"Spawned enemy "<<i+1<<"\n";
+    }
+}
+
 void Game::drawLevel()
 {
     loader.drawLevelBackground(window);
@@ -231,6 +242,10 @@ void Game::drawLevel()
     for(auto& projectile : playerProjectiles)
     {
         projectile.drawProjectile(window);
+    }
+    for(auto& enemy : enemies)
+    {
+        enemy.drawEnemy(window); 
     }
     drawGUI();
 }

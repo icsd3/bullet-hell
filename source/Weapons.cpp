@@ -45,13 +45,13 @@ Weapon::~Weapon()
     std::cout<<"Weapon destroyed: "<<name<<"\n";
 }
 
-Projectile Weapon::fire(const sf::Vector2f& position, const sf::Vector2f& target)
+Projectile Weapon::fire(const sf::Vector2f& position, const sf::Vector2f& target) const
 {
     Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", bulletSpeed, damage, target);
     return projectile;
 }
 
-bool Weapon::canFire(const float& dt)
+bool Weapon::canFire(const float& dt) const
 {
     if(dt>=1/fire_rate)
         return true;

@@ -13,6 +13,7 @@ class Object
 protected:
     sf::Vector2f position;
     bool orientation = false; // false = left, true = right
+    bool isEntity=false;
 
     std::string textureFile;
     sf::Texture texture;
@@ -20,6 +21,8 @@ protected:
 
 public:
     static sf::Texture loadTexture(const std::string& file);
+    bool collidesWith(const Object& other) const;
+
     Object(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf);
     Object(const Object&);
     Object& operator=(const Object&);
