@@ -1,7 +1,7 @@
 #include "../headers/Player.h"
 
 Player::Player(const sf::Vector2f& start)
-    :Entity(false, start, false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 25, 1, 60.f, 0.f, 500.f, 500.f)
+    :Entity(false, start, false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 25, 1, 5.f, 0.f, 500.f, 500.f)
 {                                                                                                                //name, dmg, f_rate, spread, range, spd
     weapons.emplace_back(currentWeapon);
 }
