@@ -18,7 +18,7 @@ void Enemy::loadEnemy(sf::RenderWindow& window)
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
-    sprite.setScale(sf::Vector2f(window.getSize().x / texture.getSize().x / 20.f, window.getSize().x / texture.getSize().x / 20.f));
+    sprite.setScale(sf::Vector2f(1.f * window.getSize().x / texture.getSize().x / 20.f, 1.f * window.getSize().x / texture.getSize().x / 20.f));
 }
 
 void Enemy::drawEnemy(sf::RenderWindow& window)
@@ -26,11 +26,8 @@ void Enemy::drawEnemy(sf::RenderWindow& window)
     window.draw(sprite);
 }
 
-bool Enemy::updateEnemy(const int& dmg, const float& dt, const sf::Vector2f& target)
+void Enemy::updateEnemy(const float& dt, const sf::Vector2f& target)
 {
-    if(takeDamage(dmg))
-        return true;
-
     sf::Vector2f dir = target - position;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
@@ -50,7 +47,6 @@ bool Enemy::updateEnemy(const int& dmg, const float& dt, const sf::Vector2f& tar
             sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
         }
     }
-    return false;
 }
 
 bool Enemy::takeDamage(const int& dmg)

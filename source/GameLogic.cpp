@@ -317,18 +317,44 @@ void Game::Play()
         }
         if(currentState == level_1 || currentState == level_2 || currentState == level_3)
         {
-            float dt = updateClock.restart().asSeconds();
-            player.updatePlayer(dt, target);
-            for(size_t i = 0; i < playerProjectiles.size(); )
-            {
-                if(playerProjectiles[i].updateProjectile(dt, window))
-                    playerProjectiles.erase(playerProjectiles.begin() + i);
-                else
-                    i++;
-            }
+            updateEntities();
         }
         draw();
     }
+}
+
+void Game::updateEntities()
+{
+    float dt = updateClock.restart().asSeconds();
+    player.updatePlayer(dt, target);
+    for(size_t i = 0; i < playerProjectiles.size(); )
+    {
+        if(playerProjectiles[i].updateProjectile(dt, window))
+            playerProjectiles.erase(playerProjectiles.begin() + i);
+        else
+        {
+            if(checkEnemyHits(playerProjectiles[i], enemies))
+                playerProjectiles.erase(playerProjectiles.begin() + i);
+            else
+                i++;
+        }
+    }
+}
+
+bool Game::checkEnemyHits(Projectile& projectile, std::vector<Enemy>& enemies)
+{
+    for(size_t i = 0; i < enemies.size();)
+    {
+        if(projectile.collidesWith(enemies[i]))
+        {
+            if(enemies[i].takeDamage(projectile.getDamage()))
+                enemies.erase(enemies.begin() + i);
+            return true;
+        }
+        else
+            i++;
+    }
+    return false;
 }
 
 std::ostream& operator<<(std::ostream& os, const Game& game)

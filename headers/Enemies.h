@@ -14,7 +14,7 @@ public:
 
     void loadEnemy(sf::RenderWindow&);
     void drawEnemy(sf::RenderWindow&);
-    bool updateEnemy(const int&, const float&, const sf::Vector2f&);
+    void updateEnemy(const float&, const sf::Vector2f&);
     bool takeDamage(const int&);
     Projectile fireEnemyWeapon(const sf::Vector2f&);
     bool canFireEnemyWeapon(const float&);

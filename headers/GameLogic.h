@@ -48,6 +48,8 @@ class Game
     void handleNewState();
 
     void spawnEnemies(const int&);
+    void updateEntities();
+    bool checkEnemyHits(Projectile&, std::vector<Enemy>&);
 
 public:
     void Play();
