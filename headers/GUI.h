@@ -9,19 +9,22 @@
 class GUI
 {
     GUI();
-    GUI(const GUI&) = delete;
-    GUI& operator=(const GUI&) = delete;
+    GUI(const GUI &) = delete;
+    GUI &operator=(const GUI &) = delete;
 
-    std:: string fontPath = "fonts/arial.ttf";
+    std::string fontPath = "fonts/arial.ttf";
     sf::Font font;
     sf::Text health;
+    sf::Text fps;
+    sf::Clock fpsClock;
+    int frameCount = 0;
 
 public:
-    static GUI& getInstance();
+    static GUI &getInstance();
     ~GUI() = default;
-    friend std::ostream& operator<<(std::ostream& os, const GUI& gui);
+    friend std::ostream &operator<<(std::ostream &os, const GUI &gui);
 
-    void loadGUI();
+    void loadGUI(sf::Window &);
     void updateGUI(sf::Vector2i);
-    void draw(sf::RenderWindow&);
-}; 
+    void draw(sf::RenderWindow &);
+};

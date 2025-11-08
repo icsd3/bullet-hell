@@ -18,5 +18,5 @@ class Progress
     Progress() = default;
 
 public:
-    static void selectGameState(gameStates& gameState);
+    static void selectGameState(gameStates &gameState);
 };

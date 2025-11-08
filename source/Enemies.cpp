@@ -1,19 +1,18 @@
 #include "../headers/Enemies.h"
 #include <iostream>
 
-Enemy::Enemy(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, const sf::Texture& tex, float spd, const int& mh, const Weapon& ew)
-    :Entity(ec, pos, ori, tf, tex, spd), maxHealth(mh), enemyWeapon(ew), currentHealth(mh)
+Enemy::Enemy(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex, float spd, const int &mh, const Weapon &ew)
+    : Entity(ec, pos, ori, tf, tex, spd), maxHealth(mh), enemyWeapon(ew), currentHealth(mh)
 {
-
 }
 
-Enemy Enemy::spawnEnemy(const sf::Texture& tex, const sf::Vector2f& pos, float spd, const int& mh, const Weapon& ew)
+Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, const Weapon &ew)
 {
     Enemy enemy(true, pos, false, "textures/enemy.png", tex, spd, mh, ew);
     return enemy;
 }
 
-void Enemy::loadEnemy(sf::RenderWindow& window, const sf::Texture& texture)
+void Enemy::loadEnemy(sf::RenderWindow &window, const sf::Texture &texture)
 {
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
@@ -21,17 +20,17 @@ void Enemy::loadEnemy(sf::RenderWindow& window, const sf::Texture& texture)
     sprite.setScale(sf::Vector2f(1.f * window.getSize().x / texture.getSize().x / 20.f, 1.f * window.getSize().x / texture.getSize().x / 20.f));
 }
 
-void Enemy::drawEnemy(sf::RenderWindow& window)
+void Enemy::drawEnemy(sf::RenderWindow &window)
 {
     window.draw(sprite);
 }
 
-void Enemy::updateEnemy(const float& dt, const sf::Vector2f& target)
+void Enemy::updateEnemy(const float &dt, const sf::Vector2f &target)
 {
     sf::Vector2f dir = target - position;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
-    if (distance > 5.0f) 
+    if (distance > 5.0f)
     {
         dir /= distance;
         sprite.move(sf::Vector2f(dir * speed * dt));
@@ -49,32 +48,31 @@ void Enemy::updateEnemy(const float& dt, const sf::Vector2f& target)
     }
 }
 
-bool Enemy::takeDamage(const int& dmg)
+bool Enemy::takeDamage(const int &dmg)
 {
     currentHealth -= dmg;
-    if(currentHealth <= 0)
+    if (currentHealth <= 0)
         return true;
     return false;
 }
 
-Projectile Enemy::fireEnemyWeapon(const sf::Vector2f& target, const sf::Texture& tex)
+Projectile Enemy::fireEnemyWeapon(const sf::Vector2f &target, const sf::Texture &tex)
 {
     Projectile projectile = enemyWeapon.fire(position, target, tex);
     return projectile;
 }
 
-bool Enemy::canFireEnemyWeapon(const float& dt)
+bool Enemy::canFireEnemyWeapon(const float &dt)
 {
     return enemyWeapon.canFire(dt);
 }
 
-Enemy::Enemy(const Enemy& other)
-    :Entity(other), maxHealth(other.maxHealth), enemyWeapon(other.enemyWeapon), currentHealth(other.currentHealth)
+Enemy::Enemy(const Enemy &other)
+    : Entity(other), maxHealth(other.maxHealth), enemyWeapon(other.enemyWeapon), currentHealth(other.currentHealth)
 {
-
 }
 
-Enemy& Enemy::operator=(const Enemy& other)
+Enemy &Enemy::operator=(const Enemy &other)
 {
     if (this != &other)
     {
@@ -86,9 +84,9 @@ Enemy& Enemy::operator=(const Enemy& other)
     return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const Enemy& enemy)
+std::ostream &operator<<(std::ostream &os, const Enemy &enemy)
 {
-    os << static_cast<const Entity&>(enemy);
+    os << static_cast<const Entity &>(enemy);
     os << " Max Health: " << enemy.maxHealth;
     os << " Current Health: " << enemy.currentHealth;
     os << " Enemy Weapon: " << enemy.enemyWeapon;
