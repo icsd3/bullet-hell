@@ -14,10 +14,10 @@ public:
 
     void loadEnemy(sf::RenderWindow &, const sf::Texture &);
     void drawEnemy(sf::RenderWindow &);
-    void updateEnemy(const float &, const sf::Vector2f &);
+    // void updateEnemy(const float &, const sf::Vector2f &);
     bool takeDamage(const int &);
-    Projectile fireEnemyWeapon(const sf::Vector2f &, const sf::Texture &);
-    bool canFireEnemyWeapon(const float &);
+    // Projectile fireEnemyWeapon(const sf::Vector2f &, const sf::Texture &);
+    // bool canFireEnemyWeapon(const float &);
 
     Enemy(const Enemy &);
     Enemy &operator=(const Enemy &);

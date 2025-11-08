@@ -63,7 +63,7 @@ public:
     sf::Texture &getPlayerTexture();
     sf::Texture &getEnemyTexture();
     sf::Texture &getPlayerProjectileTexture();
-    sf::Texture &getEnemyProjectileTexture();
+    // sf::Texture &getEnemyProjectileTexture();
 
     sf::FloatRect getMenuButtonBounds(int);
     sf::FloatRect getAugmentButtonBounds(int);

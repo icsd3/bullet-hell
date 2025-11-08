@@ -314,7 +314,7 @@ void Game::updateEntities()
             playerProjectiles.erase(playerProjectiles.begin() + i);
         else
         {
-            if (checkEnemyHits(playerProjectiles[i], enemies))
+            if (checkEnemyHits(playerProjectiles[i]))
                 playerProjectiles.erase(playerProjectiles.begin() + i);
             else
                 i++;
@@ -322,7 +322,7 @@ void Game::updateEntities()
     }
 }
 
-bool Game::checkEnemyHits(Projectile &projectile, std::vector<Enemy> &enemies)
+bool Game::checkEnemyHits(const Projectile &projectile)
 {
     for (size_t i = 0; i < enemies.size();)
     {

@@ -49,7 +49,7 @@ class Game
 
     void spawnEnemies(const int &);
     void updateEntities();
-    bool checkEnemyHits(Projectile &, std::vector<Enemy> &);
+    bool checkEnemyHits(const Projectile &);
 
 public:
     void Play();

@@ -25,28 +25,28 @@ void Enemy::drawEnemy(sf::RenderWindow &window)
     window.draw(sprite);
 }
 
-void Enemy::updateEnemy(const float &dt, const sf::Vector2f &target)
-{
-    sf::Vector2f dir = target - position;
-    float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+// void Enemy::updateEnemy(const float &dt, const sf::Vector2f &target)
+// {
+//     sf::Vector2f dir = target - position;
+//     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
-    if (distance > 5.0f)
-    {
-        dir /= distance;
-        sprite.move(sf::Vector2f(dir * speed * dt));
-        position = sprite.getPosition();
-        if (dir.x > 0.f)
-        {
-            orientation = true;
-            sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
-        }
-        else
-        {
-            orientation = false;
-            sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
-        }
-    }
-}
+//     if (distance > 5.0f)
+//     {
+//         dir /= distance;
+//         sprite.move(sf::Vector2f(dir * speed * dt));
+//         position = sprite.getPosition();
+//         if (dir.x > 0.f)
+//         {
+//             orientation = true;
+//             sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
+//         }
+//         else
+//         {
+//             orientation = false;
+//             sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
+//         }
+//     }
+// }
 
 bool Enemy::takeDamage(const int &dmg)
 {
@@ -56,16 +56,16 @@ bool Enemy::takeDamage(const int &dmg)
     return false;
 }
 
-Projectile Enemy::fireEnemyWeapon(const sf::Vector2f &target, const sf::Texture &tex)
-{
-    Projectile projectile = enemyWeapon.fire(position, target, tex);
-    return projectile;
-}
+// Projectile Enemy::fireEnemyWeapon(const sf::Vector2f &target, const sf::Texture &tex)
+// {
+//     Projectile projectile = enemyWeapon.fire(position, target, tex);
+//     return projectile;
+// }
 
-bool Enemy::canFireEnemyWeapon(const float &dt)
-{
-    return enemyWeapon.canFire(dt);
-}
+// bool Enemy::canFireEnemyWeapon(const float &dt)
+// {
+//     return enemyWeapon.canFire(dt);
+// }
 
 Enemy::Enemy(const Enemy &other)
     : Entity(other), maxHealth(other.maxHealth), enemyWeapon(other.enemyWeapon), currentHealth(other.currentHealth)

@@ -218,10 +218,10 @@ sf::Texture &AssetLoader::getPlayerProjectileTexture()
     return playerProjectileTexture;
 }
 
-sf::Texture &AssetLoader::getEnemyProjectileTexture()
-{
-    return enemyProjectileTexture;
-}
+// sf::Texture &AssetLoader::getEnemyProjectileTexture()
+// {
+//     return enemyProjectileTexture;
+// }
 
 sf::FloatRect AssetLoader::getMenuButtonBounds(int i)
 {
