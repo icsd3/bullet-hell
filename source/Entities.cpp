@@ -1,33 +1,19 @@
 #include "../headers/Entities.h"
 #include <iostream>
 
-Object::Object(const bool& pc, const sf::Vector2f& pos, const bool& ori, const std::string& tf)
-    :entityCollision(pc), position(pos), orientation(ori), textureFile(std::move(tf)), texture(loadTexture(textureFile)), sprite(texture)
+Object::Object(const bool& pc, const sf::Vector2f& pos, const bool& ori, const std::string& tf, const sf::Texture& tex)
+    :entityCollision(pc), position(pos), orientation(ori), textureFile(tf), sprite(tex)
 {
     
 }
 
-sf::Texture Object::loadTexture(const std::string& file) 
-{
-    sf::Texture t;
-    if (!t.loadFromFile(file)) {
-        std::cerr << "Failed to load texture: " << file << '\n';
-    }
-    return t;
-}
-
-bool Object::collidesWith(const Object& other) const
-{
-    return (sprite.getGlobalBounds().findIntersection(other.sprite.getGlobalBounds())).has_value();
-}
-
 Object::Object(const Object& other)
-    :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(std::move(other.textureFile)), texture(loadTexture(textureFile)), sprite(texture)
+    :entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(other.textureFile), sprite(other.sprite)
 {
-    sprite.setOrigin(other.sprite.getOrigin());
-    sprite.setPosition(other.sprite.getPosition());
-    sprite.setScale(other.sprite.getScale());
-    sprite.setRotation(other.sprite.getRotation());
+    // sprite.setOrigin(other.sprite.getOrigin());
+    // sprite.setPosition(other.sprite.getPosition());
+    // sprite.setScale(other.sprite.getScale());
+    // sprite.setRotation(other.sprite.getRotation());
 }
 
 Object& Object::operator=(const Object& other)
@@ -37,13 +23,12 @@ Object& Object::operator=(const Object& other)
         entityCollision = other.entityCollision;
         position = other.position;
         orientation = other.orientation;
-        textureFile = std::move(other.textureFile);
-        texture = loadTexture(textureFile);
-        sprite = sf::Sprite(texture);
-        sprite.setOrigin(other.sprite.getOrigin());
-        sprite.setPosition(other.sprite.getPosition());
-        sprite.setScale(other.sprite.getScale());
-        sprite.setRotation(other.sprite.getRotation());
+        textureFile = other.textureFile;
+        sprite = other.sprite;
+        // sprite.setOrigin(other.sprite.getOrigin());
+        // sprite.setPosition(other.sprite.getPosition());
+        // sprite.setScale(other.sprite.getScale());
+        // sprite.setRotation(other.sprite.getRotation());
     }
     return *this;
 }
@@ -54,8 +39,13 @@ std::ostream& operator<<(std::ostream& os, const Object& object)
     return os;
 }
 
-Entity::Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, float spd)
-    :Object(ec, pos, ori, tf), speed(spd)
+bool Object::collidesWith(const Object& other) const
+{
+    return (sprite.getGlobalBounds().findIntersection(other.sprite.getGlobalBounds())).has_value();
+}
+
+Entity::Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, const sf::Texture& tex, float spd)
+    :Object(ec, pos, ori, tf, tex), speed(spd)
 {
     isEntity=true;
 }

@@ -16,14 +16,12 @@ protected:
     bool isEntity=false;
 
     std::string textureFile;
-    sf::Texture texture;
     sf::Sprite sprite;
 
 public:
-    static sf::Texture loadTexture(const std::string& file);
     bool collidesWith(const Object& other) const;
 
-    Object(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf);
+    Object(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, const sf::Texture& tex);
     Object(const Object&);
     Object& operator=(const Object&);
     ~Object() = default;
@@ -37,7 +35,7 @@ protected:
     float speed;
 
 public:
-    Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, float spd);
+    Entity(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, const sf::Texture& tex, float spd);
     Entity(const Entity&);
     Entity& operator=(const Entity&);
     ~Entity() = default;

@@ -21,6 +21,9 @@ class AssetLoader
     std::string augmentBackgroundPath = "textures/augment_background.png";
     std::string augmentButtonPath = "textures/augment_button.png";
     std::string levelBackgroundPath = "textures/level_background.png";
+    std::string enemyPath = "textures/enemy.png";
+    std::string playerProjectilePath = "textures/player_projectile.png";
+    std::string enemyProjectilePath = "textures/enemy_projectile.png";
 
     sf::Texture menuBackgroundTexture;
     std::optional<sf::Sprite> menuBackgroundSprite;
@@ -34,6 +37,11 @@ class AssetLoader
 
     sf::Texture levelBackgroundTexture;
     std::optional<sf::Sprite> levelBackgroundSprite;
+
+    sf::Texture playerTexture;
+    sf::Texture enemyTexture;
+    sf::Texture playerProjectileTexture;
+    sf::Texture enemyProjectileTexture;
 
 public:
     static AssetLoader& getInstance();
@@ -52,6 +60,11 @@ public:
     bool hasLevelBackgroundSprite();
     bool hasMenuButtonSprites();
     bool hasAugmentButtonSprites();
+
+    sf::Texture& getPlayerTexture();
+    sf::Texture& getEnemyTexture();
+    sf::Texture& getPlayerProjectileTexture();
+    sf::Texture& getEnemyProjectileTexture();
 
     sf::FloatRect getMenuButtonBounds(int);
     sf::FloatRect getAugmentButtonBounds(int);

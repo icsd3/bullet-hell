@@ -46,7 +46,7 @@ void Game::handleNewState()
             break;
         case level_1:
             loader.loadLevel(window);
-            player.loadPlayer(window);
+            player.loadPlayer(window, loader.getPlayerTexture());
             gui.loadGUI();
             spawnEnemies(5);
             std::cout << "level_1\n";
@@ -89,8 +89,8 @@ bool Game::handleInputs()
             {
                 weaponClock.restart();
                 sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
-                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
-                playerProjectiles.back().loadProjectile(window);
+                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget , loader.getPlayerProjectileTexture()));
+                playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
             }
         }
     }
@@ -213,9 +213,8 @@ void Game::handleLevelInput(const sf::Event& event)
             {
                 weaponClock.restart();
                 sf::Vector2f projectileTarget = sf::Vector2f(mouseEvent->position);
-                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget));
-                playerProjectiles.back().loadProjectile(window);
-                std::cout<<"fired\n";
+                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture()));
+                playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
             }
         }
     }
@@ -229,8 +228,8 @@ void Game::spawnEnemies(const int& numberOfEnemies)
 {
     for(int i=0; i<numberOfEnemies; i++)
     {
-        enemies.push_back(Enemy::spawnEnemy(sf::Vector2f(100.f + i * 100.f, 100.f), 100.f, 100, Weapon("EnemyGun", 10, 1, 1.f, 0.f, 500.f, 300.f)));
-        enemies.back().loadEnemy(window);
+        enemies.push_back(Enemy::spawnEnemy(loader.getEnemyTexture(), sf::Vector2f(100.f + i * 100.f, 100.f), 100.f, 100, Weapon("EnemyGun", 10, 1, 1.f, 0.f, 500.f, 300.f)));
+        enemies.back().loadEnemy(window, loader.getEnemyTexture());
         std::cout<<"Spawned enemy "<<i+1<<"\n";
     }
 }

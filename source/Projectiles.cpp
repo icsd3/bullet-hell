@@ -1,7 +1,7 @@
 #include "../headers/Projectiles.h"
 
-Projectile::Projectile(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& textureFile, float spd, const int& dmg, const sf::Vector2f& t)
-    :Entity(ec, pos, ori, textureFile, spd), damage(dmg), target(t)
+Projectile::Projectile(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& textureFile, const sf::Texture& tex, float spd, const int& dmg, const sf::Vector2f& t)
+    :Entity(ec, pos, ori, textureFile, tex, spd), damage(dmg), target(t)
 {
     direction = target - position;
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -9,7 +9,7 @@ Projectile::Projectile(const bool& ec, const sf::Vector2f& pos, const bool& ori,
     rotation = sf::radians(std::atan2(direction.y, direction.x));
 }
 
-void Projectile::loadProjectile(sf::RenderWindow& window)
+void Projectile::loadProjectile(sf::RenderWindow& window, const sf::Texture& texture)
 {
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));

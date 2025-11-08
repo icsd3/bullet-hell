@@ -1,14 +1,14 @@
 #include "../headers/Player.h"
 
-Player::Player(const sf::Vector2f& start)
-    :Entity(false, start, false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 25, 1, 5.f, 0.f, 500.f, 500.f)
-{                                                                                                                //name, dmg, f_rate, spread, range, spd
+Player::Player(const sf::Vector2f& start, const sf::Texture& tex)
+    :Entity(false, start, false, "textures/player.png", tex, 200.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 1, 1, 5.f, 0.f, 500.f, 1000.f)
+{                                                                                                                     //name, dmg, f_rate, spread, range, spd
     weapons.emplace_back(currentWeapon);
 }
 
-Player& Player::getInstance(const sf::Vector2f& start)
+Player& Player::getInstance(const sf::Vector2f& start, const sf::Texture& tex)
 {
-    static Player instance(start);
+    static Player instance(start, tex);
     return instance;
 }
 
@@ -48,7 +48,7 @@ void Player::updatePlayer(const float& dt, const sf::Vector2f& target)
     }
 }
 
-void Player::loadPlayer(sf::RenderWindow& window)
+void Player::loadPlayer(sf::RenderWindow& window, const sf::Texture& texture)
 {
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
@@ -74,9 +74,9 @@ sf::Vector2i Player::getHealthStatus() const
     return sf::Vector2i(currentHealth, maxHealth);
 }
 
-Projectile Player::fireCurrentWeapon(const sf::Vector2f& target)
+Projectile Player::fireCurrentWeapon(const sf::Vector2f& target, const sf::Texture& tex)
 {
-    return currentWeapon.fire(position, target);
+    return currentWeapon.fire(position, target, tex);
 }
 
 bool Player::canFireCurrentWeapon(const float& dt)

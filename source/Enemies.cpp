@@ -1,19 +1,19 @@
 #include "../headers/Enemies.h"
 #include <iostream>
 
-Enemy::Enemy(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, float spd, const int& mh, const Weapon& ew)
-    :Entity(ec, pos, ori, tf, spd), maxHealth(mh), enemyWeapon(ew), currentHealth(mh)
+Enemy::Enemy(const bool& ec, const sf::Vector2f& pos, const bool& ori, const std::string& tf, const sf::Texture& tex, float spd, const int& mh, const Weapon& ew)
+    :Entity(ec, pos, ori, tf, tex, spd), maxHealth(mh), enemyWeapon(ew), currentHealth(mh)
 {
 
 }
 
-Enemy Enemy::spawnEnemy(const sf::Vector2f& pos, float spd, const int& mh, const Weapon& ew)
+Enemy Enemy::spawnEnemy(const sf::Texture& tex, const sf::Vector2f& pos, float spd, const int& mh, const Weapon& ew)
 {
-    Enemy enemy(true, pos, false, "textures/enemy.png", spd, mh, ew);
+    Enemy enemy(true, pos, false, "textures/enemy.png", tex, spd, mh, ew);
     return enemy;
 }
 
-void Enemy::loadEnemy(sf::RenderWindow& window)
+void Enemy::loadEnemy(sf::RenderWindow& window, const sf::Texture& texture)
 {
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
@@ -57,9 +57,9 @@ bool Enemy::takeDamage(const int& dmg)
     return false;
 }
 
-Projectile Enemy::fireEnemyWeapon(const sf::Vector2f& target)
+Projectile Enemy::fireEnemyWeapon(const sf::Vector2f& target, const sf::Texture& tex)
 {
-    Projectile projectile = enemyWeapon.fire(position, target);
+    Projectile projectile = enemyWeapon.fire(position, target, tex);
     return projectile;
 }
 

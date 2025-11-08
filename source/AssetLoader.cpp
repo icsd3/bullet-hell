@@ -75,6 +75,21 @@ void AssetLoader::loadStaticAssets()
         std::cerr << "Error loading level_background.png\n";
     }
     levelBackgroundSprite.emplace(levelBackgroundTexture);
+
+    if(!enemyTexture.loadFromFile(enemyPath))
+    {
+        std::cerr << "Error loading enemy.png\n";
+    }
+    
+    if(!playerProjectileTexture.loadFromFile(playerProjectilePath))
+    {
+        std::cerr << "Error loading player_projectile.png\n";
+    }
+
+    if(!enemyProjectileTexture.loadFromFile(enemyProjectilePath))
+    {
+        std::cerr << "Error loading enemy_projectile.png\n";
+    }
 }
 
 void AssetLoader::loadMainMenu(sf::RenderWindow& window)
@@ -188,6 +203,33 @@ bool AssetLoader::hasMenuButtonSprites()
 bool AssetLoader::hasAugmentButtonSprites()
 {
     return (augmentButtonSprite[0].has_value() && augmentButtonSprite[1].has_value() && augmentButtonSprite[2].has_value());
+}
+
+sf::Texture& AssetLoader::getPlayerTexture()
+{
+    if(playerTexture.getSize().x == 0 || playerTexture.getSize().y == 0)
+    {
+        if(!playerTexture.loadFromFile("textures/player.png"))
+        {
+            std::cerr << "Error loading player.png\n";
+        }
+    }
+    return playerTexture;
+}
+
+sf::Texture& AssetLoader::getEnemyTexture()
+{
+    return enemyTexture;
+}
+
+sf::Texture& AssetLoader::getPlayerProjectileTexture()
+{
+    return playerProjectileTexture;
+}
+
+sf::Texture& AssetLoader::getEnemyProjectileTexture()
+{
+    return enemyProjectileTexture;
 }
 
 sf::FloatRect AssetLoader::getMenuButtonBounds(int i)

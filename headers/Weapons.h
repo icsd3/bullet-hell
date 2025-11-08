@@ -24,6 +24,6 @@ public:
     ~Weapon();
     friend std::ostream& operator<<(std::ostream& os, const Weapon& weapon);
 
-    Projectile fire(const sf::Vector2f&, const sf::Vector2f&) const;
+    Projectile fire(const sf::Vector2f&, const sf::Vector2f&, const sf::Texture&) const;
     bool canFire(const float&) const;
 };

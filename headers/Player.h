@@ -7,7 +7,7 @@
 
 class Player : public Entity
 {
-    explicit Player(const sf::Vector2f&);
+    explicit Player(const sf::Vector2f&, const sf::Texture& tex);
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;
 
@@ -18,14 +18,14 @@ class Player : public Entity
     std::vector<Weapon> weapons;
 
 public:
-    static Player& getInstance(const sf::Vector2f&);
+    static Player& getInstance(const sf::Vector2f&, const sf::Texture& tex);
     ~Player() = default;
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
 
-    void loadPlayer(sf::RenderWindow&);
+    void loadPlayer(sf::RenderWindow&, const sf::Texture&);
     void updatePlayer(const float&, const sf::Vector2f&);
     void drawPlayer(sf::RenderWindow&);
     sf::Vector2i getHealthStatus() const;
-    Projectile fireCurrentWeapon(const sf::Vector2f&);
+    Projectile fireCurrentWeapon(const sf::Vector2f& , const sf::Texture& tex);
     bool canFireCurrentWeapon(const float&);
 };

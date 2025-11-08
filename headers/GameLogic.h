@@ -26,7 +26,7 @@ class Game
     gameStates currentState;
 
     AssetLoader& loader = AssetLoader::getInstance();
-    Player& player = Player::getInstance(target);
+    Player& player = Player::getInstance(target, loader.getPlayerTexture());
     GUI& gui = GUI::getInstance();
     std::vector<Projectile> playerProjectiles;
     std::vector<Projectile> enemyProjectiles;
