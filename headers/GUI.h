@@ -15,6 +15,8 @@ class GUI
     std::string fontPath = "fonts/arial.ttf";
     sf::Font font;
     sf::Text health;
+    sf::RectangleShape maxHealthBar;
+    sf::RectangleShape currentHealthBar;
     sf::Text fps;
     sf::Clock fpsClock;
     int frameCount = 0;
@@ -25,6 +27,6 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const GUI &gui);
 
     void loadGUI(sf::Window &);
-    void updateGUI(sf::Vector2i);
+    void updateGUI(const sf::Vector2i &, sf::RenderWindow &);
     void draw(sf::RenderWindow &);
 };

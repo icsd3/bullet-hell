@@ -230,9 +230,8 @@ void Game::spawnEnemies(const int &numberOfEnemies)
 {
     for (int i = 0; i < numberOfEnemies; i++)
     {
-        enemies.push_back(Enemy::spawnEnemy(loader.getEnemyTexture(), sf::Vector2f(100.f + i * 100.f, 100.f), 100.f, 100, Weapon("EnemyGun", 10, 1, 1.f, 0.f, 500.f, 300.f)));
+        enemies.push_back(Enemy::spawnEnemy(loader.getEnemyTexture(), sf::Vector2f(500.f + i * 100.f, 500.f), 100.f, 100, Weapon("EnemyGun", 10, 1, 1.f, 0.f, 500.f, 300.f)));
         enemies.back().loadEnemy(window, loader.getEnemyTexture());
-        std::cout << "Spawned enemy " << i + 1 << "\n";
     }
 }
 
@@ -253,7 +252,7 @@ void Game::drawLevel()
 
 void Game::drawGUI()
 {
-    gui.updateGUI(player.getHealthStatus());
+    gui.updateGUI(player.getHealthStatus(), window);
     gui.draw(window);
 }
 

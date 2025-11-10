@@ -9,6 +9,9 @@ protected:
     Weapon enemyWeapon;
     int currentHealth;
 
+    sf::RectangleShape maxHealthBar;
+    sf::RectangleShape currentHealthBar;
+
 public:
     static Enemy spawnEnemy(const sf::Texture &, const sf::Vector2f &, float, const int &, const Weapon &);
 

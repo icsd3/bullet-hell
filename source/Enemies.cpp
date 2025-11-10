@@ -18,11 +18,25 @@ void Enemy::loadEnemy(sf::RenderWindow &window, const sf::Texture &texture)
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
     sprite.setScale(sf::Vector2f(1.f * window.getSize().x / texture.getSize().x / 20.f, 1.f * window.getSize().x / texture.getSize().x / 20.f));
+
+    maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, window.getSize().y / 100.f));
+    maxHealthBar.setFillColor(sf::Color(75, 0, 0, 175));
+    maxHealthBar.setOrigin(sf::Vector2f(maxHealthBar.getLocalBounds().size.x / 2.f, maxHealthBar.getLocalBounds().size.y / 2.f));
+    maxHealthBar.setPosition(sf::Vector2f(position.x, position.y - sprite.getGlobalBounds().size.y / 2.f - maxHealthBar.getSize().y));
+    maxHealthBar.setOutlineThickness(2.f);
+    maxHealthBar.setOutlineColor(sf::Color::Black);
+
+    currentHealthBar.setSize(maxHealthBar.getSize());
+    currentHealthBar.setFillColor(sf::Color(150, 0, 0, 175));
+    currentHealthBar.setOrigin(sf::Vector2f(0, currentHealthBar.getLocalBounds().size.y / 2.f));
+    currentHealthBar.setPosition(sf::Vector2f(maxHealthBar.getPosition().x - maxHealthBar.getSize().x / 2.f, maxHealthBar.getPosition().y));
 }
 
 void Enemy::drawEnemy(sf::RenderWindow &window)
 {
     window.draw(sprite);
+    window.draw(maxHealthBar);
+    window.draw(currentHealthBar);
 }
 
 // void Enemy::updateEnemy(const float &dt, const sf::Vector2f &target)
@@ -51,6 +65,7 @@ void Enemy::drawEnemy(sf::RenderWindow &window)
 bool Enemy::takeDamage(const int &dmg)
 {
     currentHealth -= dmg;
+    currentHealthBar.setSize(sf::Vector2f(static_cast<float>(currentHealth) / static_cast<float>(maxHealth) * maxHealthBar.getSize().x, currentHealthBar.getSize().y));
     if (currentHealth <= 0)
         return true;
     return false;
@@ -68,7 +83,7 @@ bool Enemy::takeDamage(const int &dmg)
 // }
 
 Enemy::Enemy(const Enemy &other)
-    : Entity(other), maxHealth(other.maxHealth), enemyWeapon(other.enemyWeapon), currentHealth(other.currentHealth)
+    : Entity(other), maxHealth(other.maxHealth), enemyWeapon(other.enemyWeapon), currentHealth(other.currentHealth), maxHealthBar(other.maxHealthBar), currentHealthBar(other.currentHealthBar)
 {
 }
 
@@ -80,6 +95,8 @@ Enemy &Enemy::operator=(const Enemy &other)
         maxHealth = other.maxHealth;
         enemyWeapon = other.enemyWeapon;
         currentHealth = other.currentHealth;
+        maxHealthBar = other.maxHealthBar;
+        currentHealthBar = other.currentHealthBar;
     }
     return *this;
 }
