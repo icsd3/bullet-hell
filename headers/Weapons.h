@@ -18,12 +18,12 @@ class Weapon
     float bulletSpeed;
 
 public:
-    Weapon(const std::string& nm, int dmg, int bnr, float fr, float sa, float rg, float bs);
-    Weapon(const Weapon&);
-    Weapon& operator=(const Weapon&);
+    Weapon(const std::string &nm, int dmg, int bnr, float fr, float sa, float rg, float bs);
+    Weapon(const Weapon &);
+    Weapon &operator=(const Weapon &);
     ~Weapon();
-    friend std::ostream& operator<<(std::ostream& os, const Weapon& weapon);
+    friend std::ostream &operator<<(std::ostream &os, const Weapon &weapon);
 
-    Projectile fire(const sf::Vector2f&, const sf::Vector2f&);
-    bool canFire(const float& dt);
+    Projectile fire(const sf::Vector2f &, const sf::Vector2f &, const sf::Texture &) const;
+    bool canFire(const float &) const;
 };

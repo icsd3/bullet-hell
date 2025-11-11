@@ -5,6 +5,7 @@
 #include "../headers/Player.h"
 #include "../headers/GUI.h"
 #include "../headers/Projectiles.h"
+#include "../headers/Enemies.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -14,8 +15,8 @@
 class Game
 {
     Game();
-    Game(const Game&) = delete;
-    Game& operator=(const Game&) = delete;
+    Game(const Game &) = delete;
+    Game &operator=(const Game &) = delete;
 
     sf::RenderWindow window;
     sf::Clock weaponClock;
@@ -24,31 +25,36 @@ class Game
 
     gameStates currentState;
 
-    AssetLoader& loader = AssetLoader::getInstance();
-    Player& player = Player::getInstance(target);
-    GUI& gui = GUI::getInstance();
+    AssetLoader &loader = AssetLoader::getInstance();
+    Player &player = Player::getInstance(target, loader.getPlayerTexture());
+    GUI &gui = GUI::getInstance();
     std::vector<Projectile> playerProjectiles;
     std::vector<Projectile> enemyProjectiles;
-    
+    std::vector<Enemy> enemies;
+
     void setup();
 
     bool handleInputs();
-    bool handleMainMenuInput(const sf::Event& event);
-    void handleAugmentInput(const sf::Event& event);
-    void handleLevelInput(const sf::Event& event);
+    bool handleMainMenuInput(const sf::Event &event);
+    void handleAugmentInput(const sf::Event &event);
+    void handleLevelInput(const sf::Event &event);
 
     void draw();
     void drawLevel();
     void drawGUI();
     // void drawDefeat();
     // void drawVictory();
-    
+
     void handleNewState();
+
+    void spawnEnemies(const int &);
+    void updateEntities();
+    bool checkEnemyHits(const Projectile &);
 
 public:
     void Play();
-    static Game& getInstance();
+    static Game &getInstance();
     ~Game() = default;
 
-    friend std::ostream& operator<<(std::ostream& os, const Game& game);
+    friend std::ostream &operator<<(std::ostream &os, const Game &game);
 };

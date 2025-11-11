@@ -11,12 +11,13 @@ class Projectile : public Entity
     sf::Vector2f direction;
 
 public:
-    Projectile(const bool&, const sf::Vector2f&, const bool&, const std::string&, float, const int&, const sf::Vector2f&);
+    Projectile(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float, const int &, const sf::Vector2f &);
     ~Projectile() = default;
 
-    void loadProjectile(sf::RenderWindow&);
-    void drawProjectile(sf::RenderWindow&);
-    bool updateProjectile(const float&, sf::RenderWindow&);     // Returns true if projectile is out of bounds or has hit something
+    void loadProjectile(sf::RenderWindow &, const sf::Texture &);
+    void drawProjectile(sf::RenderWindow &);
+    bool updateProjectile(const float &, sf::RenderWindow &); // Returns true if projectile is out of bounds
+    int getDamage() const;
 
-    friend std::ostream& operator<<(std::ostream& os, const Projectile& projectile);
+    friend std::ostream &operator<<(std::ostream &os, const Projectile &projectile);
 };

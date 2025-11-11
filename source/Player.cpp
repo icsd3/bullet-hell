@@ -1,36 +1,36 @@
 #include "../headers/Player.h"
 
-Player::Player(const sf::Vector2f& start)
-    :Entity(false, start, false, "textures/player.png", 175.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 10, 1, 2.f, 0.f, 500.f, 500.f)
-{
+Player::Player(const sf::Vector2f &start, const sf::Texture &tex)
+    : Entity(false, start, false, "textures/player.png", tex, 200.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 20, 1, 5.f, 0.f, 500.f, 1000.f)
+{                                                                                                                     //name, dmg, b_nr, f_rate, spread, range, spd
     weapons.emplace_back(currentWeapon);
 }
 
-Player& Player::getInstance(const sf::Vector2f& start)
+Player &Player::getInstance(const sf::Vector2f &start, const sf::Texture &tex)
 {
-    static Player instance(start);
+    static Player instance(start, tex);
     return instance;
 }
 
-std::ostream& operator<<(std::ostream& os, const Player& player)
+std::ostream &operator<<(std::ostream &os, const Player &player)
 {
-    os << static_cast<const Entity&>(player);
+    os << static_cast<const Entity &>(player);
     os << ", Max Health: " << player.maxHealth;
     os << ", Current Health: " << player.currentHealth;
     os << ", Weapons Count: " << player.weapons.size();
-    for(unsigned int i = 0; i < player.weapons.size(); i++)
+    for (unsigned int i = 0; i < player.weapons.size(); i++)
     {
         os << "\n        Weapon " << i + 1 << ": " << player.weapons[i];
     }
     return os;
 }
 
-void Player::updatePlayer(const float& dt, const sf::Vector2f& target)
+void Player::updatePlayer(const float &dt, const sf::Vector2f &target)
 {
     sf::Vector2f dir = target - position;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
-    if (distance > 5.0f) 
+    if (distance > 5.0f)
     {
         dir /= distance;
         sprite.move(sf::Vector2f(dir * speed * dt));
@@ -48,13 +48,13 @@ void Player::updatePlayer(const float& dt, const sf::Vector2f& target)
     }
 }
 
-void Player::loadPlayer(sf::RenderWindow& window)
+void Player::loadPlayer(sf::RenderWindow &window, const sf::Texture &texture)
 {
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
-    sprite.setScale(sf::Vector2f(window.getSize().x / texture.getSize().x / 20.f, window.getSize().x / texture.getSize().x / 20.f));
-    if(orientation)
+    sprite.setScale(sf::Vector2f(1.f * window.getSize().x / texture.getSize().x / 20.f, 1.f * window.getSize().x / texture.getSize().x / 20.f));
+    if (orientation)
     {
         sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
     }
@@ -64,7 +64,7 @@ void Player::loadPlayer(sf::RenderWindow& window)
     }
 }
 
-void Player::drawPlayer(sf::RenderWindow& window)
+void Player::drawPlayer(sf::RenderWindow &window)
 {
     window.draw(sprite);
 }
@@ -74,12 +74,17 @@ sf::Vector2i Player::getHealthStatus() const
     return sf::Vector2i(currentHealth, maxHealth);
 }
 
-Projectile Player::fireCurrentWeapon(const sf::Vector2f& target)
+sf::Vector2f Player::getPosition() const
 {
-    return currentWeapon.fire(position, target);
+    return position;
 }
 
-bool Player::canFireCurrentWeapon(const float& dt)
+Projectile Player::fireCurrentWeapon(const sf::Vector2f &target, const sf::Texture &tex)
+{
+    return currentWeapon.fire(position, target, tex);
+}
+
+bool Player::canFireCurrentWeapon(const float &dt)
 {
     return currentWeapon.canFire(dt);
 }
