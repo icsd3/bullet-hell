@@ -76,8 +76,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Projectiles.cpp
     headers/Enemies.h
     source/Enemies.cpp
-    headers/Settings.h
-    source/Settings.cpp
+    # headers/Settings.h
+    # source/Settings.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
