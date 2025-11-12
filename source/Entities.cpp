@@ -9,10 +9,6 @@ Object::Object(const bool &pc, const sf::Vector2f &pos, const bool &ori, const s
 Object::Object(const Object &other)
     : entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(other.textureFile), sprite(other.sprite)
 {
-    // sprite.setOrigin(other.sprite.getOrigin());
-    // sprite.setPosition(other.sprite.getPosition());
-    // sprite.setScale(other.sprite.getScale());
-    // sprite.setRotation(other.sprite.getRotation());
 }
 
 Object &Object::operator=(const Object &other)
@@ -24,10 +20,6 @@ Object &Object::operator=(const Object &other)
         orientation = other.orientation;
         textureFile = other.textureFile;
         sprite = other.sprite;
-        // sprite.setOrigin(other.sprite.getOrigin());
-        // sprite.setPosition(other.sprite.getPosition());
-        // sprite.setScale(other.sprite.getScale());
-        // sprite.setRotation(other.sprite.getRotation());
     }
     return *this;
 }
