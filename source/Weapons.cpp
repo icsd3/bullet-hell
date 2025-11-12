@@ -49,9 +49,13 @@ Projectile Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target
     return projectile;
 }
 
-bool Weapon::canFire(const float &dt) const
+bool Weapon::canFire()
 {
+    float dt = weaponClock.getElapsedTime().asSeconds();
     if (dt >= 1 / fire_rate)
+    {
+        weaponClock.restart();
         return true;
+    }
     return false;
 }

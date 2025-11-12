@@ -28,5 +28,5 @@ public:
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
     Projectile fireCurrentWeapon(const sf::Vector2f &, const sf::Texture &tex);
-    bool canFireCurrentWeapon(const float &);
+    bool canFireCurrentWeapon();
 };
