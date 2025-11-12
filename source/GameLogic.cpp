@@ -84,14 +84,11 @@ bool Game::handleInputs()
         }
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
-            float dt = weaponClock.getElapsedTime().asSeconds();
-            if (player.canFireCurrentWeapon(dt))
+            if (player.canFireCurrentWeapon())
             {
-                weaponClock.restart();
                 sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
                 playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture()));
                 playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
-                // target = player.getPosition();
             }
         }
     }
@@ -209,10 +206,8 @@ void Game::handleLevelInput(const sf::Event &event)
 
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            float dt = weaponClock.getElapsedTime().asSeconds();
-            if (player.canFireCurrentWeapon(dt))
+            if (player.canFireCurrentWeapon())
             {
-                weaponClock.restart();
                 sf::Vector2f projectileTarget = sf::Vector2f(mouseEvent->position);
                 playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture()));
                 playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());

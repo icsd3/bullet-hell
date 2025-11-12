@@ -84,7 +84,7 @@ Projectile Player::fireCurrentWeapon(const sf::Vector2f &target, const sf::Textu
     return currentWeapon.fire(position, target, tex);
 }
 
-bool Player::canFireCurrentWeapon(const float &dt)
+bool Player::canFireCurrentWeapon()
 {
-    return currentWeapon.canFire(dt);
+    return currentWeapon.canFire();
 }

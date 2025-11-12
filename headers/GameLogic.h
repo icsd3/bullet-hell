@@ -22,7 +22,6 @@ class Game
 
     //bool paused = false;
 
-    sf::Clock weaponClock;
     sf::Clock updateClock;
     sf::Vector2f target;
 
