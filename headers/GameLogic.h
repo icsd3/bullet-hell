@@ -8,8 +8,6 @@
 #include "../headers/Enemies.h"
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Audio/Music.hpp>
 #include <optional>
 
 class Game
@@ -18,16 +16,19 @@ class Game
     Game(const Game &) = delete;
     Game &operator=(const Game &) = delete;
 
-    sf::RenderWindow window;
-    sf::Clock weaponClock;
-    sf::Clock updateClock;
-    sf::Vector2f target;
-
-    gameStates currentState;
-
     AssetLoader &loader = AssetLoader::getInstance();
     Player &player = Player::getInstance(target, loader.getPlayerTexture());
     GUI &gui = GUI::getInstance();
+
+    sf::RenderWindow window;
+
+    gameStates currentState;
+
+    //bool paused = false;
+
+    sf::Clock weaponClock;
+    sf::Clock updateClock;
+    sf::Vector2f target;
     std::vector<Projectile> playerProjectiles;
     std::vector<Projectile> enemyProjectiles;
     std::vector<Enemy> enemies;
