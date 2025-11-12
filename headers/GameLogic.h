@@ -24,7 +24,7 @@ class Game
 
     gameStates currentState;
 
-    bool paused = false;
+    //bool paused = false;
 
     sf::Clock weaponClock;
     sf::Clock updateClock;
