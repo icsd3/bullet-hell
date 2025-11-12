@@ -19,6 +19,10 @@ class Game
     AssetLoader &loader = AssetLoader::getInstance();
     Player &player = Player::getInstance(target, loader.getPlayerTexture());
     GUI &gui = GUI::getInstance();
+    
+    std::vector<Projectile> playerProjectiles;
+    std::vector<Projectile> enemyProjectiles;
+    std::vector<Enemy> enemies;
 
     sf::RenderWindow window;
 
@@ -29,9 +33,6 @@ class Game
     sf::Clock weaponClock;
     sf::Clock updateClock;
     sf::Vector2f target;
-    std::vector<Projectile> playerProjectiles;
-    std::vector<Projectile> enemyProjectiles;
-    std::vector<Enemy> enemies;
 
     void setup();
 
