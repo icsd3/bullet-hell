@@ -16,14 +16,6 @@ class Game
     Game(const Game &) = delete;
     Game &operator=(const Game &) = delete;
 
-    AssetLoader &loader = AssetLoader::getInstance();
-    Player &player = Player::getInstance(target, loader.getPlayerTexture());
-    GUI &gui = GUI::getInstance();
-    
-    std::vector<Projectile> playerProjectiles;
-    std::vector<Projectile> enemyProjectiles;
-    std::vector<Enemy> enemies;
-
     sf::RenderWindow window;
 
     gameStates currentState;
@@ -33,6 +25,13 @@ class Game
     sf::Clock weaponClock;
     sf::Clock updateClock;
     sf::Vector2f target;
+
+    AssetLoader &loader = AssetLoader::getInstance();
+    Player &player = Player::getInstance(target, loader.getPlayerTexture());
+    GUI &gui = GUI::getInstance();
+    std::vector<Projectile> playerProjectiles;
+    std::vector<Projectile> enemyProjectiles;
+    std::vector<Enemy> enemies;
 
     void setup();
 
