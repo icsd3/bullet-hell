@@ -22,6 +22,7 @@ void Game::setup()
     currentState = menu;
     handleNewState();
     window.setVerticalSyncEnabled(true);
+    
 }
 
 void Game::handleNewState()
@@ -30,6 +31,7 @@ void Game::handleNewState()
     {
     case menu:
         loader.loadMainMenu(window);
+        settings.loadSettingsBox(window, fullscreen, controls);
         std::cout << "menu\n";
         break;
     case augment_1:
@@ -72,11 +74,21 @@ void Game::handleNewState()
     }
 }
 
+void Game::togglePause()
+{
+    if(!paused)
+        updateClock.stop();
+    else
+        updateClock.start();
+    paused = !paused;
+    std::cout << "Paused toggled to " << (paused ? "true" : "false") << "\n";
+}
+
 bool Game::handleInputs()
 {
     bool shouldExit = false;
 
-    if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+    if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
@@ -100,6 +112,20 @@ bool Game::handleInputs()
             window.close();
             std::cout << "Fereastra a fost inchisa fortat\n";
         }
+        // else if(event->is<sf::Event::Resized>())
+        // {
+        //     sf::FloatRect visibleArea({0.f, 0.f}, {static_cast<float>(event->getIf<sf::Event::Resized>()->size.x), static_cast<float>(event->getIf<sf::Event::Resized>()->size.y)});
+        //     window.setView(sf::View(visibleArea));
+        //     std::cout << "Fereastra redimensionata la: " << event->getIf<sf::Event::Resized>()->size.x << "x" << event->getIf<sf::Event::Resized>()->size.y << "\n";
+        // }
+        else if(event->is<sf::Event::FocusLost>())
+        {
+            if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+            {
+                if(!paused)
+                    togglePause();
+            }
+        }
         else if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>())
         {
             if (event->is<sf::Event::KeyPressed>())
@@ -113,6 +139,13 @@ bool Game::handleInputs()
                 else if (keyPressed->scancode == sf::Keyboard::Scancode::I)
                 {
                     std::cout << *this;
+                }
+                else if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+                {
+                    if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+                    {
+                        togglePause();
+                    }
                 }
             }
             else if (currentState == menu)
@@ -195,7 +228,7 @@ void Game::handleAugmentInput(const sf::Event &event)
 
 void Game::handleLevelInput(const sf::Event &event)
 {
-    if (event.is<sf::Event::MouseButtonPressed>())
+    if (event.is<sf::Event::MouseButtonPressed>() && !paused)
     {
         const auto *mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
 
@@ -243,6 +276,10 @@ void Game::drawLevel()
         enemy.drawEnemy(window);
     }
     drawGUI();
+    if(paused)
+    {
+        settings.draw(window, fullscreen, controls);
+    }
 }
 
 void Game::drawGUI()
@@ -344,7 +381,7 @@ void Game::Play()
             std::cout << "Fereastra a fost inchisa (shouldExit == true)\n";
             break;
         }
-        if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+        if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
         {
             updateEntities();
         }

@@ -6,6 +6,7 @@
 #include "../headers/GUI.h"
 #include "../headers/Projectiles.h"
 #include "../headers/Enemies.h"
+#include "../headers/Settings.h"
 
 #include <SFML/Graphics.hpp>
 #include <optional>
@@ -16,12 +17,15 @@ class Game
     Game(const Game &) = delete;
     Game &operator=(const Game &) = delete;
 
+    Settings &settings = Settings::getInstance();
+
     sf::RenderWindow window;
 
     gameStates currentState;
 
-    //bool paused = false;
-
+    bool paused = false;
+    bool fullscreen = true;
+    bool controls = true;
     sf::Clock updateClock;
     sf::Vector2f target;
 
@@ -50,6 +54,8 @@ class Game
     void spawnEnemies(const int &);
     void updateEntities();
     bool checkEnemyHits(const Projectile &);
+
+    void togglePause();
 
 public:
     void Play();
