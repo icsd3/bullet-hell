@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../headers/GameStates.h"
+#include "../headers/MainMenu.h"
 #include "../headers/AssetLoader.h"
 #include "../headers/Player.h"
 #include "../headers/GUI.h"
@@ -10,6 +10,19 @@
 
 #include <SFML/Graphics.hpp>
 #include <optional>
+
+enum gameStates
+{
+    main_menu = 1,
+    augment_1 = 2,
+    level_1 = 3,
+    augment_2 = 4,
+    level_2 = 5,
+    augment_3 = 6,
+    level_3 = 7,
+    defeat = 8,
+    victory = 9
+};
 
 class Game
 {
@@ -24,10 +37,13 @@ class Game
     gameStates currentState;
 
     bool paused = false;
+    bool openSettings = false;
     bool fullscreen = true;
     bool controls = true;
     sf::Clock updateClock;
     sf::Vector2f target;
+
+    mainMenu &menu = mainMenu::getInstance();
 
     AssetLoader &loader = AssetLoader::getInstance();
     Player &player = Player::getInstance(target, loader.getPlayerTexture());
@@ -37,9 +53,10 @@ class Game
     std::vector<Enemy> enemies;
 
     void setup();
+    static void selectGameState(gameStates &gameState);
 
     bool handleInputs();
-    bool handleMainMenuInput(const sf::Event &event);
+    // bool handleMainMenuInput(const sf::Event &event);
     void handleAugmentInput(const sf::Event &event);
     void handleLevelInput(const sf::Event &event);
 

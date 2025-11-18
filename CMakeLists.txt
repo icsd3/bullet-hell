@@ -60,8 +60,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     main.cpp
     headers/GameLogic.h
     source/GameLogic.cpp
-    headers/GameStates.h
-    source/GameStates.cpp
+    headers/MainMenu.h
+    source/MainMenu.cpp
     headers/AssetLoader.h
     source/AssetLoader.cpp
     headers/Entities.h
