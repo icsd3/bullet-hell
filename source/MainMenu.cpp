@@ -69,7 +69,7 @@ void mainMenu::draw(sf::RenderWindow &window)
     window.draw(exitButtonSprite);
 }
 
-int mainMenu::handleInput(const sf::Event &event, const sf::RenderWindow &window)
+int mainMenu::handleInput(const sf::Event &event)
 {
     if (event.is<sf::Event::MouseButtonPressed>())
     {

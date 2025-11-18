@@ -30,7 +30,8 @@ void Game::selectGameState(gameStates &gameState)
     switch (gameState)
     {
     case main_menu:
-        gameState = augment_1;
+        // gameState = augment_1;
+        gameState = level_1;
         break;
 
     case augment_1:
@@ -164,7 +165,7 @@ bool Game::handleInputs()
         {
             if(currentState == main_menu)
             {
-                int action = menu.handleInput(*event, window);
+                int action = menu.handleInput(*event);
                 switch (action)
                 {
                 case 1:
