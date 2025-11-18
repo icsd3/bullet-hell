@@ -43,10 +43,19 @@ Weapon::~Weapon()
     // std::cout << "Weapon destroyed: " << name << "\n";
 }
 
-Projectile Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target, const sf::Texture &texture) const
+std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target, const sf::Texture &texture) const
 {
-    Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", texture, bulletSpeed, damage, target);
-    return projectile;
+    std::vector<Projectile> bullets;
+    for(int i = 0; i < bullet_nr; i++)
+    {
+        sf::Vector2f direction = target - position;
+        direction = direction.normalized();
+        sf::Angle randomAngle = sf::degrees(((rand() / (float)RAND_MAX) - 0.5f) * spread_angle);
+        direction = direction.rotatedBy(randomAngle);
+        Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", texture, bulletSpeed, damage, direction, range);
+        bullets.push_back(projectile);
+    }
+    return bullets;
 }
 
 bool Weapon::canFire()

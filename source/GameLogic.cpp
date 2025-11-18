@@ -140,8 +140,12 @@ bool Game::handleInputs()
             if (player.canFireCurrentWeapon())
             {
                 sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
-                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture()));
-                playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
+                std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
+                for(size_t i=0; i<bullets.size(); i++)
+                {
+                    playerProjectiles.push_back(bullets[i]);
+                    playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
+                }
             }
         }
     }
@@ -253,10 +257,13 @@ void Game::handleLevelInput(const sf::Event &event)
         {
             if (player.canFireCurrentWeapon())
             {
-                sf::Vector2f projectileTarget = sf::Vector2f(mouseEvent->position);
-                playerProjectiles.push_back(player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture()));
-                playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
-                // target = player.getPosition();
+                sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
+                std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
+                for(size_t i=0; i<bullets.size(); i++)
+                {
+                    playerProjectiles.push_back(bullets[i]);
+                    playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
+                }
             }
         }
     }

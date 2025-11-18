@@ -1,7 +1,7 @@
 #include "../headers/Player.h"
 
 Player::Player(const sf::Vector2f &start, const sf::Texture &tex)
-    : Entity(false, start, false, "textures/player.png", tex, 200.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 20, 1, 5.f, 0.f, 500.f, 1000.f)
+    : Entity(false, start, false, "textures/player.png", tex, 200.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 20, 10, 2.f, 45.f, 0.3f, 500.f)
 {                                                                                                                     //name, dmg, b_nr, f_rate, spread, range, spd
     weapons.emplace_back(currentWeapon);
 }
@@ -79,7 +79,7 @@ sf::Vector2f Player::getPosition() const
     return position;
 }
 
-Projectile Player::fireCurrentWeapon(const sf::Vector2f &target, const sf::Texture &tex)
+std::vector<Projectile> Player::fireCurrentWeapon(const sf::Vector2f &target, const sf::Texture &tex)
 {
     return currentWeapon.fire(position, target, tex);
 }

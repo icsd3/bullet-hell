@@ -7,11 +7,12 @@ class Projectile : public Entity
 {
     sf::Angle rotation;
     int damage;
-    sf::Vector2f target;
     sf::Vector2f direction;
+    sf::Vector2f origin;
+    float range;
 
 public:
-    Projectile(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float, const int &, const sf::Vector2f &);
+    Projectile(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float, const int &, const sf::Vector2f &, const float &);
     ~Projectile() = default;
 
     void loadProjectile(sf::RenderWindow &, const sf::Texture &);

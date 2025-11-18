@@ -3,6 +3,8 @@
 #include <optional>
 #include <iostream>
 
+#include "../headers/Player.h"
+
 class Augment
 {
     Augment();
@@ -10,26 +12,27 @@ class Augment
     Augment &operator=(const Augment &) = delete;
 
     std::string backgroundPath = "textures/augment_background.png";
-    std::string startButtonPath = "textures/start_button.png";
-    std::string settingsButtonPath = "textures/settings_button.png";
-    std::string exitButtonPath = "textures/exit_button.png";
+    std::string buttonPath = "textures/augment_button.png";
+    std::string fontPath = "fonts/courier.ttf";
 
     sf::Texture backgroundTexture;
-    sf::Texture startButtonTexture;
-    sf::Texture settingsButtonTexture;
-    sf::Texture exitButtonTexture;
+    sf::Texture buttonTexture;
 
     sf::Sprite backgroundSprite;
-    sf::Sprite startButtonSprite;
-    sf::Sprite settingsButtonSprite;
-    sf::Sprite exitButtonSprite;
+    sf::Sprite firstButtonSprite;
+    sf::Text firstButtonText;
+    sf::Sprite secondButtonSprite;
+    sf::Text secondButtonText;
+    sf::Sprite thirdButtonSprite;
+    sf::Text thirdButtonText;
 
 public:
     static Augment &getInstance();
     ~Augment() = default;
     friend std::ostream &operator<<(std::ostream &os, const Augment &Augment);
 
-    void loadMainMenu(sf::RenderWindow &);
-    void drawMainMenu(sf::RenderWindow &);
-    int handleInput(const sf::Event &event, const sf::RenderWindow &window);
+    void load(sf::RenderWindow &);
+    void draw(sf::RenderWindow &);
+    int handleInput(const sf::Event &event);
+    void applyModifiers(Player &);
 };
