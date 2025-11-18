@@ -13,11 +13,6 @@ AssetLoader &AssetLoader::getInstance()
 
 std::ostream &operator<<(std::ostream &os, const AssetLoader &loader)
 {
-    os << "    Menu Background Loaded: " << (loader.menuBackgroundSprite.has_value() ? loader.menuBackgroundPath : "Not Loaded") << "\n";
-    for (int i = 0; i < 2; i++)
-    {
-        os << "    Menu Button " << i << " Loaded: " << (loader.menuButtonSprite[i].has_value() ? loader.menuButtonPath[i] : "Not Loaded") << "\n";
-    }
     os << "    Augment Background Loaded: " << (loader.augmentBackgroundSprite.has_value() ? loader.augmentBackgroundPath : "Not Loaded") << "\n";
     for (int i = 0; i < 3; i++)
     {
@@ -29,31 +24,6 @@ std::ostream &operator<<(std::ostream &os, const AssetLoader &loader)
 
 void AssetLoader::loadStaticAssets()
 {
-    if (!menuBackgroundTexture.loadFromFile(menuBackgroundPath))
-    {
-        std::cerr << "Error loading menu_background.png\n";
-    }
-    menuBackgroundSprite.emplace(menuBackgroundTexture);
-
-    for (int i = 0; i < 2; i++)
-    {
-        if (i == 0)
-        {
-            if (!menuButtonTexture[i].loadFromFile(menuButtonPath[0]))
-            {
-                std::cerr << "Error loading start_button.png\n";
-            }
-        }
-        else
-        {
-            if (!menuButtonTexture[i].loadFromFile(menuButtonPath[1]))
-            {
-                std::cerr << "Error loading exit_button.png\n";
-            }
-        }
-        menuButtonSprite[i].emplace(menuButtonTexture[i]);
-    }
-
     if (!augmentBackgroundTexture.loadFromFile(augmentBackgroundPath))
     {
         std::cerr << "Error loading augment_background.png\n";
@@ -88,34 +58,6 @@ void AssetLoader::loadStaticAssets()
     if (!enemyProjectileTexture.loadFromFile(enemyProjectilePath))
     {
         std::cerr << "Error loading enemy_projectile.png\n";
-    }
-}
-
-void AssetLoader::loadMainMenu(sf::RenderWindow &window)
-{
-    if (menuBackgroundSprite)
-    {
-        const sf::Vector2u windowSize = window.getSize();
-        const sf::Vector2u textureSize = menuBackgroundTexture.getSize();
-        menuBackgroundSprite->setScale(sf::Vector2f(
-            static_cast<float>(windowSize.x) / static_cast<float>(textureSize.x),
-            static_cast<float>(windowSize.y) / static_cast<float>(textureSize.y)));
-    }
-    for (int i = 0; i < 2; i++)
-    {
-        if (menuButtonSprite[i])
-        {
-            const sf::Vector2u windowSize = window.getSize();
-            const sf::Vector2u startButtonSize = menuButtonTexture[i].getSize();
-            const float scale = static_cast<float>(windowSize.x) / static_cast<float>(startButtonSize.x) / 4.f;
-            menuButtonSprite[i]->setScale(sf::Vector2f(scale, scale));
-            menuButtonSprite[i]->setOrigin(sf::Vector2f(
-                startButtonSize.x / 2.f,
-                startButtonSize.y / 2.f));
-            menuButtonSprite[i]->setPosition(sf::Vector2f(
-                windowSize.x / 2.f,
-                windowSize.y / 3.f * (i + 1)));
-        }
     }
 }
 
@@ -171,11 +113,6 @@ void AssetLoader::loadLevel(sf::RenderWindow &window)
 
 // }
 
-bool AssetLoader::hasMenuBackgroundSprite()
-{
-    return menuBackgroundSprite.has_value();
-}
-
 bool AssetLoader::hasAugmentBackgroundSprite()
 {
     return augmentBackgroundSprite.has_value();
@@ -184,11 +121,6 @@ bool AssetLoader::hasAugmentBackgroundSprite()
 bool AssetLoader::hasLevelBackgroundSprite()
 {
     return levelBackgroundSprite.has_value();
-}
-
-bool AssetLoader::hasMenuButtonSprites()
-{
-    return (menuButtonSprite[0].has_value() && menuButtonSprite[1].has_value());
 }
 
 bool AssetLoader::hasAugmentButtonSprites()
@@ -218,20 +150,6 @@ sf::Texture &AssetLoader::getPlayerProjectileTexture()
     return playerProjectileTexture;
 }
 
-// sf::Texture &AssetLoader::getEnemyProjectileTexture()
-// {
-//     return enemyProjectileTexture;
-// }
-
-sf::FloatRect AssetLoader::getMenuButtonBounds(int i)
-{
-    if (i < 0 || i >= 2)
-    {
-        return sf::FloatRect();
-    }
-    return menuButtonSprite[i]->getGlobalBounds();
-}
-
 sf::FloatRect AssetLoader::getAugmentButtonBounds(int i)
 {
     if (i < 0 || i >= 3)
@@ -239,16 +157,6 @@ sf::FloatRect AssetLoader::getAugmentButtonBounds(int i)
         return sf::FloatRect();
     }
     return augmentButtonSprite[i]->getGlobalBounds();
-}
-
-void AssetLoader::drawMenu(sf::RenderWindow &window)
-{
-    if (hasMenuBackgroundSprite() && hasMenuButtonSprites())
-    {
-        window.draw(*menuBackgroundSprite);
-        window.draw(*menuButtonSprite[0]);
-        window.draw(*menuButtonSprite[1]);
-    }
 }
 
 void AssetLoader::drawAugment(sf::RenderWindow &window)

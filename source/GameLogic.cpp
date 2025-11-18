@@ -19,18 +19,59 @@ void Game::setup()
     window.clear(sf::Color::Black);
     window.display();
     loader.loadStaticAssets();
-    currentState = menu;
+    currentState = main_menu;
     handleNewState();
     window.setVerticalSyncEnabled(true);
     
+}
+
+void Game::selectGameState(gameStates &gameState)
+{
+    switch (gameState)
+    {
+    case main_menu:
+        // gameState = augment_1;
+        gameState = level_1;
+        break;
+
+    case augment_1:
+        gameState = level_1;
+        break;
+
+    case level_1:
+        gameState = augment_2;
+        break;
+
+    case augment_2:
+        gameState = level_2;
+        break;
+
+    case level_2:
+        gameState = augment_3;
+        break;
+
+    case augment_3:
+        gameState = level_3;
+        break;
+
+    case level_3:
+        gameState = victory;
+        break;
+
+    case defeat:
+    case victory:
+    default:
+        gameState = main_menu;
+        break;
+    }
 }
 
 void Game::handleNewState()
 {
     switch (currentState)
     {
-    case menu:
-        loader.loadMainMenu(window);
+    case main_menu:
+        menu.load(window);
         settings.loadSettingsBox(window, fullscreen, controls);
         std::cout << "menu\n";
         break;
@@ -112,12 +153,6 @@ bool Game::handleInputs()
             window.close();
             std::cout << "Fereastra a fost inchisa fortat\n";
         }
-        // else if(event->is<sf::Event::Resized>())
-        // {
-        //     sf::FloatRect visibleArea({0.f, 0.f}, {static_cast<float>(event->getIf<sf::Event::Resized>()->size.x), static_cast<float>(event->getIf<sf::Event::Resized>()->size.y)});
-        //     window.setView(sf::View(visibleArea));
-        //     std::cout << "Fereastra redimensionata la: " << event->getIf<sf::Event::Resized>()->size.x << "x" << event->getIf<sf::Event::Resized>()->size.y << "\n";
-        // }
         else if(event->is<sf::Event::FocusLost>())
         {
             if (currentState == level_1 || currentState == level_2 || currentState == level_3)
@@ -128,7 +163,26 @@ bool Game::handleInputs()
         }
         else if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>())
         {
-            if (event->is<sf::Event::KeyPressed>())
+            if(currentState == main_menu)
+            {
+                int action = menu.handleInput(*event);
+                switch (action)
+                {
+                case 1:
+                    selectGameState(currentState);
+                    handleNewState();
+                    break;
+                case 2:
+                    openSettings = true;
+                    break;
+                case 3:
+                    shouldExit = true;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (event->is<sf::Event::KeyPressed>())
             {
                 const auto *keyPressed = event->getIf<sf::Event::KeyPressed>();
                 if (keyPressed->scancode == sf::Keyboard::Scancode::Backspace)
@@ -148,8 +202,6 @@ bool Game::handleInputs()
                     }
                 }
             }
-            else if (currentState == menu)
-                shouldExit = handleMainMenuInput(*event);
             else if (currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
                 handleAugmentInput(*event);
             else if (currentState == level_1 || currentState == level_2 || currentState == level_3)
@@ -157,46 +209,6 @@ bool Game::handleInputs()
         }
     }
     return shouldExit;
-}
-
-bool Game::handleMainMenuInput(const sf::Event &event)
-{
-    if (event.is<sf::Event::MouseButtonPressed>())
-    {
-        const auto *mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
-
-        if (mouseEvent->button == sf::Mouse::Button::Left)
-        {
-            if (!loader.hasMenuButtonSprites())
-                return false;
-
-            const auto startButtonBounds = loader.getMenuButtonBounds(0);
-            const auto exitButtonBounds = loader.getMenuButtonBounds(1);
-
-            if (startButtonBounds.contains(sf::Vector2f(mouseEvent->position)))
-            {
-                std::cout << "Start button clicked!\n";
-                Progress::selectGameState(currentState);
-                handleNewState();
-            }
-            else if (exitButtonBounds.contains(sf::Vector2f(mouseEvent->position)))
-            {
-                std::cout << "Exit button clicked!\n";
-                return true;
-            }
-        }
-    }
-    else if (event.is<sf::Event::KeyPressed>())
-    {
-        const auto *keyboardEvent = event.getIf<sf::Event::KeyPressed>();
-        if (keyboardEvent->scancode == sf::Keyboard::Scancode::Enter)
-        {
-            std::cout << "Enter key pressed!\n";
-            Progress::selectGameState(currentState);
-            handleNewState();
-        }
-    }
-    return false;
 }
 
 void Game::handleAugmentInput(const sf::Event &event)
@@ -217,7 +229,7 @@ void Game::handleAugmentInput(const sf::Event &event)
                 if (buttonBounds.contains(sf::Vector2f(mouseEvent->position)))
                 {
                     std::cout << "Augment button " << i + 1 << " clicked!\n";
-                    Progress::selectGameState(currentState);
+                    selectGameState(currentState);
                     handleNewState();
                     break;
                 }
@@ -304,8 +316,8 @@ void Game::draw()
 
     switch (currentState)
     {
-    case menu:
-        loader.drawMenu(window);
+    case main_menu:
+        menu.draw(window);
         break;
 
     case augment_1:
