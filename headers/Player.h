@@ -22,7 +22,7 @@ public:
     ~Player() = default;
     friend std::ostream &operator<<(std::ostream &os, const Player &player);
 
-    void loadPlayer(sf::RenderWindow &, const sf::Texture &);
+    void loadPlayer(const sf::RenderWindow &, const sf::Texture &);
     void updatePlayer(const float &, const sf::Vector2f &);
     void drawPlayer(sf::RenderWindow &);
     sf::Vector2i getHealthStatus() const;

@@ -8,6 +8,7 @@ Projectile::Projectile(const bool &ec, const sf::Vector2f &pos, const bool &ori,
 
 void Projectile::loadProjectile(sf::RenderWindow &window, const sf::Texture &texture)
 {
+    speed = speed * window.getSize().x;
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);

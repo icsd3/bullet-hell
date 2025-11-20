@@ -9,10 +9,10 @@ class mainMenu
     mainMenu(const mainMenu &) = delete;
     mainMenu &operator=(const mainMenu &) = delete;
 
-    std::string backgroundPath = "textures/menu_background.png";
-    std::string startButtonPath = "textures/start_button.png";
-    std::string settingsButtonPath = "textures/settings_button.png";
-    std::string exitButtonPath = "textures/exit_button.png";
+    std::string backgroundPath;
+    std::string startButtonPath;
+    std::string settingsButtonPath;
+    std::string exitButtonPath;
 
     sf::Texture backgroundTexture;
     sf::Texture startButtonTexture;

@@ -1,7 +1,7 @@
 #include "../headers/Player.h"
 
 Player::Player(const sf::Vector2f &start, const sf::Texture &tex)
-    : Entity(false, start, false, "textures/player.png", tex, 200.f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 20, 10, 2.f, 45.f, 0.3f, 500.f)
+    : Entity(false, start, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 20, 10, 2.f, 45.f, 0.3f, 0.25f)
 {                                                                                                                     //name, dmg, b_nr, f_rate, spread, range, spd
     weapons.emplace_back(currentWeapon);
 }
@@ -48,8 +48,9 @@ void Player::updatePlayer(const float &dt, const sf::Vector2f &target)
     }
 }
 
-void Player::loadPlayer(sf::RenderWindow &window, const sf::Texture &texture)
+void Player::loadPlayer(const sf::RenderWindow &window, const sf::Texture &texture)
 {
+    speed = speed * window.getSize().x;
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
