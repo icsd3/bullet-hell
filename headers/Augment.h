@@ -1,0 +1,39 @@
+#pragma once
+#include <SFML/Graphics.hpp>
+#include <optional>
+#include <iostream>
+
+#include "../headers/Player.h"
+
+class Augment
+{
+    Augment();
+    Augment(const Augment &) = delete;
+    Augment &operator=(const Augment &) = delete;
+
+    std::string backgroundPath = "textures/augment_background.png";
+    std::string buttonPath = "textures/augment_button.png";
+    std::string fontPath = "fonts/courier.ttf";
+
+    sf::Texture backgroundTexture;
+    sf::Texture buttonTexture;
+    sf::Font font;
+
+    sf::Sprite backgroundSprite;
+    sf::Sprite firstButtonSprite;
+    sf::Text firstButtonText;
+    sf::Sprite secondButtonSprite;
+    sf::Text secondButtonText;
+    sf::Sprite thirdButtonSprite;
+    sf::Text thirdButtonText;
+
+public:
+    static Augment &getInstance();
+    ~Augment() = default;
+    friend std::ostream &operator<<(std::ostream &os, const Augment &Augment);
+
+    void load();
+    void draw(sf::RenderWindow &);
+    int handleInput(const sf::RenderWindow &window, const sf::Event &event);
+    // void applyModifiers(Player &);
+};

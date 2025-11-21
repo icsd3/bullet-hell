@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 class Settings
 {
@@ -8,19 +9,20 @@ class Settings
     Settings(const Settings &) = delete;
     Settings &operator=(const Settings &) = delete;
 
-    bool fullscreen = true;
-    bool controls = true;
-
     sf::RectangleShape settingsBox;
+    sf::RectangleShape screenButton;
+    sf::RectangleShape controlsButton;
     sf::Font font;
-    sf::Text fullscreenText;
+    sf::Text screenText;
     sf::Text controlsText;
 
 public:
     static Settings &getInstance();
     ~Settings() = default;
-    friend std::ostream &operator<<(std::ostream &os, const Settings &settings);
 
-    bool changeFullscreen();
-    bool changeControls();
+    void load();
+    void draw(sf::RenderWindow &);
+    int handleInput(const sf::RenderWindow &, const sf::Event &);
+
+    friend std::ostream &operator<<(std::ostream &os, const Settings &settings);
 };

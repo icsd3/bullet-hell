@@ -6,9 +6,8 @@
 
 class Object
 {
-    bool entityCollision;
-
 protected:
+    bool entityCollision;
     sf::Vector2f position;
     bool orientation = false; // false = left, true = right
     bool isEntity = false;

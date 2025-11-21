@@ -60,8 +60,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     main.cpp
     headers/GameLogic.h
     source/GameLogic.cpp
-    headers/GameStates.h
-    source/GameStates.cpp
+    headers/MainMenu.h
+    source/MainMenu.cpp
     headers/AssetLoader.h
     source/AssetLoader.cpp
     headers/Entities.h
@@ -76,8 +76,11 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Projectiles.cpp
     headers/Enemies.h
     source/Enemies.cpp
-    # headers/Settings.h
-    # source/Settings.cpp
+    headers/Settings.h
+    source/Settings.cpp
+    headers/Utils.h
+    headers/Augment.h
+    source/Augment.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

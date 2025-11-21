@@ -10,7 +10,7 @@ class GUI
     GUI(const GUI &) = delete;
     GUI &operator=(const GUI &) = delete;
 
-    std::string fontPath = "fonts/arial.ttf";
+    std::string fontPath;
     sf::Font font;
     sf::Text health;
     sf::RectangleShape maxHealthBar;
@@ -24,7 +24,7 @@ public:
     ~GUI() = default;
     friend std::ostream &operator<<(std::ostream &os, const GUI &gui);
 
-    void loadGUI(sf::Window &);
-    void updateGUI(const sf::Vector2i &, sf::RenderWindow &);
+    void load();
+    void update(const sf::Vector2i &);
     void draw(sf::RenderWindow &);
 };
