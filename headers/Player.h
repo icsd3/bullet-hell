@@ -2,8 +2,8 @@
 
 #include "../headers/Entities.h"
 #include "../headers/Weapons.h"
-#include "../ext/json.hpp"
-#include <fstream>
+#include <nlohmann/json.hpp>
+#include <fstream> 
 
 #include <cmath>
 
