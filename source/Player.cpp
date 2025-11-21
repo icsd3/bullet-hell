@@ -57,7 +57,7 @@ void Player::load(const sf::Texture &texture)
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
     file >> data;
-    auto &w = data[1];
+    const auto &w = data[1];
     currentWeapon = Weapon(
         w["name"],
         w["damage"],
