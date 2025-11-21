@@ -96,7 +96,7 @@ void Settings::draw(sf::RenderWindow &window)
     window.draw(drawControlsText);
 }
 
-int Settings::handleInput(sf::RenderWindow &window, const sf::Event &event)
+int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event)
 {
     if(event.is<sf::Event::MouseButtonPressed>())
     {

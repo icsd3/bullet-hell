@@ -22,7 +22,7 @@ public:
 
     void load();
     void draw(sf::RenderWindow &);
-    int handleInput(sf::RenderWindow &, const sf::Event &);
+    int handleInput(const sf::RenderWindow &, const sf::Event &);
 
     friend std::ostream &operator<<(std::ostream &os, const Settings &settings);
 };
