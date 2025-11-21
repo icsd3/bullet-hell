@@ -60,7 +60,7 @@ Entity &Entity::operator=(const Entity &other)
 
 std::ostream &operator<<(std::ostream &os, const Entity &entity)
 {
-    os << "    Entity (";
+    os << "Entity (";
     os << static_cast<const Object &>(entity);
     os << ", Speed: " << entity.speed << ")";
     return os;

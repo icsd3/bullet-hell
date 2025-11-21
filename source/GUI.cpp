@@ -19,14 +19,13 @@ GUI &GUI::getInstance()
 std::ostream &operator<<(std::ostream &os, const GUI &gui)
 {
     os << "    GUI Font loaded: " << (gui.font.getInfo().family.empty() ? "No" : gui.fontPath) << "\n";
-    os << "    Health Text: " << gui.health.getString().toAnsiString();
+    os << "    Health Text: " << gui.health.getString().toAnsiString() << "\n";
     os << "    FPS Text: " << gui.fps.getString().toAnsiString();
     return os;
 }
 
 void GUI::load()
 {
-    // Use LOGICAL size for GUI layout
     maxHealthBar.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.04f * LOGICAL_HEIGHT));
     maxHealthBar.setOrigin(sf::Vector2f(0.5f * maxHealthBar.getLocalBounds().size.x, 0.5f * maxHealthBar.getLocalBounds().size.y));
     maxHealthBar.setPosition(sf::Vector2f(0.5f * LOGICAL_WIDTH, LOGICAL_HEIGHT - 0.5f * maxHealthBar.getSize().y - 3.f));

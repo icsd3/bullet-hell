@@ -53,8 +53,9 @@ int Projectile::getDamage() const
 std::ostream &operator<<(std::ostream &os, const Projectile &projectile)
 {
     os << static_cast<const Entity &>(projectile);
-    os << " Damage: " << projectile.damage;
-    os << " Direction: (" << projectile.direction.x << ", " << projectile.direction.y << ")";
-    os << " Rotation: " << projectile.rotation.asDegrees();
+    os << "\n";
+    os << "        Damage: " << projectile.damage << "\n";
+    os << "        Direction: (" << projectile.direction.x << ", " << projectile.direction.y << ")\n";
+    os << "        Rotation: " << projectile.rotation.asDegrees();
     return os;
 }

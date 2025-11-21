@@ -142,12 +142,13 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
             return 3; // Close settings
         }
     }
-    return 0; // No action
+    return 0;
 }
 
 std::ostream &operator<<(std::ostream &os, const Settings &settings)
 {
-    os << std::string(settings.screenText.getString()) << "\n";
-    os << std::string(settings.controlsText.getString()) << "\n";
+    os << "Settings:\n";
+    os << "    " << std::string(settings.screenText.getString()) << "\n";
+    os << "    " << std::string(settings.controlsText.getString()) << "\n";
     return os;
 }

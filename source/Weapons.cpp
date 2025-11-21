@@ -38,11 +38,6 @@ std::ostream &operator<<(std::ostream &os, const Weapon &weapon)
     return os;
 }
 
-Weapon::~Weapon()
-{
-    // std::cout << "Weapon destroyed: " << name << "\n";
-}
-
 std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target, const sf::Texture &texture) const
 {
     std::vector<Projectile> bullets;

@@ -2,8 +2,9 @@
 #include "../headers/Utils.h"
 
 Player::Player(const sf::Vector2f &start, const sf::Texture &tex)
-    : Entity(false, start, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("Basic Gun", 20, 10, 2.f, 45.f, 0.3f, 0.25f)
-{                                                                                                                     //name, dmg, b_nr, f_rate, spread, range, spd
+    : Entity(false, start, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100)
+{
+    currentWeapon = Weapon("Basic Gun", 20, 10, 2.f, 45.f, 0.3f, 0.25f);
     weapons.emplace_back(currentWeapon);
 }
 
@@ -15,14 +16,18 @@ Player &Player::getInstance(const sf::Vector2f &start, const sf::Texture &tex)
 
 std::ostream &operator<<(std::ostream &os, const Player &player)
 {
+    os << "Player:\n    ";
     os << static_cast<const Entity &>(player);
-    os << ", Max Health: " << player.maxHealth;
-    os << ", Current Health: " << player.currentHealth;
-    os << ", Weapons Count: " << player.weapons.size();
+    os << "\n";
+    os << "    Max Health: " << player.maxHealth << "\n";
+    os << "    Current Health: " << player.currentHealth << "\n";
+    os << "    Weapons:\n";
+    os << "        Count: " << player.weapons.size();
     for (unsigned int i = 0; i < player.weapons.size(); i++)
     {
         os << "\n        Weapon " << i + 1 << ": " << player.weapons[i];
     }
+    os << "\n";
     return os;
 }
 
@@ -34,7 +39,7 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     if (distance > 5.0f)
     {
         dir /= distance;
-        sprite.move(sf::Vector2f(dir * speed * dt));
+        sprite.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
         position = sprite.getPosition();
         if (dir.x > 0.f)
         {
@@ -50,9 +55,7 @@ void Player::update(const float &dt, const sf::Vector2f &target)
 }
 
 void Player::load(const sf::Texture &texture)
-{
-    speed = speed * LOGICAL_WIDTH;
-    
+{   
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);

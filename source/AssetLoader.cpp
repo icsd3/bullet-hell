@@ -14,7 +14,9 @@ AssetLoader &AssetLoader::getInstance()
 
 std::ostream &operator<<(std::ostream &os, const AssetLoader &loader)
 {
+    os << "Loader:\n";
     os << "    Level Background Loaded: " << (loader.levelBackgroundSprite.has_value() ? loader.levelBackgroundPath : "Not Loaded");
+    os << "\n";
     return os;
 }
 

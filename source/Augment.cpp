@@ -72,17 +72,14 @@ int Augment::handleInput(const sf::RenderWindow &window, const sf::Event &event)
             
             if (firstButtonSprite.getGlobalBounds().contains(mousePos))
             {
-                std::cout << "Augment button 1 clicked!\n";
                 return 1;
             }
             if (secondButtonSprite.getGlobalBounds().contains(mousePos))
             {
-                std::cout << "Augment button 2 clicked!\n";
                 return 2;
             }
             if (thirdButtonSprite.getGlobalBounds().contains(mousePos))
             {
-                std::cout << "Augment button 3 clicked!\n";
                 return 3;
             }
         }

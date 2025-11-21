@@ -102,17 +102,14 @@ int mainMenu::handleInput(const sf::RenderWindow &window, const sf::Event &event
 
             if (startButtonBounds.contains(mousePos))
             {
-                std::cout << "Start button clicked!\n";
                 return 1; // Start game
             }
             else if (settingsButtonBounds.contains(mousePos))
             {
-                std::cout << "Settings button clicked!\n";
                 return 2; // Open settings
             }
             else if (exitButtonBounds.contains(mousePos))
             {
-                std::cout << "Exit button clicked!\n";
                 return 3; // Exit game
             }
         }
@@ -122,16 +119,14 @@ int mainMenu::handleInput(const sf::RenderWindow &window, const sf::Event &event
         const auto *keyboardEvent = event.getIf<sf::Event::KeyPressed>();
         if (keyboardEvent->scancode == sf::Keyboard::Scancode::Enter)
         {
-            std::cout << "Enter key pressed!\n";
             return 1; // Start game
         }
-        else if(keyboardEvent->scancode == sf::Keyboard::Scancode::Escape)
+        else if (keyboardEvent->scancode == sf::Keyboard::Scancode::Escape)
         {
-            std::cout << "Escape key pressed!\n";
             return 2; // Open settings
         }
     }
-    return 0; // No action
+    return 0;
 }   
 
 

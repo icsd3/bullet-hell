@@ -92,8 +92,9 @@ Enemy &Enemy::operator=(const Enemy &other)
 std::ostream &operator<<(std::ostream &os, const Enemy &enemy)
 {
     os << static_cast<const Entity &>(enemy);
-    os << " Max Health: " << enemy.maxHealth;
-    os << " Current Health: " << enemy.currentHealth;
-    os << " Enemy Weapon: " << enemy.enemyWeapon;
+    os << "\n";
+    os << "        Max Health: " << enemy.maxHealth << "\n";
+    os << "        Current Health: " << enemy.currentHealth << "\n";
+    os << "        Enemy Weapon: " << enemy.enemyWeapon;
     return os;
 }
