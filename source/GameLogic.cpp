@@ -72,7 +72,7 @@ void Game::handleNewState()
     switch (currentState)
     {
     case main_menu:
-        menu.load(window);
+        menu.load();
         settings.load();
         std::cout << "menu\n";
         break;

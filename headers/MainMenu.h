@@ -29,7 +29,7 @@ public:
     ~mainMenu() = default;
     friend std::ostream &operator<<(std::ostream &os, const mainMenu &menu);
 
-    void load(sf::RenderWindow &);
+    void load();
     void draw(sf::RenderWindow &);
     int handleInput(const sf::RenderWindow &window, const sf::Event &event);
 };

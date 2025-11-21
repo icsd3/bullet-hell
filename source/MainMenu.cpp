@@ -24,9 +24,8 @@ mainMenu &mainMenu::getInstance()
     return instance;
 }
 
-void mainMenu::load(sf::RenderWindow &window)
+void mainMenu::load()
 {
-    // Use LOGICAL size
     backgroundSprite.setScale(sf::Vector2f(
         1.f * LOGICAL_WIDTH / backgroundTexture.getSize().x,
         1.f * LOGICAL_HEIGHT / backgroundTexture.getSize().y));
@@ -95,7 +94,6 @@ int mainMenu::handleInput(const sf::RenderWindow &window, const sf::Event &event
 
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            // Map mouse position to logical coordinates
             sf::Vector2f mousePos = mapToLogical(sf::Vector2f(mouseEvent->position), window);
 
             const auto startButtonBounds = startButtonSprite.getGlobalBounds();

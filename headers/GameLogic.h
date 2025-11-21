@@ -40,7 +40,7 @@ class Game
     bool paused = false;
     bool openSettings = false;
     bool fullscreen = true;
-    bool controls = true;
+    bool controls = true; //true for mouse, false for WASD
     sf::Clock updateClock;
     sf::Vector2f target;
 
