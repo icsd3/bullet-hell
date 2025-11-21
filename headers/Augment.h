@@ -17,6 +17,7 @@ class Augment
 
     sf::Texture backgroundTexture;
     sf::Texture buttonTexture;
+    sf::Font font;
 
     sf::Sprite backgroundSprite;
     sf::Sprite firstButtonSprite;
@@ -31,8 +32,8 @@ public:
     ~Augment() = default;
     friend std::ostream &operator<<(std::ostream &os, const Augment &Augment);
 
-    void load(sf::RenderWindow &);
+    void load();
     void draw(sf::RenderWindow &);
-    int handleInput(const sf::Event &event);
-    void applyModifiers(Player &);
+    int handleInput(const sf::RenderWindow &window, const sf::Event &event);
+    // void applyModifiers(Player &);
 };

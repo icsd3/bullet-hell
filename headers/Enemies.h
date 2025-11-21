@@ -15,9 +15,9 @@ protected:
 public:
     static Enemy spawnEnemy(const sf::Texture &, const sf::Vector2f &, float, const int &, const Weapon &);
 
-    void loadEnemy(sf::RenderWindow &, const sf::Texture &);
-    void drawEnemy(sf::RenderWindow &);
-    // void updateEnemy(const float &, const sf::Vector2f &);
+    void load(const sf::Texture &);
+    void draw(sf::RenderWindow &);
+    // void update(const float &, const sf::Vector2f &);
     bool takeDamage(const int &);
     // Projectile fireEnemyWeapon(const sf::Vector2f &, const sf::Texture &);
     // bool canFireEnemyWeapon(const float &);

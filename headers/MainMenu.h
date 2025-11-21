@@ -31,5 +31,5 @@ public:
 
     void load(sf::RenderWindow &);
     void draw(sf::RenderWindow &);
-    int handleInput(const sf::Event &event);
+    int handleInput(const sf::RenderWindow &window, const sf::Event &event);
 };

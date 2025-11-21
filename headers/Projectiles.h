@@ -15,9 +15,9 @@ public:
     Projectile(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float, const int &, const sf::Vector2f &, const float &);
     ~Projectile() = default;
 
-    void loadProjectile(sf::RenderWindow &, const sf::Texture &);
-    void drawProjectile(sf::RenderWindow &);
-    bool updateProjectile(const float &, sf::RenderWindow &); // Returns true if projectile is out of bounds
+    void load(const sf::Texture &);
+    void draw(sf::RenderWindow &);
+    bool update(const float &); // Returns true if projectile is out of bounds
     int getDamage() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Projectile &projectile);

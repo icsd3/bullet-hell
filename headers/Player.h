@@ -22,9 +22,9 @@ public:
     ~Player() = default;
     friend std::ostream &operator<<(std::ostream &os, const Player &player);
 
-    void loadPlayer(const sf::RenderWindow &, const sf::Texture &);
-    void updatePlayer(const float &, const sf::Vector2f &);
-    void drawPlayer(sf::RenderWindow &);
+    void load(const sf::Texture &);
+    void update(const float &, const sf::Vector2f &);
+    void draw(sf::RenderWindow &);
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
     std::vector<Projectile> fireCurrentWeapon(const sf::Vector2f &, const sf::Texture &tex);

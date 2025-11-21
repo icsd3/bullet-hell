@@ -7,6 +7,7 @@
 #include "../headers/Projectiles.h"
 #include "../headers/Enemies.h"
 #include "../headers/Settings.h"
+#include "../headers/Augment.h"
 
 #include <SFML/Graphics.hpp>
 #include <optional>
@@ -44,6 +45,7 @@ class Game
     sf::Vector2f target;
 
     mainMenu &menu = mainMenu::getInstance();
+    Augment &augment = Augment::getInstance();
 
     AssetLoader &loader = AssetLoader::getInstance();
     Player &player = Player::getInstance(target, loader.getPlayerTexture());
@@ -56,9 +58,7 @@ class Game
     static void selectGameState(gameStates &gameState);
 
     bool handleInputs();
-    // bool handleMainMenuInput(const sf::Event &event);
-    void handleAugmentInput(const sf::Event &event);
-    void handleLevelInput(const sf::Event &event);
+    std::pair<int, sf::Vector2f> handleLevelInput(const sf::Event &event);
 
     void draw();
     void drawLevel();

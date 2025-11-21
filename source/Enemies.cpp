@@ -1,4 +1,5 @@
 #include "../headers/Enemies.h"
+#include "../headers/Utils.h"
 #include <iostream>
 
 Enemy::Enemy(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex, float spd, const int &mh, const Weapon &ew)
@@ -12,14 +13,16 @@ Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float s
     return enemy;
 }
 
-void Enemy::loadEnemy(sf::RenderWindow &window, const sf::Texture &texture)
+void Enemy::load(const sf::Texture &texture)
 {
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
-    sprite.setScale(sf::Vector2f(1.f * window.getSize().x / texture.getSize().x / 20.f, 1.f * window.getSize().x / texture.getSize().x / 20.f));
+    
+    float scale = 1.f * LOGICAL_WIDTH / texture.getSize().x / 20.f;
+    sprite.setScale(sf::Vector2f(scale, scale));
 
-    maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, window.getSize().y / 100.f));
+    maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
     maxHealthBar.setFillColor(sf::Color(75, 0, 0, 175));
     maxHealthBar.setOrigin(sf::Vector2f(maxHealthBar.getLocalBounds().size.x / 2.f, maxHealthBar.getLocalBounds().size.y / 2.f));
     maxHealthBar.setPosition(sf::Vector2f(position.x, position.y - sprite.getGlobalBounds().size.y / 2.f - maxHealthBar.getSize().y));
@@ -32,55 +35,40 @@ void Enemy::loadEnemy(sf::RenderWindow &window, const sf::Texture &texture)
     currentHealthBar.setPosition(sf::Vector2f(maxHealthBar.getPosition().x - maxHealthBar.getSize().x / 2.f, maxHealthBar.getPosition().y));
 }
 
-void Enemy::drawEnemy(sf::RenderWindow &window)
+void Enemy::draw(sf::RenderWindow &window)
 {
-    window.draw(sprite);
-    window.draw(maxHealthBar);
-    window.draw(currentHealthBar);
+    sf::Vector2f scaleFactor = getScaleFactor(window);
+
+    sf::Sprite drawSprite = sprite;
+    drawSprite.setPosition(mapToScreen(position, window));
+    drawSprite.scale(scaleFactor);
+    window.draw(drawSprite);
+
+    sf::RectangleShape drawMaxHealthBar = maxHealthBar;
+    drawMaxHealthBar.setPosition(mapToScreen(maxHealthBar.getPosition(), window));
+    drawMaxHealthBar.setSize(sf::Vector2f(maxHealthBar.getSize().x * scaleFactor.x, maxHealthBar.getSize().y * scaleFactor.y));
+    drawMaxHealthBar.setOrigin(sf::Vector2f(drawMaxHealthBar.getSize().x / 2.f, drawMaxHealthBar.getSize().y / 2.f));
+    
+    drawMaxHealthBar.setOutlineThickness(maxHealthBar.getOutlineThickness() * scaleFactor.x);
+    
+    window.draw(drawMaxHealthBar);
+
+    sf::RectangleShape drawCurrentHealthBar = currentHealthBar;
+    drawCurrentHealthBar.setPosition(mapToScreen(currentHealthBar.getPosition(), window));
+    drawCurrentHealthBar.setSize(sf::Vector2f(currentHealthBar.getSize().x * scaleFactor.x, currentHealthBar.getSize().y * scaleFactor.y));
+    drawCurrentHealthBar.setOrigin(sf::Vector2f(0, drawCurrentHealthBar.getSize().y / 2.f));
+    
+    window.draw(drawCurrentHealthBar);
 }
-
-// void Enemy::updateEnemy(const float &dt, const sf::Vector2f &target)
-// {
-//     sf::Vector2f dir = target - position;
-//     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
-
-//     if (distance > 5.0f)
-//     {
-//         dir /= distance;
-//         sprite.move(sf::Vector2f(dir * speed * dt));
-//         position = sprite.getPosition();
-//         if (dir.x > 0.f)
-//         {
-//             orientation = true;
-//             sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
-//         }
-//         else
-//         {
-//             orientation = false;
-//             sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
-//         }
-//     }
-// }
 
 bool Enemy::takeDamage(const int &dmg)
 {
     currentHealth -= dmg;
-    currentHealthBar.setSize(sf::Vector2f(static_cast<float>(currentHealth) / static_cast<float>(maxHealth) * maxHealthBar.getSize().x, currentHealthBar.getSize().y));
+    currentHealthBar.setSize(sf::Vector2f(1.f * currentHealth / maxHealth * maxHealthBar.getSize().x, currentHealthBar.getSize().y));
     if (currentHealth <= 0)
         return true;
     return false;
 }
-
-// Projectile Enemy::fireEnemyWeapon(const sf::Vector2f &target, const sf::Texture &tex)
-// {
-//     Projectile projectile = enemyWeapon.fire(position, target, tex);
-//     return projectile;
-// }
-
-// bool Enemy::canFireEnemyWeapon(const float &dt)
-// {
-//     return enemyWeapon.canFire(dt);
-// }
 
 Enemy::Enemy(const Enemy &other)
     : Entity(other), maxHealth(other.maxHealth), enemyWeapon(other.enemyWeapon), currentHealth(other.currentHealth), maxHealthBar(other.maxHealthBar), currentHealthBar(other.currentHealthBar)

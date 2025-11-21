@@ -1,7 +1,8 @@
 #include "../headers/GUI.h"
+#include "../headers/Utils.h"
 
 GUI::GUI()
-    : health(font), fps(font)
+    : fontPath("fonts/arial.ttf"), health(font), fps(font)
 {
     if (!font.openFromFile(fontPath))
     {
@@ -23,11 +24,12 @@ std::ostream &operator<<(std::ostream &os, const GUI &gui)
     return os;
 }
 
-void GUI::loadGUI(sf::Window &window)
+void GUI::load()
 {
-    maxHealthBar.setSize(sf::Vector2f(0.4f * window.getSize().x, 0.04f * window.getSize().y));
+    // Use LOGICAL size for GUI layout
+    maxHealthBar.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.04f * LOGICAL_HEIGHT));
     maxHealthBar.setOrigin(sf::Vector2f(0.5f * maxHealthBar.getLocalBounds().size.x, 0.5f * maxHealthBar.getLocalBounds().size.y));
-    maxHealthBar.setPosition(sf::Vector2f(0.5f * window.getSize().x, window.getSize().y - 0.5f * maxHealthBar.getSize().y - 3.f));
+    maxHealthBar.setPosition(sf::Vector2f(0.5f * LOGICAL_WIDTH, LOGICAL_HEIGHT - 0.5f * maxHealthBar.getSize().y - 3.f));
     maxHealthBar.setFillColor(sf::Color(0, 50, 0, 175));
     maxHealthBar.setOutlineThickness(3.f);
     maxHealthBar.setOutlineColor(sf::Color::Black);
@@ -44,10 +46,10 @@ void GUI::loadGUI(sf::Window &window)
 
     fps.setCharacterSize(20);
     fps.setFillColor(sf::Color::Green);
-    fps.setPosition(sf::Vector2f(window.getSize().x - 100.f, 10.f));
+    fps.setPosition(sf::Vector2f(LOGICAL_WIDTH - 100.f, 10.f));
 }
 
-void GUI::updateGUI(const sf::Vector2i &HP, sf::RenderWindow &window)
+void GUI::update(const sf::Vector2i &HP)
 {
     currentHealthBar.setSize(sf::Vector2f(static_cast<float>(HP.x) / static_cast<float>(HP.y) * maxHealthBar.getSize().x, currentHealthBar.getSize().y));
 
@@ -59,7 +61,7 @@ void GUI::updateGUI(const sf::Vector2i &HP, sf::RenderWindow &window)
     {
         fps.setString("FPS: " + std::to_string(frameCount));
         fps.setOrigin(sf::Vector2f(fps.getLocalBounds().position.x + fps.getLocalBounds().size.x, fps.getLocalBounds().position.y));
-        fps.setPosition(sf::Vector2f(window.getSize().x - 10.f, 10.f));
+        fps.setPosition(sf::Vector2f(LOGICAL_WIDTH - 10.f, 10.f));
         frameCount = 0;
         fpsClock.restart();
     }
@@ -71,8 +73,28 @@ void GUI::updateGUI(const sf::Vector2i &HP, sf::RenderWindow &window)
 
 void GUI::draw(sf::RenderWindow &window)
 {
-    window.draw(maxHealthBar);
-    window.draw(currentHealthBar);
-    window.draw(health);
-    window.draw(fps);
+    sf::Vector2f scaleFactor = getScaleFactor(window);
+
+    sf::RectangleShape drawMaxHealthBar = maxHealthBar;
+    drawMaxHealthBar.setPosition(mapToScreen(maxHealthBar.getPosition(), window));
+    drawMaxHealthBar.setSize(sf::Vector2f(maxHealthBar.getSize().x * scaleFactor.x, maxHealthBar.getSize().y * scaleFactor.y));
+    drawMaxHealthBar.setOrigin(sf::Vector2f(drawMaxHealthBar.getSize().x / 2.f, drawMaxHealthBar.getSize().y / 2.f));
+    drawMaxHealthBar.setOutlineThickness(maxHealthBar.getOutlineThickness() * scaleFactor.x);
+    window.draw(drawMaxHealthBar);
+
+    sf::RectangleShape drawCurrentHealthBar = currentHealthBar;
+    drawCurrentHealthBar.setPosition(mapToScreen(currentHealthBar.getPosition(), window));
+    drawCurrentHealthBar.setSize(sf::Vector2f(currentHealthBar.getSize().x * scaleFactor.x, currentHealthBar.getSize().y * scaleFactor.y));
+    drawCurrentHealthBar.setOrigin(sf::Vector2f(0, drawCurrentHealthBar.getSize().y / 2.f));
+    window.draw(drawCurrentHealthBar);
+
+    sf::Text drawHealth = health;
+    drawHealth.setPosition(mapToScreen(health.getPosition(), window));
+    drawHealth.setScale(scaleFactor);
+    window.draw(drawHealth);
+
+    sf::Text drawFps = fps;
+    drawFps.setPosition(mapToScreen(fps.getPosition(), window));
+    drawFps.setScale(scaleFactor);
+    window.draw(drawFps);
 }

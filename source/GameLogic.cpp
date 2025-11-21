@@ -1,9 +1,10 @@
 #include "../headers/GameLogic.h"
+#include "../headers/Utils.h"
 #include <iostream>
 
 Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen),
-      target(sf::Vector2f(window.getSize().x / 2.f, window.getSize().y * 0.8f))
+      target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f))
 {
     setup();
 }
@@ -30,8 +31,8 @@ void Game::selectGameState(gameStates &gameState)
     switch (gameState)
     {
     case main_menu:
-        // gameState = augment_1;
         gameState = level_1;
+        // gameState = augment_1;
         break;
 
     case augment_1:
@@ -72,34 +73,34 @@ void Game::handleNewState()
     {
     case main_menu:
         menu.load(window);
-        settings.loadSettingsBox(window, fullscreen, controls);
+        settings.load();
         std::cout << "menu\n";
         break;
     case augment_1:
-        loader.loadAugment(window);
+        augment.load();
         std::cout << "augment_1\n";
         break;
     case augment_2:
-        loader.loadAugment(window);
+        augment.load();
         std::cout << "augment_2\n";
         break;
     case augment_3:
-        loader.loadAugment(window);
+        augment.load();
         std::cout << "augment_3\n";
         break;
     case level_1:
-        loader.loadLevel(window);
-        player.loadPlayer(window, loader.getPlayerTexture());
-        gui.loadGUI(window);
+        loader.loadLevel();
+        player.load(loader.getPlayerTexture());
+        gui.load();
         spawnEnemies(5);
         std::cout << "level_1\n";
         break;
     case level_2:
-        loader.loadLevel(window);
+        loader.loadLevel();
         std::cout << "level_2\n";
         break;
     case level_3:
-        loader.loadLevel(window);
+        loader.loadLevel();
         std::cout << "level_3\n";
         break;
     case defeat:
@@ -133,18 +134,18 @@ bool Game::handleInputs()
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
-            target = sf::Vector2f(sf::Mouse::getPosition());
+            target = mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
         }
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
             if (player.canFireCurrentWeapon())
             {
-                sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
+                sf::Vector2f projectileTarget = mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
                 std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
                 for(size_t i=0; i<bullets.size(); i++)
                 {
                     playerProjectiles.push_back(bullets[i]);
-                    playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
+                    playerProjectiles.back().load(loader.getPlayerProjectileTexture());
                 }
             }
         }
@@ -162,14 +163,51 @@ bool Game::handleInputs()
             if (currentState == level_1 || currentState == level_2 || currentState == level_3)
             {
                 if(!paused)
+                {
                     togglePause();
+                    openSettings = true;
+                }
             }
+        }
+        else if (event->is<sf::Event::Resized>())
+        {
+            const auto* resized = event->getIf<sf::Event::Resized>();
+            sf::FloatRect visibleArea(sf::Vector2f(0, 0), sf::Vector2f(resized->size));
+            window.setView(sf::View(visibleArea));
         }
         else if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>())
         {
-            if(currentState == main_menu)
+            if(openSettings)
             {
-                int action = menu.handleInput(*event);
+                int action = settings.handleInput(window, *event);
+                switch (action)
+                {
+                case 1:
+                    window.close();
+                    if(fullscreen)
+                        window.create(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Windowed);
+                    else
+                        window.create(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen);
+                    fullscreen = !fullscreen;
+                    window.setVerticalSyncEnabled(true);
+                    window.clear(sf::Color::Black);
+                    window.display();
+                    break;
+                case 2:
+                    controls = !controls;
+                    break;
+                case 3:
+                    openSettings = false;
+                    if(paused)
+                        togglePause();
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if(currentState == main_menu)
+            {
+                int action = menu.handleInput(window, *event);
                 switch (action)
                 {
                 case 1:
@@ -180,6 +218,48 @@ bool Game::handleInputs()
                     openSettings = true;
                     break;
                 case 3:
+                    shouldExit = true;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
+            {
+                int action = augment.handleInput(window, *event);
+                if (action != 0)
+                {
+                    std::cout << "Augment button " << action << " clicked!\n";
+                    selectGameState(currentState);
+                    handleNewState();
+                }
+            }
+            else if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+            {
+                std::pair<int, sf::Vector2f> ans = handleLevelInput(*event);
+                int action = ans.first;
+                switch (action)
+                {
+                case 1:
+                    target = mapToLogical(ans.second, window);
+                    break;
+                case 2:
+                    if (player.canFireCurrentWeapon())
+                    {
+                        sf::Vector2f projectileTarget = mapToLogical(ans.second, window);
+                        std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
+                        for(size_t i=0; i<bullets.size(); i++)
+                        {
+                            playerProjectiles.push_back(bullets[i]);
+                            playerProjectiles.back().load(loader.getPlayerProjectileTexture());
+                        }
+                    }
+                    break;
+                case 3:
+                    togglePause();
+                    openSettings = !openSettings;   
+                    break;
+                case 4:
                     shouldExit = true;
                     break;
                 default:
@@ -198,51 +278,13 @@ bool Game::handleInputs()
                 {
                     std::cout << *this;
                 }
-                else if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
-                {
-                    if (currentState == level_1 || currentState == level_2 || currentState == level_3)
-                    {
-                        togglePause();
-                    }
-                }
             }
-            else if (currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
-                handleAugmentInput(*event);
-            else if (currentState == level_1 || currentState == level_2 || currentState == level_3)
-                handleLevelInput(*event);
         }
     }
     return shouldExit;
 }
 
-void Game::handleAugmentInput(const sf::Event &event)
-{
-    if (event.is<sf::Event::MouseButtonPressed>())
-    {
-        const auto *mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
-
-        if (mouseEvent->button == sf::Mouse::Button::Left)
-        {
-            if (!loader.hasAugmentButtonSprites())
-                return;
-
-            for (int i = 0; i < 3; i++)
-            {
-                const auto buttonBounds = loader.getAugmentButtonBounds(i);
-
-                if (buttonBounds.contains(sf::Vector2f(mouseEvent->position)))
-                {
-                    std::cout << "Augment button " << i + 1 << " clicked!\n";
-                    selectGameState(currentState);
-                    handleNewState();
-                    break;
-                }
-            }
-        }
-    }
-}
-
-void Game::handleLevelInput(const sf::Event &event)
+std::pair<int, sf::Vector2f> Game::handleLevelInput(const sf::Event &event)
 {
     if (event.is<sf::Event::MouseButtonPressed>() && !paused)
     {
@@ -250,60 +292,61 @@ void Game::handleLevelInput(const sf::Event &event)
 
         if (mouseEvent->button == sf::Mouse::Button::Right)
         {
-            target = sf::Vector2f(mouseEvent->position);
+            return std::make_pair(1, sf::Vector2f(mouseEvent->position));
         }
 
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            if (player.canFireCurrentWeapon())
-            {
-                sf::Vector2f projectileTarget = sf::Vector2f(sf::Mouse::getPosition());
-                std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
-                for(size_t i=0; i<bullets.size(); i++)
-                {
-                    playerProjectiles.push_back(bullets[i]);
-                    playerProjectiles.back().loadProjectile(window, loader.getPlayerProjectileTexture());
-                }
-            }
+            return std::make_pair(2, sf::Vector2f(mouseEvent->position));
         }
     }
     if (event.is<sf::Event::KeyPressed>())
     {
-        // const auto* keyBoardEvent = event.getIf<sf::Event::KeyPressed>();
+        const auto *keyPressed = event.getIf<sf::Event::KeyPressed>();
+        if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+        {
+            return std::make_pair(3, sf::Vector2f(-1.f, -1.f));
+        }
+        else if (keyPressed->scancode == sf::Keyboard::Scancode::Backspace)
+        {
+            return std::make_pair(4, sf::Vector2f(-1.f, -1.f));
+        }
+        // else if(!controls && !paused)
+        // {
+            
+        // }
     }
+
+    return std::make_pair(0, sf::Vector2f(-1.f, -1.f));
 }
 
 void Game::spawnEnemies(const int &numberOfEnemies)
 {
     for (int i = 0; i < numberOfEnemies; i++)
     {
-        enemies.push_back(Enemy::spawnEnemy(loader.getEnemyTexture(), sf::Vector2f(500.f + i * 100.f, 500.f), 100.f, 100, Weapon("EnemyGun", 10, 1, 1.f, 0.f, 500.f, 300.f)));
-        enemies.back().loadEnemy(window, loader.getEnemyTexture());
+        enemies.push_back(Enemy::spawnEnemy(loader.getEnemyTexture(), sf::Vector2f(500.f + i * 100.f, 500.f), 100.f, 100, Weapon("EnemyGun", 10, 1, 1.f, 0.f, 0.25f, 0.15f)));
+        enemies.back().load(loader.getEnemyTexture());
     }
 }
 
 void Game::drawLevel()
 {
     loader.drawLevelBackground(window);
-    player.drawPlayer(window);
+    player.draw(window);
     for (auto &projectile : playerProjectiles)
     {
-        projectile.drawProjectile(window);
+        projectile.draw(window);
     }
     for (auto &enemy : enemies)
     {
-        enemy.drawEnemy(window);
+        enemy.draw(window);
     }
     drawGUI();
-    if(paused)
-    {
-        settings.draw(window, fullscreen, controls);
-    }
 }
 
 void Game::drawGUI()
 {
-    gui.updateGUI(player.getHealthStatus(), window);
+    gui.update(player.getHealthStatus());
     gui.draw(window);
 }
 
@@ -330,14 +373,13 @@ void Game::draw()
     case augment_1:
     case augment_2:
     case augment_3:
-        loader.drawAugment(window);
+        augment.draw(window);
         break;
 
     case level_1:
     case level_2:
     case level_3:
         drawLevel();
-        break;
 
     case defeat:
         // drawDefeat();
@@ -351,16 +393,21 @@ void Game::draw()
         break;
     }
 
+    if(openSettings)
+    {
+        settings.draw(window);
+    }
+
     window.display();
 }
 
 void Game::updateEntities()
 {
     float dt = updateClock.restart().asSeconds();
-    player.updatePlayer(dt, target);
+    player.update(dt, target);
     for (size_t i = 0; i < playerProjectiles.size();)
     {
-        if (playerProjectiles[i].updateProjectile(dt, window))
+        if (playerProjectiles[i].update(dt))
             playerProjectiles.erase(playerProjectiles.begin() + i);
         else
         {

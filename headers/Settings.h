@@ -9,10 +9,9 @@ class Settings
     Settings(const Settings &) = delete;
     Settings &operator=(const Settings &) = delete;
 
-    bool fullscreen;
-    bool controls;
-
     sf::RectangleShape settingsBox;
+    sf::RectangleShape screenButton;
+    sf::RectangleShape controlsButton;
     sf::Font font;
     sf::Text screenText;
     sf::Text controlsText;
@@ -21,8 +20,9 @@ public:
     static Settings &getInstance();
     ~Settings() = default;
 
-    void loadSettingsBox(sf::RenderWindow &, const bool &, const bool &);
-    void draw(sf::RenderWindow &, const bool &, const bool &);
+    void load();
+    void draw(sf::RenderWindow &);
+    int handleInput(sf::RenderWindow &, const sf::Event &);
 
     friend std::ostream &operator<<(std::ostream &os, const Settings &settings);
 };
