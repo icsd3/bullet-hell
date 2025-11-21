@@ -2,7 +2,7 @@
 
 #include "../headers/Entities.h"
 #include "../headers/Weapons.h"
-#include "../json/json.hpp"
+#include "../ext/json.hpp"
 #include <fstream>
 
 #include <cmath>

@@ -3,7 +3,6 @@
 
 class Enemy : public Entity
 {
-private:
     Enemy(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float, const int &, const Weapon &);
     int maxHealth;
     Weapon enemyWeapon;
