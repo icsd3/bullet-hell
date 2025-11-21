@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Player::Player(const sf::Vector2f &start, const sf::Texture &tex)
-    : Entity(false, start, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100)
+    : Entity(false, start, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0)
 {
     currentWeapon = Weapon("Basic Gun", 20, 10, 2.f, 45.f, 0.3f, 0.25f);
     weapons.emplace_back(currentWeapon);
