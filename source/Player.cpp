@@ -4,8 +4,6 @@
 Player::Player(const sf::Vector2f &start, const sf::Texture &tex)
     : Entity(false, start, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0)
 {
-    currentWeapon = Weapon("Basic Gun", 20, 10, 2.f, 45.f, 0.3f, 0.25f);
-    weapons.emplace_back(currentWeapon);
 }
 
 Player &Player::getInstance(const sf::Vector2f &start, const sf::Texture &tex)
@@ -56,6 +54,21 @@ void Player::update(const float &dt, const sf::Vector2f &target)
 
 void Player::load(const sf::Texture &texture)
 {   
+    std::ifstream file("json/Weapons.json");
+    nlohmann::json data;
+    file >> data;
+    auto &w = data[0];
+    currentWeapon = Weapon(
+        w["name"],
+        w["damage"],
+        w["bullet_nr"],
+        w["fire_rate"],
+        w["spread_angle"],
+        w["range"],
+        w["bullet_speed"]
+    );
+    weapons.emplace_back(currentWeapon);
+
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);

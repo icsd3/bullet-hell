@@ -112,4 +112,4 @@ if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-copy_files(FILES tastatura.txt DIRECTORY textures fonts COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+copy_files(FILES tastatura.txt DIRECTORY textures fonts json COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})

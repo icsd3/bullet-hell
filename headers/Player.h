@@ -2,6 +2,8 @@
 
 #include "../headers/Entities.h"
 #include "../headers/Weapons.h"
+#include "../json/json.hpp"
+#include <fstream>
 
 #include <cmath>
 
