@@ -503,9 +503,9 @@ void Game::updateEntities()
             sf::Vector2f projectileTarget = player.getPosition();
             std::vector<Projectile> bullets = enemies[i].fire(projectileTarget, loader.getEnemyProjectileTexture());
             
-            for(size_t i=0; i<bullets.size(); i++)
+            for(size_t j=0; j<bullets.size(); j++)
             {
-                enemyProjectiles.push_back(bullets[i]);
+                enemyProjectiles.push_back(bullets[j]);
                 enemyProjectiles.back().load(loader.getEnemyProjectileTexture());
             }
         }
