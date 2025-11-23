@@ -10,11 +10,11 @@
 
 - [ ] Exit - Backspace
 - [ ] Start (in meniu) - Enter
-- [ ] Pause (in level) - Escape (NOT DONE)
+- [ ] Pause - Escape
 
 #### Gameplay
 
-- [ ] Movement - Right click (press/hold) / WASD (NOT DONE)
+- [ ] Movement - Right click (press/hold) / WASD
 
 #### Debugging
 
