@@ -39,6 +39,7 @@ public:
     sf::Texture &getPlayerTexture();
     sf::Texture &getEnemyTexture();
     sf::Texture &getPlayerProjectileTexture();
+    sf::Texture &getEnemyProjectileTexture();
 
     void drawLevelBackground(sf::RenderWindow &);
 };

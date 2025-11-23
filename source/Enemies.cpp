@@ -1,14 +1,29 @@
 #include "../headers/Enemies.h"
 #include "../headers/Utils.h"
+#include <nlohmann/json.hpp>
 #include <iostream>
+#include <fstream>
 
 Enemy::Enemy(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex, float spd, const int &mh, const Weapon &ew)
-    : Entity(ec, pos, ori, tf, tex, spd), maxHealth(mh), enemyWeapon(ew), currentHealth(mh)
+    : Entity(ec, pos, ori, tf, tex, spd), maxHealth(mh), weapon(ew), currentHealth(mh)
 {
 }
 
-Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, const Weapon &ew)
+Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh)
 {
+    std::ifstream file("json/Weapons.json");
+    nlohmann::json data;
+    file >> data;
+    const auto &w = data[0];
+    Weapon ew = Weapon(
+        w["name"],
+        w["damage"],
+        w["bullet_nr"],
+        w["fire_rate"],
+        w["spread_angle"],
+        w["range"],
+        w["bullet_speed"]
+    );
     Enemy enemy(true, pos, false, "textures/enemy.png", tex, spd, mh, ew);
     return enemy;
 }
@@ -61,6 +76,21 @@ void Enemy::draw(sf::RenderWindow &window)
     window.draw(drawCurrentHealthBar);
 }
 
+void Enemy::update()
+{
+    
+}
+
+std::vector<Projectile> Enemy::fire(const sf::Vector2f &target, const sf::Texture &tex)
+{
+    return weapon.fire(position, target, tex);
+}
+
+bool Enemy::canFire()
+{
+    return weapon.canFire();
+}
+
 bool Enemy::takeDamage(const int &dmg)
 {
     currentHealth -= dmg;
@@ -71,7 +101,7 @@ bool Enemy::takeDamage(const int &dmg)
 }
 
 Enemy::Enemy(const Enemy &other)
-    : Entity(other), maxHealth(other.maxHealth), enemyWeapon(other.enemyWeapon), currentHealth(other.currentHealth), maxHealthBar(other.maxHealthBar), currentHealthBar(other.currentHealthBar)
+    : Entity(other), maxHealth(other.maxHealth), weapon(other.weapon), currentHealth(other.currentHealth), maxHealthBar(other.maxHealthBar), currentHealthBar(other.currentHealthBar)
 {
 }
 
@@ -81,7 +111,7 @@ Enemy &Enemy::operator=(const Enemy &other)
     {
         Entity::operator=(other);
         maxHealth = other.maxHealth;
-        enemyWeapon = other.enemyWeapon;
+        weapon = other.weapon;
         currentHealth = other.currentHealth;
         maxHealthBar = other.maxHealthBar;
         currentHealthBar = other.currentHealthBar;
@@ -95,6 +125,6 @@ std::ostream &operator<<(std::ostream &os, const Enemy &enemy)
     os << "\n";
     os << "        Max Health: " << enemy.maxHealth << "\n";
     os << "        Current Health: " << enemy.currentHealth << "\n";
-    os << "        Enemy Weapon: " << enemy.enemyWeapon;
+    os << "        Enemy Weapon: " << enemy.weapon;
     return os;
 }

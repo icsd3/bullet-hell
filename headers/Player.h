@@ -27,8 +27,10 @@ public:
     void load(const sf::Texture &);
     void update(const float &, const sf::Vector2f &);
     void draw(sf::RenderWindow &);
+    bool takeDamage(const int &);
+
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
-    std::vector<Projectile> fireCurrentWeapon(const sf::Vector2f &, const sf::Texture &);
-    bool canFireCurrentWeapon();
+    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Texture &);
+    bool canFire();
 };

@@ -25,4 +25,5 @@ public:
 
     std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &, const sf::Texture &) const;
     bool canFire();
+    void reset();
 };

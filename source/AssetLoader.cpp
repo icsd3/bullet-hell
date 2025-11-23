@@ -92,6 +92,11 @@ sf::Texture &AssetLoader::getPlayerProjectileTexture()
     return playerProjectileTexture;
 }
 
+sf::Texture &AssetLoader::getEnemyProjectileTexture()
+{
+    return enemyProjectileTexture;
+}
+
 void AssetLoader::drawLevelBackground(sf::RenderWindow &window)
 {
     if (hasLevelBackgroundSprite()) {

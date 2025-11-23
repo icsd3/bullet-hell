@@ -92,7 +92,7 @@ void Game::handleNewState()
         loader.loadLevel();
         player.load(loader.getPlayerTexture());
         gui.load();
-        spawnEnemies(5);
+        spawnEnemies(4);
         break;
 
     case level_2:
@@ -163,10 +163,10 @@ bool Game::handleInputs()
             moved = true;
         }
 
-        if (shoot.x != -1 && shoot.y != -1 && player.canFireCurrentWeapon())
+        if (shoot.x != -1 && shoot.y != -1 && player.canFire())
         {
             sf::Vector2f projectileTarget = shoot;
-            std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
+            std::vector<Projectile> bullets = player.fire(projectileTarget, loader.getPlayerProjectileTexture());
             
             for(size_t i=0; i<bullets.size(); i++)
             {
@@ -296,10 +296,10 @@ bool Game::handleInputs()
                     break;
 
                 case 2:
-                    if (player.canFireCurrentWeapon())
+                    if (player.canFire())
                     {
                         sf::Vector2f projectileTarget = ans.second;
-                        std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
+                        std::vector<Projectile> bullets = player.fire(projectileTarget, loader.getPlayerProjectileTexture());
                         
                         for(size_t i=0; i<bullets.size(); i++)
                         {
@@ -413,9 +413,9 @@ sf::Vector2f Game::handleShootInput()
 
 void Game::spawnEnemies(const int &numberOfEnemies)
 {
-    for (int i = 0; i < numberOfEnemies; i++)
+    for (int i = 1; i <= numberOfEnemies; i++)
     {
-        enemies.push_back(Enemy::spawnEnemy(loader.getEnemyTexture(), sf::Vector2f(500.f + i * 100.f, 500.f), 100.f, 100, Weapon("EnemyGun", 10, 1, 1.f, 0.f, 0.25f, 0.15f)));
+        enemies.push_back(Enemy::spawnEnemy(loader.getEnemyTexture(), sf::Vector2f(100.f + i%2 * 1720.f, 100.f + (i-1) / 2 * 880.f), 100.f, 100));
         enemies.back().load(loader.getEnemyTexture());
     }
 }
@@ -443,14 +443,13 @@ void Game::draw()
         player.draw(window);
 
         for (auto &projectile : playerProjectiles)
-        {
             projectile.draw(window);
-        }
+
+        for (auto &projectile : enemyProjectiles)
+            projectile.draw(window);
 
         for (auto &enemy : enemies)
-        {
             enemy.draw(window);
-        }
 
         gui.update(player.getHealthStatus());
         gui.draw(window);
@@ -495,6 +494,37 @@ void Game::updateEntities()
                 i++;
         }
     }
+
+    for(size_t i = 0; i < enemies.size(); i++)
+    {
+        enemies[i].update();
+        if(enemies[i].canFire())
+        {
+            sf::Vector2f projectileTarget = player.getPosition();
+            std::vector<Projectile> bullets = enemies[i].fire(projectileTarget, loader.getEnemyProjectileTexture());
+            
+            for(size_t i=0; i<bullets.size(); i++)
+            {
+                enemyProjectiles.push_back(bullets[i]);
+                enemyProjectiles.back().load(loader.getEnemyProjectileTexture());
+            }
+        }
+    }
+
+    for (size_t i = 0; i < enemyProjectiles.size();)
+    {
+        if (enemyProjectiles[i].update(dt))
+            enemyProjectiles.erase(enemyProjectiles.begin() + i);
+
+        else
+        {
+            if (checkPlayerHits(enemyProjectiles[i]))
+                enemyProjectiles.erase(enemyProjectiles.begin() + i);
+
+            else
+                i++;
+        }
+    }
 }
 
 bool Game::checkEnemyHits(const Projectile &projectile)
@@ -511,6 +541,17 @@ bool Game::checkEnemyHits(const Projectile &projectile)
         else
             i++;
     }
+    return false;
+}
+
+bool Game::checkPlayerHits(const Projectile &projectile)
+{
+    if (projectile.collidesWith(player))
+    {
+        if (player.takeDamage(projectile.getDamage()))
+            window.close();
+        return true;
+    }  
     return false;
 }
 

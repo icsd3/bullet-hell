@@ -59,7 +59,6 @@ class Game
 
     bool handleInputs();
     std::pair<int, sf::Vector2f> handleLevelInput(const sf::Event &);
-    std::pair<int, sf::Vector2f> handleLevelInput();
     sf::Vector2f handleMovementInput();
     sf::Vector2f handleShootInput();
 
@@ -70,6 +69,7 @@ class Game
     void spawnEnemies(const int &);
     void updateEntities();
     bool checkEnemyHits(const Projectile &);
+    bool checkPlayerHits(const Projectile &);
 
     void togglePause();
 

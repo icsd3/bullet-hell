@@ -84,6 +84,8 @@ void Player::load(const sf::Texture &texture)
     {
         sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
     }
+
+    currentWeapon.reset();
 }
 
 void Player::draw(sf::RenderWindow &window)
@@ -105,12 +107,20 @@ sf::Vector2f Player::getPosition() const
     return position;
 }
 
-std::vector<Projectile> Player::fireCurrentWeapon(const sf::Vector2f &target, const sf::Texture &tex)
+std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex)
 {
     return currentWeapon.fire(position, target, tex);
 }
 
-bool Player::canFireCurrentWeapon()
+bool Player::takeDamage(const int &dmg)
+{
+    currentHealth -= dmg;
+    if (currentHealth <= 0)
+        return true;
+    return false;
+}
+
+bool Player::canFire()
 {
     return currentWeapon.canFire();
 }
