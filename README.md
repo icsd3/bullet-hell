@@ -14,7 +14,8 @@
 
 #### Gameplay
 
-- [ ] Movement - Right click (press/hold) / WASD
+- [ ] Movement - Right click / WASD
+- [ ] Fire - Left Click
 
 #### Debugging
 
