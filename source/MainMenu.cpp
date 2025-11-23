@@ -5,7 +5,7 @@
 mainMenu::mainMenu()
     :backgroundPath("textures/menu_background.png"), 
     startButtonPath("textures/start_button.png"), 
-    settingsButtonPath("textures/start_button.png"), 
+    settingsButtonPath("textures/settings_button.png"), 
     exitButtonPath("textures/exit_button.png"),
     backgroundTexture(backgroundPath),
     startButtonTexture(startButtonPath),

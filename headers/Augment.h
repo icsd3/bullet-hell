@@ -30,10 +30,10 @@ class Augment
 public:
     static Augment &getInstance();
     ~Augment() = default;
-    friend std::ostream &operator<<(std::ostream &os, const Augment &Augment);
+    friend std::ostream &operator<<(std::ostream &, const Augment &);
 
     void load();
     void draw(sf::RenderWindow &);
-    int handleInput(const sf::RenderWindow &window, const sf::Event &event);
+    int handleInput(const sf::RenderWindow &, const sf::Event &);
     // void applyModifiers(Player &);
 };

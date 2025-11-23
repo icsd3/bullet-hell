@@ -130,26 +130,48 @@ void Game::togglePause()
 bool Game::handleInputs()
 {
     bool shouldExit = false;
+    bool moved = false;
 
     if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
     {
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+        sf::Vector2f move = handleMovementInput();
+        sf::Vector2f shoot = handleShootInput();
+
+        if(move.x > 0 &&  move.x < LOGICAL_WIDTH && move.y > 0 && move.y < LOGICAL_HEIGHT)
         {
-            target = mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+            target = move;
+            moved = true;
         }
 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        if((move.x < 0 ||  move.x > LOGICAL_WIDTH) && (move.y > 0 && move.y < LOGICAL_HEIGHT))
         {
-            if (player.canFireCurrentWeapon())
-            {
-                sf::Vector2f projectileTarget = mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
-                std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
+            if(move.x < 0)
+                move.x = 0;
+            else
+                move.x = LOGICAL_WIDTH;
+            target = move;
+            moved = true;
+        }
 
-                for(size_t i=0; i<bullets.size(); i++)
-                {
-                    playerProjectiles.push_back(bullets[i]);
-                    playerProjectiles.back().load(loader.getPlayerProjectileTexture());
-                }
+        if((move.y < 0 ||  move.y > LOGICAL_HEIGHT) && (move.x > 0 && move.x < LOGICAL_WIDTH))
+        {
+            if(move.y < 0)
+                move.y = 0;
+            else
+                move.y = LOGICAL_HEIGHT;
+            target = move;
+            moved = true;
+        }
+
+        if (shoot.x != -1 && shoot.y != -1 && player.canFireCurrentWeapon())
+        {
+            sf::Vector2f projectileTarget = shoot;
+            std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
+            
+            for(size_t i=0; i<bullets.size(); i++)
+            {
+                playerProjectiles.push_back(bullets[i]);
+                playerProjectiles.back().load(loader.getPlayerProjectileTexture());
             }
         }
     }
@@ -269,13 +291,14 @@ bool Game::handleInputs()
                 switch (action)
                 {
                 case 1:
-                    target = mapToLogical(ans.second, window);
+                    if(!moved && ans.second.x > 0 && ans.second.y > 0 && ans.second.x < LOGICAL_WIDTH && ans.second.y < LOGICAL_HEIGHT)
+                        target = ans.second;
                     break;
 
                 case 2:
                     if (player.canFireCurrentWeapon())
                     {
-                        sf::Vector2f projectileTarget = mapToLogical(ans.second, window);
+                        sf::Vector2f projectileTarget = ans.second;
                         std::vector<Projectile> bullets = player.fireCurrentWeapon(projectileTarget, loader.getPlayerProjectileTexture());
                         
                         for(size_t i=0; i<bullets.size(); i++)
@@ -289,10 +312,6 @@ bool Game::handleInputs()
                 case 3:
                     togglePause();
                     openSettings = !openSettings;   
-                    break;
-
-                case 4:
-                    shouldExit = true;
                     break;
 
                 default:
@@ -310,14 +329,14 @@ std::pair<int, sf::Vector2f> Game::handleLevelInput(const sf::Event &event)
     {
         const auto *mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
 
-        if (mouseEvent->button == sf::Mouse::Button::Right)
+        if (mouseEvent->button == sf::Mouse::Button::Right && !controls)
         {
-            return std::make_pair(1, sf::Vector2f(mouseEvent->position));
+            return std::make_pair(1, mapToLogical(sf::Vector2f(mouseEvent->position), window));
         }
 
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            return std::make_pair(2, sf::Vector2f(mouseEvent->position));
+            return std::make_pair(2, mapToLogical(sf::Vector2f(mouseEvent->position), window));
         }
     }
     if (event.is<sf::Event::KeyPressed>())
@@ -329,18 +348,67 @@ std::pair<int, sf::Vector2f> Game::handleLevelInput(const sf::Event &event)
             return std::make_pair(3, sf::Vector2f(-1.f, -1.f));
         }
 
-        else if (keyPressed->scancode == sf::Keyboard::Scancode::Backspace)
+        else if(controls && !paused)
         {
-            return std::make_pair(4, sf::Vector2f(-1.f, -1.f));
-        }
+            if (keyPressed->scancode == sf::Keyboard::Scancode::W)
+                return std::make_pair(1, player.getPosition() + sf::Vector2f(0.f, -10.f));
 
-        // else if(!controls && !paused)
-        // {
-            
-        // }
+            else if (keyPressed->scancode == sf::Keyboard::Scancode::A)
+                return std::make_pair(1, player.getPosition() + sf::Vector2f(-10.f, 0.f));
+
+            else if (keyPressed->scancode == sf::Keyboard::Scancode::S)
+                return std::make_pair(1, player.getPosition() + sf::Vector2f(0.f, 10.f));
+
+            else if (keyPressed->scancode == sf::Keyboard::Scancode::D)
+                return std::make_pair(1, player.getPosition() + sf::Vector2f(10.f, 0.f));
+        }
     }
 
     return std::make_pair(0, sf::Vector2f(-1.f, -1.f));
+}
+
+sf::Vector2f Game::handleMovementInput()
+{
+    if(!paused)
+    {
+        if(controls)
+        {
+            sf::Vector2f movement = player.getPosition();
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+                movement += sf::Vector2f(0.f, -10.f);
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+                movement += sf::Vector2f(-10.f, 0.f);
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+                movement += sf::Vector2f(0.f, 10.f);
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+                movement += sf::Vector2f(10.f, 0.f);
+
+            return movement; 
+        } 
+        else
+        {
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+            {
+                return mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+            }
+        }
+    }
+    return sf::Vector2f(-1,-1);
+}
+
+sf::Vector2f Game::handleShootInput()
+{
+    if(!paused)
+    {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            return mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+        }
+    }
+    return sf::Vector2f(-1.f, -1.f);
 }
 
 void Game::spawnEnemies(const int &numberOfEnemies)
@@ -351,40 +419,6 @@ void Game::spawnEnemies(const int &numberOfEnemies)
         enemies.back().load(loader.getEnemyTexture());
     }
 }
-
-void Game::drawLevel()
-{
-    loader.drawLevelBackground(window);
-    player.draw(window);
-
-    for (auto &projectile : playerProjectiles)
-    {
-        projectile.draw(window);
-    }
-
-    for (auto &enemy : enemies)
-    {
-        enemy.draw(window);
-    }
-
-    drawGUI();
-}
-
-void Game::drawGUI()
-{
-    gui.update(player.getHealthStatus());
-    gui.draw(window);
-}
-
-// void Game::drawDefeat()
-// {
-
-// }
-
-// void Game::drawVictory()
-// {
-
-// }
 
 void Game::draw()
 {
@@ -405,14 +439,29 @@ void Game::draw()
     case level_1:
     case level_2:
     case level_3:
-        drawLevel();
+        loader.drawLevelBackground(window);
+        player.draw(window);
+
+        for (auto &projectile : playerProjectiles)
+        {
+            projectile.draw(window);
+        }
+
+        for (auto &enemy : enemies)
+        {
+            enemy.draw(window);
+        }
+
+        gui.update(player.getHealthStatus());
+        gui.draw(window);
+        break;
 
     case defeat:
-        // drawDefeat();
+        
         break;
 
     case victory:
-        // drawVictory();
+        
         break;
 
     default:

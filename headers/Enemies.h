@@ -24,5 +24,5 @@ public:
     Enemy(const Enemy &);
     Enemy &operator=(const Enemy &);
     ~Enemy() = default;
-    friend std::ostream &operator<<(std::ostream &os, const Enemy &enemy);
+    friend std::ostream &operator<<(std::ostream &, const Enemy &);
 };

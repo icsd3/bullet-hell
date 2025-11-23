@@ -27,7 +27,7 @@ class AssetLoader
 public:
     static AssetLoader &getInstance();
     ~AssetLoader() = default;
-    friend std::ostream &operator<<(std::ostream &os, const AssetLoader &loader);
+    friend std::ostream &operator<<(std::ostream &, const AssetLoader &);
 
     void loadStaticAssets();
     void loadLevel();

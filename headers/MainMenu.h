@@ -27,9 +27,9 @@ class mainMenu
 public:
     static mainMenu &getInstance();
     ~mainMenu() = default;
-    friend std::ostream &operator<<(std::ostream &os, const mainMenu &menu);
+    friend std::ostream &operator<<(std::ostream &, const mainMenu &);
 
     void load();
     void draw(sf::RenderWindow &);
-    int handleInput(const sf::RenderWindow &window, const sf::Event &event);
+    int handleInput(const sf::RenderWindow &, const sf::Event &);
 };

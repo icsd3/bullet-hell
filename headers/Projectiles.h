@@ -20,5 +20,5 @@ public:
     bool update(const float &); // Returns true if projectile is out of bounds
     int getDamage() const;
 
-    friend std::ostream &operator<<(std::ostream &os, const Projectile &projectile);
+    friend std::ostream &operator<<(std::ostream &, const Projectile &);
 };

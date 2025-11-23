@@ -56,7 +56,7 @@ std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vec
 bool Weapon::canFire()
 {
     float dt = weaponClock.getElapsedTime().asSeconds();
-    if (dt >= 1 / fire_rate)
+    if (dt >= (1 / fire_rate))
     {
         weaponClock.restart();
         return true;

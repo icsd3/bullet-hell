@@ -50,7 +50,7 @@ void Settings::load()
 
     controlsText.setCharacterSize(30);
     controlsText.setFillColor(sf::Color::White);
-    controlsText.setString("Controls: Mouse");
+    controlsText.setString("Controls: WASD");
     controlsText.setOrigin(sf::Vector2f(controlsText.getLocalBounds().position.x + 0.5f * controlsText.getLocalBounds().size.x,
                                         controlsText.getLocalBounds().position.y + 0.5f * controlsText.getLocalBounds().size.y));
     controlsText.setPosition(controlsButton.getPosition());
@@ -122,13 +122,13 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
             }
             if(controlsButtonBounds.contains(mousePos))
             {
-                if(controlsText.getString() == "Controls: Mouse")
+                if(controlsText.getString() == "Controls: WASD")
                 {
-                    controlsText.setString("Controls: WASD");
+                    controlsText.setString("Controls: Mouse");
                 }
                 else
                 {
-                    controlsText.setString("Controls: Mouse");
+                    controlsText.setString("Controls: WASD");
                 }
                 return 2; // Change controls
             }

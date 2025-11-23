@@ -72,6 +72,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/MainMenu.cpp
     headers/AssetLoader.h
     source/AssetLoader.cpp
+    headers/Object.h
+    source/Object.cpp
     headers/Entities.h
     source/Entities.cpp
     headers/Player.h
@@ -86,9 +88,9 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Enemies.cpp
     headers/Settings.h
     source/Settings.cpp
-    headers/Utils.h
     headers/Augment.h
     source/Augment.cpp
+    headers/Utils.h
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

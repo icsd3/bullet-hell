@@ -22,7 +22,7 @@ class GUI
 public:
     static GUI &getInstance();
     ~GUI() = default;
-    friend std::ostream &operator<<(std::ostream &os, const GUI &gui);
+    friend std::ostream &operator<<(std::ostream &, const GUI &);
 
     void load();
     void update(const sf::Vector2i &);

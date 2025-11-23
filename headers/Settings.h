@@ -24,5 +24,5 @@ public:
     void draw(sf::RenderWindow &);
     int handleInput(const sf::RenderWindow &, const sf::Event &);
 
-    friend std::ostream &operator<<(std::ostream &os, const Settings &settings);
+    friend std::ostream &operator<<(std::ostream &, const Settings &);
 };

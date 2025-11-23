@@ -40,7 +40,7 @@ class Game
     bool paused = false;
     bool openSettings = false;
     bool fullscreen = true;
-    bool controls = true; //true for mouse, false for WASD
+    bool controls = true; //true for WASD, false for mouse
     sf::Clock updateClock;
     sf::Vector2f target;
 
@@ -55,16 +55,15 @@ class Game
     std::vector<Enemy> enemies;
 
     void setup();
-    static void selectGameState(gameStates &gameState);
+    static void selectGameState(gameStates &);
 
     bool handleInputs();
-    std::pair<int, sf::Vector2f> handleLevelInput(const sf::Event &event);
+    std::pair<int, sf::Vector2f> handleLevelInput(const sf::Event &);
+    std::pair<int, sf::Vector2f> handleLevelInput();
+    sf::Vector2f handleMovementInput();
+    sf::Vector2f handleShootInput();
 
     void draw();
-    void drawLevel();
-    void drawGUI();
-    // void drawDefeat();
-    // void drawVictory();
 
     void handleNewState();
 
@@ -79,5 +78,5 @@ public:
     static Game &getInstance();
     ~Game() = default;
 
-    friend std::ostream &operator<<(std::ostream &os, const Game &game);
+    friend std::ostream &operator<<(std::ostream &, const Game &);
 };

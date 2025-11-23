@@ -17,11 +17,11 @@ class Weapon
     sf::Clock weaponClock;
 
 public:
-    Weapon(const std::string &nm, int dmg, int bnr, float fr, float sa, float rg, float bs);
+    Weapon(const std::string &, int , int , float , float , float , float);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
     ~Weapon() = default;
-    friend std::ostream &operator<<(std::ostream &os, const Weapon &weapon);
+    friend std::ostream &operator<<(std::ostream &, const Weapon &);
 
     std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &, const sf::Texture &) const;
     bool canFire();
