@@ -9,7 +9,7 @@
 
 class Player : public Entity
 {
-    Player(const sf::Texture &);
+    explicit Player(const sf::Texture &);
     Player(const Player &) = delete;
     Player &operator=(const Player &) = delete;
 
