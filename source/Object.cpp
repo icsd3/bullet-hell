@@ -1,8 +1,8 @@
 #include "../headers/Object.h"
 #include <iostream>
 
-Object::Object(const bool &pc, const sf::Vector2f &pos, const bool &ori, const std::string tf, const sf::Texture &tex)
-    : entityCollision(pc), position(pos), orientation(ori), textureFile(std::move(tf)), sprite(tex)
+Object::Object(const bool &pc, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex)
+    : entityCollision(pc), position(pos), orientation(ori), textureFile(tf), sprite(tex)
 {
 }
 

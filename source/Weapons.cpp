@@ -1,8 +1,8 @@
 #include "../headers/Weapons.h"
 #include <iostream>
 
-Weapon::Weapon(const std::string nm, int dmg, int bnr, float fr, float sa, float rg, float bs)
-    : name(std::move(nm)), damage(dmg), bullet_nr(bnr), fire_rate(fr), spread_angle(sa), range(rg), bulletSpeed(bs)
+Weapon::Weapon(const std::string &nm, int dmg, int bnr, float fr, float sa, float rg, float bs)
+    : name(nm), damage(dmg), bullet_nr(bnr), fire_rate(fr), spread_angle(sa), range(rg), bulletSpeed(bs)
 {
 }
 

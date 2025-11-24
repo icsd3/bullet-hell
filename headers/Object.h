@@ -18,7 +18,7 @@ protected:
 public:
     bool collidesWith(const Object &) const;
 
-    Object(const bool &, const sf::Vector2f &, const bool &, const std::string, const sf::Texture &);
+    Object(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &);
     Object(const Object &);
     Object &operator=(const Object &);
     ~Object() = default;

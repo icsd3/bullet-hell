@@ -158,7 +158,7 @@ void Level::updateEntities(const float &dt, const sf::Vector2f &target)
             sf::Vector2f projectileTarget = player.getPosition();
             std::vector<Projectile> bullets = enemy.fire(projectileTarget, enemyProjectileTexture);
             
-            for(auto &bullet : bullets)
+            for(const auto &bullet : bullets)
             {
                 enemyProjectiles.push_back(bullet);
                 enemyProjectiles.back().load(enemyProjectileTexture);
@@ -214,7 +214,7 @@ void Level::spawnPlayerProjectile(const sf::Vector2f &target)
 {
     std::vector<Projectile> bullets = player.fire(target, playerProjectileTexture);
             
-    for(auto &bullet : bullets)
+    for(const auto &bullet : bullets)
     {
         playerProjectiles.push_back(bullet);
         playerProjectiles.back().load(playerProjectileTexture);
