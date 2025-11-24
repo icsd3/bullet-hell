@@ -21,7 +21,6 @@ void Level::load()
 {
     currentRoom.load();
     player.load({LOGICAL_WIDTH / 2, LOGICAL_HEIGHT / 2});
-    std::cout<<"\n"<<player.getPosition().x<<"\n";
 }
 
 void Level::spawnEnemies(const int &nrOfEnemies)
@@ -133,7 +132,6 @@ void Level::draw(sf::RenderWindow &window)
 
 void Level::updateEntities(const float &dt)
 {
-    std::cout<<player.getPosition().x;
     for (size_t i = 0; i < playerProjectiles.size();)
     {
         if (playerProjectiles[i].update(dt))

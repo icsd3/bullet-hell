@@ -85,10 +85,8 @@ void Player::load(const sf::Vector2f &start)
         sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
     }
 
-    std::cout<<start.x<<" "<<start.y<<"\n";
     sprite.setPosition(start);
     position = start;
-    std::cout<<sprite.getPosition().x;
 
     currentWeapon.reset();
 }
