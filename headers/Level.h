@@ -31,7 +31,7 @@ public:
     void spawnEnemies(const int &);
     void updateEntities(const float &, const sf::Vector2f &);
     bool checkEnemyHits(const Projectile &);
-    bool checkPlayerHits(const Projectile &, Player &);
+    static bool checkPlayerHits(const Projectile &, Player &);
     void load();
     void spawnPlayerProjectile(const sf::Vector2f &);
     std::pair<int, sf::Vector2f> handleInput(const sf::Event &, const bool &, const sf::RenderWindow &);

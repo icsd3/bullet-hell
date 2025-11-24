@@ -109,7 +109,7 @@ void Player::draw(sf::RenderWindow &window)
 
 sf::Vector2i Player::getHealthStatus() const
 {
-    return sf::Vector2i(currentHealth, maxHealth);
+    return {currentHealth, maxHealth};
 }
 
 sf::Vector2f Player::getPosition() const

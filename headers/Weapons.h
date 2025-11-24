@@ -17,7 +17,7 @@ class Weapon
     sf::Clock weaponClock;
 
 public:
-    Weapon(const std::string &, int , int , float , float , float , float);
+    Weapon(const std::string, int , int , float , float , float , float);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
     ~Weapon() = default;
