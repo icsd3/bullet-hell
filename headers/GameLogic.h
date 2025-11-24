@@ -47,30 +47,17 @@ class Game
     mainMenu &menu = mainMenu::getInstance();
     Augment &augment = Augment::getInstance();
     Level &level = Level::getInstance();
-
-    // AssetLoader &loader = AssetLoader::getInstance();
     Player &player = Player::getInstance();
     GUI &gui = GUI::getInstance();
-    // std::vector<Projectile> playerProjectiles;
-    // std::vector<Projectile> enemyProjectiles;
-    // std::vector<Enemy> enemies;
 
     void setup();
     static void selectGameState(gameStates &);
 
     bool handleInputs();
-    // std::pair<int, sf::Vector2f> handleLevelInput(const sf::Event &);
-    // sf::Vector2f handleMovementInput();
-    // sf::Vector2f handleShootInput();
 
     void draw();
 
     void handleNewState();
-
-    // void spawnEnemies(const int &);
-    // void updateEntities();
-    // bool checkEnemyHits(const Projectile &);
-    // bool checkPlayerHits(const Projectile &);
 
     void togglePause();
 

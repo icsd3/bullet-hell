@@ -150,17 +150,17 @@ void Level::updateEntities(const float &dt, const sf::Vector2f &target)
         }
     }
 
-    for(size_t i = 0; i < enemies.size(); i++)
+    for(auto &enemy : enemies)
     {
-        enemies[i].update();
-        if(enemies[i].canFire())
+        enemy.update();
+        if(enemy.canFire())
         {
             sf::Vector2f projectileTarget = player.getPosition();
-            std::vector<Projectile> bullets = enemies[i].fire(projectileTarget, enemyProjectileTexture);
+            std::vector<Projectile> bullets = enemy.fire(projectileTarget, enemyProjectileTexture);
             
-            for(size_t i=0; i<bullets.size(); i++)
+            for(auto &bullet : bullets)
             {
-                enemyProjectiles.push_back(bullets[i]);
+                enemyProjectiles.push_back(bullet);
                 enemyProjectiles.back().load(enemyProjectileTexture);
             }
         }
@@ -214,9 +214,9 @@ void Level::spawnPlayerProjectile(const sf::Vector2f &target)
 {
     std::vector<Projectile> bullets = player.fire(target, playerProjectileTexture);
             
-    for(size_t i=0; i<bullets.size(); i++)
+    for(auto &bullet : bullets)
     {
-        playerProjectiles.push_back(bullets[i]);
+        playerProjectiles.push_back(bullet);
         playerProjectiles.back().load(playerProjectileTexture);
     }
 }
