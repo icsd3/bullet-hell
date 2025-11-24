@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../headers/Entities.h"
 #include "../headers/Weapons.h"
 

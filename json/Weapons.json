@@ -25,5 +25,14 @@
         "spread_angle": 30.0,
         "range": 0.3,
         "bullet_speed": 0.3
+    },
+    {
+        "name": "Basic Sniper",
+        "damage": 40,
+        "bullet_nr": 1,
+        "fire_rate": 0.8,
+        "spread_angle": 5.0,
+        "range": 1.5,
+        "bullet_speed": 0.8
     }
 ]

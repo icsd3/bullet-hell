@@ -70,8 +70,6 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/GameLogic.cpp
     headers/MainMenu.h
     source/MainMenu.cpp
-    headers/AssetLoader.h
-    source/AssetLoader.cpp
     headers/Object.h
     source/Object.cpp
     headers/Entities.h
@@ -90,6 +88,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Settings.cpp
     headers/Augment.h
     source/Augment.cpp
+    headers/Level.h
+    source/Level.cpp
+    headers/Room.h
+    source/Room.cpp
     headers/Utils.h
 )
 

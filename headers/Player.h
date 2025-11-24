@@ -9,9 +9,11 @@
 
 class Player : public Entity
 {
-    explicit Player(const sf::Vector2f &, const sf::Texture &);
+    Player();
     Player(const Player &) = delete;
     Player &operator=(const Player &) = delete;
+
+    sf::Texture texture;
 
     int maxHealth;
     int currentHealth;
@@ -20,11 +22,11 @@ class Player : public Entity
     std::vector<Weapon> weapons;
 
 public:
-    static Player &getInstance(const sf::Vector2f &, const sf::Texture &);
+    static Player &getInstance();
     ~Player() = default;
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
-    void load(const sf::Texture &);
+    void load(const sf::Vector2f &);
     void update(const float &, const sf::Vector2f &);
     void draw(sf::RenderWindow &);
     bool takeDamage(const int &);

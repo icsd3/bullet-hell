@@ -1,14 +1,14 @@
 #include "../headers/Player.h"
 #include "../headers/Utils.h"
 
-Player::Player(const sf::Vector2f &start, const sf::Texture &tex)
-    : Entity(false, start, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0)
+Player::Player()
+    : Entity(false, {0, 0}, false, "textures/player.png", texture, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0)
 {
 }
 
-Player &Player::getInstance(const sf::Vector2f &start, const sf::Texture &tex)
+Player &Player::getInstance()
 {
-    static Player instance(start, tex);
+    static Player instance;
     return instance;
 }
 
@@ -52,7 +52,7 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     }
 }
 
-void Player::load(const sf::Texture &texture)
+void Player::load(const sf::Vector2f &start)
 {   
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
@@ -84,6 +84,11 @@ void Player::load(const sf::Texture &texture)
     {
         sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
     }
+
+    std::cout<<start.x<<" "<<start.y<<"\n";
+    sprite.setPosition(start);
+    position = start;
+    std::cout<<sprite.getPosition().x;
 
     currentWeapon.reset();
 }
