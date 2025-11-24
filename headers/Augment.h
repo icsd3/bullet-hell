@@ -11,9 +11,9 @@ class Augment
     Augment(const Augment &) = delete;
     Augment &operator=(const Augment &) = delete;
 
-    std::string backgroundPath = "textures/augment_background.png";
-    std::string buttonPath = "textures/augment_button.png";
-    std::string fontPath = "fonts/courier.ttf";
+    std::string backgroundPath;
+    std::string buttonPath;
+    std::string fontPath;
 
     sf::Texture backgroundTexture;
     sf::Texture buttonTexture;

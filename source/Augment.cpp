@@ -27,15 +27,15 @@ Augment &Augment::getInstance()
 void Augment::load()
 {
     backgroundSprite.setScale(sf::Vector2f(
-        1.f * LOGICAL_WIDTH / backgroundTexture.getSize().x,
-        1.f * LOGICAL_HEIGHT / backgroundTexture.getSize().y));
+        1.f * LOGICAL_WIDTH / static_cast<float>(backgroundTexture.getSize().x),
+        1.f * LOGICAL_HEIGHT / static_cast<float>(backgroundTexture.getSize().y)));
 
-    float scaleX = 1.f * LOGICAL_WIDTH / buttonTexture.getSize().x / 13.f * 3.f;
-    float scaleY = 1.f * LOGICAL_HEIGHT / buttonTexture.getSize().y / 10.f * 7.5f;
+    float scaleX = 1.f * LOGICAL_WIDTH / static_cast<float>(buttonTexture.getSize().x) / 13.f * 3.f;
+    float scaleY = 1.f * LOGICAL_HEIGHT / static_cast<float>(buttonTexture.getSize().y) / 10.f * 7.5f;
     
     auto setupButton = [&](sf::Sprite& sprite, int index) {
         sprite.setScale(sf::Vector2f(scaleX, scaleY));
-        sprite.setOrigin(sf::Vector2f(buttonTexture.getSize().x / 2.f, buttonTexture.getSize().y / 2.f));
+        sprite.setOrigin(sf::Vector2f(static_cast<float>(buttonTexture.getSize().x) / 2.f, static_cast<float>(buttonTexture.getSize().y) / 2.f));
         sprite.setPosition(sf::Vector2f(LOGICAL_WIDTH / 26.f * (8 * index + 5), LOGICAL_HEIGHT / 2.f));
     };
 

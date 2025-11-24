@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../headers/MainMenu.h"
-#include "../headers/AssetLoader.h"
+#include "../headers/Level.h"
 #include "../headers/Player.h"
 #include "../headers/GUI.h"
 #include "../headers/Projectiles.h"
@@ -35,41 +35,28 @@ class Game
 
     sf::RenderWindow window;
 
-    gameStates currentState;
-
     bool paused = false;
     bool openSettings = false;
     bool fullscreen = true;
     bool controls = true; //true for WASD, false for mouse
     sf::Clock updateClock;
     sf::Vector2f target;
+    gameStates currentState;
 
     mainMenu &menu = mainMenu::getInstance();
     Augment &augment = Augment::getInstance();
-
-    AssetLoader &loader = AssetLoader::getInstance();
-    Player &player = Player::getInstance(target, loader.getPlayerTexture());
+    Level &level = Level::getInstance();
+    Player &player = Player::getInstance();
     GUI &gui = GUI::getInstance();
-    std::vector<Projectile> playerProjectiles;
-    std::vector<Projectile> enemyProjectiles;
-    std::vector<Enemy> enemies;
 
     void setup();
     static void selectGameState(gameStates &);
 
     bool handleInputs();
-    std::pair<int, sf::Vector2f> handleLevelInput(const sf::Event &);
-    sf::Vector2f handleMovementInput();
-    sf::Vector2f handleShootInput();
 
     void draw();
 
     void handleNewState();
-
-    void spawnEnemies(const int &);
-    void updateEntities();
-    bool checkEnemyHits(const Projectile &);
-    bool checkPlayerHits(const Projectile &);
 
     void togglePause();
 

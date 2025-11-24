@@ -9,7 +9,7 @@
 
 class Player : public Entity
 {
-    explicit Player(const sf::Vector2f &, const sf::Texture &);
+    explicit Player(const sf::Texture &);
     Player(const Player &) = delete;
     Player &operator=(const Player &) = delete;
 
@@ -19,12 +19,16 @@ class Player : public Entity
     Weapon currentWeapon;
     std::vector<Weapon> weapons;
 
+    static std::unique_ptr<Player> instance;
+    const sf::Texture &texture;
+
 public:
-    static Player &getInstance(const sf::Vector2f &, const sf::Texture &);
+    static Player &getInstance();
+    static Player &Initialize(const sf::Texture &);
     ~Player() = default;
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
-    void load(const sf::Texture &);
+    void load(const sf::Vector2f &);
     void update(const float &, const sf::Vector2f &);
     void draw(sf::RenderWindow &);
     bool takeDamage(const int &);

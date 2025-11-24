@@ -1,15 +1,22 @@
 #include "../headers/Player.h"
 #include "../headers/Utils.h"
 
-Player::Player(const sf::Vector2f &start, const sf::Texture &tex)
-    : Entity(false, start, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0)
+Player::Player(const sf::Texture &tex)
+    : Entity(false, {0, 0}, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0), texture(tex)
 {
 }
 
-Player &Player::getInstance(const sf::Vector2f &start, const sf::Texture &tex)
+std::unique_ptr<Player> Player::instance = nullptr; 
+
+Player &Player::getInstance()
 {
-    static Player instance(start, tex);
-    return instance;
+    return *instance;
+}
+
+Player &Player::Initialize(const sf::Texture &tex)
+{
+    instance = std::unique_ptr<Player>(new Player(tex));
+    return *instance;
 }
 
 std::ostream &operator<<(std::ostream &os, const Player &player)
@@ -52,7 +59,7 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     }
 }
 
-void Player::load(const sf::Texture &texture)
+void Player::load(const sf::Vector2f &start)
 {   
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
@@ -73,7 +80,7 @@ void Player::load(const sf::Texture &texture)
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
 
-    float scale = 1.f * LOGICAL_WIDTH / texture.getSize().x / 20.f;
+    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 20.f;
     sprite.setScale(sf::Vector2f(scale, scale));
     
     if (orientation)
@@ -84,6 +91,9 @@ void Player::load(const sf::Texture &texture)
     {
         sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
     }
+
+    sprite.setPosition(start);
+    position = start;
 
     currentWeapon.reset();
 }
@@ -99,7 +109,7 @@ void Player::draw(sf::RenderWindow &window)
 
 sf::Vector2i Player::getHealthStatus() const
 {
-    return sf::Vector2i(currentHealth, maxHealth);
+    return {currentHealth, maxHealth};
 }
 
 sf::Vector2f Player::getPosition() const

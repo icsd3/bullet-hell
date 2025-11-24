@@ -27,8 +27,8 @@ mainMenu &mainMenu::getInstance()
 void mainMenu::load()
 {
     backgroundSprite.setScale(sf::Vector2f(
-        1.f * LOGICAL_WIDTH / backgroundTexture.getSize().x,
-        1.f * LOGICAL_HEIGHT / backgroundTexture.getSize().y));
+        1.f * LOGICAL_WIDTH / static_cast<float>(backgroundTexture.getSize().x),
+        1.f * LOGICAL_HEIGHT / static_cast<float>(backgroundTexture.getSize().y)));
 
     startButtonSprite.setScale(sf::Vector2f(
         1.f * LOGICAL_WIDTH / startButtonTexture.getSize().x / 4.f,
