@@ -35,14 +35,13 @@ class Game
 
     sf::RenderWindow window;
 
-    gameStates currentState;
-
     bool paused = false;
     bool openSettings = false;
     bool fullscreen = true;
     bool controls = true; //true for WASD, false for mouse
     sf::Clock updateClock;
     sf::Vector2f target;
+    gameStates currentState;
 
     mainMenu &menu = mainMenu::getInstance();
     Augment &augment = Augment::getInstance();

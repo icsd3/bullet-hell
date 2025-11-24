@@ -15,7 +15,7 @@ void Projectile::load(const sf::Texture &texture)
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
     
-    float scale = 1.f * LOGICAL_WIDTH / texture.getSize().x / 50.f;
+    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 50.f;
     sprite.setScale(sf::Vector2f(scale, scale));
     
     sprite.setRotation(rotation);

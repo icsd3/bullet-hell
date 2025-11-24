@@ -80,7 +80,7 @@ void Player::load(const sf::Vector2f &start)
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
 
-    float scale = 1.f * LOGICAL_WIDTH / texture.getSize().x / 20.f;
+    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 20.f;
     sprite.setScale(sf::Vector2f(scale, scale));
     
     if (orientation)

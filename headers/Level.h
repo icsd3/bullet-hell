@@ -36,6 +36,6 @@ public:
     void spawnPlayerProjectile(const sf::Vector2f &);
     std::pair<int, sf::Vector2f> handleInput(const sf::Event &, const bool &, const sf::RenderWindow &);
     sf::Vector2f handleMovementInput(const bool &, const sf::RenderWindow &);
-    sf::Vector2f handleShootInput(const sf::RenderWindow &);
+    static sf::Vector2f handleShootInput(const sf::RenderWindow &);
     void draw(sf::RenderWindow &);
 };

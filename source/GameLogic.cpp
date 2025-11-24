@@ -4,7 +4,8 @@
 
 Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen),
-      target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f))
+      target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
+      currentState(main_menu)
 {
     setup();
 }
@@ -19,7 +20,6 @@ void Game::setup()
 {
     window.clear(sf::Color::Black);
     window.display();
-    currentState = main_menu;
     handleNewState();
     window.setVerticalSyncEnabled(true);
     

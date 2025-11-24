@@ -34,7 +34,7 @@ void Enemy::load(const sf::Texture &texture)
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
     
-    float scale = 1.f * LOGICAL_WIDTH / texture.getSize().x / 20.f;
+    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 20.f;
     sprite.setScale(sf::Vector2f(scale, scale));
 
     maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
@@ -98,11 +98,6 @@ bool Enemy::takeDamage(const int &dmg)
     if (currentHealth <= 0)
         return true;
     return false;
-}
-
-Enemy::Enemy(const Enemy &other)
-    : Entity(other), maxHealth(other.maxHealth), weapon(other.weapon), currentHealth(other.currentHealth), maxHealthBar(other.maxHealthBar), currentHealthBar(other.currentHealthBar)
-{
 }
 
 Enemy &Enemy::operator=(const Enemy &other)

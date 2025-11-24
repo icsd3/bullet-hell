@@ -104,7 +104,7 @@ sf::Vector2f Level::handleMovementInput(const bool &controls, const sf::RenderWi
             return mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
         }
     }
-    return sf::Vector2f(-1,-1);
+    return {-1.f, -1.f};
 }
 
 sf::Vector2f Level::handleShootInput(const sf::RenderWindow &window)
@@ -113,7 +113,7 @@ sf::Vector2f Level::handleShootInput(const sf::RenderWindow &window)
     {
         return mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
     }
-    return sf::Vector2f(-1.f, -1.f);
+    return {-1.f, -1.f};
 }
 
 void Level::draw(sf::RenderWindow &window)
