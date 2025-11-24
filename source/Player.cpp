@@ -1,15 +1,22 @@
 #include "../headers/Player.h"
 #include "../headers/Utils.h"
 
-Player::Player()
-    : Entity(false, {0, 0}, false, "textures/player.png", texture, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0)
+Player::Player(const sf::Texture &tex)
+    : Entity(false, {0, 0}, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0), texture(tex)
 {
 }
 
+std::unique_ptr<Player> Player::instance = nullptr; 
+
 Player &Player::getInstance()
 {
-    static Player instance;
-    return instance;
+    return *instance;
+}
+
+Player &Player::Initialize(const sf::Texture &tex)
+{
+    instance = std::unique_ptr<Player>(new Player(tex));
+    return *instance;
 }
 
 std::ostream &operator<<(std::ostream &os, const Player &player)

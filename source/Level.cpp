@@ -2,9 +2,11 @@
 #include "../headers/Utils.h"
 
 Level::Level()
-    :enemyPath("textures/enemy.png"),
+    :playerTexturePath("textures/player.png"),
+    enemyPath("textures/enemy.png"),
     playerProjectilePath("textures/player_projectile.png"),
     enemyProjectilePath("textures/enemy_projectile.png"),
+    playerTexture(playerTexturePath),
     enemyTexture(enemyPath),
     playerProjectileTexture(playerProjectilePath),
     enemyProjectileTexture(enemyProjectilePath)
@@ -130,8 +132,9 @@ void Level::draw(sf::RenderWindow &window)
     player.draw(window);
 }
 
-void Level::updateEntities(const float &dt)
+void Level::updateEntities(const float &dt, const sf::Vector2f &target)
 {
+    player.update(dt, target);
     for (size_t i = 0; i < playerProjectiles.size();)
     {
         if (playerProjectiles[i].update(dt))

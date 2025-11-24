@@ -366,7 +366,7 @@ void Game::Play()
         if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
         {
             float dt = updateClock.restart().asSeconds();
-            level.updateEntities(dt);
+            level.updateEntities(dt, target);
         }
 
         draw();

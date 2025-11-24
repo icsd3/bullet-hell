@@ -9,11 +9,9 @@
 
 class Player : public Entity
 {
-    Player();
+    Player(const sf::Texture &);
     Player(const Player &) = delete;
     Player &operator=(const Player &) = delete;
-
-    sf::Texture texture;
 
     int maxHealth;
     int currentHealth;
@@ -21,8 +19,12 @@ class Player : public Entity
     Weapon currentWeapon;
     std::vector<Weapon> weapons;
 
+    static std::unique_ptr<Player> instance;
+    const sf::Texture &texture;
+
 public:
     static Player &getInstance();
+    static Player &Initialize(const sf::Texture &);
     ~Player() = default;
     friend std::ostream &operator<<(std::ostream &, const Player &);
 

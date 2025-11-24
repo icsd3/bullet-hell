@@ -9,10 +9,12 @@ class Level
 {
     Level();
 
+    std::string playerTexturePath;
     std::string enemyPath;
     std::string playerProjectilePath;
     std::string enemyProjectilePath;
 
+    sf::Texture playerTexture;
     sf::Texture enemyTexture;
     sf::Texture playerProjectileTexture;
     sf::Texture enemyProjectileTexture;
@@ -22,12 +24,12 @@ class Level
     std::vector<Projectile> enemyProjectiles;
 
     Room currentRoom;
-    Player &player = Player::getInstance();
+    Player &player = Player::Initialize(playerTexture);
 
 public:
     static Level &getInstance();
     void spawnEnemies(const int &);
-    void updateEntities(const float &);
+    void updateEntities(const float &, const sf::Vector2f &);
     bool checkEnemyHits(const Projectile &);
     bool checkPlayerHits(const Projectile &, Player &);
     void load();
