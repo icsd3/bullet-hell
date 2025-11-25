@@ -28,7 +28,7 @@ public:
     ~Player() = default;
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
-    void load(const sf::Vector2f &);
+    void load();
     void update(const float &, const sf::Vector2f &);
     void draw(sf::RenderWindow &);
     bool takeDamage(const int &);

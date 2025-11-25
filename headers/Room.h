@@ -14,6 +14,7 @@ class Room
     sf::Sprite backgroundSprite;
 
     // std::vector<Object> walls;
+    // std::vector<Object> gates;
     // std::vector<Object> obstacles;
 
 public:

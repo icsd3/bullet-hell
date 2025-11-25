@@ -22,7 +22,7 @@ Level &Level::getInstance()
 void Level::load()
 {
     currentRoom.load();
-    player.load({LOGICAL_WIDTH / 2, LOGICAL_HEIGHT / 2});
+    player.load();
 }
 
 void Level::spawnEnemies(const int &nrOfEnemies)

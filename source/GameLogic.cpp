@@ -4,7 +4,6 @@
 
 Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen),
-      target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
       currentState(main_menu)
 {
     setup();
@@ -22,7 +21,6 @@ void Game::setup()
     window.display();
     handleNewState();
     window.setVerticalSyncEnabled(true);
-    
 }
 
 void Game::selectGameState(gameStates &gameState)
@@ -88,6 +86,7 @@ void Game::handleNewState()
         break;
 
     case level_1:
+        updateClock.restart();
         level.load();
         gui.load();
         level.spawnEnemies(4);
@@ -274,7 +273,7 @@ bool Game::handleInputs()
                 }
             }
 
-            else if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+            else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
             {
                 std::pair<int, sf::Vector2f> ans = level.handleInput(*event, controls, window);
                 int action = ans.first;
@@ -368,7 +367,6 @@ void Game::Play()
             float dt = updateClock.restart().asSeconds();
             level.updateEntities(dt, target);
         }
-
         draw();
     }
 }

@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Player::Player(const sf::Texture &tex)
-    : Entity(false, {0, 0}, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0), texture(tex)
+    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon("",0,0,0,0,0,0), texture(tex)
 {
 }
 
@@ -59,7 +59,7 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     }
 }
 
-void Player::load(const sf::Vector2f &start)
+void Player::load()
 {   
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
@@ -92,9 +92,6 @@ void Player::load(const sf::Vector2f &start)
         sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
     }
 
-    sprite.setPosition(start);
-    position = start;
-
     currentWeapon.reset();
 }
 
@@ -114,7 +111,8 @@ sf::Vector2i Player::getHealthStatus() const
 
 sf::Vector2f Player::getPosition() const
 {
-    return position;
+    // return position;
+    return sprite.getPosition();
 }
 
 std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex)
@@ -126,7 +124,10 @@ bool Player::takeDamage(const int &dmg)
 {
     currentHealth -= dmg;
     if (currentHealth <= 0)
+    {
+        currentHealth = 0;
         return true;
+    }
     return false;
 }
 
