@@ -230,7 +230,7 @@ std::pair<int, Room*> Room::update(const Player &player, const bool &finished)
 
 int Room::checkCollisions(const Player &player)
 {
-    for (auto &wall : walls)
+    for (const auto &wall : walls)
     {
         if(player.boxCollidesWith(wall))
             return -2;

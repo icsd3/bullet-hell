@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Player::Player(const sf::Texture &tex)
-    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), texture(tex)
+    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon(nullptr), texture(tex)
 {
 }
 

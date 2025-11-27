@@ -15,7 +15,7 @@ Level::Level()
     roomBackgroundTexture(roomBackgroundPath),
     doorVerticalTexture(doorVerticalPath),
     doorHorizontalTexture(doorHorizontalPath),
-    map{0}
+    map{{0}}
 {
 }
 
@@ -98,7 +98,7 @@ void Level::generateRooms(const int nr)
     rooms.clear();
 
     std::queue<std::pair<int, int>> q;
-    bool visited[5][7] = {false};
+    bool visited[5][7] = {{false}};
 
     q.push({4, 3});
     visited[4][3] = true;
