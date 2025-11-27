@@ -17,6 +17,7 @@ protected:
 
 public:
     bool collidesWith(const Object &) const;
+    bool collidesWith(const sf::RectangleShape &) const;
 
     Object(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &);
     Object(const Object &);

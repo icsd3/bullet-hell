@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../headers/Projectiles.h"
+#include "../headers/Utils.h"
 
 class Weapon
 {
@@ -14,10 +15,11 @@ class Weapon
     float spread_angle;
     float range;
     float bulletSpeed;
+    float offset;
     sf::Clock weaponClock;
 
 public:
-    Weapon(const std::string &, int , int , float , float , float , float);
+    Weapon(const std::string &, int , int , float , float , float , float, float);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
     ~Weapon() = default;

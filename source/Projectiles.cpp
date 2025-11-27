@@ -1,8 +1,8 @@
 #include "../headers/Projectiles.h"
 #include "../headers/Utils.h"
 
-Projectile::Projectile(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &textureFile, const sf::Texture &tex, float spd, const int &dmg, const sf::Vector2f &dir, const float &rng)
-    : Entity(ec, pos, ori, textureFile, tex, spd), damage(dmg), direction(dir), origin(position), range(rng)
+Projectile::Projectile(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &textureFile, const sf::Texture &tex, float spd, const int &dmg, const sf::Vector2f &dir, const float &rn)
+    : Entity(ec, pos, ori, textureFile, tex, spd), damage(dmg), direction(dir), origin(position), range(rn)
 {
     rotation = sf::radians(std::atan2(direction.y, direction.x));
 }
@@ -38,7 +38,7 @@ bool Projectile::update(const float &dt)
     sf::Vector2f dir = position - origin;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
     
-    if (position.x < 0 || position.x > LOGICAL_WIDTH || position.y < 0 || position.y > LOGICAL_HEIGHT || distance > range)
+    if (position.x < 100 || position.x > LOGICAL_WIDTH - 100 || position.y < 100 || position.y > LOGICAL_HEIGHT - 100 || distance > range)
     {
         return true;
     }

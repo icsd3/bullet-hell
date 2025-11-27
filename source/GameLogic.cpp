@@ -3,8 +3,9 @@
 #include <iostream>
 
 Game::Game()
-    : window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen),
-      currentState(main_menu)
+    : target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
+      currentState(main_menu),
+      window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
 {
     setup();
 }
@@ -87,7 +88,7 @@ void Game::handleNewState()
 
     case level_1:
         updateClock.restart();
-        level.load();
+        level.load(1);
         gui.load();
         level.spawnEnemies(4);
         break;
@@ -365,7 +366,7 @@ void Game::Play()
         if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
         {
             float dt = updateClock.restart().asSeconds();
-            level.updateEntities(dt, target);
+            level.update(dt, target);
         }
         draw();
     }
