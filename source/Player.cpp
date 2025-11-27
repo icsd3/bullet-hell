@@ -141,7 +141,10 @@ bool Player::takeDamage(const int &dmg)
 {
     currentHealth -= dmg;
     if (currentHealth <= 0)
+    {
+        currentHealth = 0;
         return true;
+    }
     return false;
 }
 

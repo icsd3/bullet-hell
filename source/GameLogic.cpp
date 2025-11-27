@@ -274,7 +274,7 @@ bool Game::handleInputs()
                 }
             }
 
-            else if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+            else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
             {
                 std::pair<int, sf::Vector2f> ans = level.handleInput(*event, controls, window);
                 int action = ans.first;
@@ -368,7 +368,6 @@ void Game::Play()
             float dt = updateClock.restart().asSeconds();
             level.update(dt, target);
         }
-
         draw();
     }
 }
