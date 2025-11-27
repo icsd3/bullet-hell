@@ -88,7 +88,8 @@ void Game::handleNewState()
         break;
 
     case level_1:
-        level.load();
+        updateClock.restart();
+        level.load(1);
         gui.load();
         level.spawnEnemies(4);
         break;
@@ -366,7 +367,7 @@ void Game::Play()
         if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
         {
             float dt = updateClock.restart().asSeconds();
-            level.updateEntities(dt, target);
+            level.update(dt, target);
         }
 
         draw();

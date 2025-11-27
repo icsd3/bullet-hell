@@ -22,7 +22,8 @@ Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float s
         w["fire_rate"],
         w["spread_angle"],
         w["range"],
-        w["bullet_speed"]
+        w["bullet_speed"],
+        0.3f
     );
     Enemy enemy(true, pos, false, "textures/enemy.png", tex, spd, mh, ew);
     return enemy;
@@ -48,6 +49,8 @@ void Enemy::load(const sf::Texture &texture)
     currentHealthBar.setFillColor(sf::Color(150, 0, 0, 175));
     currentHealthBar.setOrigin(sf::Vector2f(0, currentHealthBar.getLocalBounds().size.y / 2.f));
     currentHealthBar.setPosition(sf::Vector2f(maxHealthBar.getPosition().x - maxHealthBar.getSize().x / 2.f, maxHealthBar.getPosition().y));
+
+    weapon.reset();
 }
 
 void Enemy::draw(sf::RenderWindow &window)

@@ -1,8 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <random>
 
 constexpr float LOGICAL_WIDTH = 1920.0f;
 constexpr float LOGICAL_HEIGHT = 1080.0f;
+
+static std::mt19937 rng(std::random_device{}());
 
 inline sf::Vector2f mapToScreen(const sf::Vector2f& logicalPos, const sf::RenderWindow& window) {
     return sf::Vector2f(

@@ -34,3 +34,8 @@ bool Object::collidesWith(const Object &other) const
 {
     return (sprite.getGlobalBounds().findIntersection(other.sprite.getGlobalBounds())).has_value();
 }
+
+bool Object::collidesWith(const sf::RectangleShape &other) const
+{
+    return (sprite.getGlobalBounds().findIntersection(other.getGlobalBounds())).has_value();
+}

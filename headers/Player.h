@@ -21,6 +21,7 @@ class Player : public Entity
 
     static std::unique_ptr<Player> instance;
     const sf::Texture &texture;
+    sf::RectangleShape collisionBox;
 
 public:
     static Player &getInstance();
@@ -35,6 +36,9 @@ public:
 
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
+    void setPosition(const sf::Vector2f &);
     std::vector<Projectile> fire(const sf::Vector2f &, const sf::Texture &);
     bool canFire();
+    bool boxCollidesWith(const sf::RectangleShape &) const;
+    bool boxCollidesWith(const Object &) const;
 };

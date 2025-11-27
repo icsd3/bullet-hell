@@ -3,7 +3,7 @@
         "name": "Enemy gun",
         "damage": 5,
         "bullet_nr": 1,
-        "fire_rate": 0.8,
+        "fire_rate": 0.5,
         "spread_angle": 15.0,
         "range": 1.5,
         "bullet_speed": 0.1
@@ -34,5 +34,14 @@
         "spread_angle": 5.0,
         "range": 1.5,
         "bullet_speed": 0.8
+    },
+    {
+        "name": "op",
+        "damage": 100,
+        "bullet_nr": 1,
+        "fire_rate": 1,
+        "spread_angle": 0,
+        "range": 1.5,
+        "bullet_speed": 2
     }
 ]

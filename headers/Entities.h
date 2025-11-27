@@ -8,7 +8,6 @@
 
 class Entity : public Object
 {
-
 protected:
     float speed;
 
