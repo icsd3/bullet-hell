@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Player::Player(const sf::Texture &tex)
-    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.1f), maxHealth(100), currentHealth(100), currentWeapon(nullptr), texture(tex)
+    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.2f), maxHealth(100), currentHealth(100), currentWeapon(nullptr), texture(tex)
 {
 }
 
@@ -108,10 +108,10 @@ void Player::draw(sf::RenderWindow &window)
     sf::Vector2f scaleFactor = getScaleFactor(window);
     drawSprite.scale(scaleFactor);
     window.draw(drawSprite);
-    sf::RectangleShape drawCollisionBox = collisionBox;
-    drawCollisionBox.setPosition(mapToScreen(collisionBox.getPosition(), window));
-    drawCollisionBox.scale(scaleFactor);
-    window.draw(drawCollisionBox);
+    // sf::RectangleShape drawCollisionBox = collisionBox;
+    // drawCollisionBox.setPosition(mapToScreen(collisionBox.getPosition(), window));
+    // drawCollisionBox.scale(scaleFactor);
+    // window.draw(drawCollisionBox);
 }
 
 sf::Vector2i Player::getHealthStatus() const

@@ -174,21 +174,21 @@ void Room::draw(sf::RenderWindow &window)
         window.draw(drawDoor);
     }
 
-    for (auto &wall : walls)
-    {
-        sf::RectangleShape drawWall = wall;
-        drawWall.setPosition(mapToScreen(wall.getPosition(), window));
-        drawWall.scale(scaleFactor);
-        window.draw(drawWall);
-    }
+    // for (auto &wall : walls)
+    // {
+    //     sf::RectangleShape drawWall = wall;
+    //     drawWall.setPosition(mapToScreen(wall.getPosition(), window));
+    //     drawWall.scale(scaleFactor);
+    //     window.draw(drawWall);
+    // }
 
-    for (auto &door : doors)
-    {
-        sf::RectangleShape drawDoor = door;
-        drawDoor.setPosition(mapToScreen(door.getPosition(), window));
-        drawDoor.scale(scaleFactor);
-        window.draw(drawDoor);
-    }
+    // for (auto &door : doors)
+    // {
+    //     sf::RectangleShape drawDoor = door;
+    //     drawDoor.setPosition(mapToScreen(door.getPosition(), window));
+    //     drawDoor.scale(scaleFactor);
+    //     window.draw(drawDoor);
+    // }
 }
 
 std::pair<int, Room*> Room::update(const Player &player, const bool &finished)
