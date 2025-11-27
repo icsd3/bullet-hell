@@ -14,7 +14,8 @@ Level::Level()
     enemyProjectileTexture(enemyProjectilePath),
     roomBackgroundTexture(roomBackgroundPath),
     doorVerticalTexture(doorVerticalPath),
-    doorHorizontalTexture(doorHorizontalPath)
+    doorHorizontalTexture(doorHorizontalPath),
+    map{0}
 {
 }
 
@@ -44,19 +45,18 @@ void Level::generateRooms(const int nr)
         if (frontier.empty())
         {
             std::fill(&map[0][0], &map[0][0] + 35, false);
-            std::cout << "Failed to generate map" << std::endl;
             generateRooms(nr);
             return;
         }
         std::uniform_int_distribution<int> distF(0, frontier.size() - 1);
-        auto [x, y] = frontier[distF(rng)];
+        auto [x1, y1] = frontier[distF(rng)];
 
         std::vector<std::pair<int,int>> moves;
 
-        for (auto& d : dirs)
+        for (const auto &d : dirs)
         {
-            int nx = x + d.first;
-            int ny = y + d.second;
+            int nx = x1 + d.first;
+            int ny = y1 + d.second;
 
             if (nx < 0 || ny < 0 || nx >= 5 || ny >= 7)
                 continue;
@@ -66,7 +66,7 @@ void Level::generateRooms(const int nr)
 
             int count = 0;
 
-            for (auto& i : dirs)
+            for (const auto &i : dirs)
             {
                 int mx = nx + i.first;
                 int my = ny + i.second;
@@ -137,15 +137,6 @@ void Level::generateRooms(const int nr)
             visited[i][j + 1] = true;
             q.push({i, j + 1});
         }
-    }
-
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 7; j++)
-        {
-            std::cout << map[i][j] << " ";
-        }
-        std::cout << std::endl;
     }
 }
 
@@ -327,11 +318,11 @@ void Level::update(const float &dt, const sf::Vector2f &target)
         if (action.first == 0)
             player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f});
         else if (action.first == 1)
-            player.setPosition({LOGICAL_WIDTH * 0.2f, LOGICAL_HEIGHT * 0.5f});
+            player.setPosition({LOGICAL_WIDTH * 0.1f, LOGICAL_HEIGHT * 0.5f});
         else if (action.first == 2)
-            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.2f});
+            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.15f});
         else if (action.first == 3)
-            player.setPosition({LOGICAL_WIDTH * 0.8f, LOGICAL_HEIGHT * 0.5f});
+            player.setPosition({LOGICAL_WIDTH * 0.9f, LOGICAL_HEIGHT * 0.5f});
     }
 
     for (size_t i = 0; i < playerProjectiles.size();)

@@ -33,8 +33,6 @@ class Game
 
     Settings &settings = Settings::getInstance();
 
-    sf::RenderWindow window;
-
     bool paused = false;
     bool openSettings = false;
     bool fullscreen = true;
@@ -48,6 +46,8 @@ class Game
     Level &level = Level::getInstance();
     Player &player = Player::getInstance();
     GUI &gui = GUI::getInstance();
+
+    sf::RenderWindow window;
 
     void setup();
     static void selectGameState(gameStates &);

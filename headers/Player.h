@@ -16,7 +16,7 @@ class Player : public Entity
     int maxHealth;
     int currentHealth;
 
-    Weapon currentWeapon;
+    Weapon *currentWeapon;
     std::vector<Weapon> weapons;
 
     static std::unique_ptr<Player> instance;
@@ -29,7 +29,7 @@ public:
     ~Player() = default;
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
-    void load(const sf::Vector2f &);
+    void load();
     void update(const float &, const sf::Vector2f &);
     void draw(sf::RenderWindow &);
     bool takeDamage(const int &);

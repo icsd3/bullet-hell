@@ -60,13 +60,13 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     }
 }
 
-void Player::load(const sf::Vector2f &start)
+void Player::load()
 {   
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
     file >> data;
     const auto &w = data[4];
-    currentWeapon = Weapon(
+    weapons.emplace_back(Weapon(
         w["name"],
         w["damage"],
         w["bullet_nr"],
@@ -75,9 +75,8 @@ void Player::load(const sf::Vector2f &start)
         w["range"],
         w["bullet_speed"],
         0.f
-    );
-    weapons.emplace_back(currentWeapon);
-
+    ));
+    currentWeapon = &weapons.back();
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
@@ -99,7 +98,7 @@ void Player::load(const sf::Vector2f &start)
     collisionBox.setOrigin(sf::Vector2f(collisionBox.getSize().x / 2.f, collisionBox.getSize().y));
     collisionBox.setPosition(sf::Vector2f(position.x, position.y + scale * 0.5f * texture.getSize().x));
 
-    currentWeapon.reset();
+    currentWeapon->reset();
 }
 
 void Player::draw(sf::RenderWindow &window)
@@ -135,7 +134,7 @@ void Player::setPosition(const sf::Vector2f &newPos)
 
 std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex)
 {
-    return currentWeapon.fire(position, target, tex);
+    return currentWeapon->fire(position, target, tex);
 }
 
 bool Player::takeDamage(const int &dmg)
@@ -148,7 +147,7 @@ bool Player::takeDamage(const int &dmg)
 
 bool Player::canFire()
 {
-    return currentWeapon.canFire();
+    return currentWeapon->canFire();
 }
 
 bool Player::boxCollidesWith(const sf::RectangleShape &rect) const
