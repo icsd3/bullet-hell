@@ -4,6 +4,7 @@
 
 Game::Game()
     : target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
+      currentState(main_menu),
       window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
 {
     setup();

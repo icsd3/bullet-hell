@@ -343,18 +343,24 @@ void Level::update(const float &dt, const sf::Vector2f &target)
         {
             player.setPosition({LOGICAL_WIDTH * 0.1f, LOGICAL_HEIGHT * 0.5f});
             map[currentCoords.first][currentCoords.second] = 1;
-            currentCoords.first -= 1;
+            currentCoords.second += 1;
             map[currentCoords.first][currentCoords.second] = 2;
         }
 
         else if (action.first == 2)
         {
             player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.15f});
+            map[currentCoords.first][currentCoords.second] = 1;
+            currentCoords.first += 1;
+            map[currentCoords.first][currentCoords.second] = 2;
         }
 
         else if (action.first == 3)
         {
             player.setPosition({LOGICAL_WIDTH * 0.9f, LOGICAL_HEIGHT * 0.5f});
+            map[currentCoords.first][currentCoords.second] = 1;
+            currentCoords.second -= 1;
+            map[currentCoords.first][currentCoords.second] = 2;
         }
     }
 
