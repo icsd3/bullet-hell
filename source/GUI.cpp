@@ -24,7 +24,7 @@ std::ostream &operator<<(std::ostream &os, const GUI &gui)
     return os;
 }
 
-void GUI::load()
+void GUI::load(const int map[5][7])
 {
     maxHealthBar.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.04f * LOGICAL_HEIGHT));
     maxHealthBar.setOrigin(sf::Vector2f(0.5f * maxHealthBar.getLocalBounds().size.x, 0.5f * maxHealthBar.getLocalBounds().size.y));
@@ -46,9 +46,11 @@ void GUI::load()
     fps.setCharacterSize(20);
     fps.setFillColor(sf::Color::Green);
     fps.setPosition(sf::Vector2f(LOGICAL_WIDTH - 100.f, 10.f));
+
+    minimap.load(map);
 }
 
-void GUI::update(const sf::Vector2i &HP)
+void GUI::update(const sf::Vector2i &HP, const int &moved)
 {
     currentHealthBar.setSize(sf::Vector2f(static_cast<float>(HP.x) / static_cast<float>(HP.y) * maxHealthBar.getSize().x, currentHealthBar.getSize().y));
 
@@ -68,6 +70,8 @@ void GUI::update(const sf::Vector2i &HP)
     {
         frameCount++;
     }
+
+    minimap.update(moved);
 }
 
 void GUI::draw(sf::RenderWindow &window)
@@ -96,4 +100,6 @@ void GUI::draw(sf::RenderWindow &window)
     drawFps.setPosition(mapToScreen(fps.getPosition(), window));
     drawFps.setScale(scaleFactor);
     window.draw(drawFps);
+
+    minimap.draw(window);
 }

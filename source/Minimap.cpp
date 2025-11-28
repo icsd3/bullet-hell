@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Minimap::Minimap()
-    : currentPos({2, 3})
+    : currentPos({4, 3})
 {
 }
 
@@ -14,9 +14,9 @@ Minimap &Minimap::getInstance()
 
 void Minimap::load(const int map[5][7])
 {
-    background.setSize({324, 150});
+    background.setSize({334, 150});
     background.setPosition({0,0});
-    background.setFillColor(sf::Color(0, 0, 0, 100));
+    background.setFillColor(sf::Color(0, 0, 0, 200));
 
     for (int i = 0; i < 5; i++)
     {
@@ -25,8 +25,8 @@ void Minimap::load(const int map[5][7])
             sf::RectangleShape cell;
             cell.setSize({42, 24});
             cell.setPosition(sf::Vector2f(
-                2 + j * 47,
-                2 + i * 29
+                5 + j * 47,
+                5 + i * 29
             ));
 
             if (map[i][j] == 2)
@@ -73,5 +73,23 @@ void Minimap::update(const int &moved)
     
     default:
         break;
+    }
+}
+
+void Minimap::draw(sf::RenderWindow &window)
+{
+    sf::Vector2f scaleFactor = getScaleFactor(window);
+
+    sf::RectangleShape drawBg = background;
+    drawBg.setPosition(mapToScreen(background.getPosition(), window));
+    drawBg.setScale(scaleFactor);
+    window.draw(drawBg);
+
+    for(const auto &cell : grid)
+    {
+        sf::RectangleShape drawCell = cell;
+        drawCell.setPosition(mapToScreen(cell.getPosition(), window));
+        drawCell.setScale(scaleFactor);
+        window.draw(drawCell);
     }
 }

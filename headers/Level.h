@@ -35,7 +35,6 @@ class Level
     int map[5][7];
     std::vector<Room> rooms;
     Room *currentRoom = nullptr;
-    std::pair<int, int> currentCoords;
     GUI &gui = GUI::getInstance();
     Player &player = Player::Initialize(playerTexture);
 
