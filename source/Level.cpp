@@ -15,7 +15,8 @@ Level::Level()
     roomBackgroundTexture(roomBackgroundPath),
     doorVerticalTexture(doorVerticalPath),
     doorHorizontalTexture(doorHorizontalPath),
-    map{{0}}
+    map{{0}},
+    currentCoords({0,0})
 {
 }
 
@@ -29,12 +30,10 @@ void Level::generateRooms(const int nr)
 {
     std::uniform_int_distribution<int> dist(5 + nr * 2, 8 + nr * 2);
     int n = dist(rng);
-    int x = 4;
-    int y = 3;
-    map[x][y] = 1;
+    map[currentCoords.first][currentCoords.second] = 1;
     
     std::vector<std::pair<int,int>> frontier;
-    frontier.emplace_back(x, y);
+    frontier.emplace_back(currentCoords.first, currentCoords.second);
 
     std::vector<std::pair<int,int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
@@ -142,6 +141,8 @@ void Level::generateRooms(const int nr)
 
 void Level::load(const int nr)
 {
+    currentCoords.first = 4;
+    currentCoords.second = 3;
     generateRooms(nr);
     currentRoom = &rooms[0];
 
@@ -168,7 +169,20 @@ void Level::load(const int nr)
         }
     }
 
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 7; j++)
+        {
+            if (i == currentCoords.first && j == currentCoords.second)
+                map[i][j] = 2;
+            else if (map[i][j] > 0)
+                map[i][j] = 1;
+        }
+    }
+
+    spawnEnemies(4);
     player.load();
+    gui.load();
 }
 
 void Level::spawnEnemies(const int &nrOfEnemies)
@@ -276,6 +290,7 @@ void Level::draw(sf::RenderWindow &window)
         enemy.draw(window);
 
     player.draw(window);
+    gui.draw(window);
 }
 
 void Level::update(const float &dt, const sf::Vector2f &target)
@@ -315,14 +330,32 @@ void Level::update(const float &dt, const sf::Vector2f &target)
         currentRoom = action.second;
         playerProjectiles.clear();
         enemyProjectiles.clear();
+
         if (action.first == 0)
+        {
             player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f});
+            map[currentCoords.first][currentCoords.second] = 1;
+            currentCoords.first -= 1;
+            map[currentCoords.first][currentCoords.second] = 2;
+        }
+
         else if (action.first == 1)
+        {
             player.setPosition({LOGICAL_WIDTH * 0.1f, LOGICAL_HEIGHT * 0.5f});
+            map[currentCoords.first][currentCoords.second] = 1;
+            currentCoords.first -= 1;
+            map[currentCoords.first][currentCoords.second] = 2;
+        }
+
         else if (action.first == 2)
+        {
             player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.15f});
+        }
+
         else if (action.first == 3)
+        {
             player.setPosition({LOGICAL_WIDTH * 0.9f, LOGICAL_HEIGHT * 0.5f});
+        }
     }
 
     for (size_t i = 0; i < playerProjectiles.size();)
@@ -370,6 +403,7 @@ void Level::update(const float &dt, const sf::Vector2f &target)
                 i++;
         }
     }
+    gui.update(player.getHealthStatus());
 }
 
 bool Level::checkEnemyHits(const Projectile &projectile)

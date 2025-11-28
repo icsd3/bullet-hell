@@ -4,7 +4,6 @@
 
 Game::Game()
     : target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
-      currentState(main_menu),
       window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
 {
     setup();
@@ -89,8 +88,6 @@ void Game::handleNewState()
     case level_1:
         updateClock.restart();
         level.load(1);
-        gui.load();
-        level.spawnEnemies(4);
         break;
 
     case level_2:
@@ -327,8 +324,6 @@ void Game::draw()
     case level_2:
     case level_3:
         level.draw(window);
-        gui.update(player.getHealthStatus());
-        gui.draw(window);
         break;
 
     case defeat:
@@ -409,8 +404,8 @@ std::ostream &operator<<(std::ostream &os, const Game &game)
     //     }
     // else 
     //     os << "\n";
-    os << "GUI status:\n"
-       << game.gui << "\n\n";
+    // os << "GUI status:\n"
+    //    << game.gui << "\n\n";
     os << "Window size: " << game.window.getSize().x << "x" << game.window.getSize().y << "\n\n";
     os << "Current State: " << game.currentState << "\n\n";
     os << "Target Position: (" << game.target.x << ", " << game.target.y << ")\n";

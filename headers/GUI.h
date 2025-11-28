@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "../headers/Minimap.h"
 
 #include <iostream>
 
@@ -18,6 +19,7 @@ class GUI
     sf::Text fps;
     sf::Clock fpsClock;
     int frameCount = 0;
+    Minimap &minimap = Minimap::getInstance();
 
 public:
     static GUI &getInstance();
