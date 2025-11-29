@@ -25,10 +25,8 @@ Level &Level::getInstance()
     return instance;
 }
 
-void Level::generateRooms(const int nr)
+void Level::generateRooms(const int n)
 {
-    std::uniform_int_distribution<int> dist(5 + nr * 2, 8 + nr * 2);
-    int n = dist(rng);
     map[4][3] = 1;
     
     std::vector<std::pair<int,int>> frontier;
@@ -43,7 +41,7 @@ void Level::generateRooms(const int nr)
         if (frontier.empty())
         {
             std::fill(&map[0][0], &map[0][0] + 35, false);
-            generateRooms(nr);
+            generateRooms(n);
             return;
         }
         std::uniform_int_distribution<int> distF(0, frontier.size() - 1);
@@ -140,7 +138,9 @@ void Level::generateRooms(const int nr)
 
 void Level::load(const int nr)
 {
-    generateRooms(nr);
+    std::uniform_int_distribution<int> dist(5 + nr * 2, 8 + nr * 2);
+    int n = dist(rng);
+    generateRooms(n);
     currentRoom = &rooms[0];
 
     for (int i = 0; i < 5; i++)
@@ -172,6 +172,8 @@ void Level::load(const int nr)
         {
             if (i == 4 && j == 3)
                 map[i][j] = 2;
+            else if (map[i][j] == n)
+                map[i][j] = 3;
             else if (map[i][j] > 0)
                 map[i][j] = 1;
         }
@@ -369,19 +371,16 @@ void Level::update(const float &dt, const sf::Vector2f &target)
         }
     }
 
+    sf::Vector2f enemyTarget = player.getPosition();
+
     for(auto &enemy : enemies)
     {
-        enemy.update();
-        if(enemy.canFire())
+        std::vector<Projectile> bullets = enemy.update(enemyTarget, enemyProjectileTexture);
+
+        for(const auto &bullet : bullets)
         {
-            sf::Vector2f projectileTarget = player.getPosition();
-            std::vector<Projectile> bullets = enemy.fire(projectileTarget, enemyProjectileTexture);
-            
-            for(const auto &bullet : bullets)
-            {
-                enemyProjectiles.push_back(bullet);
-                enemyProjectiles.back().load(enemyProjectileTexture);
-            }
+            enemyProjectiles.push_back(bullet);
+            enemyProjectiles.back().load(enemyProjectileTexture);
         }
     }
 

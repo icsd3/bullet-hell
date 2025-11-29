@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Player::Player(const sf::Texture &tex)
-    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.2f), maxHealth(100), currentHealth(100), currentWeapon(nullptr), texture(tex)
+    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.2f, 100), currentWeapon(nullptr), texture(tex)
 {
 }
 
@@ -81,7 +81,7 @@ void Player::load()
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
 
-    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 20.f;
+    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 30.f;
     sprite.setScale(sf::Vector2f(scale, scale));
     
     if (orientation)

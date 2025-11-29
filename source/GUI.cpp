@@ -26,7 +26,7 @@ std::ostream &operator<<(std::ostream &os, const GUI &gui)
 
 void GUI::load(const int map[5][7])
 {
-    maxHealthBar.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.04f * LOGICAL_HEIGHT));
+    maxHealthBar.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 44.f));
     maxHealthBar.setOrigin(sf::Vector2f(0.5f * maxHealthBar.getLocalBounds().size.x, 0.5f * maxHealthBar.getLocalBounds().size.y));
     maxHealthBar.setPosition(sf::Vector2f(0.5f * LOGICAL_WIDTH, LOGICAL_HEIGHT - 0.5f * maxHealthBar.getSize().y - 3.f));
     maxHealthBar.setFillColor(sf::Color(0, 50, 0, 175));

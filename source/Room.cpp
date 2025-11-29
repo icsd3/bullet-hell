@@ -37,16 +37,21 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
     right = r;
     down = d;
     left = l;
+
+    sf::IntRect texRect({0, 0}, {300, 300});
+
     if (doorUp)
     {
         doorUp->setOrigin({150, 0});
         doorUp->setPosition(sf::Vector2f(LOGICAL_WIDTH / 2, -66.5));
+        doorUp->setTextureRect(texRect);
     }
 
     if (doorRight)
     {
         doorRight->setOrigin({300, 150});
         doorRight->setPosition(sf::Vector2f(LOGICAL_WIDTH + 66.5, LOGICAL_HEIGHT / 2));
+        doorRight->setTextureRect(texRect);
     }
 
     if (doorDown)
@@ -54,6 +59,7 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
         doorDown->setOrigin({150, 0});
         doorDown->setPosition(sf::Vector2f(LOGICAL_WIDTH / 2, LOGICAL_HEIGHT + 66.5));
         doorDown->setScale({1, -1});
+        doorDown->setTextureRect(texRect);
     }
 
     if (doorLeft)
@@ -61,6 +67,7 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
         doorLeft->setOrigin({300, 150});
         doorLeft->setPosition(sf::Vector2f(-66.5, LOGICAL_HEIGHT / 2));
         doorLeft->setScale({-1, 1});
+        doorLeft->setTextureRect(texRect);
     }
 
     for(int i = 0; i < 8; i++)
@@ -191,14 +198,43 @@ void Room::draw(sf::RenderWindow &window)
     // }
 }
 
+void Room::animate(const int &frame)
+{
+    if (doorUp)
+        doorUp->setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
+    if (doorRight)
+        doorRight->setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
+    if (doorDown)
+        doorDown->setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
+    if (doorLeft)
+        doorLeft->setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
+}
+
 std::pair<int, Room*> Room::update(const Player &player, const bool &finished)
 {
     int action = checkCollisions(player);
+
     if (finished)
         animationClock.start();
     
-    if (animationClock.getElapsedTime().asSeconds() >= 1)
+    if (animationClock.getElapsedTime().asMilliseconds() >= 600)
+    {
         open = true;
+        animationClock.stop();
+        animate(4);
+    }
+
+    else if (animationClock.getElapsedTime().asMilliseconds() >= 450)
+        animate(3);
+
+    else if (animationClock.getElapsedTime().asMilliseconds() >= 300)
+        animate(2);
+
+    else if (animationClock.getElapsedTime().asMilliseconds() >= 150)
+        animate(1);
+
+    else
+        animate(0);
 
     switch (action)
     {

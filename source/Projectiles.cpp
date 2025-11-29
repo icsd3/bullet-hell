@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Projectile::Projectile(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &textureFile, const sf::Texture &tex, float spd, const int &dmg, const sf::Vector2f &dir, const float &rn)
-    : Entity(ec, pos, ori, textureFile, tex, spd), damage(dmg), direction(dir), origin(position), range(rn)
+    : Entity(ec, pos, ori, textureFile, tex, spd, 1), damage(dmg), direction(dir), origin(position), range(rn)
 {
     rotation = sf::radians(std::atan2(direction.y, direction.x));
 }

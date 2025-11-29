@@ -10,9 +10,12 @@ class Entity : public Object
 {
 protected:
     float speed;
+    int maxHealth;
+    int currentHealth;
+    // sf::Clock animationClock;
 
 public:
-    Entity(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float);
+    Entity(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, const float, const int);
     Entity(const Entity &);
     Entity &operator=(const Entity &);
     ~Entity() = default;

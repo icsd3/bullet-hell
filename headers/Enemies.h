@@ -5,23 +5,21 @@
 
 class Enemy : public Entity
 {
-    Enemy(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float, const int &, const Weapon &);
-    int maxHealth;
+    Enemy(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, const float, const int &, const Weapon &);
     Weapon weapon;
-    int currentHealth;
 
     sf::RectangleShape maxHealthBar;
     sf::RectangleShape currentHealthBar;
+
+    bool canFire();
 
 public:
     static Enemy spawnEnemy(const sf::Texture &, const sf::Vector2f &, float, const int &);
 
     void load(const sf::Texture &);
     void draw(sf::RenderWindow &);
-    void update();
+    std::vector<Projectile> update(const sf::Vector2f &, const sf::Texture &);
     bool takeDamage(const int &);
-    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Texture &);
-    bool canFire();
 
     Enemy(const Enemy &) = default;
     Enemy &operator=(const Enemy &);

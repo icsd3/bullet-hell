@@ -29,7 +29,10 @@ void Minimap::load(const int map[5][7])
                 5 + i * 29
             ));
 
-            if (map[i][j] == 2)
+            if (map[i][j] == 3)
+                cell.setFillColor(sf::Color(150, 0, 0, 255));
+
+            else if (map[i][j] == 2)
                 cell.setFillColor(sf::Color(0, 150, 0, 255));
 
             else if (map[i][j] == 1)

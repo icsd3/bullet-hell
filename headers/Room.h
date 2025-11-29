@@ -25,6 +25,8 @@ class Room
     sf::Clock animationClock;
     bool open = false;
 
+    void animate(const int &);
+
 public:
     Room(const bool &, const bool &, const bool &, const bool &, const sf::Texture &, const sf::Texture &, const sf::Texture &);
     Room(const Room &) = default;

@@ -4,8 +4,8 @@
 #include <iostream>
 #include <fstream>
 
-Enemy::Enemy(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex, float spd, const int &mh, const Weapon &ew)
-    : Entity(ec, pos, ori, tf, tex, spd), maxHealth(mh), weapon(ew), currentHealth(mh)
+Enemy::Enemy(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
+    : Entity(ec, pos, ori, tf, tex, spd, mh), weapon(ew)
 {
 }
 
@@ -35,7 +35,7 @@ void Enemy::load(const sf::Texture &texture)
     sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
     sprite.setPosition(position);
     
-    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 20.f;
+    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 30.f;
     sprite.setScale(sf::Vector2f(scale, scale));
 
     maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
@@ -79,14 +79,14 @@ void Enemy::draw(sf::RenderWindow &window)
     window.draw(drawCurrentHealthBar);
 }
 
-void Enemy::update()
+std::vector<Projectile> Enemy::update(const sf::Vector2f &target, const sf::Texture &tex)
 {
-    
-}
-
-std::vector<Projectile> Enemy::fire(const sf::Vector2f &target, const sf::Texture &tex)
-{
-    return weapon.fire(position, target, tex);
+    std::vector<Projectile> bullets;
+    if (canFire())
+    {
+        bullets = weapon.fire(position, target, tex);
+    }
+    return bullets;
 }
 
 bool Enemy::canFire()

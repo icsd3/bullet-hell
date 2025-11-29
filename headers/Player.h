@@ -13,9 +13,6 @@ class Player : public Entity
     Player(const Player &) = delete;
     Player &operator=(const Player &) = delete;
 
-    int maxHealth;
-    int currentHealth;
-
     Weapon *currentWeapon;
     std::vector<Weapon> weapons;
 
