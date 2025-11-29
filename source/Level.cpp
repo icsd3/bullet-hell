@@ -36,6 +36,8 @@ void Level::generateRooms(const int n)
 
     int cellCount = 1;
 
+    std::mt19937 &rng = Utils::getRng(); 
+
     while (cellCount < n)
     {
         if (frontier.empty())
@@ -139,6 +141,7 @@ void Level::generateRooms(const int n)
 void Level::load(const int nr)
 {
     std::uniform_int_distribution<int> dist(5 + nr * 2, 8 + nr * 2);
+    std::mt19937 &rng = Utils::getRng(); 
     int n = dist(rng);
     generateRooms(n);
     currentRoom = &rooms[0];
@@ -201,12 +204,12 @@ std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bo
 
         if (mouseEvent->button == sf::Mouse::Button::Right && !controls)
         {
-            return std::make_pair(1, mapToLogical(sf::Vector2f(mouseEvent->position), window));
+            return std::make_pair(1, Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window));
         }
 
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            return std::make_pair(2, mapToLogical(sf::Vector2f(mouseEvent->position), window));
+            return std::make_pair(2, Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window));
         }
     }
     if (event.is<sf::Event::KeyPressed>())
@@ -260,7 +263,7 @@ sf::Vector2f Level::handleMovementInput(const bool &controls, const sf::RenderWi
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
-            return mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+            return Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
         }
     }
     return {-1.f, -1.f};
@@ -270,7 +273,7 @@ sf::Vector2f Level::handleShootInput(const sf::RenderWindow &window)
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
     {
-        return mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+        return Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
     }
     return {-1.f, -1.f};
 }

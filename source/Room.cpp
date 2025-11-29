@@ -143,16 +143,16 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
 
 void Room::draw(sf::RenderWindow &window)
 {
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
     sf::Sprite drawBg = backgroundSprite;
-    drawBg.setPosition(mapToScreen(backgroundSprite.getPosition(), window));
+    drawBg.setPosition(Utils::mapToScreen(backgroundSprite.getPosition(), window));
     drawBg.scale(scaleFactor);
     window.draw(drawBg);
 
     if(doorUp)
     {
         sf::Sprite drawDoor = doorUp.value();
-        drawDoor.setPosition(mapToScreen(doorUp.value().getPosition(), window));
+        drawDoor.setPosition(Utils::mapToScreen(doorUp.value().getPosition(), window));
         drawDoor.scale(scaleFactor);
         window.draw(drawDoor);
     }
@@ -160,7 +160,7 @@ void Room::draw(sf::RenderWindow &window)
     if(doorRight)
     {
         sf::Sprite drawDoor = doorRight.value();
-        drawDoor.setPosition(mapToScreen(doorRight.value().getPosition(), window));
+        drawDoor.setPosition(Utils::mapToScreen(doorRight.value().getPosition(), window));
         drawDoor.scale(scaleFactor);
         window.draw(drawDoor);
     }
@@ -168,7 +168,7 @@ void Room::draw(sf::RenderWindow &window)
     if(doorDown)
     {
         sf::Sprite drawDoor = doorDown.value();
-        drawDoor.setPosition(mapToScreen(doorDown.value().getPosition(), window));
+        drawDoor.setPosition(Utils::mapToScreen(doorDown.value().getPosition(), window));
         drawDoor.scale(scaleFactor);
         window.draw(drawDoor);
     }
@@ -176,7 +176,7 @@ void Room::draw(sf::RenderWindow &window)
     if(doorLeft)
     {
         sf::Sprite drawDoor = doorLeft.value();
-        drawDoor.setPosition(mapToScreen(doorLeft.value().getPosition(), window));
+        drawDoor.setPosition(Utils::mapToScreen(doorLeft.value().getPosition(), window));
         drawDoor.scale(scaleFactor);
         window.draw(drawDoor);
     }
@@ -184,7 +184,7 @@ void Room::draw(sf::RenderWindow &window)
     // for (auto &wall : walls)
     // {
     //     sf::RectangleShape drawWall = wall;
-    //     drawWall.setPosition(mapToScreen(wall.getPosition(), window));
+    //     drawWall.setPosition(Utils::mapToScreen(wall.getPosition(), window));
     //     drawWall.scale(scaleFactor);
     //     window.draw(drawWall);
     // }
@@ -192,7 +192,7 @@ void Room::draw(sf::RenderWindow &window)
     // for (auto &door : doors)
     // {
     //     sf::RectangleShape drawDoor = door;
-    //     drawDoor.setPosition(mapToScreen(door.getPosition(), window));
+    //     drawDoor.setPosition(Utils::mapToScreen(door.getPosition(), window));
     //     drawDoor.scale(scaleFactor);
     //     window.draw(drawDoor);
     // }

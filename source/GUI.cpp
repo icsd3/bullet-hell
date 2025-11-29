@@ -76,28 +76,28 @@ void GUI::update(const sf::Vector2i &HP, const int &moved)
 
 void GUI::draw(sf::RenderWindow &window)
 {
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
     sf::RectangleShape drawMaxHealthBar = maxHealthBar;
-    drawMaxHealthBar.setPosition(mapToScreen(maxHealthBar.getPosition(), window));
+    drawMaxHealthBar.setPosition(Utils::mapToScreen(maxHealthBar.getPosition(), window));
     drawMaxHealthBar.setSize(sf::Vector2f(maxHealthBar.getSize().x * scaleFactor.x, maxHealthBar.getSize().y * scaleFactor.y));
     drawMaxHealthBar.setOrigin(sf::Vector2f(drawMaxHealthBar.getSize().x / 2.f, drawMaxHealthBar.getSize().y / 2.f));
     drawMaxHealthBar.setOutlineThickness(maxHealthBar.getOutlineThickness() * scaleFactor.x);
     window.draw(drawMaxHealthBar);
 
     sf::RectangleShape drawCurrentHealthBar = currentHealthBar;
-    drawCurrentHealthBar.setPosition(mapToScreen(currentHealthBar.getPosition(), window));
+    drawCurrentHealthBar.setPosition(Utils::mapToScreen(currentHealthBar.getPosition(), window));
     drawCurrentHealthBar.setSize(sf::Vector2f(currentHealthBar.getSize().x * scaleFactor.x, currentHealthBar.getSize().y * scaleFactor.y));
     drawCurrentHealthBar.setOrigin(sf::Vector2f(0, drawCurrentHealthBar.getSize().y / 2.f));
     window.draw(drawCurrentHealthBar);
 
     sf::Text drawHealth = health;
-    drawHealth.setPosition(mapToScreen(health.getPosition(), window));
+    drawHealth.setPosition(Utils::mapToScreen(health.getPosition(), window));
     drawHealth.setScale(scaleFactor);
     window.draw(drawHealth);
 
     sf::Text drawFps = fps;
-    drawFps.setPosition(mapToScreen(fps.getPosition(), window));
+    drawFps.setPosition(Utils::mapToScreen(fps.getPosition(), window));
     drawFps.setScale(scaleFactor);
     window.draw(drawFps);
 

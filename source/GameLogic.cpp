@@ -114,13 +114,11 @@ void Game::handleNewState()
 
 void Game::togglePause()
 {
-    if(!paused)
+    if(Utils::changePaused(1))
         updateClock.stop();
 
     else
         updateClock.start();
-
-    paused = !paused;
 }
 
 bool Game::handleInputs()
@@ -128,7 +126,7 @@ bool Game::handleInputs()
     bool shouldExit = false;
     bool moved = false;
 
-    if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
+    if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
     {
         sf::Vector2f move = level.handleMovementInput(controls, window);
         sf::Vector2f shoot = level.handleShootInput(window);
@@ -176,7 +174,7 @@ bool Game::handleInputs()
         {
             if (currentState == level_1 || currentState == level_2 || currentState == level_3)
             {
-                if(!paused)
+                if(!Utils::changePaused(0))
                 {
                     togglePause();
                     openSettings = true;
@@ -227,7 +225,7 @@ bool Game::handleInputs()
                 case 3:
                     openSettings = false;
 
-                    if(paused)
+                    if(Utils::changePaused(0))
                         togglePause();
 
                     break;
@@ -272,7 +270,7 @@ bool Game::handleInputs()
                 }
             }
 
-            else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
+            else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
             {
                 std::pair<int, sf::Vector2f> ans = level.handleInput(*event, controls, window);
                 int action = ans.first;
@@ -359,9 +357,11 @@ void Game::Play()
             break;
         }
 
-        if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
+        if (currentState == level_1 || currentState == level_2 || currentState == level_3)
         {
-            float dt = updateClock.restart().asSeconds();
+            float dt = 0;
+            if (!Utils::changePaused(0))
+                dt = updateClock.restart().asSeconds();
             level.update(dt, target);
         }
         draw();

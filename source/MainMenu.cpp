@@ -63,25 +63,25 @@ void mainMenu::load()
 
 void mainMenu::draw(sf::RenderWindow &window)
 {
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
     sf::Sprite drawBackground = backgroundSprite;
-    drawBackground.setPosition(mapToScreen(backgroundSprite.getPosition(), window));
+    drawBackground.setPosition(Utils::mapToScreen(backgroundSprite.getPosition(), window));
     drawBackground.scale(scaleFactor);
     window.draw(drawBackground);
 
     sf::Sprite drawStart = startButtonSprite;
-    drawStart.setPosition(mapToScreen(startButtonSprite.getPosition(), window));
+    drawStart.setPosition(Utils::mapToScreen(startButtonSprite.getPosition(), window));
     drawStart.scale(scaleFactor);
     window.draw(drawStart);
 
     sf::Sprite drawSettings = settingsButtonSprite;
-    drawSettings.setPosition(mapToScreen(settingsButtonSprite.getPosition(), window));
+    drawSettings.setPosition(Utils::mapToScreen(settingsButtonSprite.getPosition(), window));
     drawSettings.scale(scaleFactor);
     window.draw(drawSettings);
 
     sf::Sprite drawExit = exitButtonSprite;
-    drawExit.setPosition(mapToScreen(exitButtonSprite.getPosition(), window));
+    drawExit.setPosition(Utils::mapToScreen(exitButtonSprite.getPosition(), window));
     drawExit.scale(scaleFactor);
     window.draw(drawExit);
 }
@@ -94,7 +94,7 @@ int mainMenu::handleInput(const sf::RenderWindow &window, const sf::Event &event
 
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            sf::Vector2f mousePos = mapToLogical(sf::Vector2f(mouseEvent->position), window);
+            sf::Vector2f mousePos = Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window);
 
             const auto startButtonBounds = startButtonSprite.getGlobalBounds();
             const auto settingsButtonBounds = settingsButtonSprite.getGlobalBounds();

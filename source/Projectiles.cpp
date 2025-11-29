@@ -25,8 +25,8 @@ void Projectile::load(const sf::Texture &texture)
 void Projectile::draw(sf::RenderWindow &window)
 {
     sf::Sprite drawSprite = sprite;
-    drawSprite.setPosition(mapToScreen(position, window));
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    drawSprite.setPosition(Utils::mapToScreen(position, window));
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
     drawSprite.scale(scaleFactor);
     window.draw(drawSprite);
 }

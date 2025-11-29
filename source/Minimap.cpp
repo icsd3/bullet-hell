@@ -81,17 +81,17 @@ void Minimap::update(const int &moved)
 
 void Minimap::draw(sf::RenderWindow &window)
 {
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
     sf::RectangleShape drawBg = background;
-    drawBg.setPosition(mapToScreen(background.getPosition(), window));
+    drawBg.setPosition(Utils::mapToScreen(background.getPosition(), window));
     drawBg.setScale(scaleFactor);
     window.draw(drawBg);
 
     for(const auto &cell : grid)
     {
         sf::RectangleShape drawCell = cell;
-        drawCell.setPosition(mapToScreen(cell.getPosition(), window));
+        drawCell.setPosition(Utils::mapToScreen(cell.getPosition(), window));
         drawCell.setScale(scaleFactor);
         window.draw(drawCell);
     }

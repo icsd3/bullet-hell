@@ -46,11 +46,11 @@ void Augment::load()
 
 void Augment::draw(sf::RenderWindow &window)
 {
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
     auto drawSprite = [&](const sf::Sprite& sprite) {
         sf::Sprite s = sprite;
-        s.setPosition(mapToScreen(sprite.getPosition(), window));
+        s.setPosition(Utils::mapToScreen(sprite.getPosition(), window));
         s.scale(scaleFactor);
         window.draw(s);
     };
@@ -68,7 +68,7 @@ int Augment::handleInput(const sf::RenderWindow &window, const sf::Event &event)
         const auto *mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            sf::Vector2f mousePos = mapToLogical(sf::Vector2f(mouseEvent->position), window);
+            sf::Vector2f mousePos = Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window);
             
             if (firstButtonSprite.getGlobalBounds().contains(mousePos))
             {

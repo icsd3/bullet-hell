@@ -55,15 +55,15 @@ void Enemy::load(const sf::Texture &texture)
 
 void Enemy::draw(sf::RenderWindow &window)
 {
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
     sf::Sprite drawSprite = sprite;
-    drawSprite.setPosition(mapToScreen(position, window));
+    drawSprite.setPosition(Utils::mapToScreen(position, window));
     drawSprite.scale(scaleFactor);
     window.draw(drawSprite);
 
     sf::RectangleShape drawMaxHealthBar = maxHealthBar;
-    drawMaxHealthBar.setPosition(mapToScreen(maxHealthBar.getPosition(), window));
+    drawMaxHealthBar.setPosition(Utils::mapToScreen(maxHealthBar.getPosition(), window));
     drawMaxHealthBar.setSize(sf::Vector2f(maxHealthBar.getSize().x * scaleFactor.x, maxHealthBar.getSize().y * scaleFactor.y));
     drawMaxHealthBar.setOrigin(sf::Vector2f(drawMaxHealthBar.getSize().x / 2.f, drawMaxHealthBar.getSize().y / 2.f));
     
@@ -72,7 +72,7 @@ void Enemy::draw(sf::RenderWindow &window)
     window.draw(drawMaxHealthBar);
 
     sf::RectangleShape drawCurrentHealthBar = currentHealthBar;
-    drawCurrentHealthBar.setPosition(mapToScreen(currentHealthBar.getPosition(), window));
+    drawCurrentHealthBar.setPosition(Utils::mapToScreen(currentHealthBar.getPosition(), window));
     drawCurrentHealthBar.setSize(sf::Vector2f(currentHealthBar.getSize().x * scaleFactor.x, currentHealthBar.getSize().y * scaleFactor.y));
     drawCurrentHealthBar.setOrigin(sf::Vector2f(0, drawCurrentHealthBar.getSize().y / 2.f));
     
@@ -81,10 +81,12 @@ void Enemy::draw(sf::RenderWindow &window)
 
 std::vector<Projectile> Enemy::update(const sf::Vector2f &target, const sf::Texture &tex)
 {
+    weapon.update();
     std::vector<Projectile> bullets;
     if (canFire())
     {
         bullets = weapon.fire(position, target, tex);
+        weapon.reset();  // Reset cooldown only after actually firing
     }
     return bullets;
 }

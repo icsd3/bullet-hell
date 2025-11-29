@@ -58,6 +58,8 @@ void Player::update(const float &dt, const sf::Vector2f &target)
             sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
         }
     }
+
+    currentWeapon -> update();
 }
 
 void Player::load()
@@ -104,12 +106,12 @@ void Player::load()
 void Player::draw(sf::RenderWindow &window)
 {
     sf::Sprite drawSprite = sprite;
-    drawSprite.setPosition(mapToScreen(position, window));
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    drawSprite.setPosition(Utils::mapToScreen(position, window));
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
     drawSprite.scale(scaleFactor);
     window.draw(drawSprite);
     // sf::RectangleShape drawCollisionBox = collisionBox;
-    // drawCollisionBox.setPosition(mapToScreen(collisionBox.getPosition(), window));
+    // drawCollisionBox.setPosition(Utils::mapToScreen(collisionBox.getPosition(), window));
     // drawCollisionBox.scale(scaleFactor);
     // window.draw(drawCollisionBox);
 }
@@ -134,6 +136,7 @@ void Player::setPosition(const sf::Vector2f &newPos)
 
 std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex)
 {
+    currentWeapon->reset();
     return currentWeapon->fire(position, target, tex);
 }
 

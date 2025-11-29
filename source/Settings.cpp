@@ -58,38 +58,38 @@ void Settings::load()
 
 void Settings::draw(sf::RenderWindow &window)
 {
-    sf::Vector2f scaleFactor = getScaleFactor(window);
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
     sf::RectangleShape drawBox = settingsBox;
-    drawBox.setPosition(mapToScreen(settingsBox.getPosition(), window));
+    drawBox.setPosition(Utils::mapToScreen(settingsBox.getPosition(), window));
     drawBox.setSize(sf::Vector2f(settingsBox.getSize().x * scaleFactor.x, settingsBox.getSize().y * scaleFactor.y));
     drawBox.setOrigin(sf::Vector2f(drawBox.getSize().x / 2.f, drawBox.getSize().y / 2.f));
     drawBox.setOutlineThickness(settingsBox.getOutlineThickness() * scaleFactor.x);
     window.draw(drawBox);
 
     sf::RectangleShape drawScreenButton = screenButton;
-    drawScreenButton.setPosition(mapToScreen(screenButton.getPosition(), window));
+    drawScreenButton.setPosition(Utils::mapToScreen(screenButton.getPosition(), window));
     drawScreenButton.setSize(sf::Vector2f(screenButton.getSize().x * scaleFactor.x, screenButton.getSize().y * scaleFactor.y));
     drawScreenButton.setOrigin(sf::Vector2f(drawScreenButton.getSize().x / 2.f, drawScreenButton.getSize().y / 2.f));
     drawScreenButton.setOutlineThickness(screenButton.getOutlineThickness() * scaleFactor.x);
     window.draw(drawScreenButton);
 
     sf::RectangleShape drawControlsButton = controlsButton;
-    drawControlsButton.setPosition(mapToScreen(controlsButton.getPosition(), window));
+    drawControlsButton.setPosition(Utils::mapToScreen(controlsButton.getPosition(), window));
     drawControlsButton.setSize(sf::Vector2f(controlsButton.getSize().x * scaleFactor.x, controlsButton.getSize().y * scaleFactor.y));
     drawControlsButton.setOrigin(sf::Vector2f(drawControlsButton.getSize().x / 2.f, drawControlsButton.getSize().y / 2.f));
     drawControlsButton.setOutlineThickness(controlsButton.getOutlineThickness() * scaleFactor.x);
     window.draw(drawControlsButton);
 
     sf::Text drawScreenText = screenText;
-    drawScreenText.setPosition(mapToScreen(screenText.getPosition(), window));
+    drawScreenText.setPosition(Utils::mapToScreen(screenText.getPosition(), window));
     drawScreenText.setOrigin(sf::Vector2f(drawScreenText.getLocalBounds().position.x + 0.5f * drawScreenText.getLocalBounds().size.x,
                                         drawScreenText.getLocalBounds().position.y + 0.5f * drawScreenText.getLocalBounds().size.y));
     drawScreenText.setScale(scaleFactor);
     window.draw(drawScreenText);
 
     sf::Text drawControlsText = controlsText;
-    drawControlsText.setPosition(mapToScreen(controlsText.getPosition(), window));
+    drawControlsText.setPosition(Utils::mapToScreen(controlsText.getPosition(), window));
     drawControlsText.setOrigin(sf::Vector2f(drawControlsText.getLocalBounds().position.x + 0.5f * drawControlsText.getLocalBounds().size.x,
                                         drawControlsText.getLocalBounds().position.y + 0.5f * drawControlsText.getLocalBounds().size.y));
     drawControlsText.setScale(scaleFactor);
@@ -103,7 +103,7 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
         const auto *mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
         if(mouseEvent->button == sf::Mouse::Button::Left)
         {
-            sf::Vector2f mousePos = mapToLogical(sf::Vector2f(mouseEvent->position), window);
+            sf::Vector2f mousePos = Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window);
             
             const auto screenButtonBounds = screenButton.getGlobalBounds();
             const auto controlsButtonBounds = controlsButton.getGlobalBounds();

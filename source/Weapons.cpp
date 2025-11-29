@@ -6,6 +6,7 @@ Weapon::Weapon(const std::string &nm, int dmg, int bnr, float fr, float sa, floa
     : name(nm), damage(dmg), bullet_nr(bnr), fire_rate(fr), spread_angle(sa), range(rg), bulletSpeed(bs), offset(off)
 {
     std::uniform_real_distribution<float> dist(0, offset);
+    std::mt19937 &rng = Utils::getRng();
     offset = dist(rng);
 }
 
@@ -52,6 +53,7 @@ std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vec
         sf::Vector2f direction = target - position;
         direction = direction.normalized();
         std::uniform_real_distribution<float> dist(spread_angle * -0.5f, spread_angle * 0.5f);
+        std::mt19937 &rng =Utils::getRng();
         sf::Angle randomAngle = sf::degrees(dist(rng));
         direction = direction.rotatedBy(randomAngle);
         Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", texture, bulletSpeed, damage, direction, range);
@@ -63,15 +65,18 @@ std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vec
 bool Weapon::canFire()
 {
     float dt = weaponClock.getElapsedTime().asSeconds();
-    if (dt >= (1 / fire_rate + offset))
-    {
-        weaponClock.restart();
-        return true;
-    }
-    return false;
+    return dt >= (1 / fire_rate + offset);
 }
 
 void Weapon::reset()
 {
     weaponClock.restart();
+}
+
+void Weapon::update()
+{
+    if (Utils::changePaused(0))
+        weaponClock.stop();
+    else
+        weaponClock.start();
 }
