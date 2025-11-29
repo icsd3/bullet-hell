@@ -34,10 +34,10 @@ std::ostream &operator<<(std::ostream &os, const Entity &entity)
     return os;
 }
 
-bool Entity::takeDamage(const int &dmg)
-{
-    currentHealth -= dmg;
-    if (currentHealth <= 0)
-        return true;
-    return false;
-}
+// bool Entity::takeDamage(const int &dmg)
+// {
+//     currentHealth -= dmg;
+//     if (currentHealth <= 0)
+//         return true;
+//     return false;
+// }
