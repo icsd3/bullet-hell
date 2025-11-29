@@ -32,6 +32,7 @@ class Game
 
     Settings &settings = Settings::getInstance();
 
+    bool paused = false;
     bool openSettings = false;
     bool fullscreen = true;
     bool controls = true; //true for WASD, false for mouse
