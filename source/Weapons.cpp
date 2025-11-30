@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-Weapon::Weapon(const std::string nm, const int dmg, const int bnr, const float fr, const float sa, const float rg, const float bs, const float off, const std::string &texpath, sf::Texture &tex)
+Weapon::Weapon(const std::string &nm, const int dmg, const int bnr, const float fr, const float sa, const float rg, const float bs, const float off, const std::string &texpath, sf::Texture &tex)
     : name(nm), damage(dmg), bullet_nr(bnr), fire_rate(fr), spread_angle(sa), range(rg), bulletSpeed(bs), offset(off), projectileTexturePath(texpath), projectileTexture(tex)
 {
     std::uniform_real_distribution<float> dist(0, offset);

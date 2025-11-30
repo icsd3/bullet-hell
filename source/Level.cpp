@@ -434,7 +434,7 @@ bool Level::checkPlayerHits(const Projectile &projectile, Player &player)
 
 void Level::spawnPlayerProjectile(const sf::Vector2f &target)
 {
-    std::vector<Projectile> bullets = player.fire(target, playerProjectileTexture);
+    std::vector<Projectile> bullets = player.fire(target);
             
     for(const auto &bullet : bullets)
     {

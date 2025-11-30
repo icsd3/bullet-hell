@@ -22,7 +22,7 @@ class Weapon
     sf::Texture &projectileTexture;
 
 public:
-    Weapon(const std::string, const int , const int , const float , const float , const float , const float, const float, const std::string &, sf::Texture &);
+    Weapon(const std::string &, const int , const int , const float , const float , const float , const float, const float, const std::string &, sf::Texture &);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
     ~Weapon() = default;

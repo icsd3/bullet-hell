@@ -106,7 +106,7 @@ void Player::setPosition(const sf::Vector2f &newPos)
     hitBox.move(offset);
 }
 
-std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex) const
+std::vector<Projectile> Player::fire(const sf::Vector2f &target) const
 {
     std::vector<Projectile> bullets;
 
