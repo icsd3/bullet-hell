@@ -97,20 +97,6 @@ bool Enemy::takeDamage(const int &dmg)
     return false;
 }
 
-Enemy &Enemy::operator=(const Enemy &other)
-{
-    if (this != &other)
-    {
-        Entity::operator=(other);
-        maxHealth = other.maxHealth;
-        weapon = other.weapon;
-        currentHealth = other.currentHealth;
-        maxHealthBar = other.maxHealthBar;
-        currentHealthBar = other.currentHealthBar;
-    }
-    return *this;
-}
-
 std::ostream &operator<<(std::ostream &os, const Enemy &enemy)
 {
     os << static_cast<const Entity &>(enemy);

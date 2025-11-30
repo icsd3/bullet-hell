@@ -157,7 +157,7 @@ bool Game::handleInputs()
             moved = true;
         }
 
-        if (shoot.x != -1 && shoot.y != -1 && player.canFire())
+        if (shoot.x != -1 && shoot.y != -1)
         {
             level.spawnPlayerProjectile(shoot);
         }
@@ -286,10 +286,7 @@ bool Game::handleInputs()
                     break;
 
                 case 2:
-                    if (player.canFire())
-                    {
-                        level.spawnPlayerProjectile(ans.second);
-                    }
+                    level.spawnPlayerProjectile(ans.second);
                     break;
 
                 case 3:

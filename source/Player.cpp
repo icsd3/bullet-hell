@@ -105,10 +105,15 @@ void Player::setPosition(const sf::Vector2f &newPos)
     hitBox.move(offset);
 }
 
-std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex)
+std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex) const
 {
-    currentWeapon->reset();
-    return currentWeapon->fire(position, target, tex);
+    std::vector<Projectile> bullets;
+    if (currentWeapon->canFire())
+    {
+        currentWeapon->reset();
+        bullets = currentWeapon->fire(position, target, tex);;
+    }
+    return bullets;
 }
 
 bool Player::takeDamage(const int &dmg)
@@ -120,9 +125,4 @@ bool Player::takeDamage(const int &dmg)
         return true;
     }
     return false;
-}
-
-bool Player::canFire()
-{
-    return currentWeapon->canFire();
 }

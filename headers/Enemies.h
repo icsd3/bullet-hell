@@ -14,9 +14,6 @@ class Enemy : public Entity
     bool canFire();
 
 public:
-    Enemy(const Enemy &) = default;
-    Enemy &operator=(const Enemy &);
-    ~Enemy() = default;
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
 
     void load() override;

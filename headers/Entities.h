@@ -19,7 +19,6 @@ public:
     Entity(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, const float, const int);
     Entity(const Entity &);
     Entity &operator=(const Entity &);
-    ~Entity() = default;
     friend std::ostream &operator<<(std::ostream &, const Entity &);
 
     void load() override;

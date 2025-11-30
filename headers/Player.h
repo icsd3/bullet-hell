@@ -21,7 +21,6 @@ class Player : public Entity
 public:
     static Player &getInstance();
     static Player &Initialize(const sf::Texture &);
-    ~Player() = default;
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
     void load() override;
@@ -31,6 +30,5 @@ public:
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f &);
-    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Texture &);
-    bool canFire();
+    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Texture &) const;
 };
