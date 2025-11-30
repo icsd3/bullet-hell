@@ -36,7 +36,7 @@ class Level
     std::vector<Room> rooms;
     Room *currentRoom = nullptr;
     GUI &gui = GUI::getInstance();
-    Player &player = Player::Initialize(playerTexture);
+    Player &player = Player::Initialize(playerTexture, playerProjectilePath, playerProjectileTexture);
 
 public:
     static Level &getInstance();

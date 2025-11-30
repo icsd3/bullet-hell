@@ -1,9 +1,26 @@
 #include "../headers/Player.h"
 #include "../headers/Utils.h"
 
-Player::Player(const sf::Texture &tex)
+Player::Player(const sf::Texture &tex, const std::string &prpath, sf::Texture &prtex)
     : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.2f, 100), currentWeapon(nullptr)
 {
+    std::ifstream file("json/Weapons.json");
+    nlohmann::json data;
+    file >> data;
+    const auto &w = data[4];
+    weapons.emplace_back(Weapon(
+        w["name"],
+        w["damage"],
+        w["bullet_nr"],
+        w["fire_rate"],
+        w["spread_angle"],
+        w["range"],
+        w["bullet_speed"],
+        0.f,
+        prpath,
+        prtex
+    ));
+    currentWeapon = &weapons.back();
 }
 
 std::unique_ptr<Player> Player::instance = nullptr; 
@@ -13,9 +30,9 @@ Player &Player::getInstance()
     return *instance;
 }
 
-Player &Player::Initialize(const sf::Texture &tex)
+Player &Player::Initialize(const sf::Texture &tex, const std::string &prpath, sf::Texture &prtex)
 {
-    instance = std::unique_ptr<Player>(new Player(tex));
+    instance = std::unique_ptr<Player>(new Player(tex, prpath, prtex));
     return *instance;
 }
 
@@ -67,22 +84,6 @@ void Player::load()
 {   
     Entity::load();
 
-    std::ifstream file("json/Weapons.json");
-    nlohmann::json data;
-    file >> data;
-    const auto &w = data[4];
-    weapons.emplace_back(Weapon(
-        w["name"],
-        w["damage"],
-        w["bullet_nr"],
-        w["fire_rate"],
-        w["spread_angle"],
-        w["range"],
-        w["bullet_speed"],
-        0.f
-    ));
-    currentWeapon = &weapons.back();
-
     currentWeapon->reset();
 }
 
@@ -109,8 +110,8 @@ std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Textu
 {
     std::vector<Projectile> bullets;
 
-    bullets = currentWeapon->fire(position, target, tex);
-    
+    bullets = currentWeapon->fire(position, target);
+
     return bullets;
 }
 

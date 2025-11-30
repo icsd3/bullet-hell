@@ -16,16 +16,19 @@ class Weapon
     float range;
     float bulletSpeed;
     float offset;
+    std::string projectileTexturePath;
+
     sf::Clock weaponClock;
+    sf::Texture &projectileTexture;
 
 public:
-    Weapon(const std::string &, int , int , float , float , float , float, float);
+    Weapon(const std::string, const int , const int , const float , const float , const float , const float, const float, const std::string &, sf::Texture &);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
     ~Weapon() = default;
     friend std::ostream &operator<<(std::ostream &, const Weapon &);
 
-    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &, const sf::Texture &);
+    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &);
     void reset();
     void update();
 };

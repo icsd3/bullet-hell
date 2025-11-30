@@ -191,7 +191,7 @@ void Level::spawnEnemies(const int &nrOfEnemies)
 {
     for (int i = 1; i <= nrOfEnemies; i++)
     {
-        enemies.push_back(Enemy::spawnEnemy(enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100));
+        enemies.push_back(Enemy::spawnEnemy(enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100, enemyProjectilePath, enemyProjectileTexture));
         enemies.back().load();
     }
 }
@@ -378,7 +378,7 @@ void Level::update(const float &dt, const sf::Vector2f &target)
 
     for(auto &enemy : enemies)
     {
-        std::vector<Projectile> bullets = enemy.update(enemyTarget, enemyProjectileTexture);
+        std::vector<Projectile> bullets = enemy.update(enemyTarget);
 
         for(const auto &bullet : bullets)
         {

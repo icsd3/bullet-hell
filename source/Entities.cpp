@@ -49,12 +49,12 @@ void Entity::load()
     sf::Transform t = sprite.getTransform();
     hitBox.setFillColor(sf::Color(0, 255, 0, 255));
     hitBox.setPointCount(6);
-    hitBox.setPoint(0, t.transformPoint({bounds.position.x + 4.f / 14 * bounds.size.x, bounds.position.y}));
-    hitBox.setPoint(1, t.transformPoint({bounds.position.x + 10.f / 14 * bounds.size.x, bounds.position.y}));
-    hitBox.setPoint(2, t.transformPoint({bounds.position.x + bounds.size.x, bounds.position.y + 4.f / 14 * bounds.size.y}));
+    hitBox.setPoint(0, t.transformPoint({bounds.position.x + 4.5f / 14 * bounds.size.x, bounds.position.y}));
+    hitBox.setPoint(1, t.transformPoint({bounds.position.x + 9.5f / 14 * bounds.size.x, bounds.position.y}));
+    hitBox.setPoint(2, t.transformPoint({bounds.position.x + bounds.size.x, bounds.position.y + 4.5f / 14 * bounds.size.y}));
     hitBox.setPoint(3, t.transformPoint({bounds.position.x + bounds.size.x, bounds.position.y + bounds.size.y}));
     hitBox.setPoint(4, t.transformPoint({bounds.position.x, bounds.position.y + bounds.size.y}));
-    hitBox.setPoint(5, t.transformPoint({bounds.position.x, bounds.position.y + 4.f / 14 * bounds.size.y}));
+    hitBox.setPoint(5, t.transformPoint({bounds.position.x, bounds.position.y + 4.5f / 14 * bounds.size.y}));
 }
 
 void Entity::draw(sf::RenderWindow &window)

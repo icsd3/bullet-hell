@@ -20,6 +20,7 @@
 #### Debugging
 
 - [ ] Output in consola date despre starea curenta a programului - i
+- [ ] Cycle display collision boxes, hit boxes - h
 
 ## Tema 0
 

@@ -20,26 +20,18 @@ void Projectile::load()
     sprite.setRotation(rotation);
 
     sf::FloatRect bounds = sprite.getLocalBounds();
-    sf::Vector2f topLeft(bounds.position);
-    sf::Vector2f topRight(bounds.position.x + bounds.size.x, bounds.position.y);
-    sf::Vector2f bottomLeft(bounds.position.x, bounds.position.y + bounds.size.y);
-    sf::Vector2f bottomRight(bounds.position.x + bounds.size.x, bounds.position.y + bounds.size.y);
-
     sf::Transform t = sprite.getTransform();
-
-    sf::Vector2f worldTopLeft     = t.transformPoint(topLeft);
-    sf::Vector2f worldTopRight    = t.transformPoint(topRight);
-    sf::Vector2f worldBottomLeft  = t.transformPoint(bottomLeft);
-    sf::Vector2f worldBottomRight = t.transformPoint(bottomRight);
-
-    hitBox.setPointCount(4);
-    hitBox.setPoint(0, worldTopLeft);
-    hitBox.setPoint(1, worldTopRight);
-    hitBox.setPoint(2, worldBottomRight);
-    hitBox.setPoint(3, worldBottomLeft);
-
     hitBox.setFillColor(sf::Color(0, 255, 0, 255));
-
+    hitBox.setPointCount(8);
+    hitBox.setPoint(0, t.transformPoint({bounds.position.x + 3.5f / 20 * bounds.size.x, bounds.position.y}));
+    hitBox.setPoint(1, t.transformPoint({bounds.position.x + 16.5f / 20 * bounds.size.x, bounds.position.y}));
+    hitBox.setPoint(2, t.transformPoint({bounds.position.x + bounds.size.x, bounds.position.y + 3.5f / 10 * bounds.size.y}));
+    hitBox.setPoint(3, t.transformPoint({bounds.position.x + bounds.size.x, bounds.position.y + 6.5f / 10 * bounds.size.y}));
+    hitBox.setPoint(4, t.transformPoint({bounds.position.x + 16.5f / 20 * bounds.size.x, bounds.position.y + bounds.size.y}));
+    hitBox.setPoint(5, t.transformPoint({bounds.position.x + 3.5f / 20 * bounds.size.x, bounds.position.y + bounds.size.y}));
+    hitBox.setPoint(6, t.transformPoint({bounds.position.x, bounds.position.y + 6.5f / 10 * bounds.size.y}));
+    hitBox.setPoint(7, t.transformPoint({bounds.position.x, bounds.position.y + 3.5f / 10 * bounds.size.y}));
+    
     range = LOGICAL_WIDTH * range;
 }
 

@@ -18,6 +18,6 @@ public:
     void draw(sf::RenderWindow &) override;
     bool takeDamage(const int &) override;
 
-    std::vector<Projectile> update(const sf::Vector2f &, const sf::Texture &);
-    static Enemy spawnEnemy(const sf::Texture &, const sf::Vector2f &, float, const int &);
+    std::vector<Projectile> update(const sf::Vector2f &);
+    static Enemy spawnEnemy(const sf::Texture &, const sf::Vector2f &, float, const int &, const std::string &, sf::Texture &);
 };

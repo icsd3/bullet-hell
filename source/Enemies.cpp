@@ -9,7 +9,7 @@ Enemy::Enemy(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std
 {
 }
 
-Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh)
+Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, const std::string &prpath, sf::Texture &prtex)
 {
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
@@ -23,7 +23,9 @@ Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float s
         w["spread_angle"],
         w["range"],
         w["bullet_speed"],
-        0.3f
+        0.3f,
+        prpath,
+        prtex
     );
     Enemy enemy(true, pos, false, "textures/enemy.png", tex, spd, mh, ew);
     return enemy;
@@ -71,12 +73,12 @@ void Enemy::draw(sf::RenderWindow &window)
     window.draw(drawCurrentHealthBar);
 }
 
-std::vector<Projectile> Enemy::update(const sf::Vector2f &target, const sf::Texture &tex)
+std::vector<Projectile> Enemy::update(const sf::Vector2f &target)
 {
     weapon.update();
     std::vector<Projectile> bullets;
 
-    bullets = weapon.fire(position, target, tex);
+    bullets = weapon.fire(position, target);
 
     return bullets;
 }
