@@ -29,14 +29,9 @@ Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float s
     return enemy;
 }
 
-void Enemy::load(const sf::Texture &texture)
+void Enemy::load()
 {
-    sf::FloatRect bounds = sprite.getLocalBounds();
-    sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
-    sprite.setPosition(position);
-    
-    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 30.f;
-    sprite.setScale(sf::Vector2f(scale, scale));
+    Entity::load();
 
     maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
     maxHealthBar.setFillColor(sf::Color(75, 0, 0, 175));
@@ -57,10 +52,7 @@ void Enemy::draw(sf::RenderWindow &window)
 {
     sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
-    sf::Sprite drawSprite = sprite;
-    drawSprite.setPosition(Utils::mapToScreen(position, window));
-    drawSprite.scale(scaleFactor);
-    window.draw(drawSprite);
+    Entity::draw(window);
 
     sf::RectangleShape drawMaxHealthBar = maxHealthBar;
     drawMaxHealthBar.setPosition(Utils::mapToScreen(maxHealthBar.getPosition(), window));

@@ -17,8 +17,6 @@ class Player : public Entity
     std::vector<Weapon> weapons;
 
     static std::unique_ptr<Player> instance;
-    const sf::Texture &texture;
-    sf::RectangleShape collisionBox;
 
 public:
     static Player &getInstance();
@@ -26,16 +24,13 @@ public:
     ~Player() = default;
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
-    void load();
+    void load() override;
+    bool takeDamage(const int &) override;
+    
     void update(const float &, const sf::Vector2f &);
-    void draw(sf::RenderWindow &);
-    bool takeDamage(const int &);
-
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f &);
     std::vector<Projectile> fire(const sf::Vector2f &, const sf::Texture &);
     bool canFire();
-    bool boxCollidesWith(const sf::RectangleShape &) const;
-    bool boxCollidesWith(const Object &) const;
 };

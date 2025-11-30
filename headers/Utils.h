@@ -8,6 +8,7 @@ constexpr float LOGICAL_HEIGHT = 1080.0f;
 class Utils
 {
     static bool paused;
+    static int displayBoxes;
     static std::mt19937 rng;
 
 public:
@@ -16,4 +17,5 @@ public:
     static sf::Vector2f getScaleFactor(const sf::RenderWindow&);
     static std::mt19937 &getRng();
     static bool changePaused(const bool);
+    static int changeDisplayBoxes(const bool);
 };

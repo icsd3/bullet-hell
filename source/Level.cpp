@@ -192,7 +192,7 @@ void Level::spawnEnemies(const int &nrOfEnemies)
     for (int i = 1; i <= nrOfEnemies; i++)
     {
         enemies.push_back(Enemy::spawnEnemy(enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100));
-        enemies.back().load(enemyTexture);
+        enemies.back().load();
     }
 }
 
@@ -383,7 +383,7 @@ void Level::update(const float &dt, const sf::Vector2f &target)
         for(const auto &bullet : bullets)
         {
             enemyProjectiles.push_back(bullet);
-            enemyProjectiles.back().load(enemyProjectileTexture);
+            enemyProjectiles.back().load();
         }
     }
 
@@ -408,9 +408,9 @@ bool Level::checkEnemyHits(const Projectile &projectile)
 {
     for (size_t i = 0; i < enemies.size();)
     {
-        if (projectile.collidesWith(enemies[i]))
+        if (int damage = projectile.hits(enemies[i]))
         {
-            if (enemies[i].takeDamage(projectile.getDamage()))
+            if (enemies[i].takeDamage(damage))
                 enemies.erase(enemies.begin() + i);
             return true;
         }
@@ -423,9 +423,9 @@ bool Level::checkEnemyHits(const Projectile &projectile)
 
 bool Level::checkPlayerHits(const Projectile &projectile, Player &player)
 {
-    if (projectile.collidesWith(player))
+    if (int damage = projectile.hits(player))
     {
-        if (player.takeDamage(projectile.getDamage()))
+        if (player.takeDamage(damage))
             std::cout<<"game over\n";
         return true;
     }  
@@ -439,6 +439,6 @@ void Level::spawnPlayerProjectile(const sf::Vector2f &target)
     for(const auto &bullet : bullets)
     {
         playerProjectiles.push_back(bullet);
-        playerProjectiles.back().load(playerProjectileTexture);
+        playerProjectiles.back().load();
     }
 }

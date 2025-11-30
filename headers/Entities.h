@@ -12,6 +12,7 @@ protected:
     float speed;
     int maxHealth;
     int currentHealth;
+    sf::ConvexShape hitBox;
     // sf::Clock animationClock;
 
 public:
@@ -20,4 +21,10 @@ public:
     Entity &operator=(const Entity &);
     ~Entity() = default;
     friend std::ostream &operator<<(std::ostream &, const Entity &);
+
+    void load() override;
+    void draw(sf::RenderWindow &) override;
+
+    virtual bool takeDamage(const int &);
+    virtual int hits(const Entity &other) const;
 };

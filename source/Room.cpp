@@ -268,7 +268,7 @@ int Room::checkCollisions(const Player &player)
 {
     for (const auto &wall : walls)
     {
-        if(player.boxCollidesWith(wall))
+        if(player.collidesWith(wall))
             return -2;
     }
 
@@ -282,7 +282,7 @@ int Room::checkCollisions(const Player &player)
     
     for (int i = 0; i < doorCount; i++)
     {
-        if (player.boxCollidesWith(doors[i]))
+        if (player.collidesWith(doors[i]))
         {
             if (open)
                 return doorDirections[i];

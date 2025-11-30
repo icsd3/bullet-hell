@@ -14,15 +14,15 @@ class Enemy : public Entity
     bool canFire();
 
 public:
-    static Enemy spawnEnemy(const sf::Texture &, const sf::Vector2f &, float, const int &);
-
-    void load(const sf::Texture &);
-    void draw(sf::RenderWindow &);
-    std::vector<Projectile> update(const sf::Vector2f &, const sf::Texture &);
-    bool takeDamage(const int &);
-
     Enemy(const Enemy &) = default;
     Enemy &operator=(const Enemy &);
     ~Enemy() = default;
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
+
+    void load() override;
+    void draw(sf::RenderWindow &) override;
+    bool takeDamage(const int &) override;
+
+    std::vector<Projectile> update(const sf::Vector2f &, const sf::Texture &);
+    static Enemy spawnEnemy(const sf::Texture &, const sf::Vector2f &, float, const int &);
 };

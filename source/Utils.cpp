@@ -4,6 +4,7 @@
 
 std::mt19937 Utils::rng(std::random_device{}());
 bool Utils::paused = false;
+int Utils::displayBoxes = 0;
 
 sf::Vector2f Utils::mapToScreen(const sf::Vector2f& logicalPos, const sf::RenderWindow& window) {
     return sf::Vector2f(
@@ -36,4 +37,16 @@ bool Utils::changePaused(const bool change)
     if (change)
         paused = !paused;
     return paused;
+}
+
+int Utils::changeDisplayBoxes(const bool change)
+{
+    if (change)
+    {
+        if (displayBoxes == 2)
+            displayBoxes = 0;
+        else
+            displayBoxes++;
+    }
+    return displayBoxes;
 }

@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Player::Player(const sf::Texture &tex)
-    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.2f, 100), currentWeapon(nullptr), texture(tex)
+    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.2f, 100), currentWeapon(nullptr)
 {
 }
 
@@ -46,6 +46,7 @@ void Player::update(const float &dt, const sf::Vector2f &target)
         dir /= distance;
         sprite.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
         collisionBox.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
+        hitBox.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
         position = sprite.getPosition();
         if (dir.x > 0.f)
         {
@@ -64,6 +65,8 @@ void Player::update(const float &dt, const sf::Vector2f &target)
 
 void Player::load()
 {   
+    Entity::load();
+
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
     file >> data;
@@ -79,41 +82,8 @@ void Player::load()
         0.f
     ));
     currentWeapon = &weapons.back();
-    sf::FloatRect bounds = sprite.getLocalBounds();
-    sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
-    sprite.setPosition(position);
-
-    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 30.f;
-    sprite.setScale(sf::Vector2f(scale, scale));
-    
-    if (orientation)
-    {
-        sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
-    }
-    else
-    {
-        sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
-    }
-
-    collisionBox.setFillColor(sf::Color(0, 0, 255, 100));
-    collisionBox.setSize(sf::Vector2f(scale * 0.7f * texture.getSize().x, scale * 0.4f * texture.getSize().y));
-    collisionBox.setOrigin(sf::Vector2f(collisionBox.getSize().x / 2.f, collisionBox.getSize().y));
-    collisionBox.setPosition(sf::Vector2f(position.x, position.y + scale * 0.5f * texture.getSize().x));
 
     currentWeapon->reset();
-}
-
-void Player::draw(sf::RenderWindow &window)
-{
-    sf::Sprite drawSprite = sprite;
-    drawSprite.setPosition(Utils::mapToScreen(position, window));
-    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
-    drawSprite.scale(scaleFactor);
-    window.draw(drawSprite);
-    // sf::RectangleShape drawCollisionBox = collisionBox;
-    // drawCollisionBox.setPosition(Utils::mapToScreen(collisionBox.getPosition(), window));
-    // drawCollisionBox.scale(scaleFactor);
-    // window.draw(drawCollisionBox);
 }
 
 sf::Vector2i Player::getHealthStatus() const
@@ -132,6 +102,7 @@ void Player::setPosition(const sf::Vector2f &newPos)
     position = newPos;
     sprite.setPosition(newPos);
     collisionBox.move(offset);
+    hitBox.move(offset);
 }
 
 std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex)
@@ -154,14 +125,4 @@ bool Player::takeDamage(const int &dmg)
 bool Player::canFire()
 {
     return currentWeapon->canFire();
-}
-
-bool Player::boxCollidesWith(const sf::RectangleShape &rect) const
-{
-    return (collisionBox.getGlobalBounds().findIntersection(rect.getGlobalBounds())).has_value();
-}
-
-bool Player::boxCollidesWith(const Object &obj) const
-{
-    return obj.collidesWith(collisionBox);
 }

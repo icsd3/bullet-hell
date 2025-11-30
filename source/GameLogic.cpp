@@ -197,6 +197,9 @@ bool Game::handleInputs()
             else if(event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::I)
                 std::cout << *this;
 
+            else if(event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::H)
+                Utils::changeDisplayBoxes(1);
+
             else if(openSettings)
             {
                 int action = settings.handleInput(window, *event);
