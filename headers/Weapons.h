@@ -25,8 +25,7 @@ public:
     ~Weapon() = default;
     friend std::ostream &operator<<(std::ostream &, const Weapon &);
 
-    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &, const sf::Texture &) const;
-    bool canFire();
+    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &, const sf::Texture &);
     void reset();
     void update();
 };

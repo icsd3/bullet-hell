@@ -11,8 +11,6 @@ class Enemy : public Entity
     sf::RectangleShape maxHealthBar;
     sf::RectangleShape currentHealthBar;
 
-    bool canFire();
-
 public:
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
 

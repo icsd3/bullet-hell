@@ -75,17 +75,10 @@ std::vector<Projectile> Enemy::update(const sf::Vector2f &target, const sf::Text
 {
     weapon.update();
     std::vector<Projectile> bullets;
-    if (canFire())
-    {
-        bullets = weapon.fire(position, target, tex);
-        weapon.reset();  // Reset cooldown only after actually firing
-    }
-    return bullets;
-}
 
-bool Enemy::canFire()
-{
-    return weapon.canFire();
+    bullets = weapon.fire(position, target, tex);
+
+    return bullets;
 }
 
 bool Enemy::takeDamage(const int &dmg)

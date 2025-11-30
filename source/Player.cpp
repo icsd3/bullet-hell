@@ -108,11 +108,9 @@ void Player::setPosition(const sf::Vector2f &newPos)
 std::vector<Projectile> Player::fire(const sf::Vector2f &target, const sf::Texture &tex) const
 {
     std::vector<Projectile> bullets;
-    if (currentWeapon->canFire())
-    {
-        currentWeapon->reset();
-        bullets = currentWeapon->fire(position, target, tex);;
-    }
+
+    bullets = currentWeapon->fire(position, target, tex);
+    
     return bullets;
 }
 

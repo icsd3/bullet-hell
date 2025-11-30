@@ -45,27 +45,25 @@ std::ostream &operator<<(std::ostream &os, const Weapon &weapon)
     return os;
 }
 
-std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target, const sf::Texture &texture) const
+std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target, const sf::Texture &texture)
 {
     std::vector<Projectile> bullets;
-    for(int i = 0; i < bullet_nr; i++)
+    if ( weaponClock.getElapsedTime().asSeconds() >= (1 / fire_rate + offset))
     {
-        sf::Vector2f direction = target - position;
-        direction = direction.normalized();
-        std::uniform_real_distribution<float> dist(spread_angle * -0.5f, spread_angle * 0.5f);
-        std::mt19937 &rng =Utils::getRng();
-        sf::Angle randomAngle = sf::degrees(dist(rng));
-        direction = direction.rotatedBy(randomAngle);
-        Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", texture, bulletSpeed, damage, direction, range);
-        bullets.push_back(projectile);
+        weaponClock.restart();
+        for(int i = 0; i < bullet_nr; i++)
+        {
+            sf::Vector2f direction = target - position;
+            direction = direction.normalized();
+            std::uniform_real_distribution<float> dist(spread_angle * -0.5f, spread_angle * 0.5f);
+            std::mt19937 &rng =Utils::getRng();
+            sf::Angle randomAngle = sf::degrees(dist(rng));
+            direction = direction.rotatedBy(randomAngle);
+            Projectile projectile = Projectile(true, position, true, "textures/player_projectile.png", texture, bulletSpeed, damage, direction, range);
+            bullets.push_back(projectile);
+        }
     }
     return bullets;
-}
-
-bool Weapon::canFire()
-{
-    float dt = weaponClock.getElapsedTime().asSeconds();
-    return dt >= (1 / fire_rate + offset);
 }
 
 void Weapon::reset()
