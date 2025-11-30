@@ -23,7 +23,7 @@ public:
     Object(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &);
     Object(const Object &);
     Object &operator=(const Object &);
-    ~Object() = default;
+    virtual ~Object() = default;
     friend std::ostream &operator<<(std::ostream &, const Object &);
 
     bool collidesWith(const Object &) const;

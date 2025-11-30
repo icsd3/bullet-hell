@@ -89,7 +89,7 @@ int Entity::hits(const Entity &other) const
         return t.transformPoint(s.getPoint(i));
     };
 
-    auto project = [](auto& getPointFunc, const sf::ConvexShape& s, const sf::Transform& t, const sf::Vector2f& axis, float& min, float& max)
+    auto project = [](const auto& getPointFunc, const sf::ConvexShape& s, const sf::Transform& t, const sf::Vector2f& axis, float& min, float& max)
     {
         sf::Vector2f p0 = getPointFunc(s, t, 0);
         min = max = p0.x * axis.x + p0.y * axis.y;
