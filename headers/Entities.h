@@ -16,7 +16,7 @@ protected:
     // sf::Clock animationClock;
 
 public:
-    Entity(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, const float, const int);
+    Entity(const sf::Vector2f &, const bool &, sf::Texture &, const float, const int);
     Entity(const Entity &);
     Entity &operator=(const Entity &);
     friend std::ostream &operator<<(std::ostream &, const Entity &);

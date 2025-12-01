@@ -4,12 +4,12 @@
 #include <iostream>
 #include <fstream>
 
-Enemy::Enemy(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
-    : Entity(ec, pos, ori, tf, tex, spd, mh), weapon(ew)
+Enemy::Enemy(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
+    : Entity(pos, ori, tex, spd, mh), weapon(ew)
 {
 }
 
-Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, const std::string &prpath, sf::Texture &prtex)
+Enemy Enemy::spawnEnemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, sf::Texture &prtex)
 {
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
@@ -24,10 +24,9 @@ Enemy Enemy::spawnEnemy(const sf::Texture &tex, const sf::Vector2f &pos, float s
         w["range"],
         w["bullet_speed"],
         0.3f,
-        prpath,
         prtex
     );
-    Enemy enemy(true, pos, false, "textures/enemy.png", tex, spd, mh, ew);
+    Enemy enemy(pos, false, tex, spd, mh, ew);
     return enemy;
 }
 
@@ -35,10 +34,10 @@ void Enemy::load()
 {
     Entity::load();
 
-    maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
+    maxHealthBar.setSize(sf::Vector2f(sprite.value().getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
     maxHealthBar.setFillColor(sf::Color(75, 0, 0, 175));
     maxHealthBar.setOrigin(sf::Vector2f(maxHealthBar.getLocalBounds().size.x / 2.f, maxHealthBar.getLocalBounds().size.y / 2.f));
-    maxHealthBar.setPosition(sf::Vector2f(position.x, position.y - sprite.getGlobalBounds().size.y / 2.f - maxHealthBar.getSize().y));
+    maxHealthBar.setPosition(sf::Vector2f(position.x, position.y - sprite.value().getGlobalBounds().size.y / 2.f - maxHealthBar.getSize().y));
     maxHealthBar.setOutlineThickness(2.f);
     maxHealthBar.setOutlineColor(sf::Color::Black);
 

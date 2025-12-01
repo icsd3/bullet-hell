@@ -12,7 +12,7 @@ class Projectile : public Entity
     float range;
 
 public:
-    Projectile(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float, const int &, const sf::Vector2f &, const float &);    
+    Projectile(const sf::Vector2f &, const bool &, sf::Texture &, float, const int &, const sf::Vector2f &, const float &);    
     friend std::ostream &operator<<(std::ostream &, const Projectile &);
 
     void load() override;

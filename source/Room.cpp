@@ -1,33 +1,9 @@
 #include "../headers/Room.h"
 #include "../headers/Utils.h"
 
-Room::Room(const bool &u, const bool &r, const bool &d, const bool &l, const sf::Texture &doorV, const sf::Texture &doorH, const sf::Texture &background)
-    :backgroundSprite(background), up(nullptr), right(nullptr), down(nullptr), left(nullptr)
+Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background)
+    :backgroundSprite(background), up(nullptr), right(nullptr), down(nullptr), left(nullptr), doorVertical(dv), doorHorizontal(dh)
 {
-    if(u)
-    {
-        sf::Sprite door(doorV);
-        doorUp.emplace(door);
-    }
-
-    if(r)
-    {
-        sf::Sprite door(doorH);
-        doorRight.emplace(door);
-    }
-
-    if(d)
-    {
-        sf::Sprite door(doorV);
-        doorDown.emplace(door);
-    }
-
-    if(l)
-    {
-        sf::Sprite door(doorH);
-        doorLeft.emplace(door);
-    }
-
     animationClock.reset();
 }
 
@@ -38,105 +14,91 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
     down = d;
     left = l;
 
-    sf::IntRect texRect({0, 0}, {300, 300});
-
-    if (doorUp)
-    {
-        doorUp->setOrigin({150, 0});
-        doorUp->setPosition(sf::Vector2f(LOGICAL_WIDTH / 2, -66.5));
-        doorUp->setTextureRect(texRect);
-    }
-
-    if (doorRight)
-    {
-        doorRight->setOrigin({300, 150});
-        doorRight->setPosition(sf::Vector2f(LOGICAL_WIDTH + 66.5, LOGICAL_HEIGHT / 2));
-        doorRight->setTextureRect(texRect);
-    }
-
-    if (doorDown)
-    {
-        doorDown->setOrigin({150, 0});
-        doorDown->setPosition(sf::Vector2f(LOGICAL_WIDTH / 2, LOGICAL_HEIGHT + 66.5));
-        doorDown->setScale({1, -1});
-        doorDown->setTextureRect(texRect);
-    }
-
-    if (doorLeft)
-    {
-        doorLeft->setOrigin({300, 150});
-        doorLeft->setPosition(sf::Vector2f(-66.5, LOGICAL_HEIGHT / 2));
-        doorLeft->setScale({-1, 1});
-        doorLeft->setTextureRect(texRect);
-    }
-
     for(int i = 0; i < 8; i++)
     {
-        sf::RectangleShape wall;
-        wall.setFillColor(sf::Color(255, 0, 0, 100));
+        sf::Vector2f position;
+        sf::Vector2f size;
+        
         if (i < 4)
         {
-            wall.setSize({900, 150});
-            wall.setPosition(sf::Vector2f(i % 2 * 1020, i / 2 * 930));
+            size = {900, 150};
+            position = {i % 2 * 1020, i / 2 * 930};
         }
         else
         {
-            wall.setSize({150, 330});
-            wall.setPosition(sf::Vector2f(((i + 1) / 2) % 2 * 1770, i / 6 * 450  + 150));
+            size = {150, 330};
+            position = {((i + 1) / 2) % 2 * 1770, i / 6 * 450  + 150};
         }
+
+        Object wall(position, false, size);
         walls.push_back(wall);
+        walls.back().load();
     }
 
     for(int i = 0; i < 4; i++)
     {
+        sf::Vector2f position;
+        sf::Vector2f size;
+
         if (i == 0 && up == nullptr)
         {
-            sf::RectangleShape wall;
-            wall.setFillColor(sf::Color(255, 0, 0, 100));
-            wall.setSize({120, 150});
-            wall.setPosition(sf::Vector2f(900, 0));
+            size = {120, 150};
+            position = {900, 0};
+            Object wall(position, false, size);
             walls.push_back(wall);
+            walls.back().load();
             continue;
         }
+
         else if (i == 1 && right == nullptr)
         {
-            sf::RectangleShape wall;
-            wall.setFillColor(sf::Color(255, 0, 0, 100));
-            wall.setSize({150, 120});
-            wall.setPosition(sf::Vector2f(1770, 480));
+            size = {150, 120};
+            position = {1770, 480};
+            Object wall(position, false, size);
             walls.push_back(wall);
+            walls.back().load();
             continue;
         }
+
         else if (i == 2 && down == nullptr)
         {
-            sf::RectangleShape wall;
-            wall.setFillColor(sf::Color(255, 0, 0, 100));
-            wall.setSize({120, 150});
-            wall.setPosition(sf::Vector2f(900, 930));
+            size = {120, 150};
+            position = {900, 930};
+            Object wall(position, false, size);
             walls.push_back(wall);
+            walls.back().load();
             continue;
         }
+        
         else if (i == 3 && left == nullptr)
         {
-            sf::RectangleShape wall;
-            wall.setFillColor(sf::Color(255, 0, 0, 100));
-            wall.setSize({150, 120});
-            wall.setPosition(sf::Vector2f(0, 480));
+            size = {150, 120};
+            position = {0, 480};
+            Object wall(position, false, size);
             walls.push_back(wall);
+            walls.back().load();
             continue;
         }
-        sf::RectangleShape door;
-        door.setFillColor(sf::Color(0, 255, 0, 100));
+
+        bool orientation = false;
+        const sf::Texture *texturePointer;
+
         if (i == 0 || i == 2)
         {
-            door.setSize({120, 150});
-            door.setPosition(sf::Vector2f(900, (i == 0) ? 0 : 930));
+            size = {120, 150};
+            position = {960, (i == 0) ? 75 : 1005};
+            texturePointer = &doorVertical;
         }
         else
         {
-            door.setSize({150, 120});
-            door.setPosition(sf::Vector2f((i == 1) ? 1770 : 0, 480));
+            size = {120, 150};
+            position = {(i == 1) ? 1845 : 75, 540};
+            texturePointer = &doorHorizontal;
         }
+
+        const sf::Texture &texture = *texturePointer;
+
+        Door door(position, orientation, texture, size, i);
         doors.push_back(door);
     }
 }
@@ -149,65 +111,23 @@ void Room::draw(sf::RenderWindow &window)
     drawBg.scale(scaleFactor);
     window.draw(drawBg);
 
-    if(doorUp)
+    for (auto &door : doors)
     {
-        sf::Sprite drawDoor = doorUp.value();
-        drawDoor.setPosition(Utils::mapToScreen(doorUp.value().getPosition(), window));
-        drawDoor.scale(scaleFactor);
-        window.draw(drawDoor);
+        door.draw(window);
     }
 
-    if(doorRight)
+    for (auto &wall : walls)
     {
-        sf::Sprite drawDoor = doorRight.value();
-        drawDoor.setPosition(Utils::mapToScreen(doorRight.value().getPosition(), window));
-        drawDoor.scale(scaleFactor);
-        window.draw(drawDoor);
+        wall.draw(window);
     }
-
-    if(doorDown)
-    {
-        sf::Sprite drawDoor = doorDown.value();
-        drawDoor.setPosition(Utils::mapToScreen(doorDown.value().getPosition(), window));
-        drawDoor.scale(scaleFactor);
-        window.draw(drawDoor);
-    }
-
-    if(doorLeft)
-    {
-        sf::Sprite drawDoor = doorLeft.value();
-        drawDoor.setPosition(Utils::mapToScreen(doorLeft.value().getPosition(), window));
-        drawDoor.scale(scaleFactor);
-        window.draw(drawDoor);
-    }
-
-    // for (auto &wall : walls)
-    // {
-    //     sf::RectangleShape drawWall = wall;
-    //     drawWall.setPosition(Utils::mapToScreen(wall.getPosition(), window));
-    //     drawWall.scale(scaleFactor);
-    //     window.draw(drawWall);
-    // }
-
-    // for (auto &door : doors)
-    // {
-    //     sf::RectangleShape drawDoor = door;
-    //     drawDoor.setPosition(Utils::mapToScreen(door.getPosition(), window));
-    //     drawDoor.scale(scaleFactor);
-    //     window.draw(drawDoor);
-    // }
 }
 
 void Room::animate(const int &frame)
 {
-    if (doorUp)
-        doorUp->setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
-    if (doorRight)
-        doorRight->setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
-    if (doorDown)
-        doorDown->setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
-    if (doorLeft)
-        doorLeft->setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
+    for (auto &door : doors)
+    {
+        door.update(frame);
+    }
 }
 
 std::pair<int, Room*> Room::update(const Player &player, const bool &finished)
@@ -275,10 +195,10 @@ int Room::checkCollisions(const Player &player)
     int doorDirections[4];
     int doorCount = 0;
     
-    if (doorUp) doorDirections[doorCount++] = 0;
-    if (doorRight) doorDirections[doorCount++] = 1;
-    if (doorDown) doorDirections[doorCount++] = 2;
-    if (doorLeft) doorDirections[doorCount++] = 3;
+    if (up != nullptr) doorDirections[doorCount++] = 0;
+    if (right != nullptr) doorDirections[doorCount++] = 1;
+    if (down != nullptr) doorDirections[doorCount++] = 2;
+    if (left != nullptr) doorDirections[doorCount++] = 3;
     
     for (int i = 0; i < doorCount; i++)
     {
@@ -292,4 +212,15 @@ int Room::checkCollisions(const Player &player)
     }
     
     return -1;
+}
+
+std::ostream &operator<<(std::ostream &os, const Room &room)
+{
+    os << "Room (Open: " << (room.open ? "Yes" : "No") << ", Neighbors: ";
+    if (room.up) os << "Up ";
+    if (room.right) os << "Right ";
+    if (room.down) os << "Down ";
+    if (room.left) os << "Left ";
+    os << ")";
+    return os;
 }

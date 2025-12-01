@@ -9,7 +9,7 @@
 
 class Player : public Entity
 {
-    explicit Player(const sf::Texture &, const std::string &, sf::Texture &);
+    explicit Player(sf::Texture &, sf::Texture &);
     Player(const Player &) = delete;
     Player &operator=(const Player &) = delete;
 
@@ -20,7 +20,7 @@ class Player : public Entity
 
 public:
     static Player &getInstance();
-    static Player &Initialize(const sf::Texture &, const std::string &, sf::Texture &);
+    static Player &Initialize(sf::Texture &, sf::Texture &);
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
     void load() override;

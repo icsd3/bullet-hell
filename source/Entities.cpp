@@ -1,16 +1,14 @@
 #include "../headers/Entities.h"
 #include <iostream>
 
-Entity::Entity(const bool &ec, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex, const float spd, const int mh)
-    : Object(ec, pos, ori, tf, tex), speed(spd), maxHealth(mh), currentHealth(mh)
+Entity::Entity(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int mh)
+    : Object(pos, ori, tex), speed(spd), maxHealth(mh), currentHealth(mh)
 {
-    isEntity = true;
 }
 
 Entity::Entity(const Entity &other)
     : Object(other), speed(other.speed), maxHealth(other.maxHealth), currentHealth(other.currentHealth), hitBox(other.hitBox)
 {
-    isEntity = true;
 }
 
 Entity &Entity::operator=(const Entity &other)
@@ -21,7 +19,6 @@ Entity &Entity::operator=(const Entity &other)
         speed = other.speed;
         maxHealth = other.maxHealth;
         currentHealth = other.currentHealth;
-        isEntity = true;
         hitBox = other.hitBox;
     }
     return *this;
@@ -39,15 +36,15 @@ void Entity::load()
 {
     Object::load();
 
-    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.getSize().x) / 30.f;
-    sprite.setScale(sf::Vector2f(scale, scale));
-    collisionBox.setSize(sf::Vector2f(scale * 0.7f * texture.getSize().x, scale * 0.4f * texture.getSize().y));
+    float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.value()->getSize().x) / 30.f;
+    sprite.value().setScale(sf::Vector2f(scale, scale));
+    collisionBox.setSize(sf::Vector2f(scale * 0.7f * texture.value()->getSize().x, scale * 0.4f * texture.value()->getSize().y));
     collisionBox.setOrigin(sf::Vector2f(collisionBox.getSize().x / 2.f, collisionBox.getSize().y));
-    collisionBox.setPosition(sf::Vector2f(position.x, position.y + scale * 0.5f * texture.getSize().x));
+    collisionBox.setPosition(sf::Vector2f(position.x, position.y + scale * 0.5f * texture.value()->getSize().x));
 
-    sf::FloatRect bounds = sprite.getLocalBounds();
-    sf::Transform t = sprite.getTransform();
-    hitBox.setFillColor(sf::Color(0, 255, 0, 255));
+    sf::FloatRect bounds = sprite.value().getLocalBounds();
+    sf::Transform t = sprite.value().getTransform();
+    hitBox.setFillColor(sf::Color(0, 200, 0, 150));
     hitBox.setPointCount(6);
     hitBox.setPoint(0, t.transformPoint({bounds.position.x + 4.5f / 14 * bounds.size.x, bounds.position.y}));
     hitBox.setPoint(1, t.transformPoint({bounds.position.x + 9.5f / 14 * bounds.size.x, bounds.position.y}));

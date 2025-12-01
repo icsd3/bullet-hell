@@ -3,6 +3,7 @@
 #include "../headers/Enemies.h"
 #include "../headers/Projectiles.h"
 #include "../headers/Player.h"
+#include "../headers/Door.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -11,12 +12,10 @@ class Room
 {
     sf::Sprite backgroundSprite;
 
-    std::vector<sf::RectangleShape> walls;
-    std::vector<sf::RectangleShape> doors;
-    std::optional<sf::Sprite> doorUp;
-    std::optional<sf::Sprite> doorRight;
-    std::optional<sf::Sprite> doorDown;
-    std::optional<sf::Sprite> doorLeft;
+    std::vector<Object> walls;
+    std::vector<Door> doors;
+    const sf::Texture &doorVertical;
+    const sf::Texture &doorHorizontal;
     // std::vector<Object> obstacles;
     Room *up;
     Room *right;
@@ -28,7 +27,7 @@ class Room
     void animate(const int &);
 
 public:
-    Room(const bool &, const bool &, const bool &, const bool &, const sf::Texture &, const sf::Texture &, const sf::Texture &);
+    Room(const sf::Texture &, const sf::Texture &, const sf::Texture &);
     Room(const Room &) = default;
     Room &operator=(const Room &) = default;
     ~Room() = default;
@@ -37,4 +36,5 @@ public:
     void draw(sf::RenderWindow &);
     std::pair<int, Room*> update(const Player &, const bool &);
     int checkCollisions(const Player &);
+    friend std::ostream &operator<<(std::ostream &, const Room &);
 };

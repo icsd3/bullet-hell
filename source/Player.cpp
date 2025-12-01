@@ -1,8 +1,8 @@
 #include "../headers/Player.h"
 #include "../headers/Utils.h"
 
-Player::Player(const sf::Texture &tex, const std::string &prpath, sf::Texture &prtex)
-    : Entity(false, {LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, "textures/player.png", tex, 0.2f, 100), currentWeapon(nullptr)
+Player::Player(sf::Texture &tex, sf::Texture &prtex)
+    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, tex, 0.2f, 100), currentWeapon(nullptr)
 {
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
@@ -17,7 +17,6 @@ Player::Player(const sf::Texture &tex, const std::string &prpath, sf::Texture &p
         w["range"],
         w["bullet_speed"],
         0.f,
-        prpath,
         prtex
     ));
     currentWeapon = &weapons.back();
@@ -30,9 +29,9 @@ Player &Player::getInstance()
     return *instance;
 }
 
-Player &Player::Initialize(const sf::Texture &tex, const std::string &prpath, sf::Texture &prtex)
+Player &Player::Initialize(sf::Texture &tex, sf::Texture &prtex)
 {
-    instance = std::unique_ptr<Player>(new Player(tex, prpath, prtex));
+    instance = std::unique_ptr<Player>(new Player(tex, prtex));
     return *instance;
 }
 
@@ -61,19 +60,19 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     if (distance > 5.0f)
     {
         dir /= distance;
-        sprite.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
+        sprite.value().move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
         collisionBox.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
         hitBox.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
-        position = sprite.getPosition();
+        position = sprite.value().getPosition();
         if (dir.x > 0.f)
         {
             orientation = true;
-            sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
+            sprite.value().setScale(sf::Vector2f(-std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
         }
         else
         {
             orientation = false;
-            sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
+            sprite.value().setScale(sf::Vector2f(std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
         }
     }
 
@@ -94,14 +93,14 @@ sf::Vector2i Player::getHealthStatus() const
 
 sf::Vector2f Player::getPosition() const
 {
-    return sprite.getPosition();
+    return sprite.value().getPosition();
 }
 
 void Player::setPosition(const sf::Vector2f &newPos)
 {
     sf::Vector2f offset = newPos - position;
     position = newPos;
-    sprite.setPosition(newPos);
+    sprite.value().setPosition(newPos);
     collisionBox.move(offset);
     hitBox.move(offset);
 }

@@ -96,6 +96,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Minimap.cpp
     headers/Utils.h
     source/Utils.cpp
+    headers/Door.h
+    source/Door.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

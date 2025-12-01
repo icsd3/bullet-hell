@@ -375,38 +375,7 @@ std::ostream &operator<<(std::ostream &os, const Game &game)
     os << game.augment << "\n";
     os << game.settings << "\n";
     os << game.player << "\n";
-    // os << "Enemies:\n";
-    // os << "    Count: " << game.enemies.size() << "\n";
-    // if(game.enemies.size() != 0)
-    //     for(size_t i=0; i<game.enemies.size(); i++)
-    //     {
-    //         os << "    Enemy " << i+1 << ":\n        "
-    //         << game.enemies[i] << "\n\n";
-    //     }
-    // else 
-    //     os << "\n";
-    // os << "Player projectiles:\n"
-    //    << "    Count: " << game.playerProjectiles.size() << "\n";
-    // if(game.playerProjectiles.size() != 0)
-    //     for(size_t i=0; i<game.playerProjectiles.size(); i++)
-    //     {
-    //         os << "    Projectile " << i+1 << ":\n        "
-    //         << game.playerProjectiles[i] << "\n\n";
-    //     }
-    // else
-    //     os << "\n";
-    // os << "Enemy projectiles:\n"
-    //    << "    Count: " << game.enemyProjectiles.size() << "\n";
-    // if(game.enemyProjectiles.size() != 0)
-    //     for(size_t i=0; i<game.enemyProjectiles.size(); i++)
-    //     {
-    //         os << "    Projectile " << i+1 << ":\n        "
-    //        << game.enemyProjectiles[i] << "\n\n";
-    //     }
-    // else 
-    //     os << "\n";
-    // os << "GUI status:\n"
-    //    << game.gui << "\n\n";
+    os << game.level << "\n";
     os << "Window size: " << game.window.getSize().x << "x" << game.window.getSize().y << "\n\n";
     os << "Current State: " << game.currentState << "\n\n";
     os << "Target Position: (" << game.target.x << ", " << game.target.y << ")\n";

@@ -113,7 +113,7 @@ void Level::generateRooms(const int n)
 
         map[i][j] = rooms.size() + 1;
 
-        rooms.emplace_back(up, right, down, left, doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
+        rooms.emplace_back(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
 
         if (up && !visited[i - 1][j])
         {
@@ -191,7 +191,7 @@ void Level::spawnEnemies(const int &nrOfEnemies)
 {
     for (int i = 1; i <= nrOfEnemies; i++)
     {
-        enemies.push_back(Enemy::spawnEnemy(enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100, enemyProjectilePath, enemyProjectileTexture));
+        enemies.push_back(Enemy::spawnEnemy(enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100, enemyProjectileTexture));
         enemies.back().load();
     }
 }
@@ -295,7 +295,7 @@ void Level::draw(sf::RenderWindow &window)
     gui.draw(window);
 }
 
-void Level::update(const float &dt, const sf::Vector2f &target)
+void Level::update(const float &dt, sf::Vector2f &target)
 {
     int moved = -1;
     sf::Vector2f oldPosition = player.getPosition();
@@ -357,6 +357,7 @@ void Level::update(const float &dt, const sf::Vector2f &target)
             player.setPosition({LOGICAL_WIDTH * 0.9f, LOGICAL_HEIGHT * 0.5f});
             moved = 3;
         }
+        target = player.getPosition();
     }
 
     for (size_t i = 0; i < playerProjectiles.size();)
@@ -441,4 +442,46 @@ void Level::spawnPlayerProjectile(const sf::Vector2f &target)
         playerProjectiles.push_back(bullet);
         playerProjectiles.back().load();
     }
+}
+
+std::ostream &operator<<(std::ostream &os, const Level &level)
+{
+    os << "Level:\n";
+    os << level.gui << "\n\n";
+    if (level.currentRoom)
+        os << "    Current Room: " << *level.currentRoom << "\n";
+    else
+        os << "    Current Room: None\n";
+
+    os << "    Enemies:\n";
+    os << "        Count: " << level.enemies.size() << "\n";
+    if (!level.enemies.empty())
+    {
+        for (size_t i = 0; i < level.enemies.size(); i++)
+        {
+            os << "        Enemy " << i + 1 << ":\n            " << level.enemies[i] << "\n\n";
+        }
+    }
+
+    os << "    Player Projectiles:\n";
+    os << "        Count: " << level.playerProjectiles.size() << "\n";
+    if (!level.playerProjectiles.empty())
+    {
+        for (size_t i = 0; i < level.playerProjectiles.size(); i++)
+        {
+            os << "        Projectile " << i + 1 << ":\n            " << level.playerProjectiles[i] << "\n\n";
+        }
+    }
+
+    os << "    Enemy Projectiles:\n";
+    os << "        Count: " << level.enemyProjectiles.size() << "\n";
+    if (!level.enemyProjectiles.empty())
+    {
+        for (size_t i = 0; i < level.enemyProjectiles.size(); i++)
+        {
+            os << "        Projectile " << i + 1 << ":\n            " << level.enemyProjectiles[i] << "\n\n";
+        }
+    }
+    
+    return os;
 }

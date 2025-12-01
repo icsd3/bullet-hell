@@ -18,4 +18,5 @@ public:
     void load(const int [5][7]);
     void draw(sf::RenderWindow &);
     void update(const int &);
+    friend std::ostream &operator<<(std::ostream &, const Minimap &);
 };

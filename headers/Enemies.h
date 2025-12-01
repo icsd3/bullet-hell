@@ -5,7 +5,7 @@
 
 class Enemy : public Entity
 {
-    Enemy(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, const float, const int &, const Weapon &);
+    Enemy(const sf::Vector2f &, const bool &, sf::Texture &, const float, const int &, const Weapon &);
     Weapon weapon;
 
     sf::RectangleShape maxHealthBar;
@@ -19,5 +19,5 @@ public:
     bool takeDamage(const int &) override;
 
     std::vector<Projectile> update(const sf::Vector2f &);
-    static Enemy spawnEnemy(const sf::Texture &, const sf::Vector2f &, float, const int &, const std::string &, sf::Texture &);
+    static Enemy spawnEnemy(sf::Texture &, const sf::Vector2f &, float, const int &, sf::Texture &);
 };

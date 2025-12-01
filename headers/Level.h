@@ -36,13 +36,13 @@ class Level
     std::vector<Room> rooms;
     Room *currentRoom = nullptr;
     GUI &gui = GUI::getInstance();
-    Player &player = Player::Initialize(playerTexture, playerProjectilePath, playerProjectileTexture);
+    Player &player = Player::Initialize(playerTexture, playerProjectileTexture);
 
 public:
     static Level &getInstance();
     void generateRooms(const int);
     void spawnEnemies(const int &);
-    void update(const float &, const sf::Vector2f &);
+    void update(const float &, sf::Vector2f &);
     bool checkEnemyHits(const Projectile &);
     static bool checkPlayerHits(const Projectile &, Player &);
     void load(const int);
@@ -51,4 +51,5 @@ public:
     sf::Vector2f handleMovementInput(const bool &, const sf::RenderWindow &);
     static sf::Vector2f handleShootInput(const sf::RenderWindow &);
     void draw(sf::RenderWindow &);
+    friend std::ostream &operator<<(std::ostream &, const Level &);
 };

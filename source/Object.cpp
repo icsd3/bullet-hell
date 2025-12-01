@@ -1,13 +1,20 @@
 #include "../headers/Object.h"
 #include <iostream>
 
-Object::Object(const bool &pc, const sf::Vector2f &pos, const bool &ori, const std::string &tf, const sf::Texture &tex)
-    : entityCollision(pc), position(pos), orientation(ori), textureFile(tf), sprite(tex), texture(tex)
+Object::Object(const sf::Vector2f &pos, const bool &ori, const sf::Texture &tex)
+    : position(pos), orientation(ori), sprite(tex), texture(&tex)
 {
 }
 
+Object::Object(const sf::Vector2f &pos, const bool &ori, const sf::Vector2f &size)
+    : position(pos), orientation(ori), sprite(std::nullopt), texture(std::nullopt)
+{
+    collisionBox.setSize(size);
+    collisionBox.setPosition(position);
+}
+
 Object::Object(const Object &other)
-    : entityCollision(other.entityCollision), position(other.position), orientation(other.orientation), textureFile(other.textureFile), sprite(other.sprite), texture(other.texture), collisionBox(other.collisionBox)
+    : position(other.position), orientation(other.orientation), sprite(other.sprite), texture(other.texture), collisionBox(other.collisionBox)
 {
 }
 
@@ -15,10 +22,8 @@ Object &Object::operator=(const Object &other)
 {
     if (this != &other)
     {
-        entityCollision = other.entityCollision;
         position = other.position;
         orientation = other.orientation;
-        textureFile = other.textureFile;
         sprite = other.sprite;
         collisionBox = other.collisionBox;
     }
@@ -27,7 +32,7 @@ Object &Object::operator=(const Object &other)
 
 std::ostream &operator<<(std::ostream &os, const Object &object)
 {
-    os << "Object (Position: (" << object.position.x << ", " << object.position.y << "), Orientation: " << (object.orientation ? "right" : "left") << ", Texture: " << object.textureFile << ")";
+    os << "Object (Position: (" << object.position.x << ", " << object.position.y << "), Orientation: " << (object.orientation ? "right" : "left") << ")";
     return os;
 }
 
@@ -36,19 +41,17 @@ bool Object::collidesWith(const Object &other) const
     return (collisionBox.getGlobalBounds().findIntersection(other.collisionBox.getGlobalBounds())).has_value();
 }
 
-bool Object::collidesWith(const sf::RectangleShape &other) const
-{
-    return (collisionBox.getGlobalBounds().findIntersection(other.getGlobalBounds())).has_value();
-}
-
 void Object::draw(sf::RenderWindow &window)
 {
     sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
-    sf::Sprite drawSprite = sprite;
-    drawSprite.setPosition(Utils::mapToScreen(position, window));
-    drawSprite.scale(scaleFactor);
-    window.draw(drawSprite);
+    if (sprite)
+    {
+        sf::Sprite drawSprite = *sprite;
+        drawSprite.setPosition(Utils::mapToScreen(position, window));
+        drawSprite.scale(scaleFactor);
+        window.draw(drawSprite);
+    }
 
     if (Utils::changeDisplayBoxes(0) == 1)
     {
@@ -61,18 +64,21 @@ void Object::draw(sf::RenderWindow &window)
 
 void Object::load()
 {
-    sf::FloatRect bounds = sprite.getLocalBounds();
-    sprite.setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
-    sprite.setPosition(position);
-    
-    if (orientation)
+    if (sprite)
     {
-        sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
-    }
-    else
-    {
-        sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
+        sf::FloatRect bounds = sprite.value().getLocalBounds();
+        sprite.value().setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
+        sprite.value().setPosition(position);
+        
+        if (orientation)
+        {
+            sprite.value().setScale(sf::Vector2f(-std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
+        }
+        else
+        {
+            sprite.value().setScale(sf::Vector2f(std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
+        }
     }
 
-    collisionBox.setFillColor(sf::Color(0, 0, 255, 255));
+    collisionBox.setFillColor(sf::Color(0, 0, 200, 150));
 }

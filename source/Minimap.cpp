@@ -96,3 +96,9 @@ void Minimap::draw(sf::RenderWindow &window)
         window.draw(drawCell);
     }
 }
+
+std::ostream &operator<<(std::ostream &os, const Minimap &minimap)
+{
+    os << "Minimap (Current Position: (" << minimap.currentPos.first << ", " << minimap.currentPos.second << "))";
+    return os;
+}
