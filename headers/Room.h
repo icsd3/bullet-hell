@@ -14,8 +14,8 @@ class Room
 
     std::vector<Object> walls;
     std::vector<Door> doors;
-    const sf::Texture &doorVertical;
-    const sf::Texture &doorHorizontal;
+    const sf::Texture *doorVertical;
+    const sf::Texture *doorHorizontal;
     // std::vector<Object> obstacles;
     Room *up;
     Room *right;
