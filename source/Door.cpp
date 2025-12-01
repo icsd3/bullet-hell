@@ -1,6 +1,6 @@
 #include "../headers/Door.h"
 
-Door::Door(sf::Vector2f &pos, bool &ori, const sf::Texture &tex, sf::Vector2f &size, int &plc)
+Door::Door(sf::Vector2f &pos, bool &ori, const sf::Texture &tex, sf::Vector2f &size, const int &plc)
     : Object(pos, ori, tex), place(plc)
 {
     collisionBox.setFillColor(sf::Color(200, 0, 0, 150));
