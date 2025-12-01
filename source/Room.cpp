@@ -2,7 +2,7 @@
 #include "../headers/Utils.h"
 
 Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background)
-    :backgroundSprite(background), up(nullptr), right(nullptr), down(nullptr), left(nullptr), doorVertical(dv), doorHorizontal(dh)
+    :backgroundSprite(background), doorVertical(dv), doorHorizontal(dh), up(nullptr), right(nullptr), down(nullptr), left(nullptr)
 {
     animationClock.reset();
 }
@@ -22,12 +22,12 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
         if (i < 4)
         {
             size = {900, 150};
-            position = {i % 2 * 1020, i / 2 * 930};
+            position = sf::Vector2f(i % 2 * 1020, i / 2 * 930);
         }
         else
         {
             size = {150, 330};
-            position = {((i + 1) / 2) % 2 * 1770, i / 6 * 450  + 150};
+            position = sf::Vector2f(((i + 1) / 2) % 2 * 1770, i / 6 * 450  + 150);
         }
 
         Object wall(position, false, size);
@@ -86,13 +86,13 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
         if (i == 0 || i == 2)
         {
             size = {120, 150};
-            position = {960, (i == 0) ? 75 : 1005};
+            position = sf::Vector2f(960, (i == 0) ? 75 : 1005);
             texturePointer = &doorVertical;
         }
         else
         {
             size = {120, 150};
-            position = {(i == 1) ? 1845 : 75, 540};
+            position = sf::Vector2f((i == 1) ? 1845 : 75, 540);
             texturePointer = &doorHorizontal;
         }
 
