@@ -27,7 +27,6 @@ class Room
     bool open = false;
 
     sf::Texture *enemyTexture;
-    sf::Texture *playerProjectileTexture;
     sf::Texture *enemyProjectileTexture;
 
     std::vector<Enemy> enemies; 
@@ -37,7 +36,7 @@ class Room
     void animate(const unsigned int &);
 
 public:
-    Room(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &);
+    Room(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &);
     Room(const Room &) = default;
     Room &operator=(const Room &) = delete;
     ~Room() = default;

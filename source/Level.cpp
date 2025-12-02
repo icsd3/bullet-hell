@@ -113,7 +113,7 @@ void Level::generateRooms(const int n)
 
         map[i][j] = rooms.size() + 1;
 
-        rooms.emplace_back(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, playerProjectileTexture, enemyProjectileTexture);
+        rooms.emplace_back(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture);
 
         if (up && !visited[i - 1][j])
         {

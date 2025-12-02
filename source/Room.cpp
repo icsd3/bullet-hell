@@ -1,9 +1,9 @@
 #include "../headers/Room.h"
 #include "../headers/Utils.h"
 
-Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ppt, sf::Texture &ept)
+Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ept)
     :backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh), up(nullptr), right(nullptr), down(nullptr), left(nullptr),
-     enemyTexture(&et), playerProjectileTexture(&ppt), enemyProjectileTexture(&ept)
+     enemyTexture(&et), enemyProjectileTexture(&ept)
 {
     animationClock.reset();
 }
