@@ -3,7 +3,7 @@
 Door::Door(sf::Vector2f &pos, bool &ori, const sf::Texture &tex, sf::Vector2f &size, const int &plc)
     : Object(pos, ori, tex), place(plc)
 {
-    collisionBox.setFillColor(sf::Color(200, 0, 0, 150));
+    collisionBox.setFillColor(sf::Color(0, 0, 200, 150));
     collisionBox.setSize(size);
     collisionBox.setOrigin({size.x / 2, size.y / 2});
     collisionBox.setPosition(position);
@@ -51,6 +51,8 @@ void Door::load()
 void Door::update(const int &frame)
 {
     sprite.value().setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
+    if (frame * 300 + 300 == texture.value()->getSize().x)
+        collisionBox.setFillColor(sf::Color(0, 200, 0, 150));
 }
 
 std::ostream &operator<<(std::ostream &os, const Door &door)

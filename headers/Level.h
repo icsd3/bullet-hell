@@ -28,10 +28,6 @@ class Level
     sf::Texture doorVerticalTexture;
     sf::Texture doorHorizontalTexture;
 
-    std::vector<Enemy> enemies; 
-    std::vector<Projectile> playerProjectiles;
-    std::vector<Projectile> enemyProjectiles;
-
     int map[5][7];
     std::vector<Room> rooms;
     Room *currentRoom = nullptr;
@@ -40,16 +36,14 @@ class Level
 
 public:
     static Level &getInstance();
+    friend std::ostream &operator<<(std::ostream &, const Level &);
+
     void generateRooms(const int);
-    void spawnEnemies(const int &);
     void update(const float &, sf::Vector2f &);
-    bool checkEnemyHits(const Projectile &);
-    static bool checkPlayerHits(const Projectile &, Player &);
     void load(const int);
-    void spawnPlayerProjectile(const sf::Vector2f &);
     std::pair<int, sf::Vector2f> handleInput(const sf::Event &, const bool &, const sf::RenderWindow &);
     sf::Vector2f handleMovementInput(const bool &, const sf::RenderWindow &);
     static sf::Vector2f handleShootInput(const sf::RenderWindow &);
+    void playerFire(const sf::Vector2f &);
     void draw(sf::RenderWindow &);
-    friend std::ostream &operator<<(std::ostream &, const Level &);
 };

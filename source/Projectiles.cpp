@@ -13,8 +13,8 @@ void Projectile::load()
 
     float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.value()->getSize().x) / 50.f;
     sprite.value().setScale(sf::Vector2f(scale, scale));
-    collisionBox.setSize(sf::Vector2f(scale * texture.value()->getSize().x, scale * texture.value()->getSize().y));
-    collisionBox.setOrigin(sf::Vector2f(collisionBox.getSize().x / 2.f, collisionBox.getSize().y / 2.f));
+    collisionBox.setSize(sf::Vector2f(scale * texture.value()->getSize().x / 4.f, scale * texture.value()->getSize().y / 2.f));
+    collisionBox.setOrigin(sf::Vector2f(collisionBox.getSize().x * 2, collisionBox.getSize().y / 2.f));
     collisionBox.setPosition(sf::Vector2f(position.x, position.y));
     collisionBox.setRotation(rotation);
     sprite.value().setRotation(rotation);
@@ -44,7 +44,7 @@ bool Projectile::update(const float &dt)
     sf::Vector2f dir = position - origin;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
     
-    if (position.x < 100 || position.x > LOGICAL_WIDTH - 100 || position.y < 100 || position.y > LOGICAL_HEIGHT - 100 || distance > range)
+    if (distance > range)
     {
         return true;
     }

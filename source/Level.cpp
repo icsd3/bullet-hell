@@ -113,7 +113,7 @@ void Level::generateRooms(const int n)
 
         map[i][j] = rooms.size() + 1;
 
-        rooms.emplace_back(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
+        rooms.emplace_back(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, playerProjectileTexture, enemyProjectileTexture);
 
         if (up && !visited[i - 1][j])
         {
@@ -182,18 +182,8 @@ void Level::load(const int nr)
         }
     }
 
-    spawnEnemies(4);
     player.load();
     gui.load(map);
-}
-
-void Level::spawnEnemies(const int &nrOfEnemies)
-{
-    for (int i = 1; i <= nrOfEnemies; i++)
-    {
-        enemies.push_back(Enemy::spawnEnemy(enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100, enemyProjectileTexture));
-        enemies.back().load();
-    }
 }
 
 std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bool& controls, const sf::RenderWindow &window)
@@ -281,16 +271,6 @@ sf::Vector2f Level::handleShootInput(const sf::RenderWindow &window)
 void Level::draw(sf::RenderWindow &window)
 {
     currentRoom->draw(window);
-
-    for (auto &projectile : playerProjectiles)
-        projectile.draw(window);
-
-    for (auto &projectile : enemyProjectiles)
-        projectile.draw(window);
-
-    for (auto &enemy : enemies)
-        enemy.draw(window);
-
     player.draw(window);
     gui.draw(window);
 }
@@ -301,19 +281,18 @@ void Level::update(const float &dt, sf::Vector2f &target)
     sf::Vector2f oldPosition = player.getPosition();
     
     player.update(dt, target);
-    bool finished = enemies.empty();
 
-    std::pair<int, Room*> action = currentRoom->update(player, finished);
+    std::pair<int, Room*> action = currentRoom->update(dt);
 
     if (action.first == -2)
     {
         sf::Vector2f newPosition = player.getPosition();
         
         player.setPosition(sf::Vector2f(newPosition.x, oldPosition.y));
-        int testActionX = currentRoom->checkCollisions(player);
+        int testActionX = currentRoom->checkPlayerCollisions();
         
         player.setPosition(sf::Vector2f(oldPosition.x, newPosition.y));
-        int testActionY = currentRoom->checkCollisions(player);
+        int testActionY = currentRoom->checkPlayerCollisions();
         
         if (testActionX == -2 && testActionY == -2)
             player.setPosition(oldPosition);
@@ -331,8 +310,7 @@ void Level::update(const float &dt, sf::Vector2f &target)
     else if (action.second != nullptr)
     {
         currentRoom = action.second;
-        playerProjectiles.clear();
-        enemyProjectiles.clear();
+        currentRoom -> start();
 
         if (action.first == 0)
         {
@@ -360,128 +338,22 @@ void Level::update(const float &dt, sf::Vector2f &target)
         target = player.getPosition();
     }
 
-    for (size_t i = 0; i < playerProjectiles.size();)
-    {
-        if (playerProjectiles[i].update(dt))
-            playerProjectiles.erase(playerProjectiles.begin() + i);
-
-        else
-        {
-            if (checkEnemyHits(playerProjectiles[i]))
-                playerProjectiles.erase(playerProjectiles.begin() + i);
-
-            else
-                i++;
-        }
-    }
-
-    sf::Vector2f enemyTarget = player.getPosition();
-
-    for(auto &enemy : enemies)
-    {
-        std::vector<Projectile> bullets = enemy.update(enemyTarget);
-
-        for(const auto &bullet : bullets)
-        {
-            enemyProjectiles.push_back(bullet);
-            enemyProjectiles.back().load();
-        }
-    }
-
-    for (size_t i = 0; i < enemyProjectiles.size();)
-    {
-        if (enemyProjectiles[i].update(dt))
-            enemyProjectiles.erase(enemyProjectiles.begin() + i);
-
-        else
-        {
-            if (checkPlayerHits(enemyProjectiles[i], player))
-                enemyProjectiles.erase(enemyProjectiles.begin() + i);
-
-            else
-                i++;
-        }
-    }
     gui.update(player.getHealthStatus(), moved);
 }
 
-bool Level::checkEnemyHits(const Projectile &projectile)
+void Level::playerFire(const sf::Vector2f &target)
 {
-    for (size_t i = 0; i < enemies.size();)
-    {
-        if (int damage = projectile.hits(enemies[i]))
-        {
-            if (enemies[i].takeDamage(damage))
-                enemies.erase(enemies.begin() + i);
-            return true;
-        }
-
-        else
-            i++;
-    }
-    return false;
-}
-
-bool Level::checkPlayerHits(const Projectile &projectile, Player &player)
-{
-    if (int damage = projectile.hits(player))
-    {
-        if (player.takeDamage(damage))
-            std::cout<<"game over\n";
-        return true;
-    }  
-    return false;
-}
-
-void Level::spawnPlayerProjectile(const sf::Vector2f &target)
-{
-    std::vector<Projectile> bullets = player.fire(target);
-            
-    for(const auto &bullet : bullets)
-    {
-        playerProjectiles.push_back(bullet);
-        playerProjectiles.back().load();
-    }
+    currentRoom->spawnPlayerProjectile(target);
 }
 
 std::ostream &operator<<(std::ostream &os, const Level &level)
 {
     os << "Level:\n";
+    os << level.player << "\n";
     os << level.gui << "\n\n";
     if (level.currentRoom)
         os << "    Current Room: " << *level.currentRoom << "\n";
     else
         os << "    Current Room: None\n";
-
-    os << "    Enemies:\n";
-    os << "        Count: " << level.enemies.size() << "\n";
-    if (!level.enemies.empty())
-    {
-        for (size_t i = 0; i < level.enemies.size(); i++)
-        {
-            os << "        Enemy " << i + 1 << ":\n            " << level.enemies[i] << "\n\n";
-        }
-    }
-
-    os << "    Player Projectiles:\n";
-    os << "        Count: " << level.playerProjectiles.size() << "\n";
-    if (!level.playerProjectiles.empty())
-    {
-        for (size_t i = 0; i < level.playerProjectiles.size(); i++)
-        {
-            os << "        Projectile " << i + 1 << ":\n            " << level.playerProjectiles[i] << "\n\n";
-        }
-    }
-
-    os << "    Enemy Projectiles:\n";
-    os << "        Count: " << level.enemyProjectiles.size() << "\n";
-    if (!level.enemyProjectiles.empty())
-    {
-        for (size_t i = 0; i < level.enemyProjectiles.size(); i++)
-        {
-            os << "        Projectile " << i + 1 << ":\n            " << level.enemyProjectiles[i] << "\n\n";
-        }
-    }
-    
     return os;
 }

@@ -42,7 +42,6 @@ class Game
     mainMenu &menu = mainMenu::getInstance();
     Augment &augment = Augment::getInstance();
     Level &level = Level::getInstance();
-    Player &player = Player::getInstance();
 
     sf::RenderWindow window;
 

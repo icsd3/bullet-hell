@@ -17,5 +17,5 @@ public:
 
     void load() override;
     int hits(const Entity &other) const override;
-    bool update(const float &); // Returns true if projectile is out of bounds
+    bool update(const float &); // Returns true if projectile range exceeded
 };

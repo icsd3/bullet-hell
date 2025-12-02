@@ -159,7 +159,7 @@ bool Game::handleInputs()
 
         if (shoot.x != -1 && shoot.y != -1)
         {
-            level.spawnPlayerProjectile(shoot);
+            level.playerFire(shoot);
         }
     }
 
@@ -286,7 +286,7 @@ bool Game::handleInputs()
                     break;
 
                 case 2:
-                    level.spawnPlayerProjectile(ans.second);
+                    level.playerFire(ans.second);
                     break;
 
                 case 3:
@@ -374,7 +374,6 @@ std::ostream &operator<<(std::ostream &os, const Game &game)
     os << game.menu << "\n";
     os << game.augment << "\n";
     os << game.settings << "\n";
-    os << game.player << "\n";
     os << game.level << "\n";
     os << "Window size: " << game.window.getSize().x << "x" << game.window.getSize().y << "\n\n";
     os << "Current State: " << game.currentState << "\n\n";

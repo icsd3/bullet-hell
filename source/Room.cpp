@@ -1,8 +1,9 @@
 #include "../headers/Room.h"
 #include "../headers/Utils.h"
 
-Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background)
-    :backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh), up(nullptr), right(nullptr), down(nullptr), left(nullptr)
+Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ppt, sf::Texture &ept)
+    :backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh), up(nullptr), right(nullptr), down(nullptr), left(nullptr),
+     enemyTexture(&et), playerProjectileTexture(&ppt), enemyProjectileTexture(&ept)
 {
     animationClock.reset();
 }
@@ -112,14 +113,19 @@ void Room::draw(sf::RenderWindow &window)
     window.draw(drawBg);
 
     for (auto &door : doors)
-    {
         door.draw(window);
-    }
 
     for (auto &wall : walls)
-    {
         wall.draw(window);
-    }
+
+    for (auto &projectile : playerProjectiles)
+        projectile.draw(window);
+
+    for (auto &projectile : enemyProjectiles)
+        projectile.draw(window);
+
+    for (auto &enemy : enemies)
+        enemy.draw(window);
 }
 
 void Room::animate(const int &frame)
@@ -130,9 +136,11 @@ void Room::animate(const int &frame)
     }
 }
 
-std::pair<int, Room*> Room::update(const Player &player, const bool &finished)
+std::pair<int, Room*> Room::update(const float &dt)
 {
-    int action = checkCollisions(player);
+    int action = checkPlayerCollisions();
+
+    bool finished = enemies.empty();
 
     if (finished)
         animationClock.start();
@@ -156,6 +164,49 @@ std::pair<int, Room*> Room::update(const Player &player, const bool &finished)
     else
         animate(0);
 
+    for (size_t i = 0; i < playerProjectiles.size();)
+    {
+        if (playerProjectiles[i].update(dt))
+            playerProjectiles.erase(playerProjectiles.begin() + i);
+
+        else
+        {
+            if (checkEnemyHits(playerProjectiles[i]))
+                playerProjectiles.erase(playerProjectiles.begin() + i);
+
+            else
+                i++;
+        }
+    }
+
+    sf::Vector2f enemyTarget = player.getPosition();
+
+    for(auto &enemy : enemies)
+    {
+        std::vector<Projectile> bullets = enemy.update(enemyTarget);
+
+        for(const auto &bullet : bullets)
+        {
+            enemyProjectiles.push_back(bullet);
+            enemyProjectiles.back().load();
+        }
+    }
+
+    for (size_t i = 0; i < enemyProjectiles.size();)
+    {
+        if (enemyProjectiles[i].update(dt))
+            enemyProjectiles.erase(enemyProjectiles.begin() + i);
+
+        else
+        {
+            if (checkPlayerHits(enemyProjectiles[i]))
+                enemyProjectiles.erase(enemyProjectiles.begin() + i);
+
+            else
+                i++;
+        }
+    }
+
     switch (action)
     {
     case -2:
@@ -163,18 +214,26 @@ std::pair<int, Room*> Room::update(const Player &player, const bool &finished)
         break;
 
     case 0:
+        playerProjectiles.clear();
+        enemyProjectiles.clear();
         return {0, up};
         break;
 
     case 1:
+        playerProjectiles.clear();
+        enemyProjectiles.clear();
         return {1, right};
         break;
 
     case 2:
+        playerProjectiles.clear();
+        enemyProjectiles.clear();
         return {2, down};
         break;
 
     case 3:
+        playerProjectiles.clear();
+        enemyProjectiles.clear();
         return {3, left};
         break;
 
@@ -184,21 +243,69 @@ std::pair<int, Room*> Room::update(const Player &player, const bool &finished)
     }
 }
 
-int Room::checkCollisions(const Player &player)
+bool Room::checkEnemyHits(const Projectile &projectile)
+{
+    for (size_t i = 0; i < enemies.size();)
+    {
+        if (int damage = projectile.hits(enemies[i]))
+        {
+            if (enemies[i].takeDamage(damage))
+                enemies.erase(enemies.begin() + i);
+            return true;
+        }
+
+        else
+            i++;
+    }
+    if (checkEntityCollisions(projectile)) 
+        return true;
+    return false;
+}
+
+bool Room::checkPlayerHits(const Projectile &projectile)
+{
+    if (int damage = projectile.hits(player))
+    {
+        if (player.takeDamage(damage))
+            std::cout<<"game over\n";
+        return true;
+    }
+    else if (checkEntityCollisions(projectile)) 
+        return true;
+    return false;
+}
+
+void Room::spawnPlayerProjectile(const sf::Vector2f &target)
+{
+    std::vector<Projectile> bullets = player.fire(target);
+            
+    for(const auto &bullet : bullets)
+    {
+        playerProjectiles.push_back(bullet);
+        playerProjectiles.back().load();
+    }
+}
+
+int Room::checkPlayerCollisions()
 {
     for (const auto &wall : walls)
-    {
         if(player.collidesWith(wall))
             return -2;
-    }
 
     int doorDirections[4];
     int doorCount = 0;
     
-    if (up != nullptr) doorDirections[doorCount++] = 0;
-    if (right != nullptr) doorDirections[doorCount++] = 1;
-    if (down != nullptr) doorDirections[doorCount++] = 2;
-    if (left != nullptr) doorDirections[doorCount++] = 3;
+    if (up != nullptr) 
+        doorDirections[doorCount++] = 0;
+
+    if (right != nullptr) 
+        doorDirections[doorCount++] = 1;
+
+    if (down != nullptr) 
+        doorDirections[doorCount++] = 2;
+
+    if (left != nullptr) 
+        doorDirections[doorCount++] = 3;
     
     for (int i = 0; i < doorCount; i++)
     {
@@ -214,13 +321,59 @@ int Room::checkCollisions(const Player &player)
     return -1;
 }
 
+bool Room::checkEntityCollisions(const Entity &entity)
+{
+    for (const auto &wall : walls)
+        if(entity.collidesWith(wall))
+            return true;
+
+    for (const auto &door : doors)
+        if(entity.collidesWith(door))
+            return true;
+
+    // for (const auto &obstacle : obstacles)
+    //     if(entity.collidesWith(obstacle))
+    //         return true;
+
+    return false;
+}
+
+void Room::start()
+{
+    if (!open)
+        for (int i = 1; i <= 4; i++)
+        {
+            enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100, *enemyProjectileTexture));
+            enemies.back().load();
+        }
+}
+
 std::ostream &operator<<(std::ostream &os, const Room &room)
 {
     os << "Room (Open: " << (room.open ? "Yes" : "No") << ", Neighbors: ";
-    if (room.up) os << "Up ";
-    if (room.right) os << "Right ";
-    if (room.down) os << "Down ";
-    if (room.left) os << "Left ";
+    if (room.up) 
+        os << "Up ";
+    if (room.right) 
+        os << "Right ";
+    if (room.down) 
+        os << "Down ";
+    if (room.left) 
+        os << "Left ";
     os << ")";
+    os << "    Enemies:\n";
+    os << "        Count: " << room.enemies.size() << "\n";
+    if (!room.enemies.empty())
+        for (size_t i = 0; i < room.enemies.size(); i++)
+            os << "        Enemy " << i + 1 << ":\n            " << room.enemies[i] << "\n\n";
+    os << "    Player Projectiles:\n";
+    os << "        Count: " << room.playerProjectiles.size() << "\n";
+    if (!room.playerProjectiles.empty())
+        for (size_t i = 0; i < room.playerProjectiles.size(); i++)
+            os << "        Projectile " << i + 1 << ":\n            " << room.playerProjectiles[i] << "\n\n";
+    os << "    Enemy Projectiles:\n";
+    os << "        Count: " << room.enemyProjectiles.size() << "\n";
+    if (!room.enemyProjectiles.empty())
+        for (size_t i = 0; i < room.enemyProjectiles.size(); i++)
+            os << "        Projectile " << i + 1 << ":\n            " << room.enemyProjectiles[i] << "\n\n";
     return os;
 }
