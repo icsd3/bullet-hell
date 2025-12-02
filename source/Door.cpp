@@ -48,9 +48,9 @@ void Door::load()
 {
 }
 
-void Door::update(const int &frame)
+void Door::update(const unsigned int &frame)
 {
-    sprite.value().setTextureRect(sf::IntRect({frame * 300, 0}, {300, 300}));
+    sprite.value().setTextureRect(sf::IntRect({(int)frame * 300, 0}, {300, 300}));
     if (frame * 300 + 300 == texture.value()->getSize().x)
         collisionBox.setFillColor(sf::Color(0, 200, 0, 150));
 }

@@ -9,6 +9,6 @@ class Door : public Object
 public:
     Door(sf::Vector2f &, bool &, const sf::Texture &, sf::Vector2f &, const int &);
     void load() override;
-    void update(const int &);
+    void update(const unsigned int &);
     friend std::ostream &operator<<(std::ostream &, const Door &);
 };

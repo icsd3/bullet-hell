@@ -34,12 +34,12 @@ class Room
     std::vector<Projectile> playerProjectiles;
     std::vector<Projectile> enemyProjectiles;
 
-    void animate(const int &);
+    void animate(const unsigned int &);
 
 public:
     Room(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &);
     Room(const Room &) = default;
-    Room &operator=(const Room &) = default;
+    Room &operator=(const Room &) = delete;
     ~Room() = default;
     friend std::ostream &operator<<(std::ostream &, const Room &);
 

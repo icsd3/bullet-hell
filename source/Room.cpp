@@ -128,7 +128,7 @@ void Room::draw(sf::RenderWindow &window)
         enemy.draw(window);
 }
 
-void Room::animate(const int &frame)
+void Room::animate(const unsigned int &frame)
 {
     for (auto &door : doors)
     {
