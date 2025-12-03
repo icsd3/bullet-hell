@@ -18,13 +18,13 @@ class Player : public Entity
 
     static std::unique_ptr<Player> instance;
 
+    void doLoad() override;
+    bool doTakeDamage(const int &) override;
+
 public:
     static Player &getInstance();
     static Player &Initialize(sf::Texture &, sf::Texture &);
     friend std::ostream &operator<<(std::ostream &, const Player &);
-
-    void load() override;
-    bool takeDamage(const int &) override;
     
     void update(const float &, const sf::Vector2f &);
     sf::Vector2i getHealthStatus() const;

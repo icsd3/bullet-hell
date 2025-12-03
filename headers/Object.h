@@ -16,6 +16,9 @@ protected:
 
     sf::RectangleShape collisionBox;
 
+    virtual void doDraw(sf::RenderWindow &);
+    virtual void doLoad();
+
 public:
     Object(const sf::Vector2f &, const bool &, const sf::Texture &);
     Object(const sf::Vector2f &, const bool &, const sf::Vector2f &);
@@ -26,6 +29,6 @@ public:
 
     bool collidesWith(const Object &) const;
 
-    virtual void draw(sf::RenderWindow &);
-    virtual void load();
+    void draw(sf::RenderWindow &);
+    void load();
 };

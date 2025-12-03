@@ -113,7 +113,14 @@ void Level::generateRooms(const int n)
 
         map[i][j] = rooms.size() + 1;
 
-        rooms.emplace_back(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture);
+        std::shared_ptr<Room> room;
+
+        if (rooms.size() == 0)
+            room = std::make_shared<Room>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
+        else
+            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture);
+
+        rooms.push_back(room);
 
         if (up && !visited[i - 1][j])
         {
@@ -144,27 +151,27 @@ void Level::load(const int nr)
     std::mt19937 &rng = Utils::getRng(); 
     int n = dist(rng);
     generateRooms(n);
-    currentRoom = &rooms[0];
+    currentRoom = rooms[0];
 
     for (int i = 0; i < 5; i++)
     {
         for (int j = 0; j < 7; j++)
         {
-            Room *up = nullptr;
-            Room *down = nullptr;
-            Room *left = nullptr;
-            Room *right = nullptr;
+            std::weak_ptr<Room> up;
+            std::weak_ptr<Room> down;
+            std::weak_ptr<Room> left;
+            std::weak_ptr<Room> right;
             if (map[i][j] > 0)
             {
                 if (i-1 >= 0 && map[i-1][j] > 0)
-                    up = &rooms[map[i-1][j]-1];
+                    up = rooms[map[i-1][j]-1];
                 if (i+1 < 5 && map[i+1][j] > 0)
-                    down = &rooms[map[i+1][j]-1];
+                    down = rooms[map[i+1][j]-1];
                 if (j-1 >= 0 && map[i][j-1] > 0)
-                    left = &rooms[map[i][j-1]-1];
+                    left = rooms[map[i][j-1]-1];
                 if (j+1 < 7 && map[i][j+1] > 0)
-                    right = &rooms[map[i][j+1]-1];
-                rooms[map[i][j]-1].load(up, right, down, left);
+                    right = rooms[map[i][j+1]-1];
+                rooms[map[i][j]-1]->load(up, right, down, left);
             }
         }
     }
@@ -184,6 +191,7 @@ void Level::load(const int nr)
 
     player.load();
     gui.load(map);
+    currentRoom -> start();
 }
 
 std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bool& controls, const sf::RenderWindow &window)
@@ -282,7 +290,7 @@ void Level::update(const float &dt, sf::Vector2f &target)
     
     player.update(dt, target);
 
-    std::pair<int, Room*> action = currentRoom->update(dt);
+    std::pair<int, std::weak_ptr<Room>> action = currentRoom->update(dt);
 
     if (action.first == -2)
     {
@@ -307,9 +315,9 @@ void Level::update(const float &dt, sf::Vector2f &target)
             player.setPosition(oldPosition);
     }
 
-    else if (action.second != nullptr)
+    else if (!action.second.expired())
     {
-        currentRoom = action.second;
+        currentRoom = action.second.lock();
         currentRoom -> start();
 
         if (action.first == 0)

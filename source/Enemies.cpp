@@ -30,9 +30,9 @@ Enemy Enemy::spawnEnemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, co
     return enemy;
 }
 
-void Enemy::load()
+void Enemy::doLoad()
 {
-    Entity::load();
+    Entity::doLoad();
 
     maxHealthBar.setSize(sf::Vector2f(sprite.value().getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
     maxHealthBar.setFillColor(sf::Color(75, 0, 0, 175));
@@ -49,11 +49,11 @@ void Enemy::load()
     weapon.reset();
 }
 
-void Enemy::draw(sf::RenderWindow &window)
+void Enemy::doDraw(sf::RenderWindow &window)
 {
     sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
-    Entity::draw(window);
+    Entity::doDraw(window);
 
     sf::RectangleShape drawMaxHealthBar = maxHealthBar;
     drawMaxHealthBar.setPosition(Utils::mapToScreen(maxHealthBar.getPosition(), window));
@@ -82,7 +82,7 @@ std::vector<Projectile> Enemy::update(const sf::Vector2f &target)
     return bullets;
 }
 
-bool Enemy::takeDamage(const int &dmg)
+bool Enemy::doTakeDamage(const int &dmg)
 {
     currentHealth -= dmg;
     currentHealthBar.setSize(sf::Vector2f(1.f * currentHealth / maxHealth * maxHealthBar.getSize().x, currentHealthBar.getSize().y));

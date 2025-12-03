@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../headers/Room.h"
+#include "../headers/EnemyRoom.h"
 #include "../headers/Utils.h"
 #include "../headers/GUI.h"
 
@@ -29,8 +29,8 @@ class Level
     sf::Texture doorHorizontalTexture;
 
     int map[5][7];
-    std::vector<Room> rooms;
-    Room *currentRoom = nullptr;
+    std::vector<std::shared_ptr<Room>> rooms;
+    std::shared_ptr<Room> currentRoom;
     GUI &gui = GUI::getInstance();
     Player &player = Player::Initialize(playerTexture, playerProjectileTexture);
 

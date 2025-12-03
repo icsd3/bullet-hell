@@ -7,9 +7,9 @@ Projectile::Projectile(const sf::Vector2f &pos, const bool &ori, sf::Texture &te
     rotation = sf::radians(std::atan2(direction.y, direction.x));
 }
 
-void Projectile::load()
+void Projectile::doLoad()
 {   
-    Object::load();
+    Object::doLoad();
 
     float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.value()->getSize().x) / 50.f;
     sprite.value().setScale(sf::Vector2f(scale, scale));
@@ -51,9 +51,9 @@ bool Projectile::update(const float &dt)
     return false;
 }
 
-int Projectile::hits(const Entity &other) const
+int Projectile::doHits(const Entity &other) const
 {
-    if (Entity::hits(other))
+    if (Entity::doHits(other))
         return damage;
     return 0;
 }

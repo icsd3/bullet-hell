@@ -79,9 +79,9 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     currentWeapon -> update();
 }
 
-void Player::load()
+void Player::doLoad()
 {   
-    Entity::load();
+    Entity::doLoad();
 
     currentWeapon->reset();
 }
@@ -114,7 +114,7 @@ std::vector<Projectile> Player::fire(const sf::Vector2f &target) const
     return bullets;
 }
 
-bool Player::takeDamage(const int &dmg)
+bool Player::doTakeDamage(const int &dmg)
 {
     currentHealth -= dmg;
     if (currentHealth <= 0)

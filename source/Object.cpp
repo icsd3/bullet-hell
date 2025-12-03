@@ -41,7 +41,7 @@ bool Object::collidesWith(const Object &other) const
     return (collisionBox.getGlobalBounds().findIntersection(other.collisionBox.getGlobalBounds())).has_value();
 }
 
-void Object::draw(sf::RenderWindow &window)
+void Object::doDraw(sf::RenderWindow &window)
 {
     sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
@@ -62,7 +62,12 @@ void Object::draw(sf::RenderWindow &window)
     }
 }
 
-void Object::load()
+void Object::draw(sf::RenderWindow &window)
+{
+    doDraw(window);
+}
+
+void Object::doLoad()
 {
     if (sprite)
     {
@@ -81,4 +86,9 @@ void Object::load()
     }
 
     collisionBox.setFillColor(sf::Color(0, 0, 200, 150));
+}
+
+void Object::load()
+{
+    doLoad();
 }

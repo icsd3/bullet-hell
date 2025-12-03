@@ -1,14 +1,12 @@
 #include "../headers/Room.h"
-#include "../headers/Utils.h"
 
-Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ept)
-    :backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh), up(nullptr), right(nullptr), down(nullptr), left(nullptr),
-     enemyTexture(&et), enemyProjectileTexture(&ept)
+Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background)
+    :backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh)
 {
     animationClock.reset();
 }
 
-void Room::load(Room *u, Room *r, Room *d, Room *l)
+void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Room> d, std::weak_ptr<Room> l)
 {
     up = u;
     right = r;
@@ -41,7 +39,7 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
         sf::Vector2f position;
         sf::Vector2f size;
 
-        if (i == 0 && up == nullptr)
+        if (i == 0 && up.expired())
         {
             size = {120, 150};
             position = {900, 0};
@@ -51,7 +49,7 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
             continue;
         }
 
-        else if (i == 1 && right == nullptr)
+        else if (i == 1 && right.expired())
         {
             size = {150, 120};
             position = {1770, 480};
@@ -61,7 +59,7 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
             continue;
         }
 
-        else if (i == 2 && down == nullptr)
+        else if (i == 2 && down.expired())
         {
             size = {120, 150};
             position = {900, 930};
@@ -71,7 +69,7 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
             continue;
         }
         
-        else if (i == 3 && left == nullptr)
+        else if (i == 3 && left.expired())
         {
             size = {150, 120};
             position = {0, 480};
@@ -101,10 +99,16 @@ void Room::load(Room *u, Room *r, Room *d, Room *l)
 
         Door door(position, orientation, texture, size, i);
         doors.push_back(door);
+        doors.back().load();
     }
 }
 
-void Room::draw(sf::RenderWindow &window)
+void Room::load(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Room> d, std::weak_ptr<Room> l)
+{
+    doLoad(u, r, d, l);
+}
+
+void Room::doDraw(sf::RenderWindow &window)
 {
     sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
     sf::Sprite drawBg = backgroundSprite;
@@ -120,12 +124,11 @@ void Room::draw(sf::RenderWindow &window)
 
     for (auto &projectile : playerProjectiles)
         projectile.draw(window);
+}
 
-    for (auto &projectile : enemyProjectiles)
-        projectile.draw(window);
-
-    for (auto &enemy : enemies)
-        enemy.draw(window);
+void Room::draw(sf::RenderWindow &window)
+{
+    doDraw(window);
 }
 
 void Room::animate(const unsigned int &frame)
@@ -136,14 +139,9 @@ void Room::animate(const unsigned int &frame)
     }
 }
 
-std::pair<int, Room*> Room::update(const float &dt)
+std::pair<int, std::weak_ptr<Room>> Room::doUpdate(const float &dt)
 {
-    int action = checkPlayerCollisions();
-
-    bool finished = enemies.empty();
-
-    if (finished)
-        animationClock.start();
+    int action = doCheckPlayerCollisions();
     
     if (animationClock.getElapsedTime().asMilliseconds() >= 600)
     {
@@ -171,7 +169,7 @@ std::pair<int, Room*> Room::update(const float &dt)
 
         else
         {
-            if (checkEnemyHits(playerProjectiles[i]))
+            if (doCheckEntityCollisions(playerProjectiles[i]))
                 playerProjectiles.erase(playerProjectiles.begin() + i);
 
             else
@@ -179,100 +177,43 @@ std::pair<int, Room*> Room::update(const float &dt)
         }
     }
 
-    sf::Vector2f enemyTarget = player.getPosition();
-
-    for(auto &enemy : enemies)
-    {
-        std::vector<Projectile> bullets = enemy.update(enemyTarget);
-
-        for(const auto &bullet : bullets)
-        {
-            enemyProjectiles.push_back(bullet);
-            enemyProjectiles.back().load();
-        }
-    }
-
-    for (size_t i = 0; i < enemyProjectiles.size();)
-    {
-        if (enemyProjectiles[i].update(dt))
-            enemyProjectiles.erase(enemyProjectiles.begin() + i);
-
-        else
-        {
-            if (checkPlayerHits(enemyProjectiles[i]))
-                enemyProjectiles.erase(enemyProjectiles.begin() + i);
-
-            else
-                i++;
-        }
-    }
+    std::weak_ptr<Room> nothing;
 
     switch (action)
     {
     case -2:
-        return {-2, nullptr};
+        return {-2, nothing};
         break;
 
     case 0:
         playerProjectiles.clear();
-        enemyProjectiles.clear();
         return {0, up};
         break;
 
     case 1:
         playerProjectiles.clear();
-        enemyProjectiles.clear();
         return {1, right};
         break;
 
     case 2:
         playerProjectiles.clear();
-        enemyProjectiles.clear();
         return {2, down};
         break;
 
     case 3:
         playerProjectiles.clear();
-        enemyProjectiles.clear();
         return {3, left};
         break;
 
     default:
-        return {-1, nullptr};
+        return {-1, nothing};
         break;
     }
 }
 
-bool Room::checkEnemyHits(const Projectile &projectile)
+std::pair<int, std::weak_ptr<Room>> Room::update(const float &dt)
 {
-    for (size_t i = 0; i < enemies.size();)
-    {
-        if (int damage = projectile.hits(enemies[i]))
-        {
-            if (enemies[i].takeDamage(damage))
-                enemies.erase(enemies.begin() + i);
-            return true;
-        }
-
-        else
-            i++;
-    }
-    if (checkEntityCollisions(projectile)) 
-        return true;
-    return false;
-}
-
-bool Room::checkPlayerHits(const Projectile &projectile)
-{
-    if (int damage = projectile.hits(player))
-    {
-        if (player.takeDamage(damage))
-            std::cout<<"game over\n";
-        return true;
-    }
-    else if (checkEntityCollisions(projectile)) 
-        return true;
-    return false;
+    return doUpdate(dt);
 }
 
 void Room::spawnPlayerProjectile(const sf::Vector2f &target)
@@ -286,7 +227,7 @@ void Room::spawnPlayerProjectile(const sf::Vector2f &target)
     }
 }
 
-int Room::checkPlayerCollisions()
+int Room::doCheckPlayerCollisions()
 {
     for (const auto &wall : walls)
         if(player.collidesWith(wall))
@@ -295,16 +236,16 @@ int Room::checkPlayerCollisions()
     int doorDirections[4];
     int doorCount = 0;
     
-    if (up != nullptr) 
+    if (!up.expired()) 
         doorDirections[doorCount++] = 0;
 
-    if (right != nullptr) 
+    if (!right.expired()) 
         doorDirections[doorCount++] = 1;
 
-    if (down != nullptr) 
+    if (!down.expired()) 
         doorDirections[doorCount++] = 2;
 
-    if (left != nullptr) 
+    if (!left.expired()) 
         doorDirections[doorCount++] = 3;
     
     for (int i = 0; i < doorCount; i++)
@@ -321,7 +262,12 @@ int Room::checkPlayerCollisions()
     return -1;
 }
 
-bool Room::checkEntityCollisions(const Entity &entity)
+int Room::checkPlayerCollisions()
+{
+    return doCheckPlayerCollisions();
+}
+
+bool Room::doCheckEntityCollisions(const Entity &entity)
 {
     for (const auto &wall : walls)
         if(entity.collidesWith(wall))
@@ -331,49 +277,41 @@ bool Room::checkEntityCollisions(const Entity &entity)
         if(entity.collidesWith(door))
             return true;
 
-    // for (const auto &obstacle : obstacles)
-    //     if(entity.collidesWith(obstacle))
-    //         return true;
-
     return false;
+}
+
+bool Room::checkEntityCollisions(const Entity &entity)
+{
+    return doCheckEntityCollisions(entity);
+}
+
+void Room::doStart()
+{
+    if (!open)
+        animationClock.start();
 }
 
 void Room::start()
 {
-    if (!open)
-        for (int i = 1; i <= 4; i++)
-        {
-            enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100, *enemyProjectileTexture));
-            enemies.back().load();
-        }
+    doStart();
 }
 
 std::ostream &operator<<(std::ostream &os, const Room &room)
 {
     os << "Room (Open: " << (room.open ? "Yes" : "No") << ", Neighbors: ";
-    if (room.up) 
+    if (!room.up.expired()) 
         os << "Up ";
-    if (room.right) 
+    if (!room.right.expired()) 
         os << "Right ";
-    if (room.down) 
+    if (!room.down.expired()) 
         os << "Down ";
-    if (room.left) 
+    if (!room.left.expired()) 
         os << "Left ";
     os << ")";
-    os << "    Enemies:\n";
-    os << "        Count: " << room.enemies.size() << "\n";
-    if (!room.enemies.empty())
-        for (size_t i = 0; i < room.enemies.size(); i++)
-            os << "        Enemy " << i + 1 << ":\n            " << room.enemies[i] << "\n\n";
     os << "    Player Projectiles:\n";
     os << "        Count: " << room.playerProjectiles.size() << "\n";
     if (!room.playerProjectiles.empty())
         for (size_t i = 0; i < room.playerProjectiles.size(); i++)
             os << "        Projectile " << i + 1 << ":\n            " << room.playerProjectiles[i] << "\n\n";
-    os << "    Enemy Projectiles:\n";
-    os << "        Count: " << room.enemyProjectiles.size() << "\n";
-    if (!room.enemyProjectiles.empty())
-        for (size_t i = 0; i < room.enemyProjectiles.size(); i++)
-            os << "        Projectile " << i + 1 << ":\n            " << room.enemyProjectiles[i] << "\n\n";
     return os;
 }

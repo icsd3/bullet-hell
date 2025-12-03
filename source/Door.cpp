@@ -3,9 +3,13 @@
 Door::Door(sf::Vector2f &pos, bool &ori, const sf::Texture &tex, sf::Vector2f &size, const int &plc)
     : Object(pos, ori, tex), place(plc)
 {
-    collisionBox.setFillColor(sf::Color(0, 0, 200, 150));
     collisionBox.setSize(size);
     collisionBox.setOrigin({size.x / 2, size.y / 2});
+}
+
+void Door::doLoad()
+{
+    collisionBox.setFillColor(sf::Color(0, 0, 200, 150));
     collisionBox.setPosition(position);
 
     sf::IntRect texRect({0, 0}, {300, 300});
@@ -42,10 +46,6 @@ Door::Door(sf::Vector2f &pos, bool &ori, const sf::Texture &tex, sf::Vector2f &s
         position = {-66.5, LOGICAL_HEIGHT / 2};
         collisionBox.setRotation(sf::Angle(sf::degrees(90)));
     }
-}
-
-void Door::load()
-{
 }
 
 void Door::update(const unsigned int &frame)

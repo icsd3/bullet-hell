@@ -32,9 +32,9 @@ std::ostream &operator<<(std::ostream &os, const Entity &entity)
     return os;
 }
 
-void Entity::load()
+void Entity::doLoad()
 {
-    Object::load();
+    Object::doLoad();
 
     float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.value()->getSize().x) / 30.f;
     sprite.value().setScale(sf::Vector2f(scale, scale));
@@ -54,9 +54,9 @@ void Entity::load()
     hitBox.setPoint(5, t.transformPoint({bounds.position.x, bounds.position.y + 4.5f / 14 * bounds.size.y}));
 }
 
-void Entity::draw(sf::RenderWindow &window)
+void Entity::doDraw(sf::RenderWindow &window)
 {
-    Object::draw(window);
+    Object::doDraw(window);
 
     if (Utils::changeDisplayBoxes(0) == 2)
     {
@@ -68,7 +68,7 @@ void Entity::draw(sf::RenderWindow &window)
     }
 }
 
-bool Entity::takeDamage(const int &dmg)
+bool Entity::doTakeDamage(const int &dmg)
 {
     currentHealth -= dmg;
     if (currentHealth <= 0)
@@ -76,7 +76,12 @@ bool Entity::takeDamage(const int &dmg)
     return false;
 }
 
-int Entity::hits(const Entity &other) const
+bool Entity::takeDamage(const int &dmg)
+{
+    return doTakeDamage(dmg);
+}
+
+int Entity::doHits(const Entity &other) const
 {
     sf::Transform hitBoxTransform = hitBox.getTransform();
     sf::Transform otherHitBoxTransform = other.hitBox.getTransform();
@@ -132,4 +137,9 @@ int Entity::hits(const Entity &other) const
     }
 
     return 1;
+}
+
+int Entity::hits(const Entity &other) const
+{
+    return doHits(other);
 }

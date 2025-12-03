@@ -11,12 +11,12 @@ class Enemy : public Entity
     sf::RectangleShape maxHealthBar;
     sf::RectangleShape currentHealthBar;
 
+    void doLoad() override;
+    void doDraw(sf::RenderWindow &) override;
+    bool doTakeDamage(const int &) override;
+
 public:
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
-
-    void load() override;
-    void draw(sf::RenderWindow &) override;
-    bool takeDamage(const int &) override;
 
     std::vector<Projectile> update(const sf::Vector2f &);
     static Enemy spawnEnemy(sf::Texture &, const sf::Vector2f &, float, const int &, sf::Texture &);

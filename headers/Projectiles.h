@@ -11,11 +11,12 @@ class Projectile : public Entity
     sf::Vector2f origin;
     float range;
 
+    void doLoad() override;
+    int doHits(const Entity &other) const override;
+
 public:
     Projectile(const sf::Vector2f &, const bool &, sf::Texture &, float, const int &, const sf::Vector2f &, const float &);    
     friend std::ostream &operator<<(std::ostream &, const Projectile &);
 
-    void load() override;
-    int hits(const Entity &other) const override;
     bool update(const float &); // Returns true if projectile range exceeded
 };
