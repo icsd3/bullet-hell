@@ -27,6 +27,7 @@ protected:
     sf::Clock animationClock;
     bool open = false;
     std::vector<Projectile> playerProjectiles;
+    int grid[27][13];
 
     void animate(const unsigned int &);
     

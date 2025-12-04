@@ -1,7 +1,7 @@
 #include "../headers/Room.h"
 
 Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background)
-    :backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh)
+    :backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh), grid{{0}}
 {
     animationClock.reset();
 }

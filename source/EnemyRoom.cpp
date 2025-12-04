@@ -6,6 +6,38 @@ EnemyRoom::EnemyRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Tex
     animationClock.reset();
 }
 
+void EnemyRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Room> d, std::weak_ptr<Room> l)
+{
+    Room::doLoad(u, r, d, l);
+
+    std::mt19937 &rng = Utils::getRng();
+    std::uniform_int_distribution<int> nrOfObstaclesDist(3, 6);
+    std::uniform_int_distribution<int> xDist(1, 25);
+    std::uniform_int_distribution<int> yDist(1, 11);
+    int nrOfObstacles = nrOfObstaclesDist(rng);
+
+    for (int i = 0; i < nrOfObstacles; i++)
+    {
+        int x = xDist(rng);;
+        int y = yDist(rng);
+        while (grid[x][y] == 0)
+        {
+            if (grid[x-1][y-1] == 0 && grid[x-1][y] == 0 && grid[x-1][y+1] == 0 &&
+                grid[x][y-1] == 0 && grid[x][y+1] == 0 &&
+                grid[x+1][y-1] == 0 && grid[x+1][y] == 0 && grid[x+1][y+1] == 0)
+            {
+                grid[x][y] = 1;
+                Object obstacle(sf::Vector2f(60.f + x * 60.f, 60.f + y * 60.f), false, sf::Vector2f(60.f, 60.f));
+                obstacles.push_back(obstacle);
+                obstacles.back().load();
+                break;
+            }
+            x = xDist(rng);;
+            y = yDist(rng);
+        }
+    }
+}
+
 void EnemyRoom::doDraw(sf::RenderWindow &window)
 {
     Room::doDraw(window);
@@ -28,18 +60,12 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
 
     for (size_t i = 0; i < playerProjectiles.size();)
     {
-        if (playerProjectiles[i].update(dt))
+        if (checkEnemyHits(playerProjectiles[i]))
             playerProjectiles.erase(playerProjectiles.begin() + i);
 
         else
-        {
-            if (checkEnemyHits(playerProjectiles[i]))
-                playerProjectiles.erase(playerProjectiles.begin() + i);
-
-            else
-                i++;
-        }
-    }
+            i++;
+    } 
 
     sf::Vector2f enemyTarget = player.getPosition();
 

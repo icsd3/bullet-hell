@@ -21,7 +21,8 @@ void Game::setup()
     window.clear(sf::Color::Black);
     window.display();
     handleNewState();
-    window.setVerticalSyncEnabled(true);
+    // window.setVerticalSyncEnabled(true);
+    window.setFramerateLimit(144);
 }
 
 void Game::selectGameState(gameStates &gameState)
@@ -216,7 +217,8 @@ bool Game::handleInputs()
                         window.create(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen);
                     
                     fullscreen = !fullscreen;
-                    window.setVerticalSyncEnabled(true);
+                    // window.setVerticalSyncEnabled(true);
+                    window.setFramerateLimit(144);
                     window.clear(sf::Color::Black);
                     window.display();
                     break;
