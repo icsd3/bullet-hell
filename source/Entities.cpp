@@ -31,7 +31,7 @@ std::ostream &operator<<(std::ostream &os, const Entity &entity)
     os << ", Speed: " << entity.speed << ")";
     return os;
 }
-
+ 
 void Entity::doLoad()
 {
     Object::doLoad();

@@ -19,6 +19,7 @@ class Level
     std::string roomBackgroundPath;
     std::string doorVerticalPath;
     std::string doorHorizontalPath;
+    std::string obstaclePath;
 
     sf::Texture playerTexture;
     sf::Texture enemyTexture;
@@ -27,6 +28,7 @@ class Level
     sf::Texture roomBackgroundTexture;
     sf::Texture doorVerticalTexture;
     sf::Texture doorHorizontalTexture;
+    sf::Texture obstacleTexture;
 
     int map[5][7];
     std::vector<std::shared_ptr<Room>> rooms;

@@ -8,6 +8,7 @@ Level::Level()
     roomBackgroundPath("textures/room_background.png"),
     doorVerticalPath("textures/door_vertical.png"),
     doorHorizontalPath("textures/door_horizontal.png"),
+    obstaclePath("textures/obstacle.png"),
     playerTexture(playerTexturePath),
     enemyTexture(enemyPath),
     playerProjectileTexture(playerProjectilePath),
@@ -15,6 +16,7 @@ Level::Level()
     roomBackgroundTexture(roomBackgroundPath),
     doorVerticalTexture(doorVerticalPath),
     doorHorizontalTexture(doorHorizontalPath),
+    obstacleTexture(obstaclePath),
     map{{0}}
 {
 }
@@ -118,7 +120,7 @@ void Level::generateRooms(const int n)
         if (rooms.size() == 0)
             room = std::make_shared<Room>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
         else
-            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture);
+            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture, obstacleTexture);
 
         rooms.push_back(room);
 
@@ -322,25 +324,25 @@ void Level::update(const float &dt, sf::Vector2f &target)
 
         if (action.first == 0)
         {
-            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f});
+            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT - 195.f});
             moved = 0;
         }
 
         else if (action.first == 1)
         {
-            player.setPosition({LOGICAL_WIDTH * 0.1f, LOGICAL_HEIGHT * 0.5f});
+            player.setPosition({195.f, LOGICAL_HEIGHT * 0.5f});
             moved = 1;
         }
 
         else if (action.first == 2)
         {
-            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.15f});
+            player.setPosition({LOGICAL_WIDTH * 0.5f, 195.f});
             moved = 2;
         }
 
         else if (action.first == 3)
         {
-            player.setPosition({LOGICAL_WIDTH * 0.9f, LOGICAL_HEIGHT * 0.5f});
+            player.setPosition({LOGICAL_WIDTH - 195.f, LOGICAL_HEIGHT * 0.5f});
             moved = 3;
         }
         target = player.getPosition();

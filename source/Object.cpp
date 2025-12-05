@@ -71,9 +71,14 @@ void Object::doLoad()
 {
     if (sprite)
     {
+        float scale = 120.f / static_cast<float>(texture.value()->getSize().x);
+        sprite.value().setScale(sf::Vector2f(scale, scale));
         sf::FloatRect bounds = sprite.value().getLocalBounds();
         sprite.value().setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));
         sprite.value().setPosition(position);
+        collisionBox.setSize(sf::Vector2f(scale * texture.value()->getSize().x, scale * texture.value()->getSize().y));
+        collisionBox.setOrigin(sf::Vector2f(collisionBox.getSize().x / 2.f, collisionBox.getSize().y / 2.f));
+        collisionBox.setPosition(position);
         
         if (orientation)
         {
