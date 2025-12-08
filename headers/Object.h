@@ -14,7 +14,7 @@ protected:
     std::optional<sf::Sprite> sprite;
     std::optional<const sf::Texture*> texture;    
 
-    sf::RectangleShape collisionBox;
+    sf::ConvexShape collisionBox;
 
     virtual void doDraw(sf::RenderWindow &);
     virtual void doLoad();
@@ -28,6 +28,7 @@ public:
     friend std::ostream &operator<<(std::ostream &, const Object &);
 
     bool collidesWith(const Object &) const;
+    bool lineIntersects(const sf::Vector2f &, const sf::Vector2f &) const;
 
     void draw(sf::RenderWindow &);
     void load();

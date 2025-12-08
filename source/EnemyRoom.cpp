@@ -1,7 +1,7 @@
 #include "../headers/EnemyRoom.h"
 
-EnemyRoom::EnemyRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ept, sf::Texture &ot)
-    :Room(dv, dh, background), enemyTexture(&et), enemyProjectileTexture(&ept), obstacleTexture(&ot)
+EnemyRoom::EnemyRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ept, sf::Texture &ot, const int ne)
+    :Room(dv, dh, background), enemyTexture(&et), enemyProjectileTexture(&ept), obstacleTexture(&ot), nrOfEnemies(ne)
 {
     animationClock.reset();
 }
@@ -11,12 +11,12 @@ void EnemyRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_p
     Room::doLoad(u, r, d, l);
 
     std::mt19937 &rng = Utils::getRng();
-    std::uniform_int_distribution<int> nrOfObstaclesDist(5, 20);
-    std::uniform_int_distribution<int> xDist(0, 11);
-    std::uniform_int_distribution<int> yDist(0, 4);
+    std::uniform_int_distribution<int> nrOfObstaclesDist(6, 12);
+    std::uniform_int_distribution<int> xDist(1, 12);
+    std::uniform_int_distribution<int> yDist(1, 5);
     int nrOfObstacles = nrOfObstaclesDist(rng);
 
-    for (int i = 0; i < nrOfObstacles; i++)
+    for (int i = 1; i <= nrOfObstacles; i++)
     {
         int x = xDist(rng);
         int y = yDist(rng);
@@ -25,7 +25,7 @@ void EnemyRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_p
             if (grid[x][y] == 0)
             {
                 grid[x][y] = 1;
-                Object obstacle(sf::Vector2f(300.f + x * 120.f, 300.f + y * 120.f), false, *obstacleTexture);
+                Object obstacle(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), false, *obstacleTexture);
                 obstacles.push_back(obstacle);
                 obstacles.back().load();
                 break;
@@ -46,11 +46,11 @@ void EnemyRoom::doDraw(sf::RenderWindow &window)
     for (auto &obstacle : obstacles)
         obstacle.draw(window);
 
-    for (auto &projectile : enemyProjectiles)
-        projectile.draw(window);
-
     for (auto &enemy : enemies)
         enemy.draw(window);
+
+    for (auto &projectile : enemyProjectiles)
+        projectile.draw(window);
 }
 
 std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
@@ -71,11 +71,14 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
             i++;
     } 
 
-    sf::Vector2f enemyTarget = player.getPosition();
+    for (int i = 0; i < 14; i++)
+        for (int j = 0; j < 7; j++)
+            if (grid[i][j] == 2)
+                grid[i][j] = 0; 
 
     for(auto &enemy : enemies)
     {
-        std::vector<Projectile> bullets = enemy.update(enemyTarget);
+        std::vector<Projectile> bullets = enemy.update(dt, player.getPosition(), obstacles, walls, doors, enemies, grid);
 
         for(const auto &bullet : bullets)
         {
@@ -136,11 +139,55 @@ bool EnemyRoom::checkPlayerHits(const Projectile &projectile)
 void EnemyRoom::doStart()
 {
     if (!open)
-        for (int i = 1; i <= 4; i++)
+    {
+        std::mt19937 &rng = Utils::getRng();
+
+        std::uniform_int_distribution<int> xDist;
+        std::uniform_int_distribution<int> yDist;
+
+        if (player.getPosition().x < 300.f)
         {
-            enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100, *enemyProjectileTexture));
-            enemies.back().load();
+            xDist = std::uniform_int_distribution<int>(7, 12);
+            yDist = std::uniform_int_distribution<int>(1, 5);
         }
+        else if (player.getPosition().x > LOGICAL_WIDTH - 300.f)
+        {
+            xDist = std::uniform_int_distribution<int>(1, 6);
+            yDist = std::uniform_int_distribution<int>(1, 5);
+        }
+        else if (player.getPosition().y < 300.f)
+        {
+            xDist = std::uniform_int_distribution<int>(1, 12);
+            yDist = std::uniform_int_distribution<int>(4, 5);
+        }
+        else
+        {
+            xDist = std::uniform_int_distribution<int>(1, 12);
+            yDist = std::uniform_int_distribution<int>(1, 2);
+        }
+
+
+        for (int i = 0; i < nrOfEnemies; i++)
+        {
+            int x = xDist(rng);
+            int y = yDist(rng);
+            while (true)
+            {
+                if (grid[x][y] == 0)
+                {
+                    grid[x][y] = 2;
+                    enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 0.05f, 100, *enemyProjectileTexture));
+                    enemies.back().load();
+                    break;
+                }
+                else
+                {
+                    x = xDist(rng);
+                    y = yDist(rng);
+                }
+            }
+        }
+    }
 }
 
 int EnemyRoom::doCheckPlayerCollisions()

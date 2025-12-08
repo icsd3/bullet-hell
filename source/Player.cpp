@@ -7,7 +7,7 @@ Player::Player(sf::Texture &tex, sf::Texture &prtex)
     std::ifstream file("json/Weapons.json");
     nlohmann::json data;
     file >> data;
-    const auto &w = data[4];
+    const auto &w = data[5];
     weapons.emplace_back(Weapon(
         w["name"],
         w["damage"],

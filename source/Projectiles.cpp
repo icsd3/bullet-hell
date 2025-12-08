@@ -13,8 +13,14 @@ void Projectile::doLoad()
 
     float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.value()->getSize().x) / 50.f;
     sprite.value().setScale(sf::Vector2f(scale, scale));
-    collisionBox.setSize(sf::Vector2f(scale * texture.value()->getSize().x / 2.f, scale * texture.value()->getSize().y));
-    collisionBox.setOrigin(sf::Vector2f(collisionBox.getSize().x / 2.f, collisionBox.getSize().y / 2.f));
+    sf::Vector2f size(scale * texture.value()->getSize().x / 2.f, scale * texture.value()->getSize().y / 2.f);
+    collisionBox.setPointCount(4);
+    collisionBox.setPoint(0, sf::Vector2f(0.f, 0.f));
+    collisionBox.setPoint(1, sf::Vector2f(size.x, 0.f));
+    collisionBox.setPoint(2, sf::Vector2f(size.x, size.y));
+    collisionBox.setPoint(3, sf::Vector2f(0.f, size.y));
+
+    collisionBox.setOrigin(sf::Vector2f(size.x / 2.f, size.y / 2.f));
     collisionBox.setPosition(sf::Vector2f(position.x, position.y));
     collisionBox.setRotation(rotation);
     sprite.value().setRotation(rotation);
