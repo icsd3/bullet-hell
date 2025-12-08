@@ -135,10 +135,10 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i& start, const sf::Vector2i&
         {{1, 1}, 1.4142f}, {{1, -1}, 1.4142f}, {{-1, 1}, 1.4142f}, {{-1, -1}, 1.4142f}
     };
 
-    bool closed[7][14] = {false};
+    bool closed[7][14] = {{false}};
     std::unique_ptr<Node> nodes[7][14];
 
-    auto cmp = [](Node* a, Node* b) 
+    auto cmp = [](const Node* a, const Node* b) 
     {
         return a->f() > b->f();
     };
