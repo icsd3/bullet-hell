@@ -9,9 +9,6 @@
 Enemy::Enemy(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
     : Entity(pos, ori, tex, spd, mh), weapon(ew), gridPosition(0, 0), target(pos)
 {
-    int gridX = static_cast<int>((pos.x - 120.f) / 120.f);
-    int gridY = static_cast<int>((pos.y - 120.f) / 120.f);
-    gridPosition = {gridX, gridY};
 }
 
 Enemy Enemy::spawnEnemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, sf::Texture &prtex)
@@ -50,6 +47,10 @@ void Enemy::doLoad()
     currentHealthBar.setFillColor(sf::Color(150, 0, 0, 175));
     currentHealthBar.setOrigin(sf::Vector2f(0, currentHealthBar.getLocalBounds().size.y / 2.f));
     currentHealthBar.setPosition(sf::Vector2f(maxHealthBar.getPosition().x - maxHealthBar.getSize().x / 2.f, maxHealthBar.getPosition().y));
+
+    int gridX = static_cast<int>((position.x - 120.f) / 120.f);
+    int gridY = static_cast<int>((position.y - 120.f) / 120.f);
+    gridPosition = {gridX, gridY};
 
     weapon.reset();
 }
