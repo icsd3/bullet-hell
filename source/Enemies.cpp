@@ -7,7 +7,7 @@
 #include <cmath>
 
 Enemy::Enemy(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
-    : Entity(pos, ori, tex, spd, mh), weapon(ew)
+    : Entity(pos, ori, tex, spd, mh), weapon(ew), gridPosition(0, 0), target(pos)
 {
     int gridX = static_cast<int>((pos.x - 120.f) / 120.f);
     int gridY = static_cast<int>((pos.y - 120.f) / 120.f);
