@@ -3,36 +3,53 @@
 #include "../headers/Enemies.h"
 #include "../headers/Projectiles.h"
 #include "../headers/Player.h"
+#include "../headers/Door.h"
+#include "../headers/Utils.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
 class Room
 {
+protected:
+    Player &player = Player::getInstance();
+
     sf::Sprite backgroundSprite;
 
-    std::vector<sf::RectangleShape> walls;
-    std::vector<sf::RectangleShape> doors;
-    std::optional<sf::Sprite> doorUp;
-    std::optional<sf::Sprite> doorRight;
-    std::optional<sf::Sprite> doorDown;
-    std::optional<sf::Sprite> doorLeft;
-    // std::vector<Object> obstacles;
-    Room *up;
-    Room *right;
-    Room *down;
-    Room *left;
+    std::vector<Object> walls;
+    std::vector<Door> doors;
+    const sf::Texture *doorVertical;
+    const sf::Texture *doorHorizontal;
+    std::weak_ptr<Room> up;
+    std::weak_ptr<Room> right;
+    std::weak_ptr<Room> down;
+    std::weak_ptr<Room> left;
     sf::Clock animationClock;
     bool open = false;
+    std::vector<Projectile> playerProjectiles;
+    int grid[12][5];
+
+    void animate(const unsigned int &);
+    
+    virtual void doLoad(std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>);
+    virtual void doStart();
+    virtual void doDraw(sf::RenderWindow &);
+    virtual std::pair<int, std::weak_ptr<Room>> doUpdate(const float &);
+    virtual int doCheckPlayerCollisions();
+    virtual bool doCheckEntityCollisions(const Entity &);
 
 public:
-    Room(const bool &, const bool &, const bool &, const bool &, const sf::Texture &, const sf::Texture &, const sf::Texture &);
+    Room(const sf::Texture &, const sf::Texture &, const sf::Texture &);
     Room(const Room &) = default;
-    Room &operator=(const Room &) = default;
-    ~Room() = default;
+    Room &operator=(const Room &) = delete;
+    virtual ~Room() = default;
+    friend std::ostream &operator<<(std::ostream &, const Room &);
 
-    void load(Room *, Room *, Room *, Room *);
+    void spawnPlayerProjectile(const sf::Vector2f &);
+    void load(std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>);
+    void start();
     void draw(sf::RenderWindow &);
-    std::pair<int, Room*> update(const Player &, const bool &);
-    int checkCollisions(const Player &);
+    std::pair<int, std::weak_ptr<Room>> update(const float &);
+    int checkPlayerCollisions();
+    bool checkEntityCollisions(const Entity &);
 };

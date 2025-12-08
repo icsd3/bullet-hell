@@ -3,7 +3,6 @@
 #include "../headers/MainMenu.h"
 #include "../headers/Level.h"
 #include "../headers/Player.h"
-#include "../headers/GUI.h"
 #include "../headers/Projectiles.h"
 #include "../headers/Enemies.h"
 #include "../headers/Settings.h"
@@ -33,7 +32,6 @@ class Game
 
     Settings &settings = Settings::getInstance();
 
-    bool paused = false;
     bool openSettings = false;
     bool fullscreen = true;
     bool controls = true; //true for WASD, false for mouse
@@ -44,8 +42,6 @@ class Game
     mainMenu &menu = mainMenu::getInstance();
     Augment &augment = Augment::getInstance();
     Level &level = Level::getInstance();
-    Player &player = Player::getInstance();
-    GUI &gui = GUI::getInstance();
 
     sf::RenderWindow window;
 

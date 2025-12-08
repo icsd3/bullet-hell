@@ -8,6 +8,7 @@ Level::Level()
     roomBackgroundPath("textures/room_background.png"),
     doorVerticalPath("textures/door_vertical.png"),
     doorHorizontalPath("textures/door_horizontal.png"),
+    obstaclePath("textures/obstacle.png"),
     playerTexture(playerTexturePath),
     enemyTexture(enemyPath),
     playerProjectileTexture(playerProjectilePath),
@@ -15,6 +16,7 @@ Level::Level()
     roomBackgroundTexture(roomBackgroundPath),
     doorVerticalTexture(doorVerticalPath),
     doorHorizontalTexture(doorHorizontalPath),
+    obstacleTexture(obstaclePath),
     map{{0}}
 {
 }
@@ -25,27 +27,25 @@ Level &Level::getInstance()
     return instance;
 }
 
-void Level::generateRooms(const int nr)
+void Level::generateRooms(const int n)
 {
-    std::uniform_int_distribution<int> dist(5 + nr * 2, 8 + nr * 2);
-    int n = dist(rng);
-    int x = 4;
-    int y = 3;
-    map[x][y] = 1;
+    map[4][3] = 1;
     
     std::vector<std::pair<int,int>> frontier;
-    frontier.emplace_back(x, y);
+    frontier.emplace_back(4, 3);
 
     std::vector<std::pair<int,int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
     int cellCount = 1;
+
+    std::mt19937 &rng = Utils::getRng(); 
 
     while (cellCount < n)
     {
         if (frontier.empty())
         {
             std::fill(&map[0][0], &map[0][0] + 35, false);
-            generateRooms(nr);
+            generateRooms(n);
             return;
         }
         std::uniform_int_distribution<int> distF(0, frontier.size() - 1);
@@ -115,7 +115,14 @@ void Level::generateRooms(const int nr)
 
         map[i][j] = rooms.size() + 1;
 
-        rooms.emplace_back(up, right, down, left, doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
+        std::shared_ptr<Room> room;
+
+        if (rooms.size() == 0)
+            room = std::make_shared<Room>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
+        else
+            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture, obstacleTexture);
+
+        rooms.push_back(room);
 
         if (up && !visited[i - 1][j])
         {
@@ -142,42 +149,51 @@ void Level::generateRooms(const int nr)
 
 void Level::load(const int nr)
 {
-    generateRooms(nr);
-    currentRoom = &rooms[0];
+    std::uniform_int_distribution<int> dist(5 + nr * 2, 8 + nr * 2);
+    std::mt19937 &rng = Utils::getRng(); 
+    int n = dist(rng);
+    generateRooms(n);
+    currentRoom = rooms[0];
 
     for (int i = 0; i < 5; i++)
     {
         for (int j = 0; j < 7; j++)
         {
-            Room *up = nullptr;
-            Room *down = nullptr;
-            Room *left = nullptr;
-            Room *right = nullptr;
+            std::weak_ptr<Room> up;
+            std::weak_ptr<Room> down;
+            std::weak_ptr<Room> left;
+            std::weak_ptr<Room> right;
             if (map[i][j] > 0)
             {
                 if (i-1 >= 0 && map[i-1][j] > 0)
-                    up = &rooms[map[i-1][j]-1];
+                    up = rooms[map[i-1][j]-1];
                 if (i+1 < 5 && map[i+1][j] > 0)
-                    down = &rooms[map[i+1][j]-1];
+                    down = rooms[map[i+1][j]-1];
                 if (j-1 >= 0 && map[i][j-1] > 0)
-                    left = &rooms[map[i][j-1]-1];
+                    left = rooms[map[i][j-1]-1];
                 if (j+1 < 7 && map[i][j+1] > 0)
-                    right = &rooms[map[i][j+1]-1];
-                rooms[map[i][j]-1].load(up, right, down, left);
+                    right = rooms[map[i][j+1]-1];
+                rooms[map[i][j]-1]->load(up, right, down, left);
             }
         }
     }
 
-    player.load();
-}
-
-void Level::spawnEnemies(const int &nrOfEnemies)
-{
-    for (int i = 1; i <= nrOfEnemies; i++)
+    for (int i = 0; i < 5; i++)
     {
-        enemies.push_back(Enemy::spawnEnemy(enemyTexture, sf::Vector2f(300.f + i%2 * 1320.f, 300.f + (i-1) / 2 * 480.f), 100.f, 100));
-        enemies.back().load(enemyTexture);
+        for (int j = 0; j < 7; j++)
+        {
+            if (i == 4 && j == 3)
+                map[i][j] = 2;
+            else if (map[i][j] == n)
+                map[i][j] = 3;
+            else if (map[i][j] > 0)
+                map[i][j] = 1;
+        }
     }
+
+    player.load();
+    gui.load(map);
+    currentRoom -> start();
 }
 
 std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bool& controls, const sf::RenderWindow &window)
@@ -188,12 +204,12 @@ std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bo
 
         if (mouseEvent->button == sf::Mouse::Button::Right && !controls)
         {
-            return std::make_pair(1, mapToLogical(sf::Vector2f(mouseEvent->position), window));
+            return std::make_pair(1, Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window));
         }
 
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            return std::make_pair(2, mapToLogical(sf::Vector2f(mouseEvent->position), window));
+            return std::make_pair(2, Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window));
         }
     }
     if (event.is<sf::Event::KeyPressed>())
@@ -247,7 +263,7 @@ sf::Vector2f Level::handleMovementInput(const bool &controls, const sf::RenderWi
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
-            return mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+            return Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
         }
     }
     return {-1.f, -1.f};
@@ -257,7 +273,7 @@ sf::Vector2f Level::handleShootInput(const sf::RenderWindow &window)
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
     {
-        return mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+        return Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
     }
     return {-1.f, -1.f};
 }
@@ -265,37 +281,28 @@ sf::Vector2f Level::handleShootInput(const sf::RenderWindow &window)
 void Level::draw(sf::RenderWindow &window)
 {
     currentRoom->draw(window);
-
-    for (auto &projectile : playerProjectiles)
-        projectile.draw(window);
-
-    for (auto &projectile : enemyProjectiles)
-        projectile.draw(window);
-
-    for (auto &enemy : enemies)
-        enemy.draw(window);
-
     player.draw(window);
+    gui.draw(window);
 }
 
-void Level::update(const float &dt, const sf::Vector2f &target)
+void Level::update(const float &dt, sf::Vector2f &target)
 {
+    int moved = -1;
     sf::Vector2f oldPosition = player.getPosition();
     
     player.update(dt, target);
-    bool finished = enemies.empty();
 
-    std::pair<int, Room*> action = currentRoom->update(player, finished);
+    std::pair<int, std::weak_ptr<Room>> action = currentRoom->update(dt);
 
     if (action.first == -2)
     {
         sf::Vector2f newPosition = player.getPosition();
         
         player.setPosition(sf::Vector2f(newPosition.x, oldPosition.y));
-        int testActionX = currentRoom->checkCollisions(player);
+        int testActionX = currentRoom->checkPlayerCollisions();
         
         player.setPosition(sf::Vector2f(oldPosition.x, newPosition.y));
-        int testActionY = currentRoom->checkCollisions(player);
+        int testActionY = currentRoom->checkPlayerCollisions();
         
         if (testActionX == -2 && testActionY == -2)
             player.setPosition(oldPosition);
@@ -310,103 +317,53 @@ void Level::update(const float &dt, const sf::Vector2f &target)
             player.setPosition(oldPosition);
     }
 
-    else if (action.second != nullptr)
+    else if (!action.second.expired())
     {
-        currentRoom = action.second;
-        playerProjectiles.clear();
-        enemyProjectiles.clear();
+        currentRoom = action.second.lock();
+        currentRoom -> start();
+
         if (action.first == 0)
-            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f});
+        {
+            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT - 195.f});
+            moved = 0;
+        }
+
         else if (action.first == 1)
-            player.setPosition({LOGICAL_WIDTH * 0.1f, LOGICAL_HEIGHT * 0.5f});
+        {
+            player.setPosition({195.f, LOGICAL_HEIGHT * 0.5f});
+            moved = 1;
+        }
+
         else if (action.first == 2)
-            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.15f});
+        {
+            player.setPosition({LOGICAL_WIDTH * 0.5f, 195.f});
+            moved = 2;
+        }
+
         else if (action.first == 3)
-            player.setPosition({LOGICAL_WIDTH * 0.9f, LOGICAL_HEIGHT * 0.5f});
-    }
-
-    for (size_t i = 0; i < playerProjectiles.size();)
-    {
-        if (playerProjectiles[i].update(dt))
-            playerProjectiles.erase(playerProjectiles.begin() + i);
-
-        else
         {
-            if (checkEnemyHits(playerProjectiles[i]))
-                playerProjectiles.erase(playerProjectiles.begin() + i);
-
-            else
-                i++;
+            player.setPosition({LOGICAL_WIDTH - 195.f, LOGICAL_HEIGHT * 0.5f});
+            moved = 3;
         }
+        target = player.getPosition();
     }
 
-    for(auto &enemy : enemies)
-    {
-        enemy.update();
-        if(enemy.canFire())
-        {
-            sf::Vector2f projectileTarget = player.getPosition();
-            std::vector<Projectile> bullets = enemy.fire(projectileTarget, enemyProjectileTexture);
-            
-            for(const auto &bullet : bullets)
-            {
-                enemyProjectiles.push_back(bullet);
-                enemyProjectiles.back().load(enemyProjectileTexture);
-            }
-        }
-    }
-
-    for (size_t i = 0; i < enemyProjectiles.size();)
-    {
-        if (enemyProjectiles[i].update(dt))
-            enemyProjectiles.erase(enemyProjectiles.begin() + i);
-
-        else
-        {
-            if (checkPlayerHits(enemyProjectiles[i], player))
-                enemyProjectiles.erase(enemyProjectiles.begin() + i);
-
-            else
-                i++;
-        }
-    }
+    gui.update(player.getHealthStatus(), moved);
 }
 
-bool Level::checkEnemyHits(const Projectile &projectile)
+void Level::playerFire(const sf::Vector2f &target)
 {
-    for (size_t i = 0; i < enemies.size();)
-    {
-        if (projectile.collidesWith(enemies[i]))
-        {
-            if (enemies[i].takeDamage(projectile.getDamage()))
-                enemies.erase(enemies.begin() + i);
-            return true;
-        }
-
-        else
-            i++;
-    }
-    return false;
+    currentRoom->spawnPlayerProjectile(target);
 }
 
-bool Level::checkPlayerHits(const Projectile &projectile, Player &player)
+std::ostream &operator<<(std::ostream &os, const Level &level)
 {
-    if (projectile.collidesWith(player))
-    {
-        if (player.takeDamage(projectile.getDamage()))
-            std::cout<<"game over\n";
-        return true;
-    }  
-    return false;
-}
-
-void Level::spawnPlayerProjectile(const sf::Vector2f &target)
-{
-    std::vector<Projectile> bullets = player.fire(target, playerProjectileTexture);
-            
-    for(const auto &bullet : bullets)
-    {
-        playerProjectiles.push_back(bullet);
-        playerProjectiles.back().load(playerProjectileTexture);
-    }
+    os << "Level:\n";
+    os << level.player << "\n";
+    os << level.gui << "\n\n";
+    if (level.currentRoom)
+        os << "    Current Room: " << *level.currentRoom << "\n";
+    else
+        os << "    Current Room: None\n";
+    return os;
 }

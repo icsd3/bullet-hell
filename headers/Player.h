@@ -9,36 +9,26 @@
 
 class Player : public Entity
 {
-    explicit Player(const sf::Texture &);
+    explicit Player(sf::Texture &, sf::Texture &);
     Player(const Player &) = delete;
     Player &operator=(const Player &) = delete;
-
-    int maxHealth;
-    int currentHealth;
 
     Weapon *currentWeapon;
     std::vector<Weapon> weapons;
 
     static std::unique_ptr<Player> instance;
-    const sf::Texture &texture;
-    sf::RectangleShape collisionBox;
+
+    void doLoad() override;
+    bool doTakeDamage(const int &) override;
 
 public:
     static Player &getInstance();
-    static Player &Initialize(const sf::Texture &);
-    ~Player() = default;
+    static Player &Initialize(sf::Texture &, sf::Texture &);
     friend std::ostream &operator<<(std::ostream &, const Player &);
-
-    void load();
+    
     void update(const float &, const sf::Vector2f &);
-    void draw(sf::RenderWindow &);
-    bool takeDamage(const int &);
-
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f &);
-    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Texture &);
-    bool canFire();
-    bool boxCollidesWith(const sf::RectangleShape &) const;
-    bool boxCollidesWith(const Object &) const;
+    std::vector<Projectile> fire(const sf::Vector2f &) const;
 };

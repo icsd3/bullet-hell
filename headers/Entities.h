@@ -10,11 +10,23 @@ class Entity : public Object
 {
 protected:
     float speed;
+    int maxHealth;
+    int currentHealth;
+    sf::ConvexShape hitBox;
+    // sf::Clock animationClock;
+
+    void doLoad() override;
+    void doDraw(sf::RenderWindow &) override;
+
+    virtual bool doTakeDamage(const int &);
+    virtual int doHits(const Entity &other) const;
 
 public:
-    Entity(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float);
+    Entity(const sf::Vector2f &, const bool &, sf::Texture &, const float, const int);
     Entity(const Entity &);
     Entity &operator=(const Entity &);
-    ~Entity() = default;
     friend std::ostream &operator<<(std::ostream &, const Entity &);
+
+    int hits(const Entity &other) const;
+    bool takeDamage(const int &);
 };

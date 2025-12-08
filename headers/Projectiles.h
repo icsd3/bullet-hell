@@ -11,14 +11,12 @@ class Projectile : public Entity
     sf::Vector2f origin;
     float range;
 
+    void doLoad() override;
+    int doHits(const Entity &other) const override;
+
 public:
-    Projectile(const bool &, const sf::Vector2f &, const bool &, const std::string &, const sf::Texture &, float, const int &, const sf::Vector2f &, const float &);
-    ~Projectile() = default;
-
-    void load(const sf::Texture &);
-    void draw(sf::RenderWindow &);
-    bool update(const float &); // Returns true if projectile is out of bounds
-    int getDamage() const;
-
+    Projectile(const sf::Vector2f &, const bool &, sf::Texture &, float, const int &, const sf::Vector2f &, const float &);    
     friend std::ostream &operator<<(std::ostream &, const Projectile &);
+
+    bool update(const float &); // Returns true if projectile range exceeded
 };

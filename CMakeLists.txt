@@ -92,7 +92,14 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Level.cpp
     headers/Room.h
     source/Room.cpp
+    headers/EnemyRoom.h
+    source/EnemyRoom.cpp
+    headers/Minimap.h
+    source/Minimap.cpp
     headers/Utils.h
+    source/Utils.cpp
+    headers/Door.h
+    source/Door.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

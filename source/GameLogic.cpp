@@ -21,7 +21,8 @@ void Game::setup()
     window.clear(sf::Color::Black);
     window.display();
     handleNewState();
-    window.setVerticalSyncEnabled(true);
+    // window.setVerticalSyncEnabled(true);
+    window.setFramerateLimit(144);
 }
 
 void Game::selectGameState(gameStates &gameState)
@@ -89,8 +90,6 @@ void Game::handleNewState()
     case level_1:
         updateClock.restart();
         level.load(1);
-        gui.load();
-        level.spawnEnemies(4);
         break;
 
     case level_2:
@@ -116,13 +115,11 @@ void Game::handleNewState()
 
 void Game::togglePause()
 {
-    if(!paused)
+    if(Utils::changePaused(1))
         updateClock.stop();
 
     else
         updateClock.start();
-
-    paused = !paused;
 }
 
 bool Game::handleInputs()
@@ -130,7 +127,7 @@ bool Game::handleInputs()
     bool shouldExit = false;
     bool moved = false;
 
-    if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
+    if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
     {
         sf::Vector2f move = level.handleMovementInput(controls, window);
         sf::Vector2f shoot = level.handleShootInput(window);
@@ -161,9 +158,9 @@ bool Game::handleInputs()
             moved = true;
         }
 
-        if (shoot.x != -1 && shoot.y != -1 && player.canFire())
+        if (shoot.x != -1 && shoot.y != -1)
         {
-            level.spawnPlayerProjectile(shoot);
+            level.playerFire(shoot);
         }
     }
 
@@ -178,7 +175,7 @@ bool Game::handleInputs()
         {
             if (currentState == level_1 || currentState == level_2 || currentState == level_3)
             {
-                if(!paused)
+                if(!Utils::changePaused(0))
                 {
                     togglePause();
                     openSettings = true;
@@ -201,6 +198,9 @@ bool Game::handleInputs()
             else if(event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::I)
                 std::cout << *this;
 
+            else if(event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::H)
+                Utils::changeDisplayBoxes(1);
+
             else if(openSettings)
             {
                 int action = settings.handleInput(window, *event);
@@ -217,7 +217,8 @@ bool Game::handleInputs()
                         window.create(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen);
                     
                     fullscreen = !fullscreen;
-                    window.setVerticalSyncEnabled(true);
+                    // window.setVerticalSyncEnabled(true);
+                    window.setFramerateLimit(144);
                     window.clear(sf::Color::Black);
                     window.display();
                     break;
@@ -229,7 +230,7 @@ bool Game::handleInputs()
                 case 3:
                     openSettings = false;
 
-                    if(paused)
+                    if(Utils::changePaused(0))
                         togglePause();
 
                     break;
@@ -274,7 +275,7 @@ bool Game::handleInputs()
                 }
             }
 
-            else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
+            else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
             {
                 std::pair<int, sf::Vector2f> ans = level.handleInput(*event, controls, window);
                 int action = ans.first;
@@ -287,10 +288,7 @@ bool Game::handleInputs()
                     break;
 
                 case 2:
-                    if (player.canFire())
-                    {
-                        level.spawnPlayerProjectile(ans.second);
-                    }
+                    level.playerFire(ans.second);
                     break;
 
                 case 3:
@@ -327,8 +325,6 @@ void Game::draw()
     case level_2:
     case level_3:
         level.draw(window);
-        gui.update(player.getHealthStatus());
-        gui.draw(window);
         break;
 
     case defeat:
@@ -363,9 +359,11 @@ void Game::Play()
             break;
         }
 
-        if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !paused)
+        if (currentState == level_1 || currentState == level_2 || currentState == level_3)
         {
-            float dt = updateClock.restart().asSeconds();
+            float dt = 0;
+            if (!Utils::changePaused(0))
+                dt = updateClock.restart().asSeconds();
             level.update(dt, target);
         }
         draw();
@@ -378,39 +376,7 @@ std::ostream &operator<<(std::ostream &os, const Game &game)
     os << game.menu << "\n";
     os << game.augment << "\n";
     os << game.settings << "\n";
-    os << game.player << "\n";
-    // os << "Enemies:\n";
-    // os << "    Count: " << game.enemies.size() << "\n";
-    // if(game.enemies.size() != 0)
-    //     for(size_t i=0; i<game.enemies.size(); i++)
-    //     {
-    //         os << "    Enemy " << i+1 << ":\n        "
-    //         << game.enemies[i] << "\n\n";
-    //     }
-    // else 
-    //     os << "\n";
-    // os << "Player projectiles:\n"
-    //    << "    Count: " << game.playerProjectiles.size() << "\n";
-    // if(game.playerProjectiles.size() != 0)
-    //     for(size_t i=0; i<game.playerProjectiles.size(); i++)
-    //     {
-    //         os << "    Projectile " << i+1 << ":\n        "
-    //         << game.playerProjectiles[i] << "\n\n";
-    //     }
-    // else
-    //     os << "\n";
-    // os << "Enemy projectiles:\n"
-    //    << "    Count: " << game.enemyProjectiles.size() << "\n";
-    // if(game.enemyProjectiles.size() != 0)
-    //     for(size_t i=0; i<game.enemyProjectiles.size(); i++)
-    //     {
-    //         os << "    Projectile " << i+1 << ":\n        "
-    //        << game.enemyProjectiles[i] << "\n\n";
-    //     }
-    // else 
-    //     os << "\n";
-    os << "GUI status:\n"
-       << game.gui << "\n\n";
+    os << game.level << "\n";
     os << "Window size: " << game.window.getSize().x << "x" << game.window.getSize().y << "\n\n";
     os << "Current State: " << game.currentState << "\n\n";
     os << "Target Position: (" << game.target.x << ", " << game.target.y << ")\n";
