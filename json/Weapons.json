@@ -43,5 +43,14 @@
         "spread_angle": 0,
         "range": 1.5,
         "bullet_speed": 2
+    },
+    {
+        "name": "beam",
+        "damage": 1,
+        "bullet_nr": 1,
+        "fire_rate": 144,
+        "spread_angle": 0,
+        "range": 1.5,
+        "bullet_speed": 0.2
     }
 ]

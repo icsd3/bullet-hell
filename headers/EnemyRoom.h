@@ -16,6 +16,8 @@ class EnemyRoom : public Room
 
     std::vector<Object> obstacles;
 
+    const int nrOfEnemies;
+
     void doLoad(std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>) override;
     void doStart() override;
     void doDraw(sf::RenderWindow &) override;
@@ -27,7 +29,7 @@ class EnemyRoom : public Room
     bool checkPlayerHits(const Projectile &);
 
 public:
-    EnemyRoom(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &);
+    EnemyRoom(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, const int);
     EnemyRoom(const EnemyRoom &) = default;
     EnemyRoom &operator=(const EnemyRoom &) = delete;
     friend std::ostream &operator<<(std::ostream &, const EnemyRoom &);

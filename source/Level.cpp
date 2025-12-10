@@ -120,7 +120,7 @@ void Level::generateRooms(const int n)
         if (rooms.size() == 0)
             room = std::make_shared<Room>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
         else
-            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture, obstacleTexture);
+            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture, obstacleTexture, 4);
 
         rooms.push_back(room);
 
@@ -281,7 +281,6 @@ sf::Vector2f Level::handleShootInput(const sf::RenderWindow &window)
 void Level::draw(sf::RenderWindow &window)
 {
     currentRoom->draw(window);
-    player.draw(window);
     gui.draw(window);
 }
 
@@ -320,7 +319,6 @@ void Level::update(const float &dt, sf::Vector2f &target)
     else if (!action.second.expired())
     {
         currentRoom = action.second.lock();
-        currentRoom -> start();
 
         if (action.first == 0)
         {
@@ -346,6 +344,7 @@ void Level::update(const float &dt, sf::Vector2f &target)
             moved = 3;
         }
         target = player.getPosition();
+        currentRoom -> start();
     }
 
     gui.update(player.getHealthStatus(), moved);
@@ -362,8 +361,8 @@ std::ostream &operator<<(std::ostream &os, const Level &level)
     os << level.player << "\n";
     os << level.gui << "\n\n";
     if (level.currentRoom)
-        os << "    Current Room: " << *level.currentRoom << "\n";
+        os << "Current Room: " << *level.currentRoom << "\n";
     else
-        os << "    Current Room: None\n";
+        os << "Current Room: None\n";
     return os;
 }

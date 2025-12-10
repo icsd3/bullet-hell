@@ -122,6 +122,8 @@ void Room::doDraw(sf::RenderWindow &window)
     for (auto &wall : walls)
         wall.draw(window);
 
+    player.draw(window);
+
     for (auto &projectile : playerProjectiles)
         projectile.draw(window);
 }
@@ -307,7 +309,7 @@ std::ostream &operator<<(std::ostream &os, const Room &room)
         os << "Down ";
     if (!room.left.expired()) 
         os << "Left ";
-    os << ")";
+    os << ")\n";
     os << "    Player Projectiles:\n";
     os << "        Count: " << room.playerProjectiles.size() << "\n";
     if (!room.playerProjectiles.empty())

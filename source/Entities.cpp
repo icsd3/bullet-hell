@@ -36,11 +36,16 @@ void Entity::doLoad()
 {
     Object::doLoad();
 
-    // float scale = 1.f * LOGICAL_WIDTH / static_cast<float>(texture.value()->getSize().x) / 30.f;
     float scale = 60.f / static_cast<float>(texture.value()->getSize().x);
     sprite.value().setScale(sf::Vector2f(scale, scale));
-    collisionBox.setSize(sf::Vector2f(scale * 0.7f * texture.value()->getSize().x, scale * 0.4f * texture.value()->getSize().y));
-    collisionBox.setOrigin(sf::Vector2f(collisionBox.getSize().x / 2.f, collisionBox.getSize().y));
+    sf::Vector2f size(scale * 0.6f * texture.value()->getSize().x, scale * 0.6f * texture.value()->getSize().y);
+    collisionBox.setPointCount(4);
+    collisionBox.setPoint(0, sf::Vector2f(0.f, 0.f));
+    collisionBox.setPoint(1, sf::Vector2f(size.x, 0.f));
+    collisionBox.setPoint(2, sf::Vector2f(size.x, size.y));
+    collisionBox.setPoint(3, sf::Vector2f(0.f, size.y));
+
+    collisionBox.setOrigin(sf::Vector2f(size.x / 2.f, size.y));
     collisionBox.setPosition(sf::Vector2f(position.x, position.y + scale * 0.5f * texture.value()->getSize().x));
 
     sf::FloatRect bounds = sprite.value().getLocalBounds();

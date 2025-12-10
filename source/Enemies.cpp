@@ -3,9 +3,11 @@
 #include <nlohmann/json.hpp>
 #include <iostream>
 #include <fstream>
+#include <cfloat>
+#include <cmath>
 
 Enemy::Enemy(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
-    : Entity(pos, ori, tex, spd, mh), weapon(ew)
+    : Entity(pos, ori, tex, spd, mh), weapon(ew), gridPosition(0, 0), target(pos)
 {
 }
 
@@ -46,7 +48,12 @@ void Enemy::doLoad()
     currentHealthBar.setOrigin(sf::Vector2f(0, currentHealthBar.getLocalBounds().size.y / 2.f));
     currentHealthBar.setPosition(sf::Vector2f(maxHealthBar.getPosition().x - maxHealthBar.getSize().x / 2.f, maxHealthBar.getPosition().y));
 
+    int gridX = static_cast<int>((position.x - 120.f) / 120.f);
+    int gridY = static_cast<int>((position.y - 120.f) / 120.f);
+    gridPosition = {gridX, gridY};
+
     weapon.reset();
+    updateClock.reset();
 }
 
 void Enemy::doDraw(sf::RenderWindow &window)
@@ -72,14 +79,230 @@ void Enemy::doDraw(sf::RenderWindow &window)
     window.draw(drawCurrentHealthBar);
 }
 
-std::vector<Projectile> Enemy::update(const sf::Vector2f &target)
+std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles, const std::vector<Object> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies, int grid[14][7])
 {
+    sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - 120.f) / 120.f), static_cast<int>((playerPosition.y - 120.f) / 120.f));
+
     weapon.update();
+
     std::vector<Projectile> bullets;
 
-    bullets = weapon.fire(position, target);
+    if (doCheckLineOfSight(position, playerPosition, obstacles))
+    {
+        bullets = weapon.fire(position, playerPosition);
+        updateClock.start();
+        if (updateClock.getElapsedTime().asSeconds() > 0.5f)
+        {
+            target = position;
+            updateClock.reset();
+        }
+    }
+
+    else
+    {
+        target = nextPathPoint(gridPosition, playerGridPosition, grid);
+        updateClock.reset();
+    }
+
+    move(dt, obstacles, walls, doors, enemies);
+
+    grid[gridPosition.x][gridPosition.y] = 2;
+    
+    int tGridX = static_cast<int>((target.x - 120.f) / 120.f);
+    int tGridY = static_cast<int>((target.y - 120.f) / 120.f);
+    
+    if (tGridX >= 0 && tGridX < 14 && tGridY >= 0 && tGridY < 7)
+    {
+        if (tGridX != gridPosition.x || tGridY != gridPosition.y)
+            grid[tGridX][tGridY] = 2;
+    }
 
     return bullets;
+}
+
+sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i& start, const sf::Vector2i& goal, const int grid[14][7])
+{
+    struct Node {
+        int x, y;
+        float g, h;
+        Node* parent;
+    };
+
+    auto inBounds = [&](int x, int y) { return x >= 0 && x < 14 && y >= 0 && y < 7; };
+
+    auto heuristic = [](int x1, int y1, int x2, int y2) {
+        float dx = static_cast<float>(x2 - x1);
+        float dy = static_cast<float>(y2 - y1);
+        return std::sqrt(dx * dx + dy * dy);
+    };
+
+    const std::pair<sf::Vector2i, float> directions[8] = {
+        {{1, 0}, 1.f}, {{-1, 0}, 1.f}, {{0, 1}, 1.f}, {{0, -1}, 1.f},
+        {{1, 1}, 1.4142f}, {{1, -1}, 1.4142f}, {{-1, 1}, 1.4142f}, {{-1, -1}, 1.4142f}
+    };
+
+    bool closed[7][14] = {{false}};
+    std::unique_ptr<Node> nodes[7][14];
+
+    auto cmp = [](const Node* a, const Node* b) 
+    {
+        return a->g + a->h > b->g + b->h;
+    };
+    
+    std::priority_queue<Node*, std::vector<Node*>, decltype(cmp)> open(cmp);
+
+    nodes[start.y][start.x] = std::make_unique<Node>(Node{start.x, start.y, 0.f, heuristic(start.x, start.y, goal.x, goal.y), nullptr});
+    open.push(nodes[start.y][start.x].get());
+
+    while (!open.empty()) {
+        Node* current = open.top();
+        open.pop();
+
+        if (current->x == goal.x && current->y == goal.y) {
+            Node* step = current;
+            while (step->parent && (step->parent->x != start.x || step->parent->y != start.y))
+                step = step->parent;
+            return sf::Vector2f(180.f + step->x * 120.f, 180.f + step->y * 120.f);
+        }
+
+        closed[current->y][current->x] = true;
+
+        for (auto& [dir, cost] : directions) {
+            int nx = current->x + dir.x;
+            int ny = current->y + dir.y;
+
+            if (!inBounds(nx, ny) || grid[nx][ny] == 1 || closed[ny][nx])
+                continue;
+
+            if (dir.x != 0 && dir.y != 0) 
+                if (grid[current->x][current->y + dir.y] == 1 || grid[current->x + dir.x][current->y] == 1)
+                    continue;
+
+            float penalty = (grid[nx][ny] >= 2) ? 5.0f : 1.0f;
+            float newG = current->g + (cost * penalty);
+
+            if (!nodes[ny][nx]) {
+                nodes[ny][nx] = std::make_unique<Node>(Node{nx, ny, newG, heuristic(nx, ny, goal.x, goal.y), current});
+                open.push(nodes[ny][nx].get());
+            }
+            else if (newG < nodes[ny][nx]->g) {
+                nodes[ny][nx]->g = newG;
+                nodes[ny][nx]->parent = current;
+            }
+        }
+    }
+    
+    return sf::Vector2f(180.f + start.x * 120.f, 180.f + start.y * 120.f); 
+}
+
+void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const std::vector<Object> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies)
+{
+    sf::Vector2f separation(0.f, 0.f);
+    int neighbors = 0;
+
+    for (const auto &enemy : enemies)
+    {
+        if (&enemy == this) 
+            continue;
+
+        sf::Vector2f dir = position - enemy.position;
+        float dist = dir.x * dir.x + dir.y * dir.y;
+    
+        if (dist < 3000.f && dist > 0.1f)
+        {
+            separation += dir / std::sqrt(dist);
+            neighbors++;
+        }
+    }
+
+    sf::Vector2f finalDir(0.f, 0.f);
+    sf::Vector2f dir = target - position;
+    float distToTarget = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+
+    if (distToTarget > 30.0f)
+    {
+        finalDir = dir / distToTarget;
+    }
+
+    if (neighbors > 0)
+    {
+        finalDir += separation;
+    }
+
+    float finalLen = std::sqrt(finalDir.x * finalDir.x + finalDir.y * finalDir.y);
+
+    if (finalLen > 0.f)
+    {
+        finalDir /= finalLen;
+
+        sf::Vector2f movement = finalDir * speed * LOGICAL_WIDTH * dt;
+
+        auto checkCollision = [&]() -> bool {
+            for (const auto &wall : walls)
+                if (collidesWith(wall)) 
+                    return true;
+            for (const auto &door : doors)
+                if (collidesWith(door)) 
+                    return true;
+            for (const auto &obstacle : obstacles)
+                if (collidesWith(obstacle)) 
+                    return true;
+            for (const auto &enemy : enemies)
+                if (&enemy != this && collidesWith(enemy)) 
+                    return true;
+            return false;
+        };
+        
+        auto performMove = [&](const sf::Vector2f& moveVec) {
+            sprite.value().move(moveVec);
+            collisionBox.move(moveVec);
+            hitBox.move(moveVec);
+            maxHealthBar.move(moveVec);
+            currentHealthBar.move(moveVec);
+            position = sprite.value().getPosition();
+        };
+
+        performMove(movement);
+
+        if (checkCollision())
+        {
+            performMove(-movement);
+            
+            sf::Vector2f moveX(movement.x, 0.f);
+            performMove(moveX);
+            
+            if (checkCollision())
+            {
+                performMove(-moveX);
+                
+                sf::Vector2f moveY(0.f, movement.y);
+                performMove(moveY);
+                
+                if (checkCollision())
+                {
+                    performMove(-moveY);
+                }
+            }
+        }
+        
+        if (movement.x > 0.2f)
+        {
+            orientation = true;
+            sprite.value().setScale(sf::Vector2f(-std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
+        }
+        else if (movement.x < -0.2f)
+        {
+            orientation = false;
+            sprite.value().setScale(sf::Vector2f(std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
+        }
+    }
+
+    else
+        target = position;
+
+    int gridX = static_cast<int>((position.x - 120.f) / 120.f);
+    int gridY = static_cast<int>((position.y - 120.f) / 120.f);
+    gridPosition = {gridX, gridY};
 }
 
 bool Enemy::doTakeDamage(const int &dmg)
@@ -89,6 +312,16 @@ bool Enemy::doTakeDamage(const int &dmg)
     if (currentHealth <= 0)
         return true;
     return false;
+}
+
+bool Enemy::doCheckLineOfSight(const sf::Vector2f &origin, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles) const
+{
+    for (const auto &obstacle : obstacles)
+    {
+        if (obstacle.lineIntersects(origin, playerPosition))
+            return false;
+    }
+    return true;
 }
 
 std::ostream &operator<<(std::ostream &os, const Enemy &enemy)
