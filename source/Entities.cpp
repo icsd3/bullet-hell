@@ -38,7 +38,7 @@ void Entity::doLoad()
 
     float scale = 60.f / static_cast<float>(texture.value()->getSize().x);
     sprite.value().setScale(sf::Vector2f(scale, scale));
-    sf::Vector2f size(scale * 0.7f * texture.value()->getSize().x, scale * 0.6f * texture.value()->getSize().y);
+    sf::Vector2f size(scale * 0.6f * texture.value()->getSize().x, scale * 0.6f * texture.value()->getSize().y);
     collisionBox.setPointCount(4);
     collisionBox.setPoint(0, sf::Vector2f(0.f, 0.f));
     collisionBox.setPoint(1, sf::Vector2f(size.x, 0.f));

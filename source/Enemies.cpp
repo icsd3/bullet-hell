@@ -53,6 +53,7 @@ void Enemy::doLoad()
     gridPosition = {gridX, gridY};
 
     weapon.reset();
+    updateClock.reset();
 }
 
 void Enemy::doDraw(sf::RenderWindow &window)
@@ -89,13 +90,18 @@ std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playe
     if (doCheckLineOfSight(position, playerPosition, obstacles))
     {
         bullets = weapon.fire(position, playerPosition);
-        target = position;
+        updateClock.start();
+        if (updateClock.getElapsedTime().asSeconds() > 0.5f)
+        {
+            target = position;
+            updateClock.reset();
+        }
     }
 
-    else if (updateClock.getElapsedTime().asSeconds() >= 0.1f)
+    else
     {
         target = nextPathPoint(gridPosition, playerGridPosition, grid);
-        updateClock.restart();
+        updateClock.reset();
     }
 
     move(dt, obstacles, walls, doors, enemies);
@@ -120,7 +126,6 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i& start, const sf::Vector2i&
         int x, y;
         float g, h;
         Node* parent;
-        float f() const { return g + h; }
     };
 
     auto inBounds = [&](int x, int y) { return x >= 0 && x < 14 && y >= 0 && y < 7; };
@@ -141,7 +146,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i& start, const sf::Vector2i&
 
     auto cmp = [](const Node* a, const Node* b) 
     {
-        return a->f() > b->f();
+        return a->g + a->h > b->g + b->h;
     };
     
     std::priority_queue<Node*, std::vector<Node*>, decltype(cmp)> open(cmp);
@@ -200,34 +205,33 @@ void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const st
         if (&enemy == this) 
             continue;
 
-        sf::Vector2f diff = position - enemy.position;
-        float distSq = diff.x * diff.x + diff.y * diff.y;
+        sf::Vector2f dir = position - enemy.position;
+        float dist = dir.x * dir.x + dir.y * dir.y;
     
-        if (distSq < 8100.f && distSq > 0.1f)
+        if (dist < 3000.f && dist > 0.1f)
         {
-            separation += diff / std::sqrt(distSq);
+            separation += dir / std::sqrt(dist);
             neighbors++;
         }
     }
 
-    sf::Vector2f pathDir(0.f, 0.f);
-    sf::Vector2f diff = target - position;
-    float distToTarget = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+    sf::Vector2f finalDir(0.f, 0.f);
+    sf::Vector2f dir = target - position;
+    float distToTarget = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
-    if (distToTarget > 5.0f)
+    if (distToTarget > 30.0f)
     {
-        pathDir = diff / distToTarget;
+        finalDir = dir / distToTarget;
     }
-
-    sf::Vector2f finalDir = pathDir;
 
     if (neighbors > 0)
     {
-        finalDir += separation * 1.5f;
+        finalDir += separation;
     }
 
     float finalLen = std::sqrt(finalDir.x * finalDir.x + finalDir.y * finalDir.y);
-    if (finalLen > 0.5f)
+
+    if (finalLen > 0.f)
     {
         finalDir /= finalLen;
 
@@ -281,12 +285,12 @@ void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const st
             }
         }
         
-        if (movement.x > 0.f)
+        if (movement.x > 0.2f)
         {
             orientation = true;
             sprite.value().setScale(sf::Vector2f(-std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
         }
-        else
+        else if (movement.x < -0.2f)
         {
             orientation = false;
             sprite.value().setScale(sf::Vector2f(std::abs(sprite.value().getScale().x), sprite.value().getScale().y));

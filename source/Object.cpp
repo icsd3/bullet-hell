@@ -155,7 +155,7 @@ void Object::doLoad()
 {
     if (sprite)
     {
-        float scale = 120.f / static_cast<float>(texture.value()->getSize().x);
+        float scale = 114.f / static_cast<float>(texture.value()->getSize().x);
         sprite.value().setScale(sf::Vector2f(scale, scale));
         sf::FloatRect bounds = sprite.value().getLocalBounds();
         sprite.value().setOrigin(sf::Vector2f(bounds.size.x / 2.f, bounds.size.y / 2.f));

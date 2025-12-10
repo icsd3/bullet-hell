@@ -69,7 +69,7 @@ void Player::update(const float &dt, const sf::Vector2f &target)
             orientation = true;
             sprite.value().setScale(sf::Vector2f(-std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
         }
-        else
+        else if (dir.x < 0.f)
         {
             orientation = false;
             sprite.value().setScale(sf::Vector2f(std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
