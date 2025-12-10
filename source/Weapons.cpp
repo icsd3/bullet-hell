@@ -1,6 +1,4 @@
 #include "../headers/Weapons.h"
-#include <iostream>
-
 
 Weapon::Weapon(const std::string &nm, const int dmg, const int bnr, const float fr, const float sa, const float rg, const float bs, const float off, sf::Texture &tex)
     : name(nm), damage(dmg), bullet_nr(bnr), fire_rate(fr), spread_angle(sa), range(rg), bulletSpeed(bs), offset(off), projectileTexture(tex)

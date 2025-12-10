@@ -1,5 +1,4 @@
 #include "../headers/Object.h"
-#include <iostream>
 
 Object::Object(const sf::Vector2f &pos, const bool &ori, const sf::Texture &tex)
     : position(pos), orientation(ori), sprite(tex), texture(&tex)

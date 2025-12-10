@@ -1,6 +1,4 @@
 #include "../headers/MainMenu.h"
-#include "../headers/Utils.h"
-#include <iostream>
 
 mainMenu::mainMenu()
     :backgroundPath("textures/menu_background.png"), 

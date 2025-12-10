@@ -1,5 +1,4 @@
 #include "../headers/Entities.h"
-#include <iostream>
 
 Entity::Entity(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int mh)
     : Object(pos, ori, tex), speed(spd), maxHealth(mh), currentHealth(mh)

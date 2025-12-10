@@ -1,5 +1,4 @@
 #include "../headers/Minimap.h"
-#include "../headers/Utils.h"
 
 Minimap::Minimap()
     : currentPos({4, 3})

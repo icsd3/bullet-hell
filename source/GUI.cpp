@@ -1,5 +1,4 @@
 #include "../headers/GUI.h"
-#include "../headers/Utils.h"
 
 GUI::GUI()
     : fontPath("fonts/arial.ttf"), health(font), fps(font)

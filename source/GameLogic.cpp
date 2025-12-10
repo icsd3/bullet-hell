@@ -1,6 +1,4 @@
 #include "../headers/GameLogic.h"
-#include "../headers/Utils.h"
-#include <iostream>
 
 Game::Game()
     : target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),

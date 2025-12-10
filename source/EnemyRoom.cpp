@@ -11,7 +11,7 @@ void EnemyRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_p
     Room::doLoad(u, r, d, l);
 
     std::mt19937 &rng = Utils::getRng();
-    std::uniform_int_distribution<int> nrOfObstaclesDist(30,32);
+    std::uniform_int_distribution<int> nrOfObstaclesDist(8, 16);
     std::uniform_int_distribution<int> xDist(1, 12);
     std::uniform_int_distribution<int> yDist(1, 5);
     int nrOfObstacles = nrOfObstaclesDist(rng);

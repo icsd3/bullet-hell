@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../headers/Entities.h"
+#include "../headers/Utils.h"
+
 #include <cmath>
 
 class Projectile : public Entity

@@ -1,5 +1,4 @@
 #include "../headers/Projectiles.h"
-#include "../headers/Utils.h"
 
 Projectile::Projectile(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, float spd, const int &dmg, const sf::Vector2f &dir, const float &rn)
     : Entity(pos, ori, tex, spd, 1), damage(dmg), direction(dir), origin(position), range(rn)

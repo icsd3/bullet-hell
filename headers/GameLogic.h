@@ -7,9 +7,11 @@
 #include "../headers/Enemies.h"
 #include "../headers/Settings.h"
 #include "../headers/Augment.h"
+#include "../headers/Utils.h"
 
 #include <SFML/Graphics.hpp>
 #include <optional>
+#include <iostream>
 
 enum gameStates
 {

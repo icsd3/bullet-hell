@@ -1,5 +1,4 @@
 #include "../headers/Augment.h"
-#include "../headers/Utils.h"
 
 Augment::Augment()
     : backgroundPath("textures/augment_background.png"),

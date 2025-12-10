@@ -1,10 +1,4 @@
 #include "../headers/Enemies.h"
-#include "../headers/Utils.h"
-#include <nlohmann/json.hpp>
-#include <iostream>
-#include <fstream>
-#include <cfloat>
-#include <cmath>
 
 Enemy::Enemy(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
     : Entity(pos, ori, tex, spd, mh), weapon(ew), gridPosition(0, 0), target(pos)
@@ -178,7 +172,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i& start, const sf::Vector2i&
                 if (grid[current->x][current->y + dir.y] == 1 || grid[current->x + dir.x][current->y] == 1)
                     continue;
 
-            float penalty = (grid[nx][ny] >= 2) ? 5.0f : 1.0f;
+            float penalty = (grid[nx][ny] >= 2) ? 10.0f : 1.0f;
             float newG = current->g + (cost * penalty);
 
             if (!nodes[ny][nx]) {

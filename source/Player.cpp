@@ -1,5 +1,4 @@
 #include "../headers/Player.h"
-#include "../headers/Utils.h"
 
 Player::Player(sf::Texture &tex, sf::Texture &prtex)
     : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, false, tex, 0.2f, 100), currentWeapon(nullptr)

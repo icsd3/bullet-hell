@@ -1,7 +1,8 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "../headers/Utils.h"
 
+#include <SFML/Graphics.hpp>
 #include <iostream>
 
 class Minimap

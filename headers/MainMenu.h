@@ -1,4 +1,7 @@
 #pragma once
+
+#include "../headers/Utils.h"
+
 #include <SFML/Graphics.hpp>
 #include <optional>
 #include <iostream>

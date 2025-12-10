@@ -3,8 +3,13 @@
 #include "../headers/Entities.h"
 #include "../headers/Weapons.h"
 #include "../headers/Door.h"
+#include "../headers/Utils.h"
 
+#include <nlohmann/json.hpp>
 #include <queue>
+#include <iostream>
+#include <fstream>
+#include <cmath>
 
 class Enemy : public Entity
 {

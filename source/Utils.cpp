@@ -1,7 +1,5 @@
 #include "../headers/Utils.h"
 
-#include <SFML/Graphics.hpp>
-
 std::mt19937 Utils::rng(std::random_device{}());
 bool Utils::paused = false;
 int Utils::displayBoxes = 0;

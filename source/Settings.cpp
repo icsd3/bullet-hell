@@ -1,5 +1,4 @@
 #include "../headers/Settings.h"
-#include "../headers/Utils.h"
 
 Settings::Settings()
     : screenText(font), controlsText(font)

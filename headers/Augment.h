@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "../headers/Player.h"
+#include "../headers/Utils.h"
 
 class Augment
 {

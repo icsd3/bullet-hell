@@ -2,9 +2,10 @@
 
 #include "../headers/Entities.h"
 #include "../headers/Weapons.h"
+#include "../headers/Utils.h"
+
 #include <nlohmann/json.hpp>
 #include <fstream> 
-
 #include <cmath>
 
 class Player : public Entity
