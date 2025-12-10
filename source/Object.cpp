@@ -34,6 +34,64 @@ Object &Object::operator=(const Object &other)
     return *this;
 }
 
+bool Object::collidesWith(const sf::ConvexShape &other) const
+{
+    sf::Transform collisionBoxTransform = collisionBox.getTransform();
+    sf::Transform otherCollisionBoxTransform = other.getTransform();
+
+    auto getPoint = [](const sf::ConvexShape& s, const sf::Transform& t, size_t i) 
+    {
+        return t.transformPoint(s.getPoint(i));
+    };
+
+    auto project = [](const auto& getPointFunc, const sf::ConvexShape& s, const sf::Transform& t, const sf::Vector2f& axis, float& min, float& max)
+    {
+        sf::Vector2f p0 = getPointFunc(s, t, 0);
+        min = max = p0.x * axis.x + p0.y * axis.y;
+
+        for (size_t i = 1; i < s.getPointCount(); ++i) 
+        {
+            sf::Vector2f p = getPointFunc(s, t, i);
+            float proj = p.x * axis.x + p.y * axis.y;
+            if (proj < min) min = proj;
+            if (proj > max) max = proj;
+        }
+    };
+
+    for (int i = 0; i < 2; ++i)
+    {
+        const sf::ConvexShape& shape = (i == 0 ? collisionBox : other);
+        const sf::Transform& transform = (i == 0 ? collisionBoxTransform : otherCollisionBoxTransform);
+
+        for (size_t j = 0; j < shape.getPointCount(); j++)
+        {
+            sf::Vector2f currentPoint = getPoint(shape, transform, j);
+            sf::Vector2f nextPoint = getPoint(shape, transform, (j + 1) % shape.getPointCount());
+
+            sf::Vector2f edge = nextPoint - currentPoint;
+            sf::Vector2f axis(-edge.y, edge.x);
+
+            float len = std::sqrt(axis.x * axis.x + axis.y * axis.y);
+
+            if (!len) 
+                continue;
+
+            axis.x /= len;
+            axis.y /= len;
+
+            float minA, maxA, minB, maxB;
+
+            project(getPoint, collisionBox, collisionBoxTransform, axis, minA, maxA);
+            project(getPoint, other, otherCollisionBoxTransform, axis, minB, maxB);
+
+            if (maxA < minB || maxB < minA)
+                return 0;
+        }
+    }
+
+    return 1;
+}
+
 bool Object::collidesWith(const Object &other) const
 {
     sf::Transform collisionBoxTransform = collisionBox.getTransform();
@@ -90,39 +148,6 @@ bool Object::collidesWith(const Object &other) const
     }
 
     return 1;
-}
-
-bool Object::lineIntersects(const sf::Vector2f &point1, const sf::Vector2f &point2) const
-{
-    auto intersects = [](sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p3, sf::Vector2f p4)
-    {
-        sf::Vector2f s1 = p2 - p1;
-        sf::Vector2f s2 = p4 - p3;
-
-        float denom = (-s2.x * s1.y + s1.x * s2.y);
-        
-        if (denom == 0) 
-            return false;
-
-        float s = (-s1.y * (p1.x - p3.x) + s1.x * (p1.y - p3.y)) / denom;
-        float t = ( s2.x * (p1.y - p3.y) - s2.y * (p1.x - p3.x)) / denom;
-
-        return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
-    };
-
-    sf::Transform t = collisionBox.getTransform();
-    std::vector<sf::Vector2f> p(collisionBox.getPointCount());
-    
-    for (size_t i = 0; i < collisionBox.getPointCount(); i++)
-        p[i] = t.transformPoint(collisionBox.getPoint(i));
-
-    for (size_t i = 0; i < collisionBox.getPointCount(); i++)
-    {
-        if (intersects(point1, point2, p[i], p[(i + 1) % collisionBox.getPointCount()]))
-            return true;
-    }
-
-    return false;
 }
 
 void Object::doDraw(sf::RenderWindow &window)

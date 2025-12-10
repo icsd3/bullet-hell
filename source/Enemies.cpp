@@ -87,7 +87,7 @@ std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playe
 
     std::vector<Projectile> bullets;
 
-    if (doCheckLineOfSight(position, playerPosition, obstacles))
+    if (checkLineOfSight(position, playerPosition, obstacles))
     {
         bullets = weapon.fire(position, playerPosition);
         updateClock.start();
@@ -314,11 +314,23 @@ bool Enemy::doTakeDamage(const int &dmg)
     return false;
 }
 
-bool Enemy::doCheckLineOfSight(const sf::Vector2f &origin, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles) const
+bool Enemy::checkLineOfSight(const sf::Vector2f &origin, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles) const
 {
+    sf::ConvexShape lineOfSight;
+    sf::Vector2f direction = playerPosition - origin;
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    direction /= distance;
+    lineOfSight.setPointCount(6);
+    lineOfSight.setPoint(0, origin);
+    lineOfSight.setPoint(1, origin + 5.f * (direction + direction.rotatedBy(sf::degrees(-90.f))));
+    lineOfSight.setPoint(2, playerPosition - 5.f * (direction + direction.rotatedBy(sf::degrees(90.f))));
+    lineOfSight.setPoint(3, playerPosition);
+    lineOfSight.setPoint(4, playerPosition - 5.f * (direction + direction.rotatedBy(sf::degrees(-90.f))));
+    lineOfSight.setPoint(5, origin + 5.f * (direction + direction.rotatedBy(sf::degrees(90.f))));
+
     for (const auto &obstacle : obstacles)
     {
-        if (obstacle.lineIntersects(origin, playerPosition))
+        if (obstacle.collidesWith(lineOfSight))
             return false;
     }
     return true;

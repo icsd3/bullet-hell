@@ -28,7 +28,7 @@ public:
     friend std::ostream &operator<<(std::ostream &, const Object &);
 
     bool collidesWith(const Object &) const;
-    bool lineIntersects(const sf::Vector2f &, const sf::Vector2f &) const;
+    bool collidesWith(const sf::ConvexShape &) const;
 
     void draw(sf::RenderWindow &);
     void load();

@@ -11,7 +11,7 @@ void EnemyRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_p
     Room::doLoad(u, r, d, l);
 
     std::mt19937 &rng = Utils::getRng();
-    std::uniform_int_distribution<int> nrOfObstaclesDist(6, 12);
+    std::uniform_int_distribution<int> nrOfObstaclesDist(30,32);
     std::uniform_int_distribution<int> xDist(1, 12);
     std::uniform_int_distribution<int> yDist(1, 5);
     int nrOfObstacles = nrOfObstaclesDist(rng);
@@ -173,7 +173,7 @@ void EnemyRoom::doStart()
             int y = yDist(rng);
             while (true)
             {
-                if (grid[x][y] == 0)
+                if (grid[x][y] == 0 && (grid[x+1][y] != 1 || grid[x-1][y] != 1 || grid[x][y+1] != 1 || grid[x][y-1] != 1))
                 {
                     grid[x][y] = 2;
                     enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 0.05f, 100, *enemyProjectileTexture));
