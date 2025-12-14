@@ -1,7 +1,7 @@
-#include "../headers/Enemies.h"
+#include "../headers/Enemy.h"
 
-Enemy::Enemy(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
-    : Entity(pos, ori, tex, spd, mh), weapon(ew), gridPosition(0, 0), target(pos)
+Enemy::Enemy(const sf::Vector2f &pos, sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
+    : Entity(pos, tex, spd, mh), weapon(ew), gridPosition(0, 0), target(pos)
 {
 }
 
@@ -22,18 +22,25 @@ Enemy Enemy::spawnEnemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, co
         0.3f,
         prtex
     );
-    Enemy enemy(pos, false, tex, spd, mh, ew);
+    Enemy enemy(pos, tex, spd, mh, ew);
     return enemy;
 }
 
-void Enemy::doLoad()
+void Enemy::load()
 {
-    Entity::doLoad();
+    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
+        {4.5f / 14, 0.f},
+        {9.5f / 14, 0.f},
+        {1.f, 4.5f / 14},
+        {1.f, 1.f},
+        {0.f, 1.f},
+        {0.f, 4.5f / 14}
+    });
 
-    maxHealthBar.setSize(sf::Vector2f(sprite.value().getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
+    maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
     maxHealthBar.setFillColor(sf::Color(75, 0, 0, 175));
     maxHealthBar.setOrigin(sf::Vector2f(maxHealthBar.getLocalBounds().size.x / 2.f, maxHealthBar.getLocalBounds().size.y / 2.f));
-    maxHealthBar.setPosition(sf::Vector2f(position.x, position.y - sprite.value().getGlobalBounds().size.y / 2.f - maxHealthBar.getSize().y));
+    maxHealthBar.setPosition(sf::Vector2f(position.x, position.y - sprite.getGlobalBounds().size.y / 2.f - maxHealthBar.getSize().y));
     maxHealthBar.setOutlineThickness(2.f);
     maxHealthBar.setOutlineColor(sf::Color::Black);
 
@@ -73,7 +80,7 @@ void Enemy::doDraw(sf::RenderWindow &window)
     window.draw(drawCurrentHealthBar);
 }
 
-std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles, const std::vector<Object> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies, int grid[14][7])
+std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies, int grid[14][7])
 {
     sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - 120.f) / 120.f), static_cast<int>((playerPosition.y - 120.f) / 120.f));
 
@@ -189,7 +196,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i& start, const sf::Vector2i&
     return sf::Vector2f(180.f + start.x * 120.f, 180.f + start.y * 120.f); 
 }
 
-void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const std::vector<Object> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies)
+void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies)
 {
     sf::Vector2f separation(0.f, 0.f);
     int neighbors = 0;
@@ -229,7 +236,7 @@ void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const st
     {
         finalDir /= finalLen;
 
-        sf::Vector2f movement = finalDir * speed * LOGICAL_WIDTH * dt;
+        sf::Vector2f movement = finalDir * speed * dt;
 
         auto checkCollision = [&]() -> bool {
             for (const auto &wall : walls)
@@ -248,12 +255,12 @@ void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const st
         };
         
         auto performMove = [&](const sf::Vector2f& moveVec) {
-            sprite.value().move(moveVec);
+            sprite.move(moveVec);
             collisionBox.move(moveVec);
             hitBox.move(moveVec);
             maxHealthBar.move(moveVec);
             currentHealthBar.move(moveVec);
-            position = sprite.value().getPosition();
+            position = sprite.getPosition();
         };
 
         performMove(movement);
@@ -281,13 +288,11 @@ void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const st
         
         if (movement.x > 0.2f)
         {
-            orientation = true;
-            sprite.value().setScale(sf::Vector2f(-std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
+            sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
         }
         else if (movement.x < -0.2f)
         {
-            orientation = false;
-            sprite.value().setScale(sf::Vector2f(std::abs(sprite.value().getScale().x), sprite.value().getScale().y));
+            sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
         }
     }
 

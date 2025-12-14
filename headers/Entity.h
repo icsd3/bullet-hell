@@ -15,18 +15,18 @@ protected:
     sf::ConvexShape hitBox;
     // sf::Clock animationClock;
 
-    void doLoad() override;
     void doDraw(sf::RenderWindow &) override;
 
     virtual bool doTakeDamage(const int &);
     virtual int doHits(const Entity &other) const;
 
 public:
-    Entity(const sf::Vector2f &, const bool &, sf::Texture &, const float, const int);
+    Entity(const sf::Vector2f &, sf::Texture &, const float, const int);
     Entity(const Entity &);
     Entity &operator=(const Entity &);
     friend std::ostream &operator<<(std::ostream &, const Entity &);
 
+    void load(float, sf::Vector2f, sf::Vector2f, sf::Vector2f, int, std::vector<sf::Vector2f>);
     int hits(const Entity &other) const;
     bool takeDamage(const int &);
 };

@@ -1,35 +1,20 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <optional>
-#include <iostream>
-#include "../headers/Utils.h"
+#include "../headers/Collider.h"
 
-class Object
+class Object : public Collider
 {
 protected:
-    sf::Vector2f position;
-    bool orientation = false; // false = left, true = right
+    sf::Sprite sprite;
+    const sf::Texture* texture;    
 
-    std::optional<sf::Sprite> sprite;
-    std::optional<const sf::Texture*> texture;    
-
-    sf::ConvexShape collisionBox;
-
-    virtual void doDraw(sf::RenderWindow &);
-    virtual void doLoad();
+    void doDraw(sf::RenderWindow &) override;
 
 public:
-    Object(const sf::Vector2f &, const bool &, const sf::Texture &);
-    Object(const sf::Vector2f &, const bool &, const sf::Vector2f &);
+    Object(const sf::Vector2f &, const sf::Texture &);
     Object(const Object &);
     Object &operator=(const Object &);
-    virtual ~Object() = default;
     friend std::ostream &operator<<(std::ostream &, const Object &);
 
-    bool collidesWith(const Object &) const;
-    bool collidesWith(const sf::ConvexShape &) const;
-
-    void draw(sf::RenderWindow &);
-    void load();
+    void load(float, sf::Vector2f, sf::Vector2f, sf::Vector2f);
 };

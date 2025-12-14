@@ -25,9 +25,9 @@ void EnemyRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_p
             if (grid[x][y] == 0)
             {
                 grid[x][y] = 1;
-                Object obstacle(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), false, *obstacleTexture);
+                Object obstacle(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), *obstacleTexture);
                 obstacles.push_back(obstacle);
-                obstacles.back().load();
+                obstacles.back().load(114.f, {1.f, 1.f}, {0.5f, 0.5f}, {0.f, 0.f});
                 break;
             }
             else
@@ -41,13 +41,28 @@ void EnemyRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_p
 
 void EnemyRoom::doDraw(sf::RenderWindow &window)
 {
-    Room::doDraw(window);
+    sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
+    sf::Sprite drawBg = backgroundSprite;
+    drawBg.setPosition(Utils::mapToScreen(backgroundSprite.getPosition(), window));
+    drawBg.scale(scaleFactor);
+    window.draw(drawBg);
+
+    for (auto &door : doors)
+        door.draw(window);
+
+    for (auto &wall : walls)
+        wall.draw(window);
 
     for (auto &obstacle : obstacles)
         obstacle.draw(window);
 
     for (auto &enemy : enemies)
         enemy.draw(window);
+
+    player.draw(window);
+
+    for (auto &projectile : playerProjectiles)
+        projectile.draw(window);
 
     for (auto &projectile : enemyProjectiles)
         projectile.draw(window);
@@ -176,7 +191,7 @@ void EnemyRoom::doStart()
                 if (grid[x][y] == 0 && (grid[x+1][y] != 1 || grid[x-1][y] != 1 || grid[x][y+1] != 1 || grid[x][y-1] != 1))
                 {
                     grid[x][y] = 2;
-                    enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 0.05f, 100, *enemyProjectileTexture));
+                    enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 100, *enemyProjectileTexture));
                     enemies.back().load();
                     break;
                 }

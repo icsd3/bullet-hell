@@ -72,18 +72,18 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/MainMenu.cpp
     headers/Object.h
     source/Object.cpp
-    headers/Entities.h
-    source/Entities.cpp
+    headers/Entity.h
+    source/Entity.cpp
     headers/Player.h
     source/Player.cpp
-    headers/Weapons.h
-    source/Weapons.cpp
+    headers/Weapon.h
+    source/Weapon.cpp
     headers/GUI.h
     source/GUI.cpp
-    headers/Projectiles.h
-    source/Projectiles.cpp
-    headers/Enemies.h
-    source/Enemies.cpp
+    headers/Projectile.h
+    source/Projectile.cpp
+    headers/Enemy.h
+    source/Enemy.cpp
     headers/Settings.h
     source/Settings.cpp
     headers/Augment.h
@@ -100,6 +100,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Utils.cpp
     headers/Door.h
     source/Door.cpp
+    headers/Collider.h
+    source/Collider.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

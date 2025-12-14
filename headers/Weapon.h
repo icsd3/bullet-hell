@@ -3,7 +3,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "../headers/Projectiles.h"
+#include "../headers/Projectile.h"
 #include "../headers/Utils.h"
 
 class Weapon

@@ -1,7 +1,7 @@
-#include "../headers/Entities.h"
+#include "../headers/Entity.h"
 
-Entity::Entity(const sf::Vector2f &pos, const bool &ori, sf::Texture &tex, const float spd, const int mh)
-    : Object(pos, ori, tex), speed(spd), maxHealth(mh), currentHealth(mh)
+Entity::Entity(const sf::Vector2f &pos, sf::Texture &tex, const float spd, const int mh)
+    : Object(pos, tex), speed(spd), maxHealth(mh), currentHealth(mh)
 {
 }
 
@@ -22,41 +22,20 @@ Entity &Entity::operator=(const Entity &other)
     }
     return *this;
 }
-
-std::ostream &operator<<(std::ostream &os, const Entity &entity)
-{
-    os << "Entity (";
-    os << static_cast<const Object &>(entity);
-    os << ", Speed: " << entity.speed << ")";
-    return os;
-}
  
-void Entity::doLoad()
+void Entity::load(float scaleFactor, sf::Vector2f sizeFactor, sf::Vector2f originFactor, sf::Vector2f positionFactor, int pointCount, std::vector<sf::Vector2f> pointFactors)
 {
-    Object::doLoad();
+    Object::load(scaleFactor, sizeFactor, originFactor, positionFactor);
 
-    float scale = 60.f / static_cast<float>(texture.value()->getSize().x);
-    sprite.value().setScale(sf::Vector2f(scale, scale));
-    sf::Vector2f size(scale * 0.6f * texture.value()->getSize().x, scale * 0.6f * texture.value()->getSize().y);
-    collisionBox.setPointCount(4);
-    collisionBox.setPoint(0, sf::Vector2f(0.f, 0.f));
-    collisionBox.setPoint(1, sf::Vector2f(size.x, 0.f));
-    collisionBox.setPoint(2, sf::Vector2f(size.x, size.y));
-    collisionBox.setPoint(3, sf::Vector2f(0.f, size.y));
-
-    collisionBox.setOrigin(sf::Vector2f(size.x / 2.f, size.y));
-    collisionBox.setPosition(sf::Vector2f(position.x, position.y + scale * 0.5f * texture.value()->getSize().x));
-
-    sf::FloatRect bounds = sprite.value().getLocalBounds();
-    sf::Transform t = sprite.value().getTransform();
+    sf::FloatRect bounds = sprite.getLocalBounds();
+    sf::Transform t = sprite.getTransform();
     hitBox.setFillColor(sf::Color(0, 200, 0, 150));
-    hitBox.setPointCount(6);
-    hitBox.setPoint(0, t.transformPoint({bounds.position.x + 4.5f / 14 * bounds.size.x, bounds.position.y}));
-    hitBox.setPoint(1, t.transformPoint({bounds.position.x + 9.5f / 14 * bounds.size.x, bounds.position.y}));
-    hitBox.setPoint(2, t.transformPoint({bounds.position.x + bounds.size.x, bounds.position.y + 4.5f / 14 * bounds.size.y}));
-    hitBox.setPoint(3, t.transformPoint({bounds.position.x + bounds.size.x, bounds.position.y + bounds.size.y}));
-    hitBox.setPoint(4, t.transformPoint({bounds.position.x, bounds.position.y + bounds.size.y}));
-    hitBox.setPoint(5, t.transformPoint({bounds.position.x, bounds.position.y + 4.5f / 14 * bounds.size.y}));
+
+    hitBox.setPointCount(pointCount);
+    for (int i = 0; i < pointCount; i++)
+    {
+        hitBox.setPoint(i, t.transformPoint({bounds.position.x + pointFactors[i].x * bounds.size.x, bounds.position.y + pointFactors[i].y * bounds.size.y}));
+    }
 }
 
 void Entity::doDraw(sf::RenderWindow &window)
@@ -147,4 +126,12 @@ int Entity::doHits(const Entity &other) const
 int Entity::hits(const Entity &other) const
 {
     return doHits(other);
+}
+
+std::ostream &operator<<(std::ostream &os, const Entity &entity)
+{
+    os << "Entity (";
+    os << static_cast<const Object &>(entity);
+    os << ", Speed: " << entity.speed << ")";
+    return os;
 }

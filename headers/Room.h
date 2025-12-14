@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../headers/Enemies.h"
-#include "../headers/Projectiles.h"
+#include "../headers/Enemy.h"
+#include "../headers/Projectile.h"
 #include "../headers/Player.h"
 #include "../headers/Door.h"
 #include "../headers/Utils.h"
@@ -16,7 +16,7 @@ protected:
 
     sf::Sprite backgroundSprite;
 
-    std::vector<Object> walls;
+    std::vector<Collider> walls;
     std::vector<Door> doors;
     const sf::Texture *doorVertical;
     const sf::Texture *doorHorizontal;

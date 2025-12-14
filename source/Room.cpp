@@ -29,9 +29,9 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
             position = sf::Vector2f(((i + 1) / 2) % 2 * 1770, i / 6 * 450  + 150);
         }
 
-        Object wall(position, false, size);
+        Collider wall(position);
         walls.push_back(wall);
-        walls.back().load();
+        walls.back().load(size);
     }
 
     for(int i = 0; i < 4; i++)
@@ -43,9 +43,9 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         {
             size = {120, 150};
             position = {900, 0};
-            Object wall(position, false, size);
+            Collider wall(position);
             walls.push_back(wall);
-            walls.back().load();
+            walls.back().load(size);
             continue;
         }
 
@@ -53,9 +53,9 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         {
             size = {150, 120};
             position = {1770, 480};
-            Object wall(position, false, size);
+            Collider wall(position);
             walls.push_back(wall);
-            walls.back().load();
+            walls.back().load(size);
             continue;
         }
 
@@ -63,9 +63,9 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         {
             size = {120, 150};
             position = {900, 930};
-            Object wall(position, false, size);
+            Collider wall(position);
             walls.push_back(wall);
-            walls.back().load();
+            walls.back().load(size);
             continue;
         }
         
@@ -73,13 +73,12 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         {
             size = {150, 120};
             position = {0, 480};
-            Object wall(position, false, size);
+            Collider wall(position);
             walls.push_back(wall);
-            walls.back().load();
+            walls.back().load(size);
             continue;
         }
 
-        bool orientation = false;
         const sf::Texture *texturePointer;
 
         if (i == 0 || i == 2)
@@ -97,7 +96,7 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
 
         const sf::Texture &texture = *texturePointer;
 
-        Door door(position, orientation, texture, size, i);
+        Door door(position, texture, size, i);
         doors.push_back(door);
         doors.back().load();
     }

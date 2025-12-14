@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../headers/Entities.h"
-#include "../headers/Weapons.h"
+#include "../headers/Entity.h"
+#include "../headers/Weapon.h"
 #include "../headers/Utils.h"
 
 #include <nlohmann/json.hpp>
@@ -19,7 +19,6 @@ class Player : public Entity
 
     static std::unique_ptr<Player> instance;
 
-    void doLoad() override;
     bool doTakeDamage(const int &) override;
 
 public:
@@ -27,6 +26,7 @@ public:
     static Player &Initialize(sf::Texture &, sf::Texture &);
     friend std::ostream &operator<<(std::ostream &, const Player &);
     
+    void load();
     void update(const float &, const sf::Vector2f &);
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;

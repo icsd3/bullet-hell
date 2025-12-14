@@ -1,4 +1,4 @@
-#include "../headers/Weapons.h"
+#include "../headers/Weapon.h"
 
 Weapon::Weapon(const std::string &nm, const int dmg, const int bnr, const float fr, const float sa, const float rg, const float bs, const float off, sf::Texture &tex)
     : name(nm), damage(dmg), bullet_nr(bnr), fire_rate(fr), spread_angle(sa), range(rg), bulletSpeed(bs), offset(off), projectileTexture(tex)
@@ -59,7 +59,7 @@ std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vec
             std::mt19937 &rng =Utils::getRng();
             sf::Angle randomAngle = sf::degrees(dist(rng));
             direction = direction.rotatedBy(randomAngle);
-            Projectile projectile = Projectile(position, true, projectileTexture, bulletSpeed, damage, direction, range);
+            Projectile projectile = Projectile(position, projectileTexture, bulletSpeed, damage, direction, range);
             bullets.push_back(projectile);
         }
     }
