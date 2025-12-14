@@ -23,7 +23,7 @@ Entity &Entity::operator=(const Entity &other)
     return *this;
 }
  
-void Entity::load(const float &scaleFactor, const sf::Vector2f &sizeFactor, const sf::Vector2f &originFactor, const sf::Vector2f &positionFactor, const int &pointCount, std::vector<sf::Vector2f> pointFactors)
+void Entity::load(const float &scaleFactor, const sf::Vector2f &sizeFactor, const sf::Vector2f &originFactor, const sf::Vector2f &positionFactor, const int &pointCount, const std::vector<sf::Vector2f> &pointFactors)
 {
     Object::load(scaleFactor, sizeFactor, originFactor, positionFactor);
 

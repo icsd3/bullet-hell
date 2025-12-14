@@ -26,7 +26,7 @@ public:
     Entity &operator=(const Entity &);
     friend std::ostream &operator<<(std::ostream &, const Entity &);
 
-    void load(const float &, const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const int &, std::vector<sf::Vector2f>);
+    void load(const float &, const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const int &, const std::vector<sf::Vector2f> &);
     int hits(const Entity &other) const;
     bool takeDamage(const int &);
 };
