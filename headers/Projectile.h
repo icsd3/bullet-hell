@@ -1,9 +1,6 @@
 #pragma once
 
 #include "../headers/Entity.h"
-#include "../headers/Utils.h"
-
-#include <cmath>
 
 class Projectile : public Entity
 {
@@ -16,7 +13,7 @@ class Projectile : public Entity
     int doHits(const Entity &other) const override;
 
 public:
-    Projectile(const sf::Vector2f &, sf::Texture &, float, const int &, const sf::Vector2f &, const float &);    
+    Projectile(const sf::Vector2f &, sf::Texture &, float, const int &, const sf::Vector2f &, const float &);
     friend std::ostream &operator<<(std::ostream &, const Projectile &);
 
     void load();

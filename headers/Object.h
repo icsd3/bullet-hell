@@ -6,7 +6,7 @@ class Object : public Collider
 {
 protected:
     sf::Sprite sprite;
-    const sf::Texture* texture;    
+    const sf::Texture *texture;
 
     void doDraw(sf::RenderWindow &) override;
 

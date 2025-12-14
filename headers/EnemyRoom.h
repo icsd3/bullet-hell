@@ -2,16 +2,13 @@
 
 #include "../headers/Room.h"
 
-#include <SFML/Graphics.hpp>
-#include <iostream>
-
 class EnemyRoom : public Room
 {
     sf::Texture *enemyTexture;
     sf::Texture *enemyProjectileTexture;
     sf::Texture *obstacleTexture;
 
-    std::vector<Enemy> enemies; 
+    std::vector<Enemy> enemies;
     std::vector<Projectile> enemyProjectiles;
 
     std::vector<Object> obstacles;
@@ -24,7 +21,7 @@ class EnemyRoom : public Room
     std::pair<int, std::weak_ptr<Room>> doUpdate(const float &) override;
     int doCheckPlayerCollisions() override;
     bool doCheckEntityCollisions(const Entity &) override;
-    
+
     bool checkEnemyHits(const Projectile &);
     bool checkPlayerHits(const Projectile &);
 

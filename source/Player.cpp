@@ -16,12 +16,11 @@ Player::Player(sf::Texture &tex, sf::Texture &prtex)
         w["range"],
         w["bullet_speed"],
         0.f,
-        prtex
-    ));
+        prtex));
     currentWeapon = &weapons.back();
 }
 
-std::unique_ptr<Player> Player::instance = nullptr; 
+std::unique_ptr<Player> Player::instance = nullptr;
 
 Player &Player::getInstance()
 {
@@ -73,19 +72,12 @@ void Player::update(const float &dt, const sf::Vector2f &target)
         }
     }
 
-    currentWeapon -> update();
+    currentWeapon->update();
 }
 
 void Player::load()
-{   
-    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
-        {4.5f / 14, 0.f},
-        {9.5f / 14, 0.f},
-        {1.f, 4.5f / 14},
-        {1.f, 1.f},
-        {0.f, 1.f},
-        {0.f, 4.5f / 14}
-    });
+{
+    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {{4.5f / 14, 0.f}, {9.5f / 14, 0.f}, {1.f, 4.5f / 14}, {1.f, 1.f}, {0.f, 1.f}, {0.f, 4.5f / 14}});
 
     currentWeapon->reset();
 }

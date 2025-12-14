@@ -1,7 +1,7 @@
 #include "../headers/EnemyRoom.h"
 
 EnemyRoom::EnemyRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ept, sf::Texture &ot, const int ne)
-    :Room(dv, dh, background), enemyTexture(&et), enemyProjectileTexture(&ept), obstacleTexture(&ot), nrOfEnemies(ne)
+    : Room(dv, dh, background), enemyTexture(&et), enemyProjectileTexture(&ept), obstacleTexture(&ot), nrOfEnemies(ne)
 {
     animationClock.reset();
 }
@@ -84,18 +84,18 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
 
         else
             i++;
-    } 
+    }
 
     for (int i = 0; i < 14; i++)
         for (int j = 0; j < 7; j++)
             if (grid[i][j] == 2)
-                grid[i][j] = 0; 
+                grid[i][j] = 0;
 
-    for(auto &enemy : enemies)
+    for (auto &enemy : enemies)
     {
         std::vector<Projectile> bullets = enemy.update(dt, player.getPosition(), obstacles, walls, doors, enemies, grid);
 
-        for(const auto &bullet : bullets)
+        for (const auto &bullet : bullets)
         {
             enemyProjectiles.push_back(bullet);
             enemyProjectiles.back().load();
@@ -145,7 +145,7 @@ bool EnemyRoom::checkPlayerHits(const Projectile &projectile)
     if (int damage = projectile.hits(player))
     {
         if (player.takeDamage(damage))
-            std::cout<<"game over\n";
+            std::cout << "game over\n";
         return true;
     }
     return false;
@@ -181,14 +181,13 @@ void EnemyRoom::doStart()
             yDist = std::uniform_int_distribution<int>(1, 2);
         }
 
-
         for (int i = 0; i < nrOfEnemies; i++)
         {
             int x = xDist(rng);
             int y = yDist(rng);
             while (true)
             {
-                if (grid[x][y] == 0 && (grid[x+1][y] != 1 || grid[x-1][y] != 1 || grid[x][y+1] != 1 || grid[x][y-1] != 1))
+                if (grid[x][y] == 0 && (grid[x + 1][y] != 1 || grid[x - 1][y] != 1 || grid[x][y + 1] != 1 || grid[x][y - 1] != 1))
                 {
                     grid[x][y] = 2;
                     enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 100, *enemyProjectileTexture));
@@ -210,9 +209,9 @@ int EnemyRoom::doCheckPlayerCollisions()
     int collides = Room::doCheckPlayerCollisions();
 
     for (const auto &obstacle : obstacles)
-        if(player.collidesWith(obstacle))
+        if (player.collidesWith(obstacle))
             collides = -2;
-    
+
     return collides;
 }
 
@@ -221,7 +220,7 @@ bool EnemyRoom::doCheckEntityCollisions(const Entity &entity)
     bool collides = Room::doCheckEntityCollisions(entity);
 
     for (const auto &obstacle : obstacles)
-        if(entity.collidesWith(obstacle))
+        if (entity.collidesWith(obstacle))
             collides = true;
 
     return collides;

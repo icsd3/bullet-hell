@@ -91,11 +91,11 @@ void Game::handleNewState()
         break;
 
     case level_2:
-        
+
         break;
 
     case level_3:
-        
+
         break;
 
     case defeat:
@@ -113,7 +113,7 @@ void Game::handleNewState()
 
 void Game::togglePause()
 {
-    if(Utils::changePaused(1))
+    if (Utils::changePaused(1))
         updateClock.stop();
 
     else
@@ -130,15 +130,15 @@ bool Game::handleInputs()
         sf::Vector2f move = level.handleMovementInput(controls, window);
         sf::Vector2f shoot = level.handleShootInput(window);
 
-        if(move.x > 0 &&  move.x < LOGICAL_WIDTH && move.y > 0 && move.y < LOGICAL_HEIGHT)
+        if (move.x > 0 && move.x < LOGICAL_WIDTH && move.y > 0 && move.y < LOGICAL_HEIGHT)
         {
             target = move;
             moved = true;
         }
 
-        if((move.x < 0 ||  move.x > LOGICAL_WIDTH) && (move.y > 0 && move.y < LOGICAL_HEIGHT))
+        if ((move.x < 0 || move.x > LOGICAL_WIDTH) && (move.y > 0 && move.y < LOGICAL_HEIGHT))
         {
-            if(move.x < 0)
+            if (move.x < 0)
                 move.x = 0;
             else
                 move.x = LOGICAL_WIDTH;
@@ -146,9 +146,9 @@ bool Game::handleInputs()
             moved = true;
         }
 
-        if((move.y < 0 ||  move.y > LOGICAL_HEIGHT) && (move.x > 0 && move.x < LOGICAL_WIDTH))
+        if ((move.y < 0 || move.y > LOGICAL_HEIGHT) && (move.x > 0 && move.x < LOGICAL_WIDTH))
         {
-            if(move.y < 0)
+            if (move.y < 0)
                 move.y = 0;
             else
                 move.y = LOGICAL_HEIGHT;
@@ -169,11 +169,11 @@ bool Game::handleInputs()
             window.close();
         }
 
-        else if(event->is<sf::Event::FocusLost>())
+        else if (event->is<sf::Event::FocusLost>())
         {
             if (currentState == level_1 || currentState == level_2 || currentState == level_3)
             {
-                if(!Utils::changePaused(0))
+                if (!Utils::changePaused(0))
                 {
                     togglePause();
                     openSettings = true;
@@ -183,23 +183,23 @@ bool Game::handleInputs()
 
         else if (event->is<sf::Event::Resized>())
         {
-            const auto* resized = event->getIf<sf::Event::Resized>();
+            const auto *resized = event->getIf<sf::Event::Resized>();
             sf::FloatRect visibleArea(sf::Vector2f(0, 0), sf::Vector2f(resized->size));
             window.setView(sf::View(visibleArea));
         }
 
         else if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>())
         {
-            if(event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::Backspace)
+            if (event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::Backspace)
                 shouldExit = true;
 
-            else if(event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::I)
+            else if (event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::I)
                 std::cout << *this;
 
-            else if(event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::H)
+            else if (event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::H)
                 Utils::changeDisplayBoxes(1);
 
-            else if(openSettings)
+            else if (openSettings)
             {
                 int action = settings.handleInput(window, *event);
 
@@ -208,12 +208,12 @@ bool Game::handleInputs()
                 case 1:
                     window.close();
 
-                    if(fullscreen)
+                    if (fullscreen)
                         window.create(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Windowed);
-                    
+
                     else
                         window.create(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen);
-                    
+
                     fullscreen = !fullscreen;
                     // window.setVerticalSyncEnabled(true);
                     window.setFramerateLimit(144);
@@ -228,7 +228,7 @@ bool Game::handleInputs()
                 case 3:
                     openSettings = false;
 
-                    if(Utils::changePaused(0))
+                    if (Utils::changePaused(0))
                         togglePause();
 
                     break;
@@ -238,7 +238,7 @@ bool Game::handleInputs()
                 }
             }
 
-            else if(currentState == main_menu)
+            else if (currentState == main_menu)
             {
                 int action = menu.handleInput(window, *event);
 
@@ -281,7 +281,7 @@ bool Game::handleInputs()
                 switch (action)
                 {
                 case 1:
-                    if(!moved && ans.second.x > 0 && ans.second.y > 0 && ans.second.x < LOGICAL_WIDTH && ans.second.y < LOGICAL_HEIGHT)
+                    if (!moved && ans.second.x > 0 && ans.second.y > 0 && ans.second.x < LOGICAL_WIDTH && ans.second.y < LOGICAL_HEIGHT)
                         target = ans.second;
                     break;
 
@@ -291,7 +291,7 @@ bool Game::handleInputs()
 
                 case 3:
                     togglePause();
-                    openSettings = !openSettings;   
+                    openSettings = !openSettings;
                     break;
 
                 default:
@@ -326,18 +326,18 @@ void Game::draw()
         break;
 
     case defeat:
-        
+
         break;
 
     case victory:
-        
+
         break;
 
     default:
         break;
     }
 
-    if(openSettings)
+    if (openSettings)
     {
         settings.draw(window);
     }

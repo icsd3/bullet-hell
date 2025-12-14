@@ -1,10 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <optional>
-#include <iostream>
 
 #include "../headers/Player.h"
-#include "../headers/Utils.h"
 
 class Augment
 {

@@ -2,11 +2,9 @@
 
 #include "../headers/Entity.h"
 #include "../headers/Weapon.h"
-#include "../headers/Utils.h"
 
 #include <nlohmann/json.hpp>
-#include <fstream> 
-#include <cmath>
+#include <fstream>
 
 class Player : public Entity
 {
@@ -25,7 +23,7 @@ public:
     static Player &getInstance();
     static Player &Initialize(sf::Texture &, sf::Texture &);
     friend std::ostream &operator<<(std::ostream &, const Player &);
-    
+
     void load();
     void update(const float &, const sf::Vector2f &);
     sf::Vector2i getHealthStatus() const;

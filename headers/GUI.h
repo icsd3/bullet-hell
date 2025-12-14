@@ -1,10 +1,6 @@
 #pragma once
 
 #include "../headers/Minimap.h"
-#include "../headers/Utils.h"
-
-#include <SFML/Graphics.hpp>
-#include <iostream>
 
 class GUI
 {
@@ -27,7 +23,7 @@ public:
     ~GUI() = default;
     friend std::ostream &operator<<(std::ostream &, const GUI &);
 
-    void load(const int [5][7]);
+    void load(const int[5][7]);
     void update(const sf::Vector2i &, const int &);
     void draw(sf::RenderWindow &);
 };

@@ -1,27 +1,31 @@
 #include "../headers/Level.h"
 
 Level::Level()
-    :playerTexturePath("textures/player.png"),
-    enemyPath("textures/enemy.png"),
-    playerProjectilePath("textures/player_projectile.png"),
-    enemyProjectilePath("textures/enemy_projectile.png"),
-    roomBackgroundPath("textures/room_background.png"),
-    doorVerticalPath("textures/door_vertical.png"),
-    doorHorizontalPath("textures/door_horizontal.png"),
-    obstaclePath("textures/obstacle.png"),
-    playerTexture(playerTexturePath),
-    enemyTexture(enemyPath),
-    playerProjectileTexture(playerProjectilePath),
-    enemyProjectileTexture(enemyProjectilePath),
-    roomBackgroundTexture(roomBackgroundPath),
-    doorVerticalTexture(doorVerticalPath),
-    doorHorizontalTexture(doorHorizontalPath),
-    obstacleTexture(obstaclePath),
-    map{{0}}
+    : playerTexturePath("textures/player.png"),
+      enemyPath("textures/enemy.png"),
+      bossPath("textures/boss.png"),
+      playerProjectilePath("textures/player_projectile.png"),
+      enemyProjectilePath("textures/enemy_projectile.png"),
+      bossProjectilePath("textures/boss_projectile.png"),
+      roomBackgroundPath("textures/room_background.png"),
+      doorVerticalPath("textures/door_vertical.png"),
+      doorHorizontalPath("textures/door_horizontal.png"),
+      obstaclePath("textures/obstacle.png"),
+      playerTexture(playerTexturePath),
+      enemyTexture(enemyPath),
+      bossTexture(bossPath),
+      playerProjectileTexture(playerProjectilePath),
+      enemyProjectileTexture(enemyProjectilePath),
+      bossProjectileTexture(bossProjectilePath),
+      roomBackgroundTexture(roomBackgroundPath),
+      doorVerticalTexture(doorVerticalPath),
+      doorHorizontalTexture(doorHorizontalPath),
+      obstacleTexture(obstaclePath),
+      map{{0}}
 {
 }
 
-Level &Level::getInstance() 
+Level &Level::getInstance()
 {
     static Level instance;
     return instance;
@@ -30,15 +34,15 @@ Level &Level::getInstance()
 void Level::generateRooms(const int n)
 {
     map[4][3] = 1;
-    
-    std::vector<std::pair<int,int>> frontier;
+
+    std::vector<std::pair<int, int>> frontier;
     frontier.emplace_back(4, 3);
 
-    std::vector<std::pair<int,int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    std::vector<std::pair<int, int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
     int cellCount = 1;
 
-    std::mt19937 &rng = Utils::getRng(); 
+    std::mt19937 &rng = Utils::getRng();
 
     while (cellCount < n)
     {
@@ -51,7 +55,7 @@ void Level::generateRooms(const int n)
         std::uniform_int_distribution<int> distF(0, frontier.size() - 1);
         auto [x1, y1] = frontier[distF(rng)];
 
-        std::vector<std::pair<int,int>> moves;
+        std::vector<std::pair<int, int>> moves;
 
         for (const auto &d : dirs)
         {
@@ -86,14 +90,13 @@ void Level::generateRooms(const int n)
             continue;
         }
 
-        std::uniform_int_distribution<int> distM(0, moves.size()-1);
+        std::uniform_int_distribution<int> distM(0, moves.size() - 1);
         auto [nx, ny] = moves[distM(rng)];
 
         map[nx][ny] = 1;
         cellCount++;
-        frontier.emplace_back(nx, ny); 
+        frontier.emplace_back(nx, ny);
     }
-
 
     rooms.clear();
 
@@ -119,8 +122,13 @@ void Level::generateRooms(const int n)
 
         if (rooms.size() == 0)
             room = std::make_shared<Room>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
+        else if (rooms.size() < static_cast<size_t>(n - 1))
+        {
+            std::uniform_int_distribution<int> nrOfEnemiesDist(4, 6);
+            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture, obstacleTexture, nrOfEnemiesDist(rng));
+        }
         else
-            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture, obstacleTexture, 4);
+            room = std::make_shared<BossRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, bossTexture, bossProjectileTexture, obstacleTexture);
 
         rooms.push_back(room);
 
@@ -150,7 +158,7 @@ void Level::generateRooms(const int n)
 void Level::load(const int nr)
 {
     std::uniform_int_distribution<int> dist(5 + nr * 2, 8 + nr * 2);
-    std::mt19937 &rng = Utils::getRng(); 
+    std::mt19937 &rng = Utils::getRng();
     int n = dist(rng);
     generateRooms(n);
     currentRoom = rooms[0];
@@ -165,15 +173,15 @@ void Level::load(const int nr)
             std::weak_ptr<Room> right;
             if (map[i][j] > 0)
             {
-                if (i-1 >= 0 && map[i-1][j] > 0)
-                    up = rooms[map[i-1][j]-1];
-                if (i+1 < 5 && map[i+1][j] > 0)
-                    down = rooms[map[i+1][j]-1];
-                if (j-1 >= 0 && map[i][j-1] > 0)
-                    left = rooms[map[i][j-1]-1];
-                if (j+1 < 7 && map[i][j+1] > 0)
-                    right = rooms[map[i][j+1]-1];
-                rooms[map[i][j]-1]->load(up, right, down, left);
+                if (i - 1 >= 0 && map[i - 1][j] > 0)
+                    up = rooms[map[i - 1][j] - 1];
+                if (i + 1 < 5 && map[i + 1][j] > 0)
+                    down = rooms[map[i + 1][j] - 1];
+                if (j - 1 >= 0 && map[i][j - 1] > 0)
+                    left = rooms[map[i][j - 1] - 1];
+                if (j + 1 < 7 && map[i][j + 1] > 0)
+                    right = rooms[map[i][j + 1] - 1];
+                rooms[map[i][j] - 1]->load(up, right, down, left);
             }
         }
     }
@@ -193,10 +201,10 @@ void Level::load(const int nr)
 
     player.load();
     gui.load(map);
-    currentRoom -> start();
+    currentRoom->start();
 }
 
-std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bool& controls, const sf::RenderWindow &window)
+std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bool &controls, const sf::RenderWindow &window)
 {
     if (event.is<sf::Event::MouseButtonPressed>())
     {
@@ -221,7 +229,7 @@ std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bo
             return std::make_pair(3, sf::Vector2f(-1.f, -1.f));
         }
 
-        else if(controls)
+        else if (controls)
         {
             if (keyPressed->scancode == sf::Keyboard::Scancode::W)
                 return std::make_pair(1, player.getPosition() + sf::Vector2f(0.f, -10.f));
@@ -242,10 +250,10 @@ std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bo
 
 sf::Vector2f Level::handleMovementInput(const bool &controls, const sf::RenderWindow &window)
 {
-    if(controls)
+    if (controls)
     {
         sf::Vector2f movement = player.getPosition();
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
             movement += sf::Vector2f(0.f, -10.f);
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
@@ -257,8 +265,8 @@ sf::Vector2f Level::handleMovementInput(const bool &controls, const sf::RenderWi
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
             movement += sf::Vector2f(10.f, 0.f);
 
-        return movement; 
-    } 
+        return movement;
+    }
     else
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
@@ -288,7 +296,7 @@ void Level::update(const float &dt, sf::Vector2f &target)
 {
     int moved = -1;
     sf::Vector2f oldPosition = player.getPosition();
-    
+
     player.update(dt, target);
 
     std::pair<int, std::weak_ptr<Room>> action = currentRoom->update(dt);
@@ -296,13 +304,13 @@ void Level::update(const float &dt, sf::Vector2f &target)
     if (action.first == -2)
     {
         sf::Vector2f newPosition = player.getPosition();
-        
+
         player.setPosition(sf::Vector2f(newPosition.x, oldPosition.y));
         int testActionX = currentRoom->checkPlayerCollisions();
-        
+
         player.setPosition(sf::Vector2f(oldPosition.x, newPosition.y));
         int testActionY = currentRoom->checkPlayerCollisions();
-        
+
         if (testActionX == -2 && testActionY == -2)
             player.setPosition(oldPosition);
 
@@ -344,7 +352,7 @@ void Level::update(const float &dt, sf::Vector2f &target)
             moved = 3;
         }
         target = player.getPosition();
-        currentRoom -> start();
+        currentRoom->start();
     }
 
     gui.update(player.getHealthStatus(), moved);

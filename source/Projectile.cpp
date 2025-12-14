@@ -7,7 +7,7 @@ Projectile::Projectile(const sf::Vector2f &pos, sf::Texture &tex, float spd, con
 }
 
 void Projectile::load()
-{   
+{
     collisionBox.setRotation(rotation);
     sprite.setRotation(rotation);
 
@@ -31,7 +31,7 @@ bool Projectile::update(const float &dt)
     position = sprite.getPosition();
     sf::Vector2f dir = position - origin;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
-    
+
     if (distance > range)
     {
         return true;

@@ -1,7 +1,7 @@
 #include "../headers/Room.h"
 
 Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background)
-    :backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh), grid{{0}}
+    : backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh), grid{{0}}
 {
     animationClock.reset();
 }
@@ -13,11 +13,11 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
     down = d;
     left = l;
 
-    for(int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++)
     {
         sf::Vector2f position;
         sf::Vector2f size;
-        
+
         if (i < 4)
         {
             size = {900, 150};
@@ -26,7 +26,7 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         else
         {
             size = {150, 330};
-            position = sf::Vector2f(((i + 1) / 2) % 2 * 1770, i / 6 * 450  + 150);
+            position = sf::Vector2f(((i + 1) / 2) % 2 * 1770, i / 6 * 450 + 150);
         }
 
         Collider wall(position);
@@ -34,7 +34,7 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         walls.back().load(size);
     }
 
-    for(int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
         sf::Vector2f position;
         sf::Vector2f size;
@@ -68,7 +68,7 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
             walls.back().load(size);
             continue;
         }
-        
+
         else if (i == 3 && left.expired())
         {
             size = {150, 120};
@@ -143,7 +143,7 @@ void Room::animate(const unsigned int &frame)
 std::pair<int, std::weak_ptr<Room>> Room::doUpdate(const float &dt)
 {
     int action = doCheckPlayerCollisions();
-    
+
     if (animationClock.getElapsedTime().asMilliseconds() >= 600)
     {
         open = true;
@@ -220,8 +220,8 @@ std::pair<int, std::weak_ptr<Room>> Room::update(const float &dt)
 void Room::spawnPlayerProjectile(const sf::Vector2f &target)
 {
     std::vector<Projectile> bullets = player.fire(target);
-            
-    for(const auto &bullet : bullets)
+
+    for (const auto &bullet : bullets)
     {
         playerProjectiles.push_back(bullet);
         playerProjectiles.back().load();
@@ -231,24 +231,24 @@ void Room::spawnPlayerProjectile(const sf::Vector2f &target)
 int Room::doCheckPlayerCollisions()
 {
     for (const auto &wall : walls)
-        if(player.collidesWith(wall))
+        if (player.collidesWith(wall))
             return -2;
 
     int doorDirections[4];
     int doorCount = 0;
-    
-    if (!up.expired()) 
+
+    if (!up.expired())
         doorDirections[doorCount++] = 0;
 
-    if (!right.expired()) 
+    if (!right.expired())
         doorDirections[doorCount++] = 1;
 
-    if (!down.expired()) 
+    if (!down.expired())
         doorDirections[doorCount++] = 2;
 
-    if (!left.expired()) 
+    if (!left.expired())
         doorDirections[doorCount++] = 3;
-    
+
     for (int i = 0; i < doorCount; i++)
     {
         if (player.collidesWith(doors[i]))
@@ -259,7 +259,7 @@ int Room::doCheckPlayerCollisions()
                 return -2;
         }
     }
-    
+
     return -1;
 }
 
@@ -271,11 +271,11 @@ int Room::checkPlayerCollisions()
 bool Room::doCheckEntityCollisions(const Entity &entity)
 {
     for (const auto &wall : walls)
-        if(entity.collidesWith(wall))
+        if (entity.collidesWith(wall))
             return true;
 
     for (const auto &door : doors)
-        if(entity.collidesWith(door))
+        if (entity.collidesWith(door))
             return true;
 
     return false;
@@ -300,13 +300,13 @@ void Room::start()
 std::ostream &operator<<(std::ostream &os, const Room &room)
 {
     os << "Room (Open: " << (room.open ? "Yes" : "No") << ", Neighbors: ";
-    if (!room.up.expired()) 
+    if (!room.up.expired())
         os << "Up ";
-    if (!room.right.expired()) 
+    if (!room.right.expired())
         os << "Right ";
-    if (!room.down.expired()) 
+    if (!room.down.expired())
         os << "Down ";
-    if (!room.left.expired()) 
+    if (!room.left.expired())
         os << "Left ";
     os << ")\n";
     os << "    Player Projectiles:\n";

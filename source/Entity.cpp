@@ -22,7 +22,7 @@ Entity &Entity::operator=(const Entity &other)
     }
     return *this;
 }
- 
+
 void Entity::load(const float &scaleFactor, const sf::Vector2f &sizeFactor, const sf::Vector2f &originFactor, const sf::Vector2f &positionFactor, const int &pointCount, const std::vector<sf::Vector2f> &pointFactors)
 {
     Object::load(scaleFactor, sizeFactor, originFactor, positionFactor);
@@ -70,29 +70,31 @@ int Entity::doHits(const Entity &other) const
     sf::Transform hitBoxTransform = hitBox.getTransform();
     sf::Transform otherHitBoxTransform = other.hitBox.getTransform();
 
-    auto getPoint = [](const sf::ConvexShape& s, const sf::Transform& t, size_t i) 
+    auto getPoint = [](const sf::ConvexShape &s, const sf::Transform &t, size_t i)
     {
         return t.transformPoint(s.getPoint(i));
     };
 
-    auto project = [](const auto& getPointFunc, const sf::ConvexShape& s, const sf::Transform& t, const sf::Vector2f& axis, float& min, float& max)
+    auto project = [](const auto &getPointFunc, const sf::ConvexShape &s, const sf::Transform &t, const sf::Vector2f &axis, float &min, float &max)
     {
         sf::Vector2f p0 = getPointFunc(s, t, 0);
         min = max = p0.x * axis.x + p0.y * axis.y;
 
-        for (size_t i = 1; i < s.getPointCount(); ++i) 
+        for (size_t i = 1; i < s.getPointCount(); ++i)
         {
             sf::Vector2f p = getPointFunc(s, t, i);
             float proj = p.x * axis.x + p.y * axis.y;
-            if (proj < min) min = proj;
-            if (proj > max) max = proj;
+            if (proj < min)
+                min = proj;
+            if (proj > max)
+                max = proj;
         }
     };
 
     for (int i = 0; i < 2; ++i)
     {
-        const sf::ConvexShape& shape = (i == 0 ? hitBox : other.hitBox);
-        const sf::Transform& transform = (i == 0 ? hitBoxTransform : otherHitBoxTransform);
+        const sf::ConvexShape &shape = (i == 0 ? hitBox : other.hitBox);
+        const sf::Transform &transform = (i == 0 ? hitBoxTransform : otherHitBoxTransform);
 
         for (size_t j = 0; j < shape.getPointCount(); j++)
         {
@@ -104,7 +106,7 @@ int Entity::doHits(const Entity &other) const
 
             float len = std::sqrt(axis.x * axis.x + axis.y * axis.y);
 
-            if (!len) 
+            if (!len)
                 continue;
 
             axis.x /= len;

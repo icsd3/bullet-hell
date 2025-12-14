@@ -53,29 +53,31 @@ bool Collider::collidesWith(const sf::ConvexShape &other) const
     sf::Transform collisionBoxTransform = collisionBox.getTransform();
     sf::Transform otherCollisionBoxTransform = other.getTransform();
 
-    auto getPoint = [](const sf::ConvexShape& s, const sf::Transform& t, size_t i) 
+    auto getPoint = [](const sf::ConvexShape &s, const sf::Transform &t, size_t i)
     {
         return t.transformPoint(s.getPoint(i));
     };
 
-    auto project = [](const auto& getPointFunc, const sf::ConvexShape& s, const sf::Transform& t, const sf::Vector2f& axis, float& min, float& max)
+    auto project = [](const auto &getPointFunc, const sf::ConvexShape &s, const sf::Transform &t, const sf::Vector2f &axis, float &min, float &max)
     {
         sf::Vector2f p0 = getPointFunc(s, t, 0);
         min = max = p0.x * axis.x + p0.y * axis.y;
 
-        for (size_t i = 1; i < s.getPointCount(); ++i) 
+        for (size_t i = 1; i < s.getPointCount(); ++i)
         {
             sf::Vector2f p = getPointFunc(s, t, i);
             float proj = p.x * axis.x + p.y * axis.y;
-            if (proj < min) min = proj;
-            if (proj > max) max = proj;
+            if (proj < min)
+                min = proj;
+            if (proj > max)
+                max = proj;
         }
     };
 
     for (int i = 0; i < 2; ++i)
     {
-        const sf::ConvexShape& shape = (i == 0 ? collisionBox : other);
-        const sf::Transform& transform = (i == 0 ? collisionBoxTransform : otherCollisionBoxTransform);
+        const sf::ConvexShape &shape = (i == 0 ? collisionBox : other);
+        const sf::Transform &transform = (i == 0 ? collisionBoxTransform : otherCollisionBoxTransform);
 
         for (size_t j = 0; j < shape.getPointCount(); j++)
         {
@@ -87,7 +89,7 @@ bool Collider::collidesWith(const sf::ConvexShape &other) const
 
             float len = std::sqrt(axis.x * axis.x + axis.y * axis.y);
 
-            if (!len) 
+            if (!len)
                 continue;
 
             axis.x /= len;
@@ -111,29 +113,31 @@ bool Collider::collidesWith(const Collider &other) const
     sf::Transform collisionBoxTransform = collisionBox.getTransform();
     sf::Transform otherCollisionBoxTransform = other.collisionBox.getTransform();
 
-    auto getPoint = [](const sf::ConvexShape& s, const sf::Transform& t, size_t i) 
+    auto getPoint = [](const sf::ConvexShape &s, const sf::Transform &t, size_t i)
     {
         return t.transformPoint(s.getPoint(i));
     };
 
-    auto project = [](const auto& getPointFunc, const sf::ConvexShape& s, const sf::Transform& t, const sf::Vector2f& axis, float& min, float& max)
+    auto project = [](const auto &getPointFunc, const sf::ConvexShape &s, const sf::Transform &t, const sf::Vector2f &axis, float &min, float &max)
     {
         sf::Vector2f p0 = getPointFunc(s, t, 0);
         min = max = p0.x * axis.x + p0.y * axis.y;
 
-        for (size_t i = 1; i < s.getPointCount(); ++i) 
+        for (size_t i = 1; i < s.getPointCount(); ++i)
         {
             sf::Vector2f p = getPointFunc(s, t, i);
             float proj = p.x * axis.x + p.y * axis.y;
-            if (proj < min) min = proj;
-            if (proj > max) max = proj;
+            if (proj < min)
+                min = proj;
+            if (proj > max)
+                max = proj;
         }
     };
 
     for (int i = 0; i < 2; ++i)
     {
-        const sf::ConvexShape& shape = (i == 0 ? collisionBox : other.collisionBox);
-        const sf::Transform& transform = (i == 0 ? collisionBoxTransform : otherCollisionBoxTransform);
+        const sf::ConvexShape &shape = (i == 0 ? collisionBox : other.collisionBox);
+        const sf::Transform &transform = (i == 0 ? collisionBoxTransform : otherCollisionBoxTransform);
 
         for (size_t j = 0; j < shape.getPointCount(); j++)
         {
@@ -145,7 +149,7 @@ bool Collider::collidesWith(const Collider &other) const
 
             float len = std::sqrt(axis.x * axis.x + axis.y * axis.y);
 
-            if (!len) 
+            if (!len)
                 continue;
 
             axis.x /= len;

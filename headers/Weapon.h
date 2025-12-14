@@ -1,10 +1,6 @@
 #pragma once
-#include <string>
-#include <iostream>
-#include <SFML/Graphics.hpp>
 
 #include "../headers/Projectile.h"
-#include "../headers/Utils.h"
 
 class Weapon
 {
@@ -21,7 +17,7 @@ class Weapon
     sf::Texture &projectileTexture;
 
 public:
-    Weapon(const std::string &, const int , const int , const float , const float , const float , const float, const float, sf::Texture &);
+    Weapon(const std::string &, const int, const int, const float, const float, const float, const float, const float, sf::Texture &);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
     ~Weapon() = default;

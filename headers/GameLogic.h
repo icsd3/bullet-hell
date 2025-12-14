@@ -2,16 +2,8 @@
 
 #include "../headers/MainMenu.h"
 #include "../headers/Level.h"
-#include "../headers/Player.h"
-#include "../headers/Projectile.h"
-#include "../headers/Enemy.h"
 #include "../headers/Settings.h"
 #include "../headers/Augment.h"
-#include "../headers/Utils.h"
-
-#include <SFML/Graphics.hpp>
-#include <optional>
-#include <iostream>
 
 enum gameStates
 {
@@ -36,7 +28,7 @@ class Game
 
     bool openSettings = false;
     bool fullscreen = true;
-    bool controls = true; //true for WASD, false for mouse
+    bool controls = true; // true for WASD, false for mouse
     sf::Clock updateClock;
     sf::Vector2f target;
     gameStates currentState;

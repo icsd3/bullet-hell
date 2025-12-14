@@ -4,10 +4,6 @@
 #include "../headers/Projectile.h"
 #include "../headers/Player.h"
 #include "../headers/Door.h"
-#include "../headers/Utils.h"
-
-#include <SFML/Graphics.hpp>
-#include <iostream>
 
 class Room
 {
@@ -30,7 +26,7 @@ protected:
     int grid[14][7];
 
     void animate(const unsigned int &);
-    
+
     virtual void doLoad(std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>);
     virtual void doStart();
     virtual void doDraw(sf::RenderWindow &);

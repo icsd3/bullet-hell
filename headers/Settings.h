@@ -2,7 +2,6 @@
 
 #include "../headers/Utils.h"
 
-#include <SFML/Graphics.hpp>
 #include <iostream>
 
 class Settings

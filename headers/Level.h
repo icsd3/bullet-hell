@@ -1,11 +1,9 @@
 #pragma once
 
 #include "../headers/EnemyRoom.h"
-#include "../headers/Utils.h"
+#include "../headers/BossRoom.h"
 #include "../headers/GUI.h"
 
-#include <SFML/Graphics.hpp>
-#include <iostream>
 #include <queue>
 
 class Level
@@ -14,8 +12,10 @@ class Level
 
     std::string playerTexturePath;
     std::string enemyPath;
+    std::string bossPath;
     std::string playerProjectilePath;
     std::string enemyProjectilePath;
+    std::string bossProjectilePath;
     std::string roomBackgroundPath;
     std::string doorVerticalPath;
     std::string doorHorizontalPath;
@@ -23,8 +23,10 @@ class Level
 
     sf::Texture playerTexture;
     sf::Texture enemyTexture;
+    sf::Texture bossTexture;
     sf::Texture playerProjectileTexture;
     sf::Texture enemyProjectileTexture;
+    sf::Texture bossProjectileTexture;
     sf::Texture roomBackgroundTexture;
     sf::Texture doorVerticalTexture;
     sf::Texture doorHorizontalTexture;
@@ -36,11 +38,12 @@ class Level
     GUI &gui = GUI::getInstance();
     Player &player = Player::Initialize(playerTexture, playerProjectileTexture);
 
+    void generateRooms(const int);
+
 public:
     static Level &getInstance();
     friend std::ostream &operator<<(std::ostream &, const Level &);
 
-    void generateRooms(const int);
     void update(const float &, sf::Vector2f &);
     void load(const int);
     std::pair<int, sf::Vector2f> handleInput(const sf::Event &, const bool &, const sf::RenderWindow &);

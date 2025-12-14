@@ -94,6 +94,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Room.cpp
     headers/EnemyRoom.h
     source/EnemyRoom.cpp
+    headers/BossRoom.h
+    source/BossRoom.cpp
     headers/Minimap.h
     source/Minimap.cpp
     headers/Utils.h

@@ -34,7 +34,7 @@ void Settings::load()
 
     controlsButton.setSize(sf::Vector2f(0.3f * LOGICAL_WIDTH, 0.05f * LOGICAL_HEIGHT));
     controlsButton.setOrigin(sf::Vector2f(controlsButton.getLocalBounds().position.x + 0.5f * controlsButton.getLocalBounds().size.x,
-                                        controlsButton.getLocalBounds().position.y + 0.5f * controlsButton.getLocalBounds().size.y));
+                                          controlsButton.getLocalBounds().position.y + 0.5f * controlsButton.getLocalBounds().size.y));
     controlsButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y + 50.f));
     controlsButton.setFillColor(sf::Color::Black);
     controlsButton.setOutlineThickness(3.f);
@@ -83,33 +83,33 @@ void Settings::draw(sf::RenderWindow &window)
     sf::Text drawScreenText = screenText;
     drawScreenText.setPosition(Utils::mapToScreen(screenText.getPosition(), window));
     drawScreenText.setOrigin(sf::Vector2f(drawScreenText.getLocalBounds().position.x + 0.5f * drawScreenText.getLocalBounds().size.x,
-                                        drawScreenText.getLocalBounds().position.y + 0.5f * drawScreenText.getLocalBounds().size.y));
+                                          drawScreenText.getLocalBounds().position.y + 0.5f * drawScreenText.getLocalBounds().size.y));
     drawScreenText.setScale(scaleFactor);
     window.draw(drawScreenText);
 
     sf::Text drawControlsText = controlsText;
     drawControlsText.setPosition(Utils::mapToScreen(controlsText.getPosition(), window));
     drawControlsText.setOrigin(sf::Vector2f(drawControlsText.getLocalBounds().position.x + 0.5f * drawControlsText.getLocalBounds().size.x,
-                                        drawControlsText.getLocalBounds().position.y + 0.5f * drawControlsText.getLocalBounds().size.y));
+                                            drawControlsText.getLocalBounds().position.y + 0.5f * drawControlsText.getLocalBounds().size.y));
     drawControlsText.setScale(scaleFactor);
     window.draw(drawControlsText);
 }
 
 int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event)
 {
-    if(event.is<sf::Event::MouseButtonPressed>())
+    if (event.is<sf::Event::MouseButtonPressed>())
     {
         const auto *mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
-        if(mouseEvent->button == sf::Mouse::Button::Left)
+        if (mouseEvent->button == sf::Mouse::Button::Left)
         {
             sf::Vector2f mousePos = Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window);
-            
+
             const auto screenButtonBounds = screenButton.getGlobalBounds();
             const auto controlsButtonBounds = controlsButton.getGlobalBounds();
 
-            if(screenButtonBounds.contains(mousePos))
+            if (screenButtonBounds.contains(mousePos))
             {
-                if(screenText.getString() == "Window Mode: Fullscreen")
+                if (screenText.getString() == "Window Mode: Fullscreen")
                 {
                     screenText.setString("Window Mode: Windowed");
                 }
@@ -119,9 +119,9 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
                 }
                 return 1; // Change window mode
             }
-            if(controlsButtonBounds.contains(mousePos))
+            if (controlsButtonBounds.contains(mousePos))
             {
-                if(controlsText.getString() == "Controls: WASD")
+                if (controlsText.getString() == "Controls: WASD")
                 {
                     controlsText.setString("Controls: Mouse");
                 }
@@ -133,10 +133,10 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
             }
         }
     }
-    else if(event.is<sf::Event::KeyPressed>())
+    else if (event.is<sf::Event::KeyPressed>())
     {
         const auto *keyboardEvent = event.getIf<sf::Event::KeyPressed>();
-        if(keyboardEvent->scancode == sf::Keyboard::Scancode::Escape)
+        if (keyboardEvent->scancode == sf::Keyboard::Scancode::Escape)
         {
             return 3; // Close settings
         }

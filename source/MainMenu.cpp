@@ -1,18 +1,18 @@
 #include "../headers/MainMenu.h"
 
 mainMenu::mainMenu()
-    :backgroundPath("textures/menu_background.png"), 
-    startButtonPath("textures/start_button.png"), 
-    settingsButtonPath("textures/settings_button.png"), 
-    exitButtonPath("textures/exit_button.png"),
-    backgroundTexture(backgroundPath),
-    startButtonTexture(startButtonPath),
-    settingsButtonTexture(settingsButtonPath),
-    exitButtonTexture(exitButtonPath),
-    backgroundSprite(backgroundTexture),
-    startButtonSprite(startButtonTexture),
-    settingsButtonSprite(settingsButtonTexture),
-    exitButtonSprite(exitButtonTexture)
+    : backgroundPath("textures/menu_background.png"),
+      startButtonPath("textures/start_button.png"),
+      settingsButtonPath("textures/settings_button.png"),
+      exitButtonPath("textures/exit_button.png"),
+      backgroundTexture(backgroundPath),
+      startButtonTexture(startButtonPath),
+      settingsButtonTexture(settingsButtonPath),
+      exitButtonTexture(exitButtonPath),
+      backgroundSprite(backgroundTexture),
+      startButtonSprite(startButtonTexture),
+      settingsButtonSprite(settingsButtonTexture),
+      exitButtonSprite(exitButtonTexture)
 {
 }
 
@@ -56,7 +56,7 @@ void mainMenu::load()
         exitButtonTexture.getSize().y / 2.f));
     exitButtonSprite.setPosition(sf::Vector2f(
         LOGICAL_WIDTH / 2.f,
-        LOGICAL_HEIGHT / 4.f *3.f));
+        LOGICAL_HEIGHT / 4.f * 3.f));
 }
 
 void mainMenu::draw(sf::RenderWindow &window)
@@ -125,8 +125,7 @@ int mainMenu::handleInput(const sf::RenderWindow &window, const sf::Event &event
         }
     }
     return 0;
-}   
-
+}
 
 std::ostream &operator<<(std::ostream &os, const mainMenu &menu)
 {
