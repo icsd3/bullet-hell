@@ -16,5 +16,5 @@ public:
     Object &operator=(const Object &);
     friend std::ostream &operator<<(std::ostream &, const Object &);
 
-    void load(float, sf::Vector2f, sf::Vector2f, sf::Vector2f);
+    void load(const float &, const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &);
 };

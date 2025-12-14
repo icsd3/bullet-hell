@@ -15,7 +15,7 @@ protected:
     virtual void doDraw(sf::RenderWindow &);
 
 public:
-    Collider(const sf::Vector2f &);
+    explicit Collider(const sf::Vector2f &);
     Collider(const Collider &);
     Collider &operator=(const Collider &);
     virtual ~Collider() = default;

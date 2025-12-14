@@ -21,7 +21,7 @@ Object &Object::operator=(const Object &other)
     return *this;
 }
 
-void Object::load(float scaleFactor, sf::Vector2f sizeFactor, sf::Vector2f originFactor, sf::Vector2f positionFactor)
+void Object::load(const float &scaleFactor, const sf::Vector2f &sizeFactor, const sf::Vector2f &originFactor, const sf::Vector2f &positionFactor)
 {
     float scale = scaleFactor / static_cast<float>(texture->getSize().x);
     
