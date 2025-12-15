@@ -3,7 +3,13 @@
 Game::Game()
     : target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
       currentState(main_menu),
-      window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
+      window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen),
+      playerPath("textures/player.png"),
+      playerProjectilePath("textures/player_projectile.png"),
+      playerTexture(playerPath),
+      playerProjectileTexture(playerProjectilePath),
+      player(playerTexture, playerProjectileTexture), 
+      level(player, gui)
 {
     setup();
 }

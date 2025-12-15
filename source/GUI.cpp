@@ -9,11 +9,7 @@ GUI::GUI()
     }
 }
 
-GUI &GUI::getInstance()
-{
-    static GUI instance;
-    return instance;
-}
+
 
 std::ostream &operator<<(std::ostream &os, const GUI &gui)
 {
@@ -23,8 +19,9 @@ std::ostream &operator<<(std::ostream &os, const GUI &gui)
     return os;
 }
 
-void GUI::load(const int map[5][7])
+void GUI::load(const int map[5][7], Player &p)
 {
+    player = &p;
     maxHealthBar.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 44.f));
     maxHealthBar.setOrigin(sf::Vector2f(0.5f * maxHealthBar.getLocalBounds().size.x, 0.5f * maxHealthBar.getLocalBounds().size.y));
     maxHealthBar.setPosition(sf::Vector2f(0.5f * LOGICAL_WIDTH, LOGICAL_HEIGHT - 0.5f * maxHealthBar.getSize().y - 3.f));
@@ -49,8 +46,9 @@ void GUI::load(const int map[5][7])
     minimap.load(map);
 }
 
-void GUI::update(const sf::Vector2i &HP, const int &moved)
+void GUI::update(const int &moved)
 {
+    sf::Vector2i HP = player->getHealthStatus();
     currentHealthBar.setSize(sf::Vector2f(static_cast<float>(HP.x) / static_cast<float>(HP.y) * maxHealthBar.getSize().x, currentHealthBar.getSize().y));
 
     health.setString("HP: " + std::to_string(HP.x) + " / " + std::to_string(HP.y));

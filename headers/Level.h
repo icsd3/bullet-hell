@@ -3,17 +3,20 @@
 #include "../headers/EnemyRoom.h"
 #include "../headers/BossRoom.h"
 #include "../headers/GUI.h"
-
+#include "../headers/Augment.h"
+#include "../headers/Player.h"
 #include <queue>
 
 class Level
 {
-    Level();
+    Level(const Level &) = delete;
+    Level &operator=(const Level &) = delete;
 
-    std::string playerTexturePath;
+    Player &player;
+    GUI &gui;
+
     std::string enemyPath;
     std::string bossPath;
-    std::string playerProjectilePath;
     std::string enemyProjectilePath;
     std::string bossProjectilePath;
     std::string roomBackgroundPath;
@@ -21,10 +24,8 @@ class Level
     std::string doorHorizontalPath;
     std::string obstaclePath;
 
-    sf::Texture playerTexture;
     sf::Texture enemyTexture;
     sf::Texture bossTexture;
-    sf::Texture playerProjectileTexture;
     sf::Texture enemyProjectileTexture;
     sf::Texture bossProjectileTexture;
     sf::Texture roomBackgroundTexture;
@@ -35,13 +36,11 @@ class Level
     int map[5][7];
     std::vector<std::shared_ptr<Room>> rooms;
     std::shared_ptr<Room> currentRoom;
-    GUI &gui = GUI::getInstance();
-    Player &player = Player::Initialize(playerTexture, playerProjectileTexture);
 
     void generateRooms(const int);
 
 public:
-    static Level &getInstance();
+    Level(Player &, GUI &);
     friend std::ostream &operator<<(std::ostream &, const Level &);
 
     void update(const float &, sf::Vector2f &);

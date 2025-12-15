@@ -26,8 +26,8 @@ class EnemyRoom : public Room
     bool checkPlayerHits(const Projectile &);
 
 public:
-    EnemyRoom(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, const int);
-    EnemyRoom(const EnemyRoom &) = default;
+    EnemyRoom(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, const int, Player &);
+    EnemyRoom(const EnemyRoom &) = delete;
     EnemyRoom &operator=(const EnemyRoom &) = delete;
     friend std::ostream &operator<<(std::ostream &, const EnemyRoom &);
 };

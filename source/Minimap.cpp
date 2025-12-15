@@ -5,12 +5,6 @@ Minimap::Minimap()
 {
 }
 
-Minimap &Minimap::getInstance()
-{
-    static Minimap instance;
-    return instance;
-}
-
 void Minimap::load(const int map[5][7])
 {
     background.setSize({334, 150});

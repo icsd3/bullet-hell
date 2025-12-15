@@ -6,13 +6,14 @@
 
 class Minimap
 {
-    Minimap();
     sf::RectangleShape background;
     std::pair<int, int> currentPos;
     std::vector<sf::RectangleShape> grid;
 
 public:
-    static Minimap &getInstance();
+    Minimap();
+    Minimap(const Minimap &) = delete;
+    Minimap &operator=(const Minimap &) = delete;
     ~Minimap() = default;
 
     void load(const int[5][7]);

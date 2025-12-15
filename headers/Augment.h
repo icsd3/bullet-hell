@@ -4,10 +4,6 @@
 
 class Augment
 {
-    Augment();
-    Augment(const Augment &) = delete;
-    Augment &operator=(const Augment &) = delete;
-
     std::string backgroundPath;
     std::string buttonPath;
     std::string fontPath;
@@ -25,7 +21,9 @@ class Augment
     sf::Text thirdButtonText;
 
 public:
-    static Augment &getInstance();
+    Augment();
+    Augment(const Augment &) = delete;
+    Augment &operator=(const Augment &) = delete;
     ~Augment() = default;
     friend std::ostream &operator<<(std::ostream &, const Augment &);
 

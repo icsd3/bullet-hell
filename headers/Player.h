@@ -8,20 +8,15 @@
 
 class Player : public Entity
 {
-    explicit Player(sf::Texture &, sf::Texture &);
-    Player(const Player &) = delete;
-    Player &operator=(const Player &) = delete;
-
     Weapon *currentWeapon;
     std::vector<Weapon> weapons;
-
-    static std::unique_ptr<Player> instance;
 
     bool doTakeDamage(const int &) override;
 
 public:
-    static Player &getInstance();
-    static Player &Initialize(sf::Texture &, sf::Texture &);
+    Player(sf::Texture &, sf::Texture &);
+    Player(const Player &) = delete;
+    Player &operator=(const Player &) = delete;
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
     void load();

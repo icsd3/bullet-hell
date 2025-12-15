@@ -1,7 +1,7 @@
 #include "../headers/EnemyRoom.h"
 
-EnemyRoom::EnemyRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ept, sf::Texture &ot, const int ne)
-    : Room(dv, dh, background), enemyTexture(&et), enemyProjectileTexture(&ept), obstacleTexture(&ot), nrOfEnemies(ne)
+EnemyRoom::EnemyRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ept, sf::Texture &ot, const int ne, Player &player)
+    : Room(dv, dh, background, player), enemyTexture(&et), enemyProjectileTexture(&ept), obstacleTexture(&ot), nrOfEnemies(ne)
 {
     animationClock.reset();
 }

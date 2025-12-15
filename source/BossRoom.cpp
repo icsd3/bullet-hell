@@ -1,7 +1,7 @@
 #include "../headers/BossRoom.h"
 
-BossRoom::BossRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &bt, sf::Texture &bpt, sf::Texture &ot)
-    : Room(dv, dh, background), bossTexture(&bt), bossProjectileTexture(&bpt), obstacleTexture(&ot)
+BossRoom::BossRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &bt, sf::Texture &bpt, sf::Texture &ot, Player &player)
+    : Room(dv, dh, background, player), bossTexture(&bt), bossProjectileTexture(&bpt), obstacleTexture(&ot)
 {
     animationClock.reset();
 }

@@ -24,7 +24,7 @@ class BossRoom : public Room
     bool checkPlayerHits(const Projectile &);
 
 public:
-    BossRoom(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &);
+    BossRoom(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, Player &);
     BossRoom(const BossRoom &) = delete;
     BossRoom &operator=(const BossRoom &) = delete;
     friend std::ostream &operator<<(std::ostream &, const BossRoom &);

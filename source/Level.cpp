@@ -1,20 +1,17 @@
 #include "../headers/Level.h"
 
-Level::Level()
-    : playerTexturePath("textures/player.png"),
+Level::Level(Player &p, GUI &g)
+    : player(p), gui(g),
       enemyPath("textures/enemy.png"),
       bossPath("textures/boss.png"),
-      playerProjectilePath("textures/player_projectile.png"),
       enemyProjectilePath("textures/enemy_projectile.png"),
       bossProjectilePath("textures/boss_projectile.png"),
       roomBackgroundPath("textures/room_background.png"),
       doorVerticalPath("textures/door_vertical.png"),
       doorHorizontalPath("textures/door_horizontal.png"),
       obstaclePath("textures/obstacle.png"),
-      playerTexture(playerTexturePath),
       enemyTexture(enemyPath),
       bossTexture(bossPath),
-      playerProjectileTexture(playerProjectilePath),
       enemyProjectileTexture(enemyProjectilePath),
       bossProjectileTexture(bossProjectilePath),
       roomBackgroundTexture(roomBackgroundPath),
@@ -23,12 +20,6 @@ Level::Level()
       obstacleTexture(obstaclePath),
       map{{0}}
 {
-}
-
-Level &Level::getInstance()
-{
-    static Level instance;
-    return instance;
 }
 
 void Level::generateRooms(const int n)
@@ -121,14 +112,14 @@ void Level::generateRooms(const int n)
         std::shared_ptr<Room> room;
 
         if (rooms.size() == 0)
-            room = std::make_shared<Room>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture);
+            room = std::make_shared<Room>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, player);
         else if (rooms.size() < static_cast<size_t>(n - 1))
         {
             std::uniform_int_distribution<int> nrOfEnemiesDist(4, 6);
-            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture, obstacleTexture, nrOfEnemiesDist(rng));
+            room = std::make_shared<EnemyRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, enemyTexture, enemyProjectileTexture, obstacleTexture, nrOfEnemiesDist(rng), player);
         }
         else
-            room = std::make_shared<BossRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, bossTexture, bossProjectileTexture, obstacleTexture);
+            room = std::make_shared<BossRoom>(doorVerticalTexture, doorHorizontalTexture, roomBackgroundTexture, bossTexture, bossProjectileTexture, obstacleTexture, player);
 
         rooms.push_back(room);
 
@@ -200,7 +191,7 @@ void Level::load(const int nr)
     }
 
     player.load();
-    gui.load(map);
+    gui.load(map, player);
     currentRoom->start();
 }
 
@@ -355,7 +346,7 @@ void Level::update(const float &dt, sf::Vector2f &target)
         currentRoom->start();
     }
 
-    gui.update(player.getHealthStatus(), moved);
+    gui.update(moved);
 }
 
 void Level::playerFire(const sf::Vector2f &target)

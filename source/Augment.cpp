@@ -17,12 +17,6 @@ Augment::Augment()
 {
 }
 
-Augment &Augment::getInstance()
-{
-    static Augment instance;
-    return instance;
-}
-
 void Augment::load()
 {
     backgroundSprite.setScale(sf::Vector2f(

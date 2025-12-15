@@ -20,19 +20,6 @@ Player::Player(sf::Texture &tex, sf::Texture &prtex)
     currentWeapon = &weapons.back();
 }
 
-std::unique_ptr<Player> Player::instance = nullptr;
-
-Player &Player::getInstance()
-{
-    return *instance;
-}
-
-Player &Player::Initialize(sf::Texture &tex, sf::Texture &prtex)
-{
-    instance = std::unique_ptr<Player>(new Player(tex, prtex));
-    return *instance;
-}
-
 std::ostream &operator<<(std::ostream &os, const Player &player)
 {
     os << "Player:\n    ";

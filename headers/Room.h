@@ -8,7 +8,7 @@
 class Room
 {
 protected:
-    Player &player = Player::getInstance();
+    Player &player;
 
     sf::Sprite backgroundSprite;
 
@@ -35,8 +35,8 @@ protected:
     virtual bool doCheckEntityCollisions(const Entity &);
 
 public:
-    Room(const sf::Texture &, const sf::Texture &, const sf::Texture &);
-    Room(const Room &) = default;
+    Room(const sf::Texture &, const sf::Texture &, const sf::Texture &, Player &);
+    Room(const Room &) = delete;
     Room &operator=(const Room &) = delete;
     virtual ~Room() = default;
     friend std::ostream &operator<<(std::ostream &, const Room &);
