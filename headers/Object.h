@@ -4,11 +4,12 @@
 
 class Object : public Collider
 {
-protected:
-    sf::Sprite sprite;
     const sf::Texture *texture;
 
-    void doDraw(sf::RenderWindow &) override;
+protected:
+    sf::Sprite sprite;
+
+    void doDraw(sf::RenderWindow &) const override;
 
 public:
     Object(const sf::Vector2f &, const sf::Texture &);

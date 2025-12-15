@@ -11,7 +11,7 @@ protected:
     sf::Vector2f position;
     sf::ConvexShape collisionBox;
 
-    virtual void doDraw(sf::RenderWindow &);
+    virtual void doDraw(sf::RenderWindow &) const;
 
 public:
     explicit Collider(const sf::Vector2f &);

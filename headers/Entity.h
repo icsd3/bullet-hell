@@ -4,16 +4,22 @@
 
 class Entity : public Object
 {
+    sf::ConvexShape hitBox;
+
+    virtual bool doTakeDamage(const int &);
+
+    using Object::sprite;
+
 protected:
     float speed;
     int maxHealth;
     int currentHealth;
-    sf::ConvexShape hitBox;
     // sf::Clock animationClock;
 
-    void doDraw(sf::RenderWindow &) override;
+    void doDraw(sf::RenderWindow &) const override;
 
-    virtual bool doTakeDamage(const int &);
+    void transform(const sf::Vector2f &, const float &, const sf::Angle &);
+
     virtual int doHits(const Entity &other) const;
 
     Entity(const sf::Vector2f &, sf::Texture &, const float, const int);

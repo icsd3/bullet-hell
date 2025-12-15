@@ -25,8 +25,6 @@ std::ostream &operator<<(std::ostream &os, const Player &player)
     os << "Player:\n    ";
     os << static_cast<const Entity &>(player);
     os << "\n";
-    os << "    Max Health: " << player.maxHealth << "\n";
-    os << "    Current Health: " << player.currentHealth << "\n";
     os << "    Weapons:\n";
     os << "        Count: " << player.weapons.size();
     for (unsigned int i = 0; i < player.weapons.size(); i++)
@@ -45,18 +43,9 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     if (distance > 5.0f)
     {
         dir /= distance;
-        sprite.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
-        collisionBox.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
-        hitBox.move(sf::Vector2f(dir * speed * LOGICAL_WIDTH * dt));
-        position = sprite.getPosition();
-        if (dir.x > 0.f)
-        {
-            sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
-        }
-        else if (dir.x < 0.f)
-        {
-            sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
-        }
+
+        sf::Vector2f moveVec(dir * speed * LOGICAL_WIDTH * dt);
+        transform(moveVec, 0.f, sf::Angle(sf::degrees(0.f)));
     }
 
     currentWeapon->update();
@@ -64,7 +53,14 @@ void Player::update(const float &dt, const sf::Vector2f &target)
 
 void Player::load()
 {
-    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {{4.5f / 14, 0.f}, {9.5f / 14, 0.f}, {1.f, 4.5f / 14}, {1.f, 1.f}, {0.f, 1.f}, {0.f, 4.5f / 14}});
+    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
+        {4.5f / 14, 0.f}, 
+        {9.5f / 14, 0.f}, 
+        {1.f, 4.5f / 14}, 
+        {1.f, 1.f}, 
+        {0.f, 1.f}, 
+        {0.f, 4.5f / 14}
+    });
 
     currentWeapon->reset();
 }
@@ -76,16 +72,13 @@ sf::Vector2i Player::getHealthStatus() const
 
 sf::Vector2f Player::getPosition() const
 {
-    return sprite.getPosition();
+    return position;
 }
 
 void Player::setPosition(const sf::Vector2f &newPos)
 {
-    sf::Vector2f offset = newPos - position;
-    position = newPos;
-    sprite.setPosition(newPos);
-    collisionBox.move(offset);
-    hitBox.move(offset);
+    sf::Vector2f moveVec = newPos - position;
+    transform(moveVec, 9999.f, sf::Angle(sf::degrees(0.f)));
 }
 
 std::vector<Projectile> Player::fire(const sf::Vector2f &target) const
@@ -95,15 +88,4 @@ std::vector<Projectile> Player::fire(const sf::Vector2f &target) const
     bullets = currentWeapon->fire(position, target);
 
     return bullets;
-}
-
-bool Player::doTakeDamage(const int &dmg)
-{
-    currentHealth -= dmg;
-    if (currentHealth <= 0)
-    {
-        currentHealth = 0;
-        return true;
-    }
-    return false;
 }

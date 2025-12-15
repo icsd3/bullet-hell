@@ -27,12 +27,19 @@ Enemy Enemy::spawnEnemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, co
 
 void Enemy::load()
 {
-    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {{4.5f / 14, 0.f}, {9.5f / 14, 0.f}, {1.f, 4.5f / 14}, {1.f, 1.f}, {0.f, 1.f}, {0.f, 4.5f / 14}});
+    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
+        {4.5f / 14, 0.f}, 
+        {9.5f / 14, 0.f}, 
+        {1.f, 4.5f / 14}, 
+        {1.f, 1.f}, 
+        {0.f, 1.f}, 
+        {0.f, 4.5f / 14}
+    });
 
-    maxHealthBar.setSize(sf::Vector2f(sprite.getGlobalBounds().size.x, LOGICAL_HEIGHT / 100.f));
+    maxHealthBar.setSize(sf::Vector2f(60.f, 12.f));
     maxHealthBar.setFillColor(sf::Color(75, 0, 0, 175));
     maxHealthBar.setOrigin(sf::Vector2f(maxHealthBar.getLocalBounds().size.x / 2.f, maxHealthBar.getLocalBounds().size.y / 2.f));
-    maxHealthBar.setPosition(sf::Vector2f(position.x, position.y - sprite.getGlobalBounds().size.y / 2.f - maxHealthBar.getSize().y));
+    maxHealthBar.setPosition(sf::Vector2f(position.x, position.y - 60.f / 2.f - maxHealthBar.getSize().y));
     maxHealthBar.setOutlineThickness(2.f);
     maxHealthBar.setOutlineColor(sf::Color::Black);
 
@@ -49,7 +56,7 @@ void Enemy::load()
     updateClock.reset();
 }
 
-void Enemy::doDraw(sf::RenderWindow &window)
+void Enemy::doDraw(sf::RenderWindow &window) const
 {
     sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
@@ -97,7 +104,7 @@ std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playe
         updateClock.reset();
     }
 
-    move(dt, obstacles, walls, doors, enemies);
+    enemyMove(dt, obstacles, walls, doors, enemies);
 
     grid[gridPosition.x][gridPosition.y] = 2;
 
@@ -194,7 +201,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
     return sf::Vector2f(180.f + start.x * 120.f, 180.f + start.y * 120.f);
 }
 
-void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies)
+void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies)
 {
     sf::Vector2f separation(0.f, 0.f);
     int neighbors = 0;
@@ -255,12 +262,9 @@ void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const st
 
         auto performMove = [&](const sf::Vector2f &moveVec)
         {
-            sprite.move(moveVec);
-            collisionBox.move(moveVec);
-            hitBox.move(moveVec);
+            transform(moveVec, 0.2f, sf::Angle(sf::degrees(0.f)));
             maxHealthBar.move(moveVec);
             currentHealthBar.move(moveVec);
-            position = sprite.getPosition();
         };
 
         performMove(movement);
@@ -285,15 +289,6 @@ void Enemy::move(const float &dt, const std::vector<Object> &obstacles, const st
                 }
             }
         }
-
-        if (movement.x > 0.2f)
-        {
-            sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
-        }
-        else if (movement.x < -0.2f)
-        {
-            sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
-        }
     }
 
     else
@@ -308,8 +303,12 @@ bool Enemy::doTakeDamage(const int &dmg)
 {
     currentHealth -= dmg;
     currentHealthBar.setSize(sf::Vector2f(1.f * currentHealth / maxHealth * maxHealthBar.getSize().x, currentHealthBar.getSize().y));
+
     if (currentHealth <= 0)
+    {
+        currentHealth = 0;
         return true;
+    }
     return false;
 }
 
@@ -339,8 +338,6 @@ std::ostream &operator<<(std::ostream &os, const Enemy &enemy)
 {
     os << static_cast<const Entity &>(enemy);
     os << "\n";
-    os << "        Max Health: " << enemy.maxHealth << "\n";
-    os << "        Current Health: " << enemy.currentHealth << "\n";
     os << "        Enemy Weapon: " << enemy.weapon;
     return os;
 }

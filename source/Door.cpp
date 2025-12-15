@@ -1,18 +1,14 @@
 #include "../headers/Door.h"
 
-Door::Door(sf::Vector2f &pos, const sf::Texture &tex, sf::Vector2f &size, const int &plc)
+Door::Door(sf::Vector2f &pos, const sf::Texture &tex, const int &plc)
     : Object(pos, tex), place(plc)
 {
-    collisionBox.setPointCount(4);
-    collisionBox.setPoint(0, sf::Vector2f(0.f, 0.f));
-    collisionBox.setPoint(1, sf::Vector2f(size.x, 0.f));
-    collisionBox.setPoint(2, sf::Vector2f(size.x, size.y));
-    collisionBox.setPoint(3, sf::Vector2f(0.f, size.y));
-    collisionBox.setOrigin({size.x / 2, size.y / 2});
 }
 
-void Door::load()
+void Door::load(const sf::Vector2f &size)
 {
+    Collider::load(size);
+    collisionBox.setOrigin({size.x / 2, size.y / 2});
     collisionBox.setFillColor(sf::Color(200, 0, 0, 150));
     collisionBox.setPosition(position);
 
@@ -55,7 +51,7 @@ void Door::load()
 void Door::update(const unsigned int &frame)
 {
     sprite.setTextureRect(sf::IntRect({(int)frame * 300, 0}, {300, 300}));
-    if (frame * 300 + 300 == texture->getSize().x)
+    if (frame * 300 + 300 == 1500)
         collisionBox.setFillColor(sf::Color(0, 0, 200, 150));
 }
 

@@ -6,7 +6,7 @@ Entity::Entity(const sf::Vector2f &pos, sf::Texture &tex, const float spd, const
 }
 
 Entity::Entity(const Entity &other)
-    : Object(other), speed(other.speed), maxHealth(other.maxHealth), currentHealth(other.currentHealth), hitBox(other.hitBox)
+    : Object(other), hitBox(other.hitBox), speed(other.speed), maxHealth(other.maxHealth), currentHealth(other.currentHealth)
 {
 }
 
@@ -28,17 +28,20 @@ void Entity::load(const float &scaleFactor, const sf::Vector2f &sizeFactor, cons
     Object::load(scaleFactor, sizeFactor, originFactor, positionFactor);
 
     sf::FloatRect bounds = sprite.getLocalBounds();
-    sf::Transform t = sprite.getTransform();
     hitBox.setFillColor(sf::Color(0, 200, 0, 150));
 
     hitBox.setPointCount(pointCount);
     for (int i = 0; i < pointCount; i++)
     {
-        hitBox.setPoint(i, t.transformPoint({bounds.position.x + pointFactors[i].x * bounds.size.x, bounds.position.y + pointFactors[i].y * bounds.size.y}));
+        hitBox.setPoint(i, {bounds.position.x + pointFactors[i].x * bounds.size.x, bounds.position.y + pointFactors[i].y * bounds.size.y});
     }
+
+    hitBox.setOrigin(sprite.getOrigin());
+    hitBox.setPosition(sprite.getPosition());
+    hitBox.setScale(sprite.getScale());
 }
 
-void Entity::doDraw(sf::RenderWindow &window)
+void Entity::doDraw(sf::RenderWindow &window) const
 {
     Object::doDraw(window);
 
@@ -52,11 +55,35 @@ void Entity::doDraw(sf::RenderWindow &window)
     }
 }
 
+void Entity::transform(const sf::Vector2f &movement, const float &threshold, const sf::Angle &angle)
+{
+    sprite.move(movement);
+    sprite.rotate(angle);
+    collisionBox.move(movement);
+    collisionBox.rotate(angle);
+    hitBox.move(movement);
+    hitBox.rotate(angle);
+
+    if (movement.x > threshold)
+    {
+        sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
+    }
+    else if (movement.x < -threshold)
+    {
+        sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
+    }
+
+    position = sprite.getPosition();
+}
+
 bool Entity::doTakeDamage(const int &dmg)
 {
     currentHealth -= dmg;
     if (currentHealth <= 0)
+    {
+        currentHealth = 0;
         return true;
+    }
     return false;
 }
 
@@ -134,6 +161,8 @@ std::ostream &operator<<(std::ostream &os, const Entity &entity)
 {
     os << "Entity (";
     os << static_cast<const Object &>(entity);
-    os << ", Speed: " << entity.speed << ")";
+    os << ", Speed: " << entity.speed;
+    os << ", Max Health: " << entity.maxHealth;
+    os << ", Current Health: " << entity.currentHealth << ")";
     return os;
 }

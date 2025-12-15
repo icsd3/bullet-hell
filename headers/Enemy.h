@@ -19,10 +19,10 @@ class Enemy : public Entity
     sf::Vector2f target;
     sf::Clock updateClock;
 
-    void doDraw(sf::RenderWindow &) override;
+    void doDraw(sf::RenderWindow &) const override;
     bool doTakeDamage(const int &) override;
     virtual bool checkLineOfSight(const sf::Vector2f &, const sf::Vector2f &, const std::vector<Object> &) const;
-    void move(const float &, const std::vector<Object> &, const std::vector<Collider> &, const std::vector<Door> &, const std::vector<Enemy> &);
+    void enemyMove(const float &, const std::vector<Object> &, const std::vector<Collider> &, const std::vector<Door> &, const std::vector<Enemy> &);
     sf::Vector2f nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int grid[14][7]);
 
 public:

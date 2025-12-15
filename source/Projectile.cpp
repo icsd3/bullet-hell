@@ -8,9 +8,6 @@ Projectile::Projectile(const sf::Vector2f &pos, sf::Texture &tex, float spd, con
 
 void Projectile::load()
 {
-    collisionBox.setRotation(rotation);
-    sprite.setRotation(rotation);
-
     Entity::load(35.f, {0.5f, 0.5f}, {0.5f, 0.5f}, {0.f, 0.f}, 8, {
         {3.5f / 20, 0.f},
         {16.5f / 20, 0.f},
@@ -21,14 +18,14 @@ void Projectile::load()
         {0.f, 6.5f / 10},
         {0.f, 3.5f / 10}
     });
+    transform({0.f, 0.f}, 9999.f, rotation);
 }
 
 bool Projectile::update(const float &dt)
 {
-    sprite.move(sf::Vector2f(direction * speed * dt));
-    collisionBox.move(sf::Vector2f(direction * speed * dt));
-    hitBox.move(sf::Vector2f(direction * speed * dt));
-    position = sprite.getPosition();
+    sf::Vector2f moveVec(direction * speed * dt);
+    transform(moveVec, 9999.f, sf::Angle(sf::degrees(0.f)));
+    
     sf::Vector2f dir = position - origin;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 

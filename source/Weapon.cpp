@@ -12,6 +12,7 @@ Weapon::Weapon(const Weapon &other)
     : name(other.name), damage(other.damage), bullet_nr(other.bullet_nr),
       fire_rate(other.fire_rate), spread_angle(other.spread_angle), range(other.range),
       bulletSpeed(other.bulletSpeed), offset(other.offset),
+      weaponClock(other.weaponClock),
       projectileTexture(other.projectileTexture)
 {
 }
@@ -27,6 +28,7 @@ Weapon &Weapon::operator=(const Weapon &other)
         range = other.range;
         bulletSpeed = other.bulletSpeed;
         offset = other.offset;
+        weaponClock = other.weaponClock;
         projectileTexture = other.projectileTexture;
     }
     return *this;

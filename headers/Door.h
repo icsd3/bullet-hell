@@ -7,9 +7,9 @@ class Door : public Object
     int place;
 
 public:
-    Door(sf::Vector2f &, const sf::Texture &, sf::Vector2f &, const int &);
+    Door(sf::Vector2f &, const sf::Texture &, const int &);
     void update(const unsigned int &);
     friend std::ostream &operator<<(std::ostream &, const Door &);
 
-    void load();
+    void load(const sf::Vector2f &);
 };

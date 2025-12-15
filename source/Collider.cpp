@@ -31,7 +31,7 @@ void Collider::load(const sf::Vector2f &size)
     collisionBox.setFillColor(sf::Color(200, 0, 0, 150));
 }
 
-void Collider::doDraw(sf::RenderWindow &window)
+void Collider::doDraw(sf::RenderWindow &window) const
 {
     if (Utils::changeDisplayBoxes(0) == 1)
     {

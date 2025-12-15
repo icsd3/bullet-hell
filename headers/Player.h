@@ -11,8 +11,6 @@ class Player : public Entity
     Weapon *currentWeapon;
     std::vector<Weapon> weapons;
 
-    bool doTakeDamage(const int &) override;
-
 public:
     Player(sf::Texture &, sf::Texture &);
     Player(const Player &) = delete;

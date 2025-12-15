@@ -1,12 +1,12 @@
 #include "../headers/Object.h"
 
 Object::Object(const sf::Vector2f &pos, const sf::Texture &tex)
-    : Collider(pos), sprite(tex), texture(&tex)
+    : Collider(pos), texture(&tex), sprite(tex)
 {
 }
 
 Object::Object(const Object &other)
-    : Collider(other), sprite(other.sprite), texture(other.texture)
+    : Collider(other), texture(other.texture), sprite(other.sprite)
 {
 }
 
@@ -40,7 +40,7 @@ void Object::load(const float &scaleFactor, const sf::Vector2f &sizeFactor, cons
     sprite.setPosition(position);
 }
 
-void Object::doDraw(sf::RenderWindow &window)
+void Object::doDraw(sf::RenderWindow &window) const
 {
     sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 

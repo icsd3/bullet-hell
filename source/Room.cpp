@@ -96,9 +96,9 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
 
         const sf::Texture &texture = *texturePointer;
 
-        Door door(position, texture, size, i);
+        Door door(position, texture, i);
         doors.push_back(door);
-        doors.back().load();
+        doors.back().load(size);
     }
 }
 
