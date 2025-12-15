@@ -22,7 +22,7 @@ void BossRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_pt
         int y = yDist(rng);
         while (true)
         {
-            if (grid[x][y] == 0 && (x < 4 || x > 9) && (y < 2 || y > 4))
+            if ((x < 4 || x > 9) && (y < 2 || y > 4) && grid[x][y] == 0)
             {
                 grid[x][y] = 1;
                 Object obstacle(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), *obstacleTexture);
