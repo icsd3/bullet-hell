@@ -3,13 +3,15 @@
 Game::Game()
     : target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
       currentState(main_menu),
-      window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen),
       playerPath("textures/player.png"),
       playerProjectilePath("textures/player_projectile.png"),
       playerTexture(playerPath),
       playerProjectileTexture(playerProjectilePath),
-      player(playerTexture, playerProjectileTexture), 
-      level(player, gui)
+      player(std::make_unique<Player>(playerTexture, playerProjectileTexture)),
+      gui(std::make_unique<GUI>()),
+      augment(std::make_unique<Augment>()),
+      level(std::make_unique<Level>(*player, *gui)),
+      window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
 {
     setup();
 }
@@ -80,20 +82,20 @@ void Game::handleNewState()
         break;
 
     case augment_1:
-        augment.load();
+        augment->load();
         break;
 
     case augment_2:
-        augment.load();
+        augment->load();
         break;
 
     case augment_3:
-        augment.load();
+        augment->load();
         break;
 
     case level_1:
         updateClock.restart();
-        level.load(1);
+        level->load(1);
         break;
 
     case level_2:
@@ -133,8 +135,8 @@ bool Game::handleInputs()
 
     if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
     {
-        sf::Vector2f move = level.handleMovementInput(controls, window);
-        sf::Vector2f shoot = level.handleShootInput(window);
+        sf::Vector2f move = level->handleMovementInput(controls, window);
+        sf::Vector2f shoot = level->handleShootInput(window);
 
         if (move.x > 0 && move.x < LOGICAL_WIDTH && move.y > 0 && move.y < LOGICAL_HEIGHT)
         {
@@ -164,7 +166,7 @@ bool Game::handleInputs()
 
         if (shoot.x != -1 && shoot.y != -1)
         {
-            level.playerFire(shoot);
+            level->playerFire(shoot);
         }
     }
 
@@ -270,7 +272,7 @@ bool Game::handleInputs()
 
             else if (currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
             {
-                int action = augment.handleInput(window, *event);
+                int action = augment->handleInput(window, *event);
 
                 if (action != 0)
                 {
@@ -281,7 +283,7 @@ bool Game::handleInputs()
 
             else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
             {
-                std::pair<int, sf::Vector2f> ans = level.handleInput(*event, controls, window);
+                std::pair<int, sf::Vector2f> ans = level->handleInput(*event, controls, window);
                 int action = ans.first;
 
                 switch (action)
@@ -292,7 +294,7 @@ bool Game::handleInputs()
                     break;
 
                 case 2:
-                    level.playerFire(ans.second);
+                    level->playerFire(ans.second);
                     break;
 
                 case 3:
@@ -322,13 +324,13 @@ void Game::draw()
     case augment_1:
     case augment_2:
     case augment_3:
-        augment.draw(window);
+        augment->draw(window);
         break;
 
     case level_1:
     case level_2:
     case level_3:
-        level.draw(window);
+        level->draw(window);
         break;
 
     case defeat:
@@ -368,7 +370,7 @@ void Game::Play()
             float dt = 0;
             if (!Utils::changePaused(0))
                 dt = updateClock.restart().asSeconds();
-            level.update(dt, target);
+            level->update(dt, target);
         }
         draw();
     }
@@ -378,9 +380,9 @@ std::ostream &operator<<(std::ostream &os, const Game &game)
 {
     os << "\n####################################################################################################################################\n";
     os << game.menu << "\n";
-    os << game.augment << "\n";
+    os << *game.augment << "\n";
     os << game.settings << "\n";
-    os << game.level << "\n";
+    os << *game.level << "\n";
     os << "Window size: " << game.window.getSize().x << "x" << game.window.getSize().y << "\n\n";
     os << "Current State: " << game.currentState << "\n\n";
     os << "Target Position: (" << game.target.x << ", " << game.target.y << ")\n";

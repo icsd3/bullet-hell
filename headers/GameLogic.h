@@ -23,12 +23,6 @@ class Game
     Game();
     Game(const Game &) = delete;
     Game &operator=(const Game &) = delete;
-    
-    std::string playerPath;
-    std::string playerProjectilePath;
-
-    sf::Texture playerTexture;
-    sf::Texture playerProjectileTexture;
 
     Settings &settings = Settings::getInstance();
 
@@ -40,10 +34,17 @@ class Game
     gameStates currentState;
 
     mainMenu &menu = mainMenu::getInstance();
-    Player player;
-    GUI gui;
-    Augment augment;
-    Level level;
+
+    std::string playerPath;
+    std::string playerProjectilePath;
+
+    sf::Texture playerTexture;
+    sf::Texture playerProjectileTexture;
+
+    std::unique_ptr<Player> player;
+    std::unique_ptr<GUI> gui;
+    std::unique_ptr<Augment> augment;
+    std::unique_ptr<Level> level;
 
     sf::RenderWindow window;
 
