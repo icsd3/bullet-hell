@@ -1,15 +1,12 @@
 #pragma once
 
 #include "../headers/Player.h"
+#include "../headers/TextureManager.h"
 
 class Augment
 {
-    std::string backgroundPath;
-    std::string buttonPath;
     std::string fontPath;
 
-    sf::Texture backgroundTexture;
-    sf::Texture buttonTexture;
     sf::Font font;
 
     sf::Sprite backgroundSprite;
@@ -25,7 +22,6 @@ public:
     Augment(const Augment &) = delete;
     Augment &operator=(const Augment &) = delete;
     ~Augment() = default;
-    friend std::ostream &operator<<(std::ostream &, const Augment &);
 
     void load();
     void draw(sf::RenderWindow &);

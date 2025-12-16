@@ -1,7 +1,8 @@
 #include "../headers/Door.h"
 
-Door::Door(sf::Vector2f &pos, const sf::Texture &tex, const int &plc)
-    : Object(pos, tex), place(plc)
+Door::Door(sf::Vector2f &pos, const int &plc)
+    : Object(pos, (plc == 0 || plc == 2) ? TextureManager::getDoorVerticalTexture() : TextureManager::getDoorHorizontalTexture()), 
+      place(plc)
 {
 }
 

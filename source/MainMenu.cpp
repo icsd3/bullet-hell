@@ -1,18 +1,10 @@
 #include "../headers/MainMenu.h"
 
 mainMenu::mainMenu()
-    : backgroundPath("textures/menu_background.png"),
-      startButtonPath("textures/start_button.png"),
-      settingsButtonPath("textures/settings_button.png"),
-      exitButtonPath("textures/exit_button.png"),
-      backgroundTexture(backgroundPath),
-      startButtonTexture(startButtonPath),
-      settingsButtonTexture(settingsButtonPath),
-      exitButtonTexture(exitButtonPath),
-      backgroundSprite(backgroundTexture),
-      startButtonSprite(startButtonTexture),
-      settingsButtonSprite(settingsButtonTexture),
-      exitButtonSprite(exitButtonTexture)
+    : backgroundSprite(TextureManager::getMenuBackgroundTexture()),
+      startButtonSprite(TextureManager::getMenuStartButtonTexture()),
+      settingsButtonSprite(TextureManager::getMenuSettingsButtonTexture()),
+      exitButtonSprite(TextureManager::getMenuExitButtonTexture())
 {
 }
 
@@ -25,35 +17,35 @@ mainMenu &mainMenu::getInstance()
 void mainMenu::load()
 {
     backgroundSprite.setScale(sf::Vector2f(
-        1.f * LOGICAL_WIDTH / static_cast<float>(backgroundTexture.getSize().x),
-        1.f * LOGICAL_HEIGHT / static_cast<float>(backgroundTexture.getSize().y)));
+        1.f * LOGICAL_WIDTH / static_cast<float>(TextureManager::getMenuBackgroundTexture().getSize().x),
+        1.f * LOGICAL_HEIGHT / static_cast<float>(TextureManager::getMenuBackgroundTexture().getSize().y)));
 
     startButtonSprite.setScale(sf::Vector2f(
-        1.f * LOGICAL_WIDTH / startButtonTexture.getSize().x / 4.f,
-        1.f * LOGICAL_WIDTH / startButtonTexture.getSize().x / 4.f));
+        1.f * LOGICAL_WIDTH / TextureManager::getMenuStartButtonTexture().getSize().x / 4.f,
+        1.f * LOGICAL_WIDTH / TextureManager::getMenuStartButtonTexture().getSize().x / 4.f));
     startButtonSprite.setOrigin(sf::Vector2f(
-        startButtonTexture.getSize().x / 2.f,
-        startButtonTexture.getSize().y / 2.f));
+        TextureManager::getMenuStartButtonTexture().getSize().x / 2.f,
+        TextureManager::getMenuStartButtonTexture().getSize().y / 2.f));
     startButtonSprite.setPosition(sf::Vector2f(
         LOGICAL_WIDTH / 2.f,
         LOGICAL_HEIGHT / 4.f));
 
     settingsButtonSprite.setScale(sf::Vector2f(
-        1.f * LOGICAL_WIDTH / settingsButtonTexture.getSize().x / 4.f,
-        1.f * LOGICAL_WIDTH / settingsButtonTexture.getSize().x / 4.f));
+        1.f * LOGICAL_WIDTH / TextureManager::getMenuSettingsButtonTexture().getSize().x / 4.f,
+        1.f * LOGICAL_WIDTH / TextureManager::getMenuSettingsButtonTexture().getSize().x / 4.f));
     settingsButtonSprite.setOrigin(sf::Vector2f(
-        settingsButtonTexture.getSize().x / 2.f,
-        settingsButtonTexture.getSize().y / 2.f));
+        TextureManager::getMenuSettingsButtonTexture().getSize().x / 2.f,
+        TextureManager::getMenuSettingsButtonTexture().getSize().y / 2.f));
     settingsButtonSprite.setPosition(sf::Vector2f(
         LOGICAL_WIDTH / 2.f,
         LOGICAL_HEIGHT / 4.f * 2.f));
 
     exitButtonSprite.setScale(sf::Vector2f(
-        1.f * LOGICAL_WIDTH / exitButtonTexture.getSize().x / 4.f,
-        1.f * LOGICAL_WIDTH / exitButtonTexture.getSize().x / 4.f));
+        1.f * LOGICAL_WIDTH / TextureManager::getMenuExitButtonTexture().getSize().x / 4.f,
+        1.f * LOGICAL_WIDTH / TextureManager::getMenuExitButtonTexture().getSize().x / 4.f));
     exitButtonSprite.setOrigin(sf::Vector2f(
-        exitButtonTexture.getSize().x / 2.f,
-        exitButtonTexture.getSize().y / 2.f));
+        TextureManager::getMenuExitButtonTexture().getSize().x / 2.f,
+        TextureManager::getMenuExitButtonTexture().getSize().y / 2.f));
     exitButtonSprite.setPosition(sf::Vector2f(
         LOGICAL_WIDTH / 2.f,
         LOGICAL_HEIGHT / 4.f * 3.f));
@@ -125,14 +117,4 @@ int mainMenu::handleInput(const sf::RenderWindow &window, const sf::Event &event
         }
     }
     return 0;
-}
-
-std::ostream &operator<<(std::ostream &os, const mainMenu &menu)
-{
-    os << "Main Menu:\n";
-    os << "    Background Path: " << menu.backgroundPath << "\n";
-    os << "    Start Button Path: " << menu.startButtonPath << "\n";
-    os << "    Settings Button Path: " << menu.settingsButtonPath << "\n";
-    os << "    Exit Button Path: " << menu.exitButtonPath << "\n";
-    return os;
 }

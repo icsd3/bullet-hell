@@ -1,8 +1,9 @@
 #include "../headers/EnemyRoom.h"
 
-EnemyRoom::EnemyRoom(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, sf::Texture &et, sf::Texture &ept, sf::Texture &ot, const int ne, Player &player)
-    : Room(dv, dh, background, player), enemyTexture(&et), enemyProjectileTexture(&ept), obstacleTexture(&ot), nrOfEnemies(ne)
+EnemyRoom::EnemyRoom(const int count, Player &player)
+    : Room(player), nrOfEnemies(count)
 {
+    obstacleTexture = &TextureManager::getObstacleTexture();
     animationClock.reset();
 }
 
@@ -190,7 +191,7 @@ void EnemyRoom::doStart()
                 if (grid[x][y] == 0 && (grid[x + 1][y] != 1 || grid[x - 1][y] != 1 || grid[x][y + 1] != 1 || grid[x][y - 1] != 1))
                 {
                     grid[x][y] = 2;
-                    enemies.push_back(std::make_unique<Enemy>(*enemyTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 100, *enemyProjectileTexture));
+                    enemies.push_back(std::make_unique<Enemy>(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 100));
                     enemies.back()->load();
                     break;
                 }

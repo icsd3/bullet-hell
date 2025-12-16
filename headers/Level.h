@@ -15,24 +15,6 @@ class Level
     Player &player;
     GUI &gui;
 
-    std::string enemyPath;
-    std::string bossPath;
-    std::string enemyProjectilePath;
-    std::string bossProjectilePath;
-    std::string roomBackgroundPath;
-    std::string doorVerticalPath;
-    std::string doorHorizontalPath;
-    std::string obstaclePath;
-
-    sf::Texture enemyTexture;
-    sf::Texture bossTexture;
-    sf::Texture enemyProjectileTexture;
-    sf::Texture bossProjectileTexture;
-    sf::Texture roomBackgroundTexture;
-    sf::Texture doorVerticalTexture;
-    sf::Texture doorHorizontalTexture;
-    sf::Texture obstacleTexture;
-
     int map[5][7];
     std::vector<std::shared_ptr<Room>> rooms;
     std::shared_ptr<Room> currentRoom;

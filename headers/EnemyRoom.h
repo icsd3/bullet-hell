@@ -1,11 +1,10 @@
 #pragma once
 
 #include "../headers/Room.h"
+#include "../headers/TextureManager.h"
 
 class EnemyRoom : public Room
 {
-    sf::Texture *enemyTexture;
-    sf::Texture *enemyProjectileTexture;
     sf::Texture *obstacleTexture;
 
     std::vector<std::unique_ptr<Enemy>> enemies;
@@ -26,7 +25,7 @@ class EnemyRoom : public Room
     bool checkPlayerHits(const Projectile &);
 
 public:
-    EnemyRoom(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, const int, Player &);
+    EnemyRoom(const int, Player &);
     EnemyRoom(const EnemyRoom &) = delete;
     EnemyRoom &operator=(const EnemyRoom &) = delete;
     friend std::ostream &operator<<(std::ostream &, const EnemyRoom &);

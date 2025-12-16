@@ -3,6 +3,7 @@
 #include "../headers/Enemy.h"
 #include "../headers/Projectile.h"
 #include "../headers/Player.h"
+#include "../headers/TextureManager.h"
 #include "../headers/Door.h"
 
 class Room
@@ -35,7 +36,7 @@ protected:
     virtual bool doCheckEntityCollisions(const Entity &);
 
 public:
-    Room(const sf::Texture &, const sf::Texture &, const sf::Texture &, Player &);
+    Room(Player &);
     Room(const Room &) = delete;
     Room &operator=(const Room &) = delete;
     virtual ~Room() = default;

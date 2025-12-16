@@ -22,7 +22,7 @@ protected:
 
     virtual int doHits(const Entity &other) const;
 
-    Entity(const sf::Vector2f &, sf::Texture &, const float, const int);
+    Entity(const sf::Vector2f &, const sf::Texture &, const float, const int);
     Entity(const Entity &);
     Entity &operator=(const Entity &);
 

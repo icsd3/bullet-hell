@@ -5,6 +5,8 @@
 class Weapon
 {
     std::string name;
+    // const sf::Texture *texture;
+    // sf::Sprite sprite;
 
 protected:
     int damage;

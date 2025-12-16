@@ -1,8 +1,9 @@
 #include "../headers/Player.h"
 
-Player::Player(sf::Texture &tex, sf::Texture &prtex)
-    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, tex, 400.f, 100), currentWeapon(0)
+Player::Player()
+    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, TextureManager::getPlayerTexture(), 400.f, 100), currentWeapon(0)
 {
+    
     std::ifstream file("json/Guns.json");
     nlohmann::json data;
     file >> data;
@@ -16,7 +17,7 @@ Player::Player(sf::Texture &tex, sf::Texture &prtex)
         w["spread_angle"],
         w["range"],
         w["bullet_speed"],
-        prtex));
+        TextureManager::getPlayerProjectileTexture()));
 }
 
 std::ostream &operator<<(std::ostream &os, const Player &player)

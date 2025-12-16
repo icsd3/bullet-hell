@@ -3,11 +3,7 @@
 Game::Game()
     : target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
       currentState(main_menu),
-      playerPath("textures/player.png"),
-      playerProjectilePath("textures/player_projectile.png"),
-      playerTexture(playerPath),
-      playerProjectileTexture(playerProjectilePath),
-      player(std::make_unique<Player>(playerTexture, playerProjectileTexture)),
+      player(std::make_unique<Player>()),
       gui(std::make_unique<GUI>()),
       augment(std::make_unique<Augment>()),
       level(std::make_unique<Level>(*player, *gui)),
@@ -379,8 +375,6 @@ void Game::Play()
 std::ostream &operator<<(std::ostream &os, const Game &game)
 {
     os << "\n####################################################################################################################################\n";
-    os << game.menu << "\n";
-    os << *game.augment << "\n";
     os << game.settings << "\n";
     os << *game.level << "\n";
     os << "Window size: " << game.window.getSize().x << "x" << game.window.getSize().y << "\n\n";

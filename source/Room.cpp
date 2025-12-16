@@ -1,7 +1,10 @@
 #include "../headers/Room.h"
 
-Room::Room(const sf::Texture &dv, const sf::Texture &dh, const sf::Texture &background, Player &player)
-    : player(player), backgroundSprite(background), doorVertical(&dv), doorHorizontal(&dh), grid{{0}}
+Room::Room(Player &player)
+    : player(player), backgroundSprite(TextureManager::getBaseRoomTexture()), 
+      doorVertical(&TextureManager::getDoorVerticalTexture()), 
+      doorHorizontal(&TextureManager::getDoorHorizontalTexture()), 
+      grid{{0}}
 {
     animationClock.reset();
 }
@@ -79,24 +82,18 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
             continue;
         }
 
-        const sf::Texture *texturePointer;
-
         if (i == 0 || i == 2)
         {
             size = {120, 150};
             position = sf::Vector2f(960, (i == 0) ? 75 : 1005);
-            texturePointer = doorVertical;
         }
         else
         {
             size = {120, 150};
             position = sf::Vector2f((i == 1) ? 1845 : 75, 540);
-            texturePointer = doorHorizontal;
         }
 
-        const sf::Texture &texture = *texturePointer;
-
-        Door door(position, texture, i);
+        Door door(position, i);
         doors.push_back(door);
         doors.back().doorLoad(size);
     }

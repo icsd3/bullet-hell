@@ -1,6 +1,6 @@
 #include "../headers/Entity.h"
 
-Entity::Entity(const sf::Vector2f &pos, sf::Texture &tex, const float spd, const int mh)
+Entity::Entity(const sf::Vector2f &pos, const sf::Texture &tex, const float spd, const int mh)
     : Object(pos, tex), speed(spd), maxHealth(mh), currentHealth(mh)
 {
 }

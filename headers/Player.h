@@ -2,6 +2,7 @@
 
 #include "../headers/Entity.h"
 #include "../headers/Gun.h"
+#include "../headers/TextureManager.h"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -12,7 +13,7 @@ class Player final : public Entity
     std::vector<std::unique_ptr<Weapon>> weapons;
 
 public:
-    Player(sf::Texture &, sf::Texture &);
+    Player();
     Player(const Player &) = delete;
     Player &operator=(const Player &) = delete;
     friend std::ostream &operator<<(std::ostream &, const Player &);

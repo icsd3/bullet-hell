@@ -1,7 +1,7 @@
 #include "../headers/Enemy.h"
 
-Enemy::Enemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, sf::Texture &prtex)
-    : Entity(pos, tex, spd, mh), gridPosition(0, 0), target(pos)
+Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh)
+    : Entity(pos, TextureManager::getEnemyTexture(), spd, mh), gridPosition(0, 0), target(pos)
 {
     std::ifstream file("json/Guns.json");
     nlohmann::json data;
@@ -16,7 +16,7 @@ Enemy::Enemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh
         w["spread_angle"],
         w["range"],
         w["bullet_speed"],
-        prtex);
+        TextureManager::getEnemyProjectileTexture());
 }
 
 void Enemy::load()

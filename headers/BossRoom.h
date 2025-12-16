@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Room.h"
+#include "../headers/TextureManager.h"
 
 class BossRoom : public Room
 {
-    sf::Texture *bossTexture;
-    sf::Texture *bossProjectileTexture;
     sf::Texture *obstacleTexture;
 
     std::unique_ptr<Enemy> boss;
@@ -24,7 +23,7 @@ class BossRoom : public Room
     bool checkPlayerHits(const Projectile &);
 
 public:
-    BossRoom(const sf::Texture &, const sf::Texture &, const sf::Texture &, sf::Texture &, sf::Texture &, sf::Texture &, Player &);
+    BossRoom(Player &);
     BossRoom(const BossRoom &) = delete;
     BossRoom &operator=(const BossRoom &) = delete;
     friend std::ostream &operator<<(std::ostream &, const BossRoom &);

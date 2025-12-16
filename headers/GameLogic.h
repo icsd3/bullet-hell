@@ -35,12 +35,6 @@ class Game
 
     mainMenu &menu = mainMenu::getInstance();
 
-    std::string playerPath;
-    std::string playerProjectilePath;
-
-    sf::Texture playerTexture;
-    sf::Texture playerProjectileTexture;
-
     std::unique_ptr<Player> player;
     std::unique_ptr<GUI> gui;
     std::unique_ptr<Augment> augment;
