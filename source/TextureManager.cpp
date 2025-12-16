@@ -4,8 +4,8 @@ sf::Texture TextureManager::playerTexture("textures/player.png");
 sf::Texture TextureManager::playerProjectileTexture("textures/player_projectile.png");
 sf::Texture TextureManager::enemyTexture("textures/enemy.png");
 sf::Texture TextureManager::enemyProjectileTexture("textures/enemy_projectile.png");
-sf::Texture TextureManager::bossTexture("textures/boss.png");
-sf::Texture TextureManager::bossProjectileTexture("textures/boss_projectile.png");
+// sf::Texture TextureManager::bossTexture("textures/boss.png");
+// sf::Texture TextureManager::bossProjectileTexture("textures/boss_projectile.png");
 sf::Texture TextureManager::baseRoomTexture("textures/room_background.png");
 sf::Texture TextureManager::doorVerticalTexture("textures/door_vertical.png");
 sf::Texture TextureManager::doorHorizontalTexture("textures/door_horizontal.png");
@@ -37,15 +37,15 @@ sf::Texture &TextureManager::getEnemyProjectileTexture()
     return enemyProjectileTexture;
 }
 
-sf::Texture &TextureManager::getBossTexture()
-{
-    return bossTexture;
-}
+// sf::Texture &TextureManager::getBossTexture()
+// {
+//     return bossTexture;
+// }
 
-sf::Texture &TextureManager::getBossProjectileTexture()
-{
-    return bossProjectileTexture;
-}
+// sf::Texture &TextureManager::getBossProjectileTexture()
+// {
+//     return bossProjectileTexture;
+// }
 
 sf::Texture &TextureManager::getBaseRoomTexture()
 {

@@ -36,7 +36,7 @@ protected:
     virtual bool doCheckEntityCollisions(const Entity &);
 
 public:
-    Room(Player &);
+    explicit Room(Player &);
     Room(const Room &) = delete;
     Room &operator=(const Room &) = delete;
     virtual ~Room() = default;

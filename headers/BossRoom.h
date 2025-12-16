@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Room.h"
+#include "../headers/Room.h"
 #include "../headers/TextureManager.h"
 
 class BossRoom : public Room
@@ -23,7 +23,7 @@ class BossRoom : public Room
     bool checkPlayerHits(const Projectile &);
 
 public:
-    BossRoom(Player &);
+    explicit BossRoom(Player &);
     BossRoom(const BossRoom &) = delete;
     BossRoom &operator=(const BossRoom &) = delete;
     friend std::ostream &operator<<(std::ostream &, const BossRoom &);
