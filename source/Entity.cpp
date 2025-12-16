@@ -121,12 +121,12 @@ int Entity::doHits(const Entity &other) const
     for (int i = 0; i < 2; ++i)
     {
         const sf::ConvexShape &shape = (i == 0 ? hitBox : other.hitBox);
-        const sf::Transform &transform = (i == 0 ? hitBoxTransform : otherHitBoxTransform);
+        const sf::Transform &tr = (i == 0 ? hitBoxTransform : otherHitBoxTransform);
 
         for (size_t j = 0; j < shape.getPointCount(); j++)
         {
-            sf::Vector2f currentPoint = getPoint(shape, transform, j);
-            sf::Vector2f nextPoint = getPoint(shape, transform, (j + 1) % shape.getPointCount());
+            sf::Vector2f currentPoint = getPoint(shape, tr, j);
+            sf::Vector2f nextPoint = getPoint(shape, tr, (j + 1) % shape.getPointCount());
 
             sf::Vector2f edge = nextPoint - currentPoint;
             sf::Vector2f axis(-edge.y, edge.x);

@@ -2,7 +2,7 @@
 
 #include "../headers/Object.h"
 
-class Door : public Object
+class Door final : public Object
 {
     int place;
 
@@ -11,5 +11,5 @@ public:
     void update(const unsigned int &);
     friend std::ostream &operator<<(std::ostream &, const Door &);
 
-    void load(const sf::Vector2f &);
+    void doorLoad(const sf::Vector2f &);
 };

@@ -5,7 +5,7 @@ Door::Door(sf::Vector2f &pos, const sf::Texture &tex, const int &plc)
 {
 }
 
-void Door::load(const sf::Vector2f &size)
+void Door::doorLoad(const sf::Vector2f &size)
 {
     Collider::load(size);
     collisionBox.setOrigin({size.x / 2, size.y / 2});
