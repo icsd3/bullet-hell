@@ -1,23 +1,22 @@
 #include "../headers/Player.h"
 
 Player::Player(sf::Texture &tex, sf::Texture &prtex)
-    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, tex, 0.2f, 100), currentWeapon(nullptr)
+    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, tex, 400.f, 100), currentWeapon(0)
 {
-    std::ifstream file("json/Weapons.json");
+    std::ifstream file("json/Guns.json");
     nlohmann::json data;
     file >> data;
     const auto &w = data[5];
-    weapons.emplace_back(Weapon(
+    weapons.emplace_back(std::make_unique<Gun>(
         w["name"],
         w["damage"],
-        w["bullet_nr"],
         w["fire_rate"],
+        0.f,
+        w["bullet_nr"],
         w["spread_angle"],
         w["range"],
         w["bullet_speed"],
-        0.f,
         prtex));
-    currentWeapon = &weapons.back();
 }
 
 std::ostream &operator<<(std::ostream &os, const Player &player)
@@ -44,11 +43,11 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     {
         dir /= distance;
 
-        sf::Vector2f moveVec(dir * speed * LOGICAL_WIDTH * dt);
+        sf::Vector2f moveVec(dir * speed * dt);
         transform(moveVec, 0.f, sf::Angle(sf::degrees(0.f)));
     }
 
-    currentWeapon->update();
+    weapons[currentWeapon]->update();
 }
 
 void Player::load()
@@ -62,7 +61,7 @@ void Player::load()
         {0.f, 4.5f / 14}
     });
 
-    currentWeapon->reset();
+    weapons[currentWeapon]->reset();
 }
 
 sf::Vector2i Player::getHealthStatus() const
@@ -85,7 +84,7 @@ std::vector<Projectile> Player::fire(const sf::Vector2f &target) const
 {
     std::vector<Projectile> bullets;
 
-    bullets = currentWeapon->fire(position, target);
+    bullets = weapons[currentWeapon]->fire(position, target);
 
     return bullets;
 }

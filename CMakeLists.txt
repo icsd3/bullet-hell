@@ -104,6 +104,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Door.cpp
     headers/Collider.h
     source/Collider.cpp
+    headers/Gun.h
+    source/Gun.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

@@ -4,26 +4,22 @@
 
 class Weapon
 {
-    const std::string name;
-    int damage;
-    int bullet_nr;
-    float fire_rate;
-    float spread_angle;
-    float range;
-    float bulletSpeed;
-    float offset;
+    std::string name;
 
+protected:
+    int damage;
+    float attackSpeed;
     sf::Clock weaponClock;
-    sf::Texture &projectileTexture;
 
 public:
-    Weapon(const std::string &, const int, const int, const float, const float, const float, const float, const float, sf::Texture &);
+    Weapon(const std::string &, const int, const float, const float);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
-    ~Weapon() = default;
+    virtual ~Weapon() = default;
     friend std::ostream &operator<<(std::ostream &, const Weapon &);
 
-    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &);
+    virtual std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &) = 0;
+
     void reset();
     void update();
 };

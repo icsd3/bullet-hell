@@ -8,7 +8,7 @@ class EnemyRoom : public Room
     sf::Texture *enemyProjectileTexture;
     sf::Texture *obstacleTexture;
 
-    std::vector<Enemy> enemies;
+    std::vector<std::unique_ptr<Enemy>> enemies;
     std::vector<Projectile> enemyProjectiles;
 
     std::vector<Object> obstacles;

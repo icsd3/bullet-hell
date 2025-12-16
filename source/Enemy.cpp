@@ -1,28 +1,22 @@
 #include "../headers/Enemy.h"
 
-Enemy::Enemy(const sf::Vector2f &pos, sf::Texture &tex, const float spd, const int &mh, const Weapon &ew)
-    : Entity(pos, tex, spd, mh), weapon(ew), gridPosition(0, 0), target(pos)
+Enemy::Enemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, sf::Texture &prtex)
+    : Entity(pos, tex, spd, mh), gridPosition(0, 0), target(pos)
 {
-}
-
-Enemy Enemy::spawnEnemy(sf::Texture &tex, const sf::Vector2f &pos, float spd, const int &mh, sf::Texture &prtex)
-{
-    std::ifstream file("json/Weapons.json");
+    std::ifstream file("json/Guns.json");
     nlohmann::json data;
     file >> data;
     const auto &w = data[0];
-    Weapon ew = Weapon(
+    weapon = std::make_unique<Gun>(
         w["name"],
         w["damage"],
-        w["bullet_nr"],
         w["fire_rate"],
+        0.3f,
+        w["bullet_nr"],
         w["spread_angle"],
         w["range"],
         w["bullet_speed"],
-        0.3f,
         prtex);
-    Enemy enemy(pos, tex, spd, mh, ew);
-    return enemy;
 }
 
 void Enemy::load()
@@ -52,7 +46,7 @@ void Enemy::load()
     int gridY = static_cast<int>((position.y - 120.f) / 120.f);
     gridPosition = {gridX, gridY};
 
-    weapon.reset();
+    weapon->reset();
     updateClock.reset();
 }
 
@@ -79,17 +73,17 @@ void Enemy::doDraw(sf::RenderWindow &window) const
     window.draw(drawCurrentHealthBar);
 }
 
-std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies, int grid[14][7])
+std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[14][7])
 {
     sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - 120.f) / 120.f), static_cast<int>((playerPosition.y - 120.f) / 120.f));
 
-    weapon.update();
+    weapon->update();
 
     std::vector<Projectile> bullets;
 
     if (checkLineOfSight(position, playerPosition, obstacles))
     {
-        bullets = weapon.fire(position, playerPosition);
+        bullets = weapon->fire(position, playerPosition);
         updateClock.start();
         if (updateClock.getElapsedTime().asSeconds() > 0.5f)
         {
@@ -201,17 +195,17 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
     return sf::Vector2f(180.f + start.x * 120.f, 180.f + start.y * 120.f);
 }
 
-void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<Enemy> &enemies)
+void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies)
 {
     sf::Vector2f separation(0.f, 0.f);
     int neighbors = 0;
 
     for (const auto &enemy : enemies)
     {
-        if (&enemy == this)
+        if (enemy.get() == this)
             continue;
 
-        sf::Vector2f dir = position - enemy.position;
+        sf::Vector2f dir = position - enemy->position;
         float dist = dir.x * dir.x + dir.y * dir.y;
 
         if (dist < 3000.f && dist > 0.1f)
@@ -255,7 +249,7 @@ void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, con
                 if (collidesWith(obstacle))
                     return true;
             for (const auto &enemy : enemies)
-                if (&enemy != this && collidesWith(enemy))
+                if (enemy.get() != this && collidesWith(*enemy))
                     return true;
             return false;
         };

@@ -1,15 +1,15 @@
 #pragma once
 
 #include "../headers/Entity.h"
-#include "../headers/Weapon.h"
+#include "../headers/Gun.h"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
 
-class Player : public Entity
+class Player final : public Entity
 {
-    Weapon *currentWeapon;
-    std::vector<Weapon> weapons;
+    int currentWeapon;
+    std::vector<std::unique_ptr<Weapon>> weapons;
 
 public:
     Player(sf::Texture &, sf::Texture &);

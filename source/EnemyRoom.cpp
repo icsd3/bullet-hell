@@ -57,7 +57,7 @@ void EnemyRoom::doDraw(sf::RenderWindow &window)
         obstacle.draw(window);
 
     for (auto &enemy : enemies)
-        enemy.draw(window);
+        enemy->draw(window);
 
     player.draw(window);
 
@@ -93,7 +93,7 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
 
     for (auto &enemy : enemies)
     {
-        std::vector<Projectile> bullets = enemy.update(dt, player.getPosition(), obstacles, walls, doors, enemies, grid);
+        std::vector<Projectile> bullets = enemy->update(dt, player.getPosition(), obstacles, walls, doors, enemies, grid);
 
         for (const auto &bullet : bullets)
         {
@@ -127,9 +127,9 @@ bool EnemyRoom::checkEnemyHits(const Projectile &projectile)
 {
     for (size_t i = 0; i < enemies.size();)
     {
-        if (int damage = projectile.hits(enemies[i]))
+        if (int damage = projectile.hits(*enemies[i]))
         {
-            if (enemies[i].takeDamage(damage))
+            if (enemies[i]->takeDamage(damage))
                 enemies.erase(enemies.begin() + i);
             return true;
         }
@@ -190,8 +190,8 @@ void EnemyRoom::doStart()
                 if (grid[x][y] == 0 && (grid[x + 1][y] != 1 || grid[x - 1][y] != 1 || grid[x][y + 1] != 1 || grid[x][y - 1] != 1))
                 {
                     grid[x][y] = 2;
-                    enemies.push_back(Enemy::spawnEnemy(*enemyTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 100, *enemyProjectileTexture));
-                    enemies.back().load();
+                    enemies.push_back(std::make_unique<Enemy>(*enemyTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 100, *enemyProjectileTexture));
+                    enemies.back()->load();
                     break;
                 }
                 else

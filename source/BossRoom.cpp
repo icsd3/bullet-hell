@@ -161,7 +161,7 @@ void BossRoom::doStart()
         int y = yDist(rng);
 
         grid[x][y] = 2;
-        boss = std::make_unique<Enemy>(Enemy::spawnEnemy(*bossTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 1000, *bossProjectileTexture));
+        boss = std::make_unique<Enemy>(*bossTexture, sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 1000, *bossProjectileTexture);
         boss->load();
     }
 }
