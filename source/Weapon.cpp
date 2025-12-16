@@ -25,11 +25,16 @@ Weapon &Weapon::operator=(const Weapon &other)
     return *this;
 }
 
+void Weapon::printDetails(std::ostream &os) const
+{
+    os << "Weapon (Name: " << name
+       << ", Damage: " << damage
+       << ", Attack speed:" << attackSpeed << ")";
+}
+
 std::ostream &operator<<(std::ostream &os, const Weapon &weapon)
 {
-    os << "Weapon (Name: " << weapon.name
-       << ", Damage: " << weapon.damage
-       << ", Attack speed:" << weapon.attackSpeed << ")";
+    weapon.printDetails(os);
     return os;
 }
 

@@ -29,5 +29,4 @@ public:
     EnemyRoom(const int, Player &);
     EnemyRoom(const EnemyRoom &) = delete;
     EnemyRoom &operator=(const EnemyRoom &) = delete;
-    friend std::ostream &operator<<(std::ostream &, const EnemyRoom &);
 };

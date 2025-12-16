@@ -27,5 +27,4 @@ public:
     explicit BossRoom(Player &);
     BossRoom(const BossRoom &) = delete;
     BossRoom &operator=(const BossRoom &) = delete;
-    friend std::ostream &operator<<(std::ostream &, const BossRoom &);
 };

@@ -11,11 +11,12 @@ class Gun : public Weapon
     float bulletSpeed;
     int projectileTextureID;
 
+    void printDetails(std::ostream &) const override;
+
 public:
     Gun(const std::string &, const int, const float, const float, const int, const float, const float, const float, const int);
     Gun(const Gun &);
     Gun &operator=(const Gun &);
-    friend std::ostream &operator<<(std::ostream &, const Gun &);
 
     std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &) override;
 };

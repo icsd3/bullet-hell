@@ -29,7 +29,7 @@ std::ostream &operator<<(std::ostream &os, const Player &player)
     os << "        Count: " << player.weapons.size();
     for (unsigned int i = 0; i < player.weapons.size(); i++)
     {
-        os << "\n        Weapon " << i + 1 << ": " << player.weapons[i];
+        os << "\n        Weapon " << i + 1 << ": " << *player.weapons[i];
     }
     os << "\n";
     return os;

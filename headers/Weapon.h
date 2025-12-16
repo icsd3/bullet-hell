@@ -14,6 +14,8 @@ protected:
     float attackSpeed;
     sf::Clock weaponClock;
 
+    virtual void printDetails(std::ostream &) const;
+
 public:
     Weapon(const std::string &, const int, const float, const float);
     Weapon(const Weapon &);

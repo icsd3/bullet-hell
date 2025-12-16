@@ -25,14 +25,13 @@ Gun &Gun::operator=(const Gun &other)
     return *this;
 }
 
-std::ostream &operator<<(std::ostream &os, const Gun &gun)
+void Gun::printDetails(std::ostream &os) const
 {
-    os << static_cast<const Weapon &>(gun)
-       << ", Bullet Number: " << gun.bullet_nr
-       << ", Spread Angle: " << gun.spread_angle
-       << ", Range: " << gun.range
-       << ", Bullet Speed: " << gun.bulletSpeed << ")";
-    return os;
+    Weapon::printDetails(os);
+    os << ", Gun: (Bullet Number: " << bullet_nr
+       << ", Spread Angle: " << spread_angle
+       << ", Range: " << range
+       << ", Bullet Speed: " << bulletSpeed << ")";
 }
 
 std::vector<Projectile> Gun::fire(const sf::Vector2f &position, const sf::Vector2f &target)
