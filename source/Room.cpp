@@ -294,22 +294,27 @@ void Room::start()
     doStart();
 }
 
-std::ostream &operator<<(std::ostream &os, const Room &room)
+void Room::printDetails(std::ostream &os) const
 {
-    os << "Room (Open: " << (room.open ? "Yes" : "No") << ", Neighbors: ";
-    if (!room.up.expired())
+    os << "Room (Open: " << (open ? "Yes" : "No") << ", Neighbors: ";
+    if (!up.expired())
         os << "Up ";
-    if (!room.right.expired())
+    if (!right.expired())
         os << "Right ";
-    if (!room.down.expired())
+    if (!down.expired())
         os << "Down ";
-    if (!room.left.expired())
+    if (!left.expired())
         os << "Left ";
     os << ")\n";
     os << "    Player Projectiles:\n";
-    os << "        Count: " << room.playerProjectiles.size() << "\n";
-    if (!room.playerProjectiles.empty())
-        for (size_t i = 0; i < room.playerProjectiles.size(); i++)
-            os << "        Projectile " << i + 1 << ":\n            " << room.playerProjectiles[i] << "\n\n";
+    os << "        Count: " << playerProjectiles.size() << "\n";
+    if (!playerProjectiles.empty())
+        for (size_t i = 0; i < playerProjectiles.size(); i++)
+            os << "        Projectile " << i + 1 << ":\n            " << playerProjectiles[i] << "\n\n";
+}
+
+std::ostream &operator<<(std::ostream &os, const Room &room)
+{
+    room.printDetails(os);
     return os;
 }

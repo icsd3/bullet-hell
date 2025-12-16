@@ -18,6 +18,7 @@ class BossRoom : public Room
     std::pair<int, std::weak_ptr<Room>> doUpdate(const float &) override;
     int doCheckPlayerCollisions() override;
     bool doCheckEntityCollisions(const Entity &) override;
+    void printDetails(std::ostream &) const override;
 
     bool checkBossHits(const Projectile &);
     bool checkPlayerHits(const Projectile &);

@@ -34,6 +34,7 @@ protected:
     virtual std::pair<int, std::weak_ptr<Room>> doUpdate(const float &);
     virtual int doCheckPlayerCollisions();
     virtual bool doCheckEntityCollisions(const Entity &);
+    virtual void printDetails(std::ostream &) const;
 
 public:
     explicit Room(Player &);

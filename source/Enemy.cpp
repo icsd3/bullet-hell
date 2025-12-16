@@ -333,6 +333,6 @@ std::ostream &operator<<(std::ostream &os, const Enemy &enemy)
 {
     os << static_cast<const Entity &>(enemy);
     os << "\n";
-    os << "        Enemy Weapon: " << enemy.weapon;
+    os << "        Enemy Weapon: " << *enemy.weapon;
     return os;
 }

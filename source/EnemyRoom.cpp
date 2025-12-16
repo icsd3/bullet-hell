@@ -227,19 +227,18 @@ bool EnemyRoom::doCheckEntityCollisions(const Entity &entity)
     return collides;
 }
 
-std::ostream &operator<<(std::ostream &os, const EnemyRoom &room)
+void EnemyRoom::printDetails(std::ostream &os) const
 {
     os << "Enemy room:\n";
-    os << static_cast<const Room &>(room);
+    Room::printDetails(os);
     os << "    Enemies:\n";
-    os << "        Count: " << room.enemies.size() << "\n";
-    if (!room.enemies.empty())
-        for (size_t i = 0; i < room.enemies.size(); i++)
-            os << "        Enemy " << i + 1 << ":\n            " << room.enemies[i] << "\n\n";
+    os << "        Count: " << enemies.size() << "\n";
+    if (!enemies.empty())
+        for (size_t i = 0; i < enemies.size(); i++)
+            os << "        Enemy " << i + 1 << ":\n            " << *enemies[i] << "\n\n";
     os << "    Enemy Projectiles:\n";
-    os << "        Count: " << room.enemyProjectiles.size() << "\n";
-    if (!room.enemyProjectiles.empty())
-        for (size_t i = 0; i < room.enemyProjectiles.size(); i++)
-            os << "        Projectile " << i + 1 << ":\n            " << room.enemyProjectiles[i] << "\n\n";
-    return os;
+    os << "        Count: " << enemyProjectiles.size() << "\n";
+    if (!enemyProjectiles.empty())
+        for (size_t i = 0; i < enemyProjectiles.size(); i++)
+            os << "        Projectile " << i + 1 << ":\n            " << enemyProjectiles[i] << "\n\n";
 }

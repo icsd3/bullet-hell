@@ -189,21 +189,20 @@ bool BossRoom::doCheckEntityCollisions(const Entity &entity)
     return collides;
 }
 
-std::ostream &operator<<(std::ostream &os, const BossRoom &room)
+void BossRoom::printDetails(std::ostream &os) const
 {
     os << "Boss room:\n";
-    os << static_cast<const Room &>(room);
-    if (room.boss)
+    Room::printDetails(os);
+    if (boss)
     {
         os << "    Boss:\n";
-        os << "        " << *(room.boss) << "\n\n";
+        os << "        " << *boss << "\n\n";
     }
     else
         os << "    Boss: defeated\n\n";
     os << "    Boss Projectiles:\n";
-    os << "        Count: " << room.bossProjectiles.size() << "\n";
-    if (!room.bossProjectiles.empty())
-        for (size_t i = 0; i < room.bossProjectiles.size(); i++)
-            os << "        Projectile " << i + 1 << ":\n            " << room.bossProjectiles[i] << "\n\n";
-    return os;
+    os << "        Count: " << bossProjectiles.size() << "\n";
+    if (!bossProjectiles.empty())
+        for (size_t i = 0; i < bossProjectiles.size(); i++)
+            os << "        Projectile " << i + 1 << ":\n            " << bossProjectiles[i] << "\n\n";
 }
