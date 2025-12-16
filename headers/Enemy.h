@@ -25,7 +25,7 @@ class Enemy : public Entity
     sf::Vector2f nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int grid[14][7]);
 
 public:
-    Enemy(const sf::Vector2f &, float, const int &);
+    Enemy(const sf::Vector2f &, float, const int &, const bool &);
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
 
     void load();

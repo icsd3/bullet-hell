@@ -1,12 +1,13 @@
 #include "../headers/Enemy.h"
 
-Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh)
-    : Entity(pos, TextureManager::getEnemyTexture(), spd, mh), gridPosition(0, 0), target(pos)
+Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss)
+    : Entity(pos, (boss == false) ? TextureManager::getEnemyTexture() : TextureManager::getBossTexture(), spd, mh), gridPosition(0, 0), target(pos)
 {
     std::ifstream file("json/Guns.json");
     nlohmann::json data;
     file >> data;
     const auto &w = data[0];
+    int type = (boss == false) ? 2 : 3;
     weapon = std::make_unique<Gun>(
         w["name"],
         w["damage"],
@@ -16,7 +17,7 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh)
         w["spread_angle"],
         w["range"],
         w["bullet_speed"],
-        2);
+        type);
 }
 
 void Enemy::load()

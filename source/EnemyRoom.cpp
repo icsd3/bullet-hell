@@ -191,7 +191,7 @@ void EnemyRoom::doStart()
                 if (grid[x][y] == 0 && (grid[x + 1][y] != 1 || grid[x - 1][y] != 1 || grid[x][y + 1] != 1 || grid[x][y - 1] != 1))
                 {
                     grid[x][y] = 2;
-                    enemies.push_back(std::make_unique<Enemy>(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 100));
+                    enemies.push_back(std::make_unique<Enemy>(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 100, false));
                     enemies.back()->load();
                     break;
                 }
