@@ -17,7 +17,7 @@ Player::Player()
         w["spread_angle"],
         w["range"],
         w["bullet_speed"],
-        TextureManager::getPlayerProjectileTexture()));
+        1));
 }
 
 std::ostream &operator<<(std::ostream &os, const Player &player)

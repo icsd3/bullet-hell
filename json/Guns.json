@@ -46,7 +46,7 @@
     },
     {
         "name": "beam",
-        "damage": 1,
+        "damage": 10,
         "bullet_nr": 1,
         "fire_rate": 144,
         "spread_angle": 0,

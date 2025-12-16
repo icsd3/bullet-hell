@@ -9,8 +9,8 @@ class TextureManager
     static sf::Texture playerProjectileTexture;
     static sf::Texture enemyTexture;
     static sf::Texture enemyProjectileTexture;
-    // static sf::Texture bossTexture;
-    // static sf::Texture bossProjectileTexture;
+    static sf::Texture bossTexture;
+    static sf::Texture bossProjectileTexture;
     static sf::Texture baseRoomTexture;
     static sf::Texture doorVerticalTexture;
     static sf::Texture doorHorizontalTexture;

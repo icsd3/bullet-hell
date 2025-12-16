@@ -16,7 +16,7 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh)
         w["spread_angle"],
         w["range"],
         w["bullet_speed"],
-        TextureManager::getEnemyProjectileTexture());
+        2);
 }
 
 void Enemy::load()

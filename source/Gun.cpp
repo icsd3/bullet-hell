@@ -1,13 +1,13 @@
 #include "../headers/Gun.h"
 
-Gun::Gun(const std::string &nm, const int dmg, const float as, const float off, const int bnr, const float sa, const float rg, const float bs, sf::Texture &tex)
-    : Weapon(nm, dmg, as, off), bullet_nr(bnr), spread_angle(sa), range(rg), bulletSpeed(bs), projectileTexture(tex)
+Gun::Gun(const std::string &nm, const int dmg, const float as, const float off, const int bnr, const float sa, const float rg, const float bs, const int id)
+    : Weapon(nm, dmg, as, off), bullet_nr(bnr), spread_angle(sa), range(rg), bulletSpeed(bs), projectileTextureID(id)
 {
 }
 
 Gun::Gun(const Gun &other)
     : Weapon(other), bullet_nr(other.bullet_nr), spread_angle(other.spread_angle), range(other.range),
-      bulletSpeed(other.bulletSpeed), projectileTexture(other.projectileTexture)
+      bulletSpeed(other.bulletSpeed), projectileTextureID(other.projectileTextureID)
 {
 }
 
@@ -20,7 +20,7 @@ Gun &Gun::operator=(const Gun &other)
         spread_angle = other.spread_angle;
         range = other.range;
         bulletSpeed = other.bulletSpeed;
-        projectileTexture = other.projectileTexture;
+        projectileTextureID = other.projectileTextureID;
     }
     return *this;
 }
@@ -41,6 +41,14 @@ std::vector<Projectile> Gun::fire(const sf::Vector2f &position, const sf::Vector
     if (weaponClock.getElapsedTime().asSeconds() >= (1 / attackSpeed))
     {
         weaponClock.restart();
+        sf::Texture *texture;
+        if (projectileTextureID == 1)
+            texture = &TextureManager::getPlayerProjectileTexture();
+        else if (projectileTextureID == 2)
+            texture = &TextureManager::getEnemyProjectileTexture();
+        else if (projectileTextureID == 3)
+            texture = &TextureManager::getBossProjectileTexture();
+
         for (int i = 0; i < bullet_nr; i++)
         {
             sf::Vector2f direction = target - position;
@@ -49,7 +57,7 @@ std::vector<Projectile> Gun::fire(const sf::Vector2f &position, const sf::Vector
             std::mt19937 &rng = Utils::getRng();
             sf::Angle randomAngle = sf::degrees(dist(rng));
             direction = direction.rotatedBy(randomAngle);
-            Projectile projectile = Projectile(position, projectileTexture, bulletSpeed, damage, direction, range);
+            Projectile projectile = Projectile(position, *texture, bulletSpeed, damage, direction, range);
             bullets.push_back(projectile);
         }
     }

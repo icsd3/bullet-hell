@@ -9,10 +9,10 @@ class Gun : public Weapon
     float spread_angle;
     float range;
     float bulletSpeed;
-    sf::Texture &projectileTexture;
+    int projectileTextureID;
 
 public:
-    Gun(const std::string &, const int, const float, const float, const int, const float, const float, const float, sf::Texture &);
+    Gun(const std::string &, const int, const float, const float, const int, const float, const float, const float, const int);
     Gun(const Gun &);
     Gun &operator=(const Gun &);
     friend std::ostream &operator<<(std::ostream &, const Gun &);
