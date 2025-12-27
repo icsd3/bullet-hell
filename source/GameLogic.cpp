@@ -62,9 +62,10 @@ void Game::selectGameState(gameStates &gameState)
 
     case defeat:
     case victory:
-    default:
         gameState = main_menu;
         break;
+    default:
+        throw GameStateException("Invalid game state transition requested");
     }
 }
 
@@ -111,7 +112,7 @@ void Game::handleNewState()
         break;
 
     default:
-        break;
+        throw GameStateException("Unknown game state encountered in handleNewState");
     }
 }
 

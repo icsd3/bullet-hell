@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../headers/Utils.h"
-#include "../headers/TextureManager.h"
+#include "../headers/ResourceManager.h"
 
 #include <iostream>
 

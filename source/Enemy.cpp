@@ -1,23 +1,35 @@
 #include "../headers/Enemy.h"
 
 Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss)
-    : Entity(pos, (boss == false) ? TextureManager::getTexture(TextureType::Enemy) : TextureManager::getTexture(TextureType::Boss), spd, mh), gridPosition(0, 0), target(pos)
+    : Entity(pos, (boss == false) ? ResourceManager::getTexture(TextureType::Enemy) : ResourceManager::getTexture(TextureType::Boss), spd, mh), gridPosition(0, 0), target(pos)
 {
     std::ifstream file("json/Guns.json");
+    if (!file.is_open())
+        throw ConfigurationException("Failed to open json/Guns.json");
+
     nlohmann::json data;
-    file >> data;
+    try {
+        file >> data;
+    } catch (const nlohmann::json::exception& e) {
+        throw ConfigurationException("Failed to parse json/Guns.json: " + std::string(e.what()));
+    }
+
     const auto &w = data[0];
     int type = (boss == false) ? 2 : 3;
-    weapon = std::make_unique<Gun>(
-        w["name"],
-        w["damage"],
-        w["fire_rate"],
-        0.3f,
-        w["bullet_nr"],
-        w["spread_angle"],
-        w["range"],
-        w["bullet_speed"],
-        type);
+    try {
+        weapon = std::make_unique<Gun>(
+            w.at("name").get<std::string>(),
+            w.at("damage").get<int>(),
+            w.at("fire_rate").get<float>(),
+            0.3f,
+            w.at("bullet_nr").get<int>(),
+            w.at("spread_angle").get<float>(),
+            w.at("range").get<float>(),
+            w.at("bullet_speed").get<float>(),
+            type);
+    } catch (const nlohmann::json::exception& e) {
+        throw ConfigurationException("json/Guns.json index 0 is missing required fields or has invalid types: " + std::string(e.what()));
+    }
 }
 
 void Enemy::load()

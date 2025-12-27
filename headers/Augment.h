@@ -1,14 +1,10 @@
 #pragma once
 
 #include "../headers/Player.h"
-#include "../headers/TextureManager.h"
+#include "../headers/ResourceManager.h"
 
 class Augment
 {
-    std::string fontPath;
-
-    sf::Font font;
-
     sf::Sprite backgroundSprite;
     sf::Sprite firstButtonSprite;
     sf::Text firstButtonText;

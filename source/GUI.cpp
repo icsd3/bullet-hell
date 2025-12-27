@@ -1,19 +1,12 @@
 #include "../headers/GUI.h"
 
 GUI::GUI()
-    : fontPath("fonts/arial.ttf"), health(font), fps(font)
+    : health(ResourceManager::getFont(FontType::Arial)), fps(ResourceManager::getFont(FontType::Arial))
 {
-    if (!font.openFromFile(fontPath))
-    {
-        std::cerr << "Error loading arial.ttf\n";
-    }
 }
-
-
 
 std::ostream &operator<<(std::ostream &os, const GUI &gui)
 {
-    os << "    GUI Font loaded: " << (gui.font.getInfo().family.empty() ? "No" : gui.fontPath) << "\n";
     os << "    Health Text: " << gui.health.getString().toAnsiString() << "\n";
     os << "    FPS Text: " << gui.fps.getString().toAnsiString();
     return os;

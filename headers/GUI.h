@@ -5,8 +5,6 @@
 
 class GUI
 {
-    std::string fontPath;
-    sf::Font font;
     sf::Text health;
     sf::RectangleShape maxHealthBar;
     sf::RectangleShape currentHealthBar;

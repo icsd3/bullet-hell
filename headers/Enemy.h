@@ -3,7 +3,7 @@
 #include "../headers/Entity.h"
 #include "../headers/Gun.h"
 #include "../headers/Door.h"
-#include "../headers/TextureManager.h"
+#include "../headers/ResourceManager.h"
 
 #include <nlohmann/json.hpp>
 #include <queue>

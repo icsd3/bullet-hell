@@ -1,23 +1,35 @@
 #include "../headers/Player.h"
 
 Player::Player()
-    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, TextureManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(0)
+    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, ResourceManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(0)
 {
     
     std::ifstream file("json/Guns.json");
+    if (!file.is_open())
+        throw ConfigurationException("Failed to open json/Guns.json");
+
     nlohmann::json data;
-    file >> data;
+    try {
+        file >> data;
+    } catch (const nlohmann::json::parse_error& e) {
+        throw ConfigurationException("Failed to parse json/Guns.json: " + std::string(e.what()));
+    }
+
     const auto &w = data[5];
-    weapons.emplace_back(std::make_unique<Gun>(
-        w["name"],
-        w["damage"],
-        w["fire_rate"],
-        0.f,
-        w["bullet_nr"],
-        w["spread_angle"],
-        w["range"],
-        w["bullet_speed"],
-        1));
+    try {
+        weapons.emplace_back(std::make_unique<Gun>(
+            w.at("name").get<std::string>(),
+            w.at("damage").get<int>(),
+            w.at("fire_rate").get<float>(),
+            0.f,
+            w.at("bullet_nr").get<int>(),
+            w.at("spread_angle").get<float>(),
+            w.at("range").get<float>(),
+            w.at("bullet_speed").get<float>(),
+            1));
+    } catch (const nlohmann::json::exception& e) {
+        throw ConfigurationException("json/Guns.json is missing required fields or has invalid types: " + std::string(e.what()));
+    }
 }
 
 std::ostream &operator<<(std::ostream &os, const Player &player)
@@ -48,6 +60,9 @@ void Player::update(const float &dt, const sf::Vector2f &target)
         transform(moveVec, 0.f, sf::Angle(sf::degrees(0.f)));
     }
 
+    if (currentWeapon >= weapons.size())
+        throw OutOfBoundsException("Invalid currentWeapon index in Player::update");
+
     weapons[currentWeapon]->update();
 }
 
@@ -61,6 +76,9 @@ void Player::load()
         {0.f, 1.f}, 
         {0.f, 4.5f / 14}
     });
+
+    if (currentWeapon >= weapons.size())
+        throw OutOfBoundsException("Invalid currentWeapon index in Player::load");
 
     weapons[currentWeapon]->reset();
 }
@@ -84,6 +102,9 @@ void Player::setPosition(const sf::Vector2f &newPos)
 std::vector<Projectile> Player::fire(const sf::Vector2f &target) const
 {
     std::vector<Projectile> bullets;
+
+    if (currentWeapon >= weapons.size())
+        throw OutOfBoundsException("Invalid currentWeapon index in Player::fire");
 
     bullets = weapons[currentWeapon]->fire(position, target);
 

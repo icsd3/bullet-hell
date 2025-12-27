@@ -1,12 +1,8 @@
 #include "../headers/Settings.h"
 
 Settings::Settings()
-    : screenText(font), controlsText(font)
+    : screenText(ResourceManager::getFont(FontType::Courier)), controlsText(ResourceManager::getFont(FontType::Courier))
 {
-    if (!font.openFromFile("fonts/courier.ttf"))
-    {
-        std::cerr << "Error loading courier.ttf\n";
-    }
 }
 
 Settings &Settings::getInstance()

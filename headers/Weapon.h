@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../headers/Projectile.h"
-#include "../headers/TextureManager.h"
+#include "../headers/ResourceManager.h"
 
 class Weapon
 {

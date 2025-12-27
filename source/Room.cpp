@@ -1,9 +1,9 @@
 #include "../headers/Room.h"
 
 Room::Room(Player &player)
-    : player(player), backgroundSprite(TextureManager::getTexture(TextureType::BaseRoom)), 
-      doorVertical(&TextureManager::getTexture(TextureType::DoorVertical)), 
-      doorHorizontal(&TextureManager::getTexture(TextureType::DoorHorizontal)), 
+    : player(player), backgroundSprite(ResourceManager::getTexture(TextureType::BaseRoom)), 
+      doorVertical(&ResourceManager::getTexture(TextureType::DoorVertical)), 
+      doorHorizontal(&ResourceManager::getTexture(TextureType::DoorHorizontal)), 
       grid{{0}}
 {
     animationClock.reset();

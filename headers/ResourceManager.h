@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../headers/Exception.h"
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -23,7 +25,13 @@ enum class TextureType
     MenuExitButton
 };
 
-class TextureManager
+enum class FontType
+{
+    Arial,
+    Courier
+};
+
+class ResourceManager
 {
     static sf::Texture playerTexture;
     static sf::Texture playerProjectileTexture;
@@ -42,6 +50,13 @@ class TextureManager
     static sf::Texture menuSettingsButtonTexture;
     static sf::Texture menuExitButtonTexture;
 
+    static sf::Font arial;
+    static sf::Font courier;
+
 public:
+    static void loadTexture(TextureType type);
     static sf::Texture &getTexture(TextureType type);
+
+    static void loadFont(FontType type);
+    static sf::Font &getFont(FontType type);
 };

@@ -3,7 +3,7 @@
 #include "../headers/Enemy.h"
 #include "../headers/Projectile.h"
 #include "../headers/Player.h"
-#include "../headers/TextureManager.h"
+#include "../headers/ResourceManager.h"
 #include "../headers/Door.h"
 
 class Room

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../headers/Utils.h"
+#include "../headers/ResourceManager.h"
 
 #include <iostream>
 
@@ -13,7 +14,7 @@ class Settings
     sf::RectangleShape settingsBox;
     sf::RectangleShape screenButton;
     sf::RectangleShape controlsButton;
-    sf::Font font;
+
     sf::Text screenText;
     sf::Text controlsText;
 

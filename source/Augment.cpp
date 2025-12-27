@@ -1,30 +1,28 @@
 #include "../headers/Augment.h"
 
 Augment::Augment()
-    : fontPath("fonts/courier.ttf"),
-      font(fontPath),
-      backgroundSprite(TextureManager::getTexture(TextureType::AugmentBackground)),
-      firstButtonSprite(TextureManager::getTexture(TextureType::AugmentButton)),
-      firstButtonText(font),
-      secondButtonSprite(TextureManager::getTexture(TextureType::AugmentButton)),
-      secondButtonText(font),
-      thirdButtonSprite(TextureManager::getTexture(TextureType::AugmentButton)),
-      thirdButtonText(font)
+    : backgroundSprite(ResourceManager::getTexture(TextureType::AugmentBackground)),
+      firstButtonSprite(ResourceManager::getTexture(TextureType::AugmentButton)),
+      firstButtonText(ResourceManager::getFont(FontType::Courier)),
+      secondButtonSprite(ResourceManager::getTexture(TextureType::AugmentButton)),
+      secondButtonText(ResourceManager::getFont(FontType::Courier)),
+      thirdButtonSprite(ResourceManager::getTexture(TextureType::AugmentButton)),
+      thirdButtonText(ResourceManager::getFont(FontType::Courier))
 {
 }
 
 void Augment::load()
 {
     backgroundSprite.setScale(sf::Vector2f(
-        1.f * LOGICAL_WIDTH / static_cast<float>(TextureManager::getTexture(TextureType::AugmentBackground).getSize().x),
-        1.f * LOGICAL_HEIGHT / static_cast<float>(TextureManager::getTexture(TextureType::AugmentBackground).getSize().y)));
+        1.f * LOGICAL_WIDTH / static_cast<float>(ResourceManager::getTexture(TextureType::AugmentBackground).getSize().x),
+        1.f * LOGICAL_HEIGHT / static_cast<float>(ResourceManager::getTexture(TextureType::AugmentBackground).getSize().y)));
 
-    float scaleX = 1.f * LOGICAL_WIDTH / static_cast<float>(TextureManager::getTexture(TextureType::AugmentButton).getSize().x) / 13.f * 3.f;
-    float scaleY = 1.f * LOGICAL_HEIGHT / static_cast<float>(TextureManager::getTexture(TextureType::AugmentButton).getSize().y) / 10.f * 7.5f;
+    float scaleX = 1.f * LOGICAL_WIDTH / static_cast<float>(ResourceManager::getTexture(TextureType::AugmentButton).getSize().x) / 13.f * 3.f;
+    float scaleY = 1.f * LOGICAL_HEIGHT / static_cast<float>(ResourceManager::getTexture(TextureType::AugmentButton).getSize().y) / 10.f * 7.5f;
     auto setupButton = [&](sf::Sprite &sprite, int index)
     {
         sprite.setScale(sf::Vector2f(scaleX, scaleY));
-        sprite.setOrigin(sf::Vector2f(static_cast<float>(TextureManager::getTexture(TextureType::AugmentButton).getSize().x) / 2.f, static_cast<float>(TextureManager::getTexture(TextureType::AugmentButton).getSize().y) / 2.f));
+        sprite.setOrigin(sf::Vector2f(static_cast<float>(ResourceManager::getTexture(TextureType::AugmentButton).getSize().x) / 2.f, static_cast<float>(ResourceManager::getTexture(TextureType::AugmentButton).getSize().y) / 2.f));
         sprite.setPosition(sf::Vector2f(LOGICAL_WIDTH / 26.f * (8 * index + 5), LOGICAL_HEIGHT / 2.f));
     };
 

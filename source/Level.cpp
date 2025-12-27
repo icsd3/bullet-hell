@@ -135,6 +135,10 @@ void Level::load(const int nr)
     std::mt19937 &rng = Utils::getRng();
     int n = dist(rng);
     generateRooms(n);
+    
+    if (rooms.empty())
+        throw OutOfBoundsException("No rooms were generated for the level");
+        
     currentRoom = rooms[0];
 
     for (int i = 0; i < 5; i++)
@@ -147,15 +151,35 @@ void Level::load(const int nr)
             std::weak_ptr<Room> right;
             if (map[i][j] > 0)
             {
+                size_t currentIndex = static_cast<size_t>(map[i][j] - 1);
+                if (currentIndex >= rooms.size())
+                    throw OutOfBoundsException("Invalid room index in Level::load during neighbor setup");
+
                 if (i - 1 >= 0 && map[i - 1][j] > 0)
-                    up = rooms[map[i - 1][j] - 1];
+                {
+                    size_t upIndex = static_cast<size_t>(map[i - 1][j] - 1);
+                    if (upIndex >= rooms.size()) throw OutOfBoundsException("Invalid neighbor index (up) in Level::load");
+                    up = rooms[upIndex];
+                }
                 if (i + 1 < 5 && map[i + 1][j] > 0)
-                    down = rooms[map[i + 1][j] - 1];
+                {
+                    size_t downIndex = static_cast<size_t>(map[i + 1][j] - 1);
+                    if (downIndex >= rooms.size()) throw OutOfBoundsException("Invalid neighbor index (down) in Level::load");
+                    down = rooms[downIndex];
+                }
                 if (j - 1 >= 0 && map[i][j - 1] > 0)
-                    left = rooms[map[i][j - 1] - 1];
+                {
+                    size_t leftIndex = static_cast<size_t>(map[i][j - 1] - 1);
+                    if (leftIndex >= rooms.size()) throw OutOfBoundsException("Invalid neighbor index (left) in Level::load");
+                    left = rooms[leftIndex];
+                }
                 if (j + 1 < 7 && map[i][j + 1] > 0)
-                    right = rooms[map[i][j + 1] - 1];
-                rooms[map[i][j] - 1]->load(up, right, down, left);
+                {
+                    size_t rightIndex = static_cast<size_t>(map[i][j + 1] - 1);
+                    if (rightIndex >= rooms.size()) throw OutOfBoundsException("Invalid neighbor index (right) in Level::load");
+                    right = rooms[rightIndex];
+                }
+                rooms[currentIndex]->load(up, right, down, left);
             }
         }
     }
@@ -272,6 +296,9 @@ void Level::update(const float &dt, sf::Vector2f &target)
     sf::Vector2f oldPosition = player.getPosition();
 
     player.update(dt, target);
+
+    if (!currentRoom)
+        throw GameStateException("currentRoom is null in Level::update");
 
     std::pair<int, std::weak_ptr<Room>> action = currentRoom->update(dt);
 
