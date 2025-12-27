@@ -114,8 +114,8 @@ std::ostream &operator<<(std::ostream &os, const Minimap &minimap)
 
 void Minimap::revealNeighbors(int r, int c)
 {
-    int dr[] = {-1, 1, 0, 0};
-    int dc[] = {0, 0, -1, 1};
+    const int dr[] = {-1, 1, 0, 0};
+    const int dc[] = {0, 0, -1, 1};
 
     for (int i = 0; i < 4; i++)
     {
