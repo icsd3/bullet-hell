@@ -9,6 +9,10 @@ class Minimap
     sf::RectangleShape background;
     std::pair<int, int> currentPos;
     std::vector<sf::RectangleShape> grid;
+    std::vector<bool> revealed;
+    int mapData[5][7];
+
+    void revealNeighbors(int r, int c);
 
 public:
     Minimap();
