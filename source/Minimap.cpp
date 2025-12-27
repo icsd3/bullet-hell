@@ -1,7 +1,7 @@
 #include "../headers/Minimap.h"
 
 Minimap::Minimap()
-    : currentPos({4, 3})
+    : currentPos({4, 3}), mapData{{0}}
 {
 }
 
