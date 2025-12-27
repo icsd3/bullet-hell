@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Enemy Pistol",
+        "damage": 10,
+        "bullet_nr": 1,
+        "fire_rate": 0.5,
+        "spread_angle": 10.0,
+        "range": 3000,
+        "bullet_speed": 200
+    },
+    {
+        "name": "Enemy Shotgun",
+        "damage": 5,
+        "bullet_nr": 5,
+        "fire_rate": 0.3,
+        "spread_angle": 30.0,
+        "range": 3000,
+        "bullet_speed": 100
+    },
+    {
+        "name": "Enemy Rifle",
+        "damage": 5,
+        "bullet_nr": 1,
+        "fire_rate": 1.0,
+        "spread_angle": 30.0,
+        "range": 3000,
+        "bullet_speed": 150
+    }
+]

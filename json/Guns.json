@@ -1,14 +1,5 @@
 [
     {
-        "name": "Enemy gun",
-        "damage": 5,
-        "bullet_nr": 1,
-        "fire_rate": 0.5,
-        "spread_angle": 15.0,
-        "range": 3000,
-        "bullet_speed": 200
-    },
-    {
         "name": "Basic Pistol",
         "damage": 20,
         "bullet_nr": 1,

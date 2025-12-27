@@ -9,14 +9,18 @@ Player::Player()
         throw ConfigurationException("Failed to open json/Guns.json");
 
     nlohmann::json data;
-    try {
+    try 
+    {
         file >> data;
-    } catch (const nlohmann::json::parse_error& e) {
+    } 
+    catch (const nlohmann::json::parse_error& e) 
+    {
         throw ConfigurationException("Failed to parse json/Guns.json: " + std::string(e.what()));
     }
 
-    const auto &w = data[5];
-    try {
+    const auto &w = data[4];
+    try 
+    {
         weapons.emplace_back(std::make_unique<Gun>(
             w.at("name").get<std::string>(),
             w.at("damage").get<int>(),
@@ -27,7 +31,9 @@ Player::Player()
             w.at("range").get<float>(),
             w.at("bullet_speed").get<float>(),
             1));
-    } catch (const nlohmann::json::exception& e) {
+    } 
+    catch (const nlohmann::json::exception& e) 
+    {
         throw ConfigurationException("json/Guns.json is missing required fields or has invalid types: " + std::string(e.what()));
     }
 }
