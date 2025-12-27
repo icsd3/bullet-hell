@@ -9,7 +9,7 @@
 
 class Player final : public Entity
 {
-    int currentWeapon;
+    size_t currentWeapon;
     std::vector<std::unique_ptr<Weapon>> weapons;
 
 public:
