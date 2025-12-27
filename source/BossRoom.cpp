@@ -3,7 +3,7 @@
 BossRoom::BossRoom(Player &player)
     : Room(player)
 {
-    obstacleTexture = &TextureManager::getObstacleTexture();
+    obstacleTexture = &TextureManager::getTexture(TextureType::Obstacle);
     animationClock.reset();
 }
 

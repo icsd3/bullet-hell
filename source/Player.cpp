@@ -1,7 +1,7 @@
 #include "../headers/Player.h"
 
 Player::Player()
-    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, TextureManager::getPlayerTexture(), 400.f, 100), currentWeapon(0)
+    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, TextureManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(0)
 {
     
     std::ifstream file("json/Guns.json");

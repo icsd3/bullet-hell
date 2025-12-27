@@ -3,7 +3,7 @@
 EnemyRoom::EnemyRoom(const int count, Player &player)
     : Room(player), nrOfEnemies(count)
 {
-    obstacleTexture = &TextureManager::getObstacleTexture();
+    obstacleTexture = &TextureManager::getTexture(TextureType::Obstacle);
     animationClock.reset();
 }
 

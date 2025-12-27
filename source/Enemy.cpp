@@ -1,7 +1,7 @@
 #include "../headers/Enemy.h"
 
 Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss)
-    : Entity(pos, (boss == false) ? TextureManager::getEnemyTexture() : TextureManager::getBossTexture(), spd, mh), gridPosition(0, 0), target(pos)
+    : Entity(pos, (boss == false) ? TextureManager::getTexture(TextureType::Enemy) : TextureManager::getTexture(TextureType::Boss), spd, mh), gridPosition(0, 0), target(pos)
 {
     std::ifstream file("json/Guns.json");
     nlohmann::json data;

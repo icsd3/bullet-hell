@@ -40,12 +40,12 @@ std::vector<Projectile> Gun::fire(const sf::Vector2f &position, const sf::Vector
     if (weaponClock.getElapsedTime().asSeconds() >= (1 / attackSpeed))
     {
         weaponClock.restart();
-        sf::Texture *texture = &TextureManager::getPlayerProjectileTexture();
+        sf::Texture *texture = &TextureManager::getTexture(TextureType::PlayerProjectile);
 
         if (projectileTextureID == 2)
-            texture = &TextureManager::getEnemyProjectileTexture();
+            texture = &TextureManager::getTexture(TextureType::EnemyProjectile);
         else if (projectileTextureID == 3)
-            texture = &TextureManager::getBossProjectileTexture();
+            texture = &TextureManager::getTexture(TextureType::BossProjectile);
 
         for (int i = 0; i < bullet_nr; i++)
         {

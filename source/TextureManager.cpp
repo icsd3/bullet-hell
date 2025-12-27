@@ -17,82 +17,44 @@ sf::Texture TextureManager::menuStartButtonTexture("textures/start_button.png");
 sf::Texture TextureManager::menuSettingsButtonTexture("textures/settings_button.png");
 sf::Texture TextureManager::menuExitButtonTexture("textures/exit_button.png");
 
-sf::Texture &TextureManager::getPlayerTexture()
+sf::Texture &TextureManager::getTexture(TextureType type)
 {
-    return playerTexture;
-}
-
-sf::Texture &TextureManager::getPlayerProjectileTexture()
-{
-    return playerProjectileTexture;
-}
-
-sf::Texture &TextureManager::getEnemyTexture()
-{
-    return enemyTexture;
-}
-
-sf::Texture &TextureManager::getEnemyProjectileTexture()
-{
-    return enemyProjectileTexture;
-}
-
-sf::Texture &TextureManager::getBossTexture()
-{
-    return bossTexture;
-}
-
-sf::Texture &TextureManager::getBossProjectileTexture()
-{
-    return bossProjectileTexture;
-}
-
-sf::Texture &TextureManager::getBaseRoomTexture()
-{
-    return baseRoomTexture;
-}
-
-sf::Texture &TextureManager::getDoorVerticalTexture()
-{
-    return doorVerticalTexture;
-}
-
-sf::Texture &TextureManager::getDoorHorizontalTexture()
-{
-    return doorHorizontalTexture;
-}
-
-sf::Texture &TextureManager::getObstacleTexture()
-{
-    return obstacleTexture;
-}
-
-sf::Texture &TextureManager::getAugmentBackgroundTexture()
-{
-    return augmentBackgroundTexture;
-}
-
-sf::Texture &TextureManager::getAugmentButtonTexture()
-{
-    return augmentButtonTexture;
-}
-
-sf::Texture &TextureManager::getMenuBackgroundTexture()
-{
-    return menuBackgroundTexture;
-}
-
-sf::Texture &TextureManager::getMenuStartButtonTexture()
-{
-    return menuStartButtonTexture;
-}
-
-sf::Texture &TextureManager::getMenuSettingsButtonTexture()
-{
-    return menuSettingsButtonTexture;
-}
-
-sf::Texture &TextureManager::getMenuExitButtonTexture()
-{
-    return menuExitButtonTexture;
+    using enum TextureType;
+    switch (type)
+    {
+        case Player:
+            return playerTexture;
+        case PlayerProjectile:
+            return playerProjectileTexture;
+        case Enemy:
+            return enemyTexture;
+        case EnemyProjectile:
+            return enemyProjectileTexture;
+        case Boss:
+            return bossTexture;
+        case BossProjectile:
+            return bossProjectileTexture;
+        case BaseRoom:
+            return baseRoomTexture;
+        case DoorVertical:
+            return doorVerticalTexture;
+        case DoorHorizontal:
+            return doorHorizontalTexture;
+        case Obstacle:
+            return obstacleTexture;
+        case AugmentBackground:
+            return augmentBackgroundTexture;
+        case AugmentButton:
+            return augmentButtonTexture;
+        case MenuBackground:
+            return menuBackgroundTexture;
+        case MenuStartButton:
+            return menuStartButtonTexture;
+        case MenuSettingsButton:
+            return menuSettingsButtonTexture;
+        case MenuExitButton:
+            return menuExitButtonTexture;
+        default:
+            throw std::invalid_argument("Invalid TextureType");
+    }
 }

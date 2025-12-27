@@ -3,6 +3,26 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+enum class TextureType
+{
+    Player,
+    PlayerProjectile,
+    Enemy,
+    EnemyProjectile,
+    Boss,
+    BossProjectile,
+    BaseRoom,
+    DoorVertical,
+    DoorHorizontal,
+    Obstacle,
+    AugmentBackground,
+    AugmentButton,
+    MenuBackground,
+    MenuStartButton,
+    MenuSettingsButton,
+    MenuExitButton
+};
+
 class TextureManager
 {
     static sf::Texture playerTexture;
@@ -23,20 +43,5 @@ class TextureManager
     static sf::Texture menuExitButtonTexture;
 
 public:
-    static sf::Texture &getPlayerTexture();
-    static sf::Texture &getPlayerProjectileTexture();
-    static sf::Texture &getEnemyTexture();
-    static sf::Texture &getEnemyProjectileTexture();
-    static sf::Texture &getBossTexture();
-    static sf::Texture &getBossProjectileTexture();
-    static sf::Texture &getBaseRoomTexture();
-    static sf::Texture &getDoorVerticalTexture();
-    static sf::Texture &getDoorHorizontalTexture();
-    static sf::Texture &getObstacleTexture();
-    static sf::Texture &getAugmentBackgroundTexture();
-    static sf::Texture &getAugmentButtonTexture();
-    static sf::Texture &getMenuBackgroundTexture();
-    static sf::Texture &getMenuStartButtonTexture();
-    static sf::Texture &getMenuSettingsButtonTexture();
-    static sf::Texture &getMenuExitButtonTexture();
+    static sf::Texture &getTexture(TextureType type);
 };
