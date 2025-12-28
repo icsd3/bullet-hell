@@ -28,6 +28,6 @@ public:
 
     void load(sf::Vector2f &);
     void reset();
-    void update(sf::Vector2f &, sf::Angle &);
+    void update(sf::Vector2f &, const sf::Angle &);
     void draw(sf::RenderWindow &);
 };

@@ -60,7 +60,7 @@ void Weapon::reset()
     weaponClock.restart();
 }
 
-void Weapon::update(sf::Vector2f &pos, sf::Angle &angle)
+void Weapon::update(sf::Vector2f &pos, const sf::Angle &angle)
 {
     if (Utils::changePaused(0))
         weaponClock.stop();
