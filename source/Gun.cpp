@@ -40,12 +40,12 @@ std::vector<Projectile> Gun::doFire(const sf::Vector2f &position, const sf::Vect
     if (weaponClock.getElapsedTime().asSeconds() >= (1 / attackSpeed))
     {
         weaponClock.restart();
-        sf::Texture *texture = &ResourceManager::getTexture(TextureType::PlayerProjectile);
+        sf::Texture *projectileTexture = &ResourceManager::getTexture(TextureType::PlayerProjectile);
 
         if (projectileTextureID == 2)
-            texture = &ResourceManager::getTexture(TextureType::EnemyProjectile);
+            projectileTexture = &ResourceManager::getTexture(TextureType::EnemyProjectile);
         else if (projectileTextureID == 3)
-            texture = &ResourceManager::getTexture(TextureType::BossProjectile);
+            projectileTexture = &ResourceManager::getTexture(TextureType::BossProjectile);
 
         for (int i = 0; i < bullet_nr; i++)
         {
@@ -55,7 +55,7 @@ std::vector<Projectile> Gun::doFire(const sf::Vector2f &position, const sf::Vect
             std::mt19937 &rng = Utils::getRng();
             sf::Angle randomAngle = sf::degrees(dist(rng));
             direction = direction.rotatedBy(randomAngle);
-            Projectile projectile = Projectile(position, *texture, bulletSpeed, damage, direction, range);
+            Projectile projectile = Projectile(position, *projectileTexture, bulletSpeed, damage, direction, range);
             bullets.push_back(projectile);
         }
     }
