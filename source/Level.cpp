@@ -294,12 +294,12 @@ void Level::draw(sf::RenderWindow &window)
     gui.draw(window);
 }
 
-void Level::update(const float &dt, sf::Vector2f &target)
+void Level::update(const float &dt, sf::Vector2f &target, const sf::Vector2f &mousePosition)
 {
     int moved = -1;
     sf::Vector2f oldPosition = player.getPosition();
 
-    player.update(dt, target);
+    player.update(dt, target, mousePosition);
 
     if (!currentRoom)
         throw GameStateException("currentRoom is null in Level::update");

@@ -21,6 +21,26 @@ Player::Player()
     const auto &w = data[4];
     try 
     {
+        int texId = w.at("texture").get<int>();
+        sf::Texture *texture;
+        switch (texId)
+        {
+            case 0:
+                texture = &ResourceManager::getTexture(TextureType::Pistol);
+                break;
+            case 1:
+                texture = &ResourceManager::getTexture(TextureType::Shotgun);
+                break;
+            case 2:
+                texture = &ResourceManager::getTexture(TextureType::Rifle);
+                break;
+            case 3:
+                texture = &ResourceManager::getTexture(TextureType::Sniper);
+                break;
+            default:
+                throw ConfigurationException("json/Guns.json is missing required fields or has invalid types");
+                break;
+        }
         weapons.emplace_back(std::make_unique<Gun>(
             w.at("name").get<std::string>(),
             w.at("damage").get<int>(),
@@ -30,7 +50,8 @@ Player::Player()
             w.at("spread_angle").get<float>(),
             w.at("range").get<float>(),
             w.at("bullet_speed").get<float>(),
-            1));
+            1,
+            *texture));
     } 
     catch (const nlohmann::json::exception& e) 
     {
@@ -53,7 +74,7 @@ std::ostream &operator<<(std::ostream &os, const Player &player)
     return os;
 }
 
-void Player::update(const float &dt, const sf::Vector2f &target)
+void Player::update(const float &dt, const sf::Vector2f &target, const sf::Vector2f &mousePosition)
 {
     sf::Vector2f dir = target - position;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
@@ -69,7 +90,12 @@ void Player::update(const float &dt, const sf::Vector2f &target)
     if (currentWeapon >= weapons.size())
         throw OutOfBoundsException("Invalid currentWeapon index in Player::update");
 
-    weapons[currentWeapon]->update();
+    sf::Angle angle = sf::degrees(0);
+
+    if ((mousePosition - position) != sf::Vector2f(0, 0))
+        angle = (mousePosition - position).angle();
+
+    weapons[currentWeapon]->update(position, angle);
 }
 
 void Player::load()
@@ -86,7 +112,18 @@ void Player::load()
     if (currentWeapon >= weapons.size())
         throw OutOfBoundsException("Invalid currentWeapon index in Player::load");
 
+    weapons[currentWeapon]->load(position);
     weapons[currentWeapon]->reset();
+}
+
+void Player::doDraw(sf::RenderWindow &window) const
+{
+    Entity::doDraw(window);
+
+    if (currentWeapon >= weapons.size())
+        throw OutOfBoundsException("Invalid currentWeapon index in Player::doDraw");
+
+    weapons[currentWeapon]->draw(window);
 }
 
 sf::Vector2i Player::getHealthStatus() const

@@ -1,7 +1,7 @@
 #include "../headers/Gun.h"
 
-Gun::Gun(const std::string &nm, const int dmg, const float as, const float off, const int bnr, const float sa, const float rg, const float bs, const int id)
-    : Weapon(nm, dmg, as, off), bullet_nr(bnr), spread_angle(sa), range(rg), bulletSpeed(bs), projectileTextureID(id)
+Gun::Gun(const std::string &nm, const int dmg, const float as, const float off, const int bnr, const float sa, const float rg, const float bs, const int id, const sf::Texture &tex)
+    : Weapon(nm, dmg, as, off, tex), bullet_nr(bnr), spread_angle(sa), range(rg), bulletSpeed(bs), projectileTextureID(id)
 {
 }
 
@@ -34,7 +34,7 @@ void Gun::printDetails(std::ostream &os) const
        << ", Bullet Speed: " << bulletSpeed << ")";
 }
 
-std::vector<Projectile> Gun::fire(const sf::Vector2f &position, const sf::Vector2f &target)
+std::vector<Projectile> Gun::doFire(const sf::Vector2f &position, const sf::Vector2f &target)
 {
     std::vector<Projectile> bullets;
     if (weaponClock.getElapsedTime().asSeconds() >= (1 / attackSpeed))

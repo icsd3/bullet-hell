@@ -25,6 +25,26 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss
     int type = (boss == false) ? 2 : 3;
     try 
     {
+        int texId = w.at("texture").get<int>();
+        sf::Texture *texture;
+        switch (texId)
+        {
+            case 0:
+                texture = &ResourceManager::getTexture(TextureType::Pistol);
+                break;
+            case 1:
+                texture = &ResourceManager::getTexture(TextureType::Shotgun);
+                break;
+            case 2:
+                texture = &ResourceManager::getTexture(TextureType::Rifle);
+                break;
+            case 3:
+                texture = &ResourceManager::getTexture(TextureType::Sniper);
+                break;
+            default:
+                throw ConfigurationException("json/EnemyGuns.json is missing required fields or has invalid types");
+                break;
+        }
         weapon = std::make_unique<Gun>(
             w.at("name").get<std::string>(),
             w.at("damage").get<int>(),
@@ -34,7 +54,8 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss
             w.at("spread_angle").get<float>(),
             w.at("range").get<float>(),
             w.at("bullet_speed").get<float>(),
-            type);
+            type,
+            *texture);
     } 
     catch (const nlohmann::json::exception& e) 
     {
@@ -69,6 +90,7 @@ void Enemy::load()
     int gridY = static_cast<int>((position.y - 120.f) / 120.f);
     gridPosition = {gridX, gridY};
 
+    weapon->load(position);
     weapon->reset();
     updateClock.reset();
 }
@@ -78,6 +100,8 @@ void Enemy::doDraw(sf::RenderWindow &window) const
     sf::Vector2f scaleFactor = Utils::getScaleFactor(window);
 
     Entity::doDraw(window);
+
+    weapon->draw(window);
 
     sf::RectangleShape drawMaxHealthBar = maxHealthBar;
     drawMaxHealthBar.setPosition(Utils::mapToScreen(maxHealthBar.getPosition(), window));
@@ -100,7 +124,9 @@ std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playe
 {
     sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - 120.f) / 120.f), static_cast<int>((playerPosition.y - 120.f) / 120.f));
 
-    weapon->update();
+    sf::Angle angle = (playerPosition - position).angle();
+
+    weapon->update(position, angle);
 
     std::vector<Projectile> bullets;
 

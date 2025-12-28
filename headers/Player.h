@@ -12,6 +12,8 @@ class Player final : public Entity
     size_t currentWeapon;
     std::vector<std::unique_ptr<Weapon>> weapons;
 
+    void doDraw(sf::RenderWindow &) const override;
+
 public:
     Player();
     Player(const Player &) = delete;
@@ -19,7 +21,7 @@ public:
     friend std::ostream &operator<<(std::ostream &, const Player &);
 
     void load();
-    void update(const float &, const sf::Vector2f &);
+    void update(const float &, const sf::Vector2f &, const sf::Vector2f &);
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f &);

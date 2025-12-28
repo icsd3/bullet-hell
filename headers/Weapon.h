@@ -6,8 +6,8 @@
 class Weapon
 {
     std::string name;
-    // const sf::Texture *texture;
-    // sf::Sprite sprite;
+    const sf::Texture *texture;
+    sf::Sprite sprite;
 
 protected:
     int damage;
@@ -15,16 +15,19 @@ protected:
     sf::Clock weaponClock;
 
     virtual void printDetails(std::ostream &) const;
+    virtual std::vector<Projectile> doFire(const sf::Vector2f &, const sf::Vector2f &) = 0;
 
 public:
-    Weapon(const std::string &, const int, const float, const float);
+    Weapon(const std::string &, const int, const float, const float, const sf::Texture &);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
     virtual ~Weapon() = default;
     friend std::ostream &operator<<(std::ostream &, const Weapon &);
 
-    virtual std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &) = 0;
+    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &);
 
+    void load(sf::Vector2f &);
     void reset();
-    void update();
+    void update(sf::Vector2f &, sf::Angle &);
+    void draw(sf::RenderWindow &);
 };

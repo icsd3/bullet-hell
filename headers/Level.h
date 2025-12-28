@@ -25,7 +25,7 @@ public:
     Level(Player &, GUI &);
     friend std::ostream &operator<<(std::ostream &, const Level &);
 
-    void update(const float &, sf::Vector2f &);
+    void update(const float &, sf::Vector2f &, const sf::Vector2f &);
     void load(const int);
     std::pair<int, sf::Vector2f> handleInput(const sf::Event &, const bool &, const sf::RenderWindow &);
     sf::Vector2f handleMovementInput(const bool &, const sf::RenderWindow &);

@@ -367,7 +367,7 @@ void Game::Play()
             float dt = 0;
             if (!Utils::changePaused(0))
                 dt = updateClock.restart().asSeconds();
-            level->update(dt, target);
+            level->update(dt, target, Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window));
         }
         draw();
     }

@@ -3,20 +3,29 @@
 
 sf::Texture ResourceManager::playerTexture;
 sf::Texture ResourceManager::playerProjectileTexture;
+
 sf::Texture ResourceManager::enemyTexture;
 sf::Texture ResourceManager::enemyProjectileTexture;
 sf::Texture ResourceManager::bossTexture;
 sf::Texture ResourceManager::bossProjectileTexture;
+
 sf::Texture ResourceManager::baseRoomTexture;
 sf::Texture ResourceManager::doorVerticalTexture;
 sf::Texture ResourceManager::doorHorizontalTexture;
 sf::Texture ResourceManager::obstacleTexture;
+
 sf::Texture ResourceManager::augmentBackgroundTexture;
 sf::Texture ResourceManager::augmentButtonTexture;
+
 sf::Texture ResourceManager::menuBackgroundTexture;
 sf::Texture ResourceManager::menuStartButtonTexture;
 sf::Texture ResourceManager::menuSettingsButtonTexture;
 sf::Texture ResourceManager::menuExitButtonTexture;
+
+sf::Texture ResourceManager::pistolTexture;
+sf::Texture ResourceManager::shotgunTexture;
+sf::Texture ResourceManager::rifleTexture;
+sf::Texture ResourceManager::sniperTexture;
 
 sf::Font ResourceManager::arial;
 sf::Font ResourceManager::courier;
@@ -93,6 +102,22 @@ void ResourceManager::loadTexture(TextureType type)
             if(!menuExitButtonTexture.loadFromFile("textures/exit_button.png"))
                 throw TextureLoadException("Failed to load menu exit button texture");
             break;
+        case Pistol:
+            if(!pistolTexture.loadFromFile("textures/pistol.png"))
+                throw TextureLoadException("Failed to load pistol texture");
+            break;
+        case Shotgun:
+            if(!shotgunTexture.loadFromFile("textures/shotgun.png"))
+                throw TextureLoadException("Failed to load shotgun texture");
+            break;
+        case Rifle:
+            if(!rifleTexture.loadFromFile("textures/rifle.png"))
+                throw TextureLoadException("Failed to load rifle texture");
+            break;
+        case Sniper:
+            if(!sniperTexture.loadFromFile("textures/sniper.png"))
+                throw TextureLoadException("Failed to load sniper texture");
+            break;
         default:
             throw TextureLoadException("Invalid TextureType");
     }
@@ -138,6 +163,14 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return menuSettingsButtonTexture;
         case MenuExitButton:
             return menuExitButtonTexture;
+        case Pistol:
+            return pistolTexture;
+        case Shotgun:
+            return shotgunTexture;
+        case Rifle:
+            return rifleTexture;
+        case Sniper:
+            return sniperTexture;
         default:
             throw TextureFetchException("Invalid TextureType");
     }
