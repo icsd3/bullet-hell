@@ -26,20 +26,20 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss
     try 
     {
         int texId = w.at("texture").get<int>();
-        sf::Texture *texture;
+        sf::Texture *weaponTexture;
         switch (texId)
         {
             case 0:
-                texture = &ResourceManager::getTexture(TextureType::Pistol);
+                weaponTexture = &ResourceManager::getTexture(TextureType::Pistol);
                 break;
             case 1:
-                texture = &ResourceManager::getTexture(TextureType::Shotgun);
+                weaponTexture = &ResourceManager::getTexture(TextureType::Shotgun);
                 break;
             case 2:
-                texture = &ResourceManager::getTexture(TextureType::Rifle);
+                weaponTexture = &ResourceManager::getTexture(TextureType::Rifle);
                 break;
             case 3:
-                texture = &ResourceManager::getTexture(TextureType::Sniper);
+                weaponTexture = &ResourceManager::getTexture(TextureType::Sniper);
                 break;
             default:
                 throw ConfigurationException("json/EnemyGuns.json is missing required fields or has invalid types");
@@ -55,7 +55,7 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss
             w.at("range").get<float>(),
             w.at("bullet_speed").get<float>(),
             type,
-            *texture);
+            *weaponTexture);
     } 
     catch (const nlohmann::json::exception& e) 
     {
