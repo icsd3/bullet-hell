@@ -50,7 +50,7 @@ Player::Player()
             w.at("spread_angle").get<float>(),
             w.at("range").get<float>(),
             w.at("bullet_speed").get<float>(),
-            1,
+            ProjectileTextureType::Player,
             *weaponTexture));
     } 
     catch (const nlohmann::json::exception& e) 
@@ -78,22 +78,29 @@ void Player::update(const float &dt, const sf::Vector2f &target, const sf::Vecto
 {
     sf::Vector2f dir = target - position;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+    sf::Angle angle = sf::degrees(0);
+
+    if ((mousePosition - position) != sf::Vector2f(0, 0))
+            angle = (mousePosition - position).angle();
+
+    bool facingLeft = true;
+
+    if (angle > sf::degrees(90) || angle < sf::degrees(-90))
+        facingLeft = false;
 
     if (distance > 5.0f)
     {
         dir /= distance;
-
         sf::Vector2f moveVec(dir * speed * dt);
-        transform(moveVec, 0.f, sf::Angle(sf::degrees(0.f)));
+
+        transform(moveVec, facingLeft, sf::Angle(sf::degrees(0.f)));
     }
+
+    else
+        transform({0.f, 0.f}, facingLeft, sf::Angle(sf::degrees(0.f)));
 
     if (currentWeapon >= weapons.size())
         throw OutOfBoundsException("Invalid currentWeapon index in Player::update");
-
-    sf::Angle angle = sf::degrees(0);
-
-    if ((mousePosition - position) != sf::Vector2f(0, 0))
-        angle = (mousePosition - position).angle();
 
     weapons[currentWeapon]->update(position, angle);
 }
@@ -136,10 +143,19 @@ sf::Vector2f Player::getPosition() const
     return position;
 }
 
-void Player::setPosition(const sf::Vector2f &newPos)
+void Player::setPosition(const sf::Vector2f &newPos, const sf::Vector2f &mousePosition)
 {
     sf::Vector2f moveVec = newPos - position;
-    transform(moveVec, 9999.f, sf::Angle(sf::degrees(0.f)));
+    sf::Angle angle = sf::degrees(0);
+    bool facingLeft = true;
+
+    if ((mousePosition - newPos) != sf::Vector2f(0, 0))
+        angle = (mousePosition - newPos).angle();
+
+    if (angle > sf::degrees(90) || angle < sf::degrees(-90))
+        facingLeft = false;
+
+    transform(moveVec, facingLeft, sf::Angle(sf::degrees(0.f)));
 }
 
 std::vector<Projectile> Player::fire(const sf::Vector2f &target) const

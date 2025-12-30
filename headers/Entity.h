@@ -18,7 +18,7 @@ protected:
 
     void doDraw(sf::RenderWindow &) const override;
 
-    void transform(const sf::Vector2f &, const float &, const sf::Angle &);
+    void transform(const sf::Vector2f &, const bool &, const sf::Angle &);
 
     virtual int doHits(const Entity &other) const;
 

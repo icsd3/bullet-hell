@@ -18,13 +18,13 @@ void Projectile::load()
         {0.f, 6.5f / 10},
         {0.f, 3.5f / 10}
     });
-    transform({0.f, 0.f}, 9999.f, rotation);
+    transform({0.f, 0.f}, false, rotation);
 }
 
 bool Projectile::update(const float &dt)
 {
     sf::Vector2f moveVec(direction * speed * dt);
-    transform(moveVec, 9999.f, sf::Angle(sf::degrees(0.f)));
+    transform(moveVec, false, sf::Angle(sf::degrees(0.f)));
     
     sf::Vector2f dir = position - origin;
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);

@@ -310,23 +310,23 @@ void Level::update(const float &dt, sf::Vector2f &target, const sf::Vector2f &mo
     {
         sf::Vector2f newPosition = player.getPosition();
 
-        player.setPosition(sf::Vector2f(newPosition.x, oldPosition.y));
+        player.setPosition(sf::Vector2f(newPosition.x, oldPosition.y), mousePosition);
         int testActionX = currentRoom->checkPlayerCollisions();
 
-        player.setPosition(sf::Vector2f(oldPosition.x, newPosition.y));
+        player.setPosition(sf::Vector2f(oldPosition.x, newPosition.y), mousePosition);
         int testActionY = currentRoom->checkPlayerCollisions();
 
         if (testActionX == -2 && testActionY == -2)
-            player.setPosition(oldPosition);
+            player.setPosition(oldPosition, mousePosition);
 
         else if (testActionX == -2)
-            player.setPosition(sf::Vector2f(oldPosition.x, newPosition.y));
+            player.setPosition(sf::Vector2f(oldPosition.x, newPosition.y), mousePosition);
 
         else if (testActionY == -2)
-            player.setPosition(sf::Vector2f(newPosition.x, oldPosition.y));
+            player.setPosition(sf::Vector2f(newPosition.x, oldPosition.y), mousePosition);
 
         else
-            player.setPosition(oldPosition);
+            player.setPosition(oldPosition, mousePosition);
     }
 
     else if (!action.second.expired())
@@ -335,25 +335,25 @@ void Level::update(const float &dt, sf::Vector2f &target, const sf::Vector2f &mo
 
         if (action.first == 0)
         {
-            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT - 195.f});
+            player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT - 195.f}, mousePosition);
             moved = 0;
         }
 
         else if (action.first == 1)
         {
-            player.setPosition({195.f, LOGICAL_HEIGHT * 0.5f});
+            player.setPosition({195.f, LOGICAL_HEIGHT * 0.5f}, mousePosition);
             moved = 1;
         }
 
         else if (action.first == 2)
         {
-            player.setPosition({LOGICAL_WIDTH * 0.5f, 195.f});
+            player.setPosition({LOGICAL_WIDTH * 0.5f, 195.f}, mousePosition);
             moved = 2;
         }
 
         else if (action.first == 3)
         {
-            player.setPosition({LOGICAL_WIDTH - 195.f, LOGICAL_HEIGHT * 0.5f});
+            player.setPosition({LOGICAL_WIDTH - 195.f, LOGICAL_HEIGHT * 0.5f}, mousePosition);
             moved = 3;
         }
         target = player.getPosition();

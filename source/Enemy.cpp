@@ -20,9 +20,8 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss
     std::mt19937 &rng = Utils::getRng();
     std::uniform_int_distribution<int> range(0, data.size() - 1);
     int index = range(rng);
-
     const auto &w = data[index];
-    int type = (boss == false) ? 2 : 3;
+
     try 
     {
         int texId = w.at("texture").get<int>();
@@ -54,7 +53,7 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss
             w.at("spread_angle").get<float>(),
             w.at("range").get<float>(),
             w.at("bullet_speed").get<float>(),
-            type,
+            (boss == false) ? ProjectileTextureType::Enemy : ProjectileTextureType::Boss,
             *weaponTexture);
     } 
     catch (const nlohmann::json::exception& e) 
@@ -147,7 +146,7 @@ std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playe
         updateClock.reset();
     }
 
-    enemyMove(dt, obstacles, walls, doors, enemies);
+    enemyMove(dt, obstacles, walls, doors, enemies, angle);
 
     grid[gridPosition.x][gridPosition.y] = 2;
 
@@ -244,7 +243,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
     return sf::Vector2f(180.f + start.x * 120.f, 180.f + start.y * 120.f);
 }
 
-void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies)
+void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, const sf::Angle &angle)
 {
     sf::Vector2f separation(0.f, 0.f);
     int neighbors = 0;
@@ -303,39 +302,53 @@ void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, con
             return false;
         };
 
-        auto performMove = [&](const sf::Vector2f &moveVec)
+        auto performMove = [&](const sf::Vector2f &moveVec, const bool &facingLeft)
         {
-            transform(moveVec, 0.2f, sf::Angle(sf::degrees(0.f)));
+            transform(moveVec, facingLeft, sf::Angle(sf::degrees(0.f)));
             maxHealthBar.move(moveVec);
             currentHealthBar.move(moveVec);
         };
 
-        performMove(movement);
+        bool facingLeft = true;
+
+        if (angle > sf::degrees(90) || angle < sf::degrees(-90))
+            facingLeft = false;
+
+        performMove(movement, facingLeft);
 
         if (checkCollision())
         {
-            performMove(-movement);
+            performMove(-movement, facingLeft);
 
             sf::Vector2f moveX(movement.x, 0.f);
-            performMove(moveX);
+            performMove(moveX, facingLeft);
 
             if (checkCollision())
             {
-                performMove(-moveX);
+                performMove(-moveX, facingLeft);
 
                 sf::Vector2f moveY(0.f, movement.y);
-                performMove(moveY);
+                performMove(moveY, facingLeft);
 
                 if (checkCollision())
                 {
-                    performMove(-moveY);
+                    performMove(-moveY, facingLeft);
                 }
             }
         }
     }
 
     else
+    {
+        bool facingLeft = true;
+
+        if (angle > sf::degrees(90) || angle < sf::degrees(-90))
+            facingLeft = false;
+            
+        transform({0, 0}, facingLeft, sf::Angle(sf::degrees(0.f)));
+
         target = position;
+    }
 
     int gridX = static_cast<int>((position.x - 120.f) / 120.f);
     int gridY = static_cast<int>((position.y - 120.f) / 120.f);

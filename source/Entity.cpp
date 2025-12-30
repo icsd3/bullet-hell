@@ -31,10 +31,9 @@ void Entity::load(const float &scaleFactor, const sf::Vector2f &sizeFactor, cons
     hitBox.setFillColor(sf::Color(0, 200, 0, 150));
 
     hitBox.setPointCount(pointCount);
+    
     for (int i = 0; i < pointCount; i++)
-    {
         hitBox.setPoint(i, {bounds.position.x + pointFactors[i].x * bounds.size.x, bounds.position.y + pointFactors[i].y * bounds.size.y});
-    }
 
     hitBox.setOrigin(sprite.getOrigin());
     hitBox.setPosition(sprite.getPosition());
@@ -55,7 +54,7 @@ void Entity::doDraw(sf::RenderWindow &window) const
     }
 }
 
-void Entity::transform(const sf::Vector2f &movement, const float &threshold, const sf::Angle &angle)
+void Entity::transform(const sf::Vector2f &movement, const bool &flip, const sf::Angle &angle)
 {
     sprite.move(movement);
     sprite.rotate(angle);
@@ -64,14 +63,11 @@ void Entity::transform(const sf::Vector2f &movement, const float &threshold, con
     hitBox.move(movement);
     hitBox.rotate(angle);
 
-    if (movement.x > threshold)
-    {
+    if (flip)
         sprite.setScale(sf::Vector2f(-std::abs(sprite.getScale().x), sprite.getScale().y));
-    }
-    else if (movement.x < -threshold)
-    {
+
+    else
         sprite.setScale(sf::Vector2f(std::abs(sprite.getScale().x), sprite.getScale().y));
-    }
 
     position = sprite.getPosition();
 }

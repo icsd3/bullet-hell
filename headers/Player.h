@@ -24,6 +24,6 @@ public:
     void update(const float &, const sf::Vector2f &, const sf::Vector2f &);
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
-    void setPosition(const sf::Vector2f &);
+    void setPosition(const sf::Vector2f &, const sf::Vector2f &);
     std::vector<Projectile> fire(const sf::Vector2f &) const;
 };
