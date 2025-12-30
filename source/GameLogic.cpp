@@ -104,11 +104,11 @@ void Game::handleNewState()
         break;
 
     case defeat:
-        // loader.loadDefeat(window);
+        
         break;
 
     case victory:
-        // loader.loadVictory(window);
+        
         break;
 
     default:

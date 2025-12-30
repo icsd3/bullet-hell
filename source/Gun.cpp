@@ -66,7 +66,7 @@ Gun::Gun(const std::string &file_path, const size_t index, const float offset, c
 }
 
 Gun::Gun(const Gun &other)
-    : Weapon(other), bullet_nr(other.bullet_nr), spreadAngle(other.spreadAngle), bulletSpeed(other.bulletSpeed)
+    : Weapon(other), bullet_nr(other.bullet_nr), spreadAngle(other.spreadAngle), bulletSpeed(other.bulletSpeed), pierce(other.pierce)
 {
 }
 
@@ -78,6 +78,7 @@ Gun &Gun::operator=(const Gun &other)
         bullet_nr = other.bullet_nr;
         spreadAngle = other.spreadAngle;
         bulletSpeed = other.bulletSpeed;
+        pierce = other.pierce;
     }
     return *this;
 }
