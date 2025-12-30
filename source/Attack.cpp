@@ -5,6 +5,25 @@ Attack::Attack(const sf::Vector2f &pos, sf::Texture &tex, float spd, const int &
 {
 }
 
+Attack::Attack(const Attack &other)
+    : Entity(other), damage(other.damage), direction(other.direction), origin(other.origin), range(other.range), hitList(other.hitList)
+{
+}
+
+Attack &Attack::operator=(const Attack &other)
+{
+    if (this != &other)
+    {
+        Entity::operator=(other);
+        damage = other.damage;
+        direction = other.direction;
+        origin = other.origin;
+        range = other.range;
+        hitList = other.hitList;
+    }
+    return *this;
+}
+
 void Attack::load()
 {
     doLoad();

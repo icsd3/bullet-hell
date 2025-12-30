@@ -18,6 +18,8 @@ protected:
 
 public:
     Attack(const sf::Vector2f &, sf::Texture &, float, const int &, const int &, const sf::Vector2f &, const float &);
+    Attack(const Attack &);
+    Attack &operator=(const Attack &);
     friend std::ostream &operator<<(std::ostream &, const Attack &);
 
     void load();
