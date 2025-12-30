@@ -15,7 +15,7 @@ protected:
     sf::Clock weaponClock;
 
     virtual void printDetails(std::ostream &) const;
-    virtual std::vector<Projectile> doFire(const sf::Vector2f &, const sf::Vector2f &) = 0;
+    virtual std::vector<std::unique_ptr<Attack>> doFire(const sf::Vector2f &, const sf::Vector2f &) = 0;
 
 public:
     Weapon(const std::string &, const int, const float, const float, const sf::Texture &);
@@ -24,7 +24,7 @@ public:
     virtual ~Weapon() = default;
     friend std::ostream &operator<<(std::ostream &, const Weapon &);
 
-    std::vector<Projectile> fire(const sf::Vector2f &, const sf::Vector2f &);
+    std::vector<std::unique_ptr<Attack>> fire(const sf::Vector2f &, const sf::Vector2f &);
 
     void load(sf::Vector2f &);
     void reset();

@@ -63,10 +63,10 @@ void BossRoom::doDraw(sf::RenderWindow &window)
     player.draw(window);
 
     for (auto &projectile : playerProjectiles)
-        projectile.draw(window);
+        projectile->draw(window);
 
     for (auto &projectile : bossProjectiles)
-        projectile.draw(window);
+        projectile->draw(window);
 }
 
 std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
@@ -80,7 +80,7 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
     for (size_t i = 0; i < playerProjectiles.size();)
     {
-        if (checkBossHits(playerProjectiles[i]))
+        if (checkBossHits(*playerProjectiles[i]))
             playerProjectiles.erase(playerProjectiles.begin() + i);
 
         else
@@ -94,23 +94,23 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
     if (boss)
     {
-        std::vector<Projectile> bullets = boss->update(dt, player.getPosition(), obstacles, walls, doors, {}, grid);
+        std::vector<std::unique_ptr<Attack>> bullets = boss->update(dt, player.getPosition(), obstacles, walls, doors, {}, grid);
 
-        for (const auto &bullet : bullets)
+        for (auto &bullet : bullets)
         {
-            bossProjectiles.push_back(bullet);
-            bossProjectiles.back().load();
+            bossProjectiles.push_back(std::move(std::move(bullet)));
+            bossProjectiles.back()->load();
         }
     }
 
     for (size_t i = 0; i < bossProjectiles.size();)
     {
-        if (bossProjectiles[i].update(dt))
+        if (bossProjectiles[i]->update(dt))
             bossProjectiles.erase(bossProjectiles.begin() + i);
 
         else
         {
-            if (checkPlayerHits(bossProjectiles[i]) || checkEntityCollisions(bossProjectiles[i]))
+            if (checkPlayerHits(*bossProjectiles[i]) || checkEntityCollisions(*bossProjectiles[i]))
                 bossProjectiles.erase(bossProjectiles.begin() + i);
 
             else
@@ -124,11 +124,11 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
     return action;
 }
 
-bool BossRoom::checkBossHits(const Projectile &projectile)
+bool BossRoom::checkBossHits(const Attack &attack)
 {
     if (boss)
     {
-        if (int damage = projectile.hits(*boss))
+        if (int damage = attack.hits(*boss))
         {
             if (boss->takeDamage(damage))
                 boss.reset();
@@ -138,9 +138,9 @@ bool BossRoom::checkBossHits(const Projectile &projectile)
     return false;
 }
 
-bool BossRoom::checkPlayerHits(const Projectile &projectile)
+bool BossRoom::checkPlayerHits(const Attack &attack)
 {
-    if (int damage = projectile.hits(player))
+    if (int damage = attack.hits(player))
     {
         if (player.takeDamage(damage))
             std::cout << "game over\n";

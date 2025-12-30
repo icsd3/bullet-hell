@@ -1,13 +1,14 @@
 #include "../headers/Projectile.h"
 
 Projectile::Projectile(const sf::Vector2f &pos, sf::Texture &tex, float spd, const int &dmg, const sf::Vector2f &dir, const float &rn)
-    : Entity(pos, tex, spd, 1), damage(dmg), direction(dir), origin(position), range(rn)
+    : Attack(pos, tex, spd, dmg, dir, rn)
 {
-    rotation = sf::radians(std::atan2(direction.y, direction.x));
 }
 
-void Projectile::load()
+void Projectile::doLoad()
 {
+    sf::Angle rotation = sf::radians(std::atan2(direction.y, direction.x));
+
     Entity::load(35.f, {0.5f, 0.5f}, {0.5f, 0.5f}, {0.f, 0.f}, 8, {
         {3.5f / 20, 0.f},
         {16.5f / 20, 0.f},
@@ -18,10 +19,11 @@ void Projectile::load()
         {0.f, 6.5f / 10},
         {0.f, 3.5f / 10}
     });
+
     transform({0.f, 0.f}, false, rotation);
 }
 
-bool Projectile::update(const float &dt)
+bool Projectile::doUpdate(const float &dt)
 {
     sf::Vector2f moveVec(direction * speed * dt);
     transform(moveVec, false, sf::Angle(sf::degrees(0.f)));
@@ -30,25 +32,13 @@ bool Projectile::update(const float &dt)
     float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
     if (distance > range)
-    {
         return true;
-    }
-    return false;
-}
 
-int Projectile::doHits(const Entity &other) const
-{
-    if (Entity::doHits(other))
-        return damage;
-    return 0;
+    return false;
 }
 
 std::ostream &operator<<(std::ostream &os, const Projectile &projectile)
 {
-    os << static_cast<const Entity &>(projectile);
-    os << "\n";
-    os << "        Damage: " << projectile.damage << "\n";
-    os << "        Direction: (" << projectile.direction.x << ", " << projectile.direction.y << ")\n";
-    os << "        Rotation: " << projectile.rotation.asDegrees();
+    os << static_cast<const Attack &>(projectile);
     return os;
 }

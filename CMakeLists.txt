@@ -110,6 +110,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/ResourceManager.cpp
     headers/Exception.h
     source/Exception.cpp
+    headers/Attack.h
+    source/Attack.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

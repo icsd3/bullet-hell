@@ -29,5 +29,5 @@ public:
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
 
     void load();
-    std::vector<Projectile> update(const float &, const sf::Vector2f &, const std::vector<Object> &, const std::vector<Collider> &, const std::vector<Door> &, const std::vector<std::unique_ptr<Enemy>> &, int[14][7]);
+    std::vector<std::unique_ptr<Attack>> update(const float &, const sf::Vector2f &, const std::vector<Object> &, const std::vector<Collider> &, const std::vector<Door> &, const std::vector<std::unique_ptr<Enemy>> &, int[14][7]);
 };

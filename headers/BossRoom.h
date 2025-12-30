@@ -8,7 +8,7 @@ class BossRoom : public Room
     sf::Texture *obstacleTexture;
 
     std::unique_ptr<Enemy> boss;
-    std::vector<Projectile> bossProjectiles;
+    std::vector<std::unique_ptr<Attack>> bossProjectiles;
 
     std::vector<Object> obstacles;
 
@@ -20,8 +20,8 @@ class BossRoom : public Room
     bool doCheckEntityCollisions(const Entity &) override;
     void printDetails(std::ostream &) const override;
 
-    bool checkBossHits(const Projectile &);
-    bool checkPlayerHits(const Projectile &);
+    bool checkBossHits(const Attack &);
+    bool checkPlayerHits(const Attack &);
 
 public:
     explicit BossRoom(Player &);

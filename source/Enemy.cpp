@@ -119,7 +119,7 @@ void Enemy::doDraw(sf::RenderWindow &window) const
     window.draw(drawCurrentHealthBar);
 }
 
-std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[14][7])
+std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[14][7])
 {
     sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - 120.f) / 120.f), static_cast<int>((playerPosition.y - 120.f) / 120.f));
 
@@ -127,7 +127,7 @@ std::vector<Projectile> Enemy::update(const float &dt, const sf::Vector2f &playe
 
     weapon->update(position, angle);
 
-    std::vector<Projectile> bullets;
+    std::vector<std::unique_ptr<Attack>> bullets;
 
     if (checkLineOfSight(position, playerPosition, obstacles))
     {

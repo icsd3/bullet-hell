@@ -34,7 +34,7 @@ void Weapon::printDetails(std::ostream &os) const
        << ", Attack speed:" << attackSpeed << ")";
 }
 
-std::vector<Projectile> Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target)
+std::vector<std::unique_ptr<Attack>> Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target)
 {
     sf::Vector2f origin = position + (target - position).normalized() * 60.f; 
     return doFire(origin, target);

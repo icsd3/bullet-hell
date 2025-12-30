@@ -23,7 +23,7 @@ protected:
     std::weak_ptr<Room> left;
     sf::Clock animationClock;
     bool open = false;
-    std::vector<Projectile> playerProjectiles;
+    std::vector<std::unique_ptr<Attack>> playerProjectiles;
     int grid[14][7];
 
     void animate(const unsigned int &);

@@ -1,21 +1,13 @@
 #pragma once
 
-#include "../headers/Entity.h"
+#include "../headers/Attack.h"
 
-class Projectile : public Entity
+class Projectile : public Attack
 {
-    sf::Angle rotation;
-    int damage;
-    sf::Vector2f direction;
-    sf::Vector2f origin;
-    float range;
-
-    int doHits(const Entity &other) const override;
+    void doLoad() override;
+    bool doUpdate(const float &) override; // Returns true if projectile range exceeded
 
 public:
     Projectile(const sf::Vector2f &, sf::Texture &, float, const int &, const sf::Vector2f &, const float &);
     friend std::ostream &operator<<(std::ostream &, const Projectile &);
-
-    void load();
-    bool update(const float &); // Returns true if projectile range exceeded
 };

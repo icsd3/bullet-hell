@@ -25,5 +25,5 @@ public:
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f &, const sf::Vector2f &);
-    std::vector<Projectile> fire(const sf::Vector2f &) const;
+    std::vector<std::unique_ptr<Attack>> fire(const sf::Vector2f &) const;
 };

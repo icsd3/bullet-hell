@@ -158,9 +158,9 @@ void Player::setPosition(const sf::Vector2f &newPos, const sf::Vector2f &mousePo
     transform(moveVec, facingLeft, sf::Angle(sf::degrees(0.f)));
 }
 
-std::vector<Projectile> Player::fire(const sf::Vector2f &target) const
+std::vector<std::unique_ptr<Attack>> Player::fire(const sf::Vector2f &target) const
 {
-    std::vector<Projectile> bullets;
+    std::vector<std::unique_ptr<Attack>> bullets;
 
     if (currentWeapon >= weapons.size())
         throw OutOfBoundsException("Invalid currentWeapon index in Player::fire");

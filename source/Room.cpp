@@ -121,7 +121,7 @@ void Room::doDraw(sf::RenderWindow &window)
     player.draw(window);
 
     for (auto &projectile : playerProjectiles)
-        projectile.draw(window);
+        projectile->draw(window);
 }
 
 void Room::draw(sf::RenderWindow &window)
@@ -162,12 +162,12 @@ std::pair<int, std::weak_ptr<Room>> Room::doUpdate(const float &dt)
 
     for (size_t i = 0; i < playerProjectiles.size();)
     {
-        if (playerProjectiles[i].update(dt))
+        if (playerProjectiles[i]->update(dt))
             playerProjectiles.erase(playerProjectiles.begin() + i);
 
         else
         {
-            if (doCheckEntityCollisions(playerProjectiles[i]))
+            if (doCheckEntityCollisions(*playerProjectiles[i]))
                 playerProjectiles.erase(playerProjectiles.begin() + i);
 
             else
@@ -216,12 +216,12 @@ std::pair<int, std::weak_ptr<Room>> Room::update(const float &dt)
 
 void Room::spawnPlayerProjectile(const sf::Vector2f &target)
 {
-    std::vector<Projectile> bullets = player.fire(target);
+    std::vector<std::unique_ptr<Attack>> bullets = player.fire(target);
 
-    for (const auto &bullet : bullets)
+    for (auto &bullet : bullets)
     {
-        playerProjectiles.push_back(bullet);
-        playerProjectiles.back().load();
+        playerProjectiles.push_back(std::move(bullet));
+        playerProjectiles.back()->load();
     }
 }
 

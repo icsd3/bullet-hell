@@ -8,7 +8,7 @@ class EnemyRoom : public Room
     sf::Texture *obstacleTexture;
 
     std::vector<std::unique_ptr<Enemy>> enemies;
-    std::vector<Projectile> enemyProjectiles;
+    std::vector<std::unique_ptr<Attack>> enemyProjectiles;
 
     std::vector<Object> obstacles;
 
@@ -22,8 +22,8 @@ class EnemyRoom : public Room
     bool doCheckEntityCollisions(const Entity &) override;
     void printDetails(std::ostream &) const override;
 
-    bool checkEnemyHits(const Projectile &);
-    bool checkPlayerHits(const Projectile &);
+    bool checkEnemyHits(const Attack &);
+    bool checkPlayerHits(const Attack &);
 
 public:
     EnemyRoom(const int, Player &);
