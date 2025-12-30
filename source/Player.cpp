@@ -1,77 +1,32 @@
 #include "../headers/Player.h"
 
 Player::Player()
-    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, ResourceManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(0)
+    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, ResourceManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(4)
 {
-    
-    std::ifstream file("json/Guns.json");
-    if (!file.is_open())
-        throw ConfigurationException("Failed to open json/Guns.json");
-
-    nlohmann::json data;
-    try 
-    {
-        file >> data;
-    } 
-    catch (const nlohmann::json::parse_error& e) 
-    {
-        throw ConfigurationException("Failed to parse json/Guns.json: " + std::string(e.what()));
-    }
-
-    const auto &w = data[4];
-    try 
-    {
-        int texId = w.at("texture").get<int>();
-        sf::Texture *weaponTexture;
-        switch (texId)
-        {
-            case 0:
-                weaponTexture = &ResourceManager::getTexture(TextureType::Pistol);
-                break;
-            case 1:
-                weaponTexture = &ResourceManager::getTexture(TextureType::Shotgun);
-                break;
-            case 2:
-                weaponTexture = &ResourceManager::getTexture(TextureType::Rifle);
-                break;
-            case 3:
-                weaponTexture = &ResourceManager::getTexture(TextureType::Sniper);
-                break;
-            default:
-                throw ConfigurationException("json/Guns.json is missing required fields or has invalid types");
-                break;
-        }
-        weapons.emplace_back(std::make_unique<Gun>(
-            w.at("name").get<std::string>(),
-            w.at("damage").get<int>(),
-            w.at("fire_rate").get<float>(),
-            0.f,
-            w.at("bullet_nr").get<int>(),
-            w.at("spread_angle").get<float>(),
-            w.at("range").get<float>(),
-            w.at("bullet_speed").get<float>(),
-            ProjectileTextureType::Player,
-            *weaponTexture));
-    } 
-    catch (const nlohmann::json::exception& e) 
-    {
-        throw ConfigurationException("json/Guns.json is missing required fields or has invalid types: " + std::string(e.what()));
-    }
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 0, 0.f, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 1, 0.f, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 2, 0.f, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 3, 0.f, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 4, 0.f, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Sword>("json/Swords.json", 0));
 }
 
-std::ostream &operator<<(std::ostream &os, const Player &player)
+void Player::load()
 {
-    os << "Player:\n    ";
-    os << static_cast<const Entity &>(player);
-    os << "\n";
-    os << "    Weapons:\n";
-    os << "        Count: " << player.weapons.size();
-    for (unsigned int i = 0; i < player.weapons.size(); i++)
-    {
-        os << "\n        Weapon " << i + 1 << ": " << *player.weapons[i];
-    }
-    os << "\n";
-    return os;
+    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
+        {4.5f / 14, 0.f}, 
+        {9.5f / 14, 0.f}, 
+        {1.f, 4.5f / 14}, 
+        {1.f, 1.f}, 
+        {0.f, 1.f}, 
+        {0.f, 4.5f / 14}
+    });
+
+    if (currentWeapon >= weapons.size())
+        throw OutOfBoundsException("Invalid currentWeapon index in Player::load");
+
+    weapons[currentWeapon]->load(position);
+    weapons[currentWeapon]->reset();
 }
 
 void Player::update(const float &dt, const sf::Vector2f &target, const sf::Vector2f &mousePosition)
@@ -81,7 +36,7 @@ void Player::update(const float &dt, const sf::Vector2f &target, const sf::Vecto
     sf::Angle angle = sf::degrees(0);
 
     if ((mousePosition - position) != sf::Vector2f(0, 0))
-            angle = (mousePosition - position).angle();
+        angle = (mousePosition - position).angle();
 
     bool facingLeft = true;
 
@@ -105,22 +60,16 @@ void Player::update(const float &dt, const sf::Vector2f &target, const sf::Vecto
     weapons[currentWeapon]->update(position, angle);
 }
 
-void Player::load()
+std::vector<std::unique_ptr<Attack>> Player::attack(const sf::Vector2f &target) const
 {
-    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
-        {4.5f / 14, 0.f}, 
-        {9.5f / 14, 0.f}, 
-        {1.f, 4.5f / 14}, 
-        {1.f, 1.f}, 
-        {0.f, 1.f}, 
-        {0.f, 4.5f / 14}
-    });
+    std::vector<std::unique_ptr<Attack>> attacks;
 
     if (currentWeapon >= weapons.size())
-        throw OutOfBoundsException("Invalid currentWeapon index in Player::load");
+        throw OutOfBoundsException("Invalid currentWeapon index in Player::attack");
 
-    weapons[currentWeapon]->load(position);
-    weapons[currentWeapon]->reset();
+    attacks = weapons[currentWeapon]->attack(position, target);
+
+    return attacks;
 }
 
 void Player::doDraw(sf::RenderWindow &window) const
@@ -158,14 +107,17 @@ void Player::setPosition(const sf::Vector2f &newPos, const sf::Vector2f &mousePo
     transform(moveVec, facingLeft, sf::Angle(sf::degrees(0.f)));
 }
 
-std::vector<std::unique_ptr<Attack>> Player::fire(const sf::Vector2f &target) const
+std::ostream &operator<<(std::ostream &os, const Player &player)
 {
-    std::vector<std::unique_ptr<Attack>> bullets;
-
-    if (currentWeapon >= weapons.size())
-        throw OutOfBoundsException("Invalid currentWeapon index in Player::fire");
-
-    bullets = weapons[currentWeapon]->fire(position, target);
-
-    return bullets;
+    os << "Player:\n    ";
+    os << static_cast<const Entity &>(player);
+    os << "\n";
+    os << "    Weapons:\n";
+    os << "        Count: " << player.weapons.size();
+    for (unsigned int i = 0; i < player.weapons.size(); i++)
+    {
+        os << "\n        Weapon " << i + 1 << ": " << *player.weapons[i];
+    }
+    os << "\n";
+    return os;
 }

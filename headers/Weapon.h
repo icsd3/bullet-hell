@@ -1,30 +1,40 @@
 #pragma once
 
 #include "../headers/Projectile.h"
-#include "../headers/ResourceManager.h"
+
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+enum class AttackTextureType
+{
+    Player,
+    Enemy,
+    Boss
+};
 
 class Weapon
 {
+protected:
     std::string name;
     const sf::Texture *texture;
     sf::Sprite sprite;
-
-protected:
     int damage;
     float attackSpeed;
     sf::Clock weaponClock;
+    AttackTextureType attackTextureID;
+    float range;
 
     virtual void printDetails(std::ostream &) const;
-    virtual std::vector<std::unique_ptr<Attack>> doFire(const sf::Vector2f &, const sf::Vector2f &) = 0;
+    virtual std::vector<std::unique_ptr<Attack>> doAttack(const sf::Vector2f &, const sf::Vector2f &) = 0;
 
 public:
-    Weapon(const std::string &, const int, const float, const float, const sf::Texture &);
+    Weapon(const std::string &, const int, const float, const float, const sf::Texture &, const AttackTextureType, const float);
     Weapon(const Weapon &);
     Weapon &operator=(const Weapon &);
     virtual ~Weapon() = default;
     friend std::ostream &operator<<(std::ostream &, const Weapon &);
 
-    std::vector<std::unique_ptr<Attack>> fire(const sf::Vector2f &, const sf::Vector2f &);
+    std::vector<std::unique_ptr<Attack>> attack(const sf::Vector2f &, const sf::Vector2f &);
 
     void load(sf::Vector2f &);
     void reset();

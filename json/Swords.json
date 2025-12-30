@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Basic Sword",
+        "damage": 20,
+        "attack_speed": 1,
+        "duration": 0.25,
+        "arc_angle": 60,
+        "range": 75
+    }
+]

@@ -3,26 +3,18 @@
 #include "../headers/Projectile.h"
 #include "../headers/Weapon.h"
 
-enum class ProjectileTextureType
-{
-    Player,
-    Enemy,
-    Boss
-};
-
 class Gun : public Weapon
 {
     int bullet_nr;
-    float spread_angle;
-    float range;
+    float spreadAngle;
     float bulletSpeed;
-    ProjectileTextureType projectileTextureID;
+    int pierce;
 
     void printDetails(std::ostream &) const override;
-    std::vector<std::unique_ptr<Attack>> doFire(const sf::Vector2f &, const sf::Vector2f &) override;
+    std::vector<std::unique_ptr<Attack>> doAttack(const sf::Vector2f &, const sf::Vector2f &) override;
 
 public:
-    Gun(const std::string &, const int, const float, const float, const int, const float, const float, const float, const ProjectileTextureType, const sf::Texture &);
+    Gun(const std::string &, const size_t, const float, const AttackTextureType);
     Gun(const Gun &);
     Gun &operator=(const Gun &);
 };

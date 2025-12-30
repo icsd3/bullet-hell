@@ -3,30 +3,33 @@
         "name": "Enemy Pistol",
         "damage": 10,
         "bullet_nr": 1,
-        "fire_rate": 0.5,
+        "attack_speed": 0.5,
         "spread_angle": 10.0,
         "range": 3000,
         "bullet_speed": 200,
+        "pierce": 1,
         "texture": 0
     },
     {
         "name": "Enemy Shotgun",
         "damage": 5,
         "bullet_nr": 5,
-        "fire_rate": 0.3,
+        "attack_speed": 0.3,
         "spread_angle": 30.0,
         "range": 3000,
         "bullet_speed": 100,
+        "pierce": 1,
         "texture": 1
     },
     {
         "name": "Enemy Rifle",
         "damage": 5,
         "bullet_nr": 1,
-        "fire_rate": 1.0,
+        "attack_speed": 1.0,
         "spread_angle": 10.0,
         "range": 3000,
         "bullet_speed": 150,
+        "pierce": 1,
         "texture": 2
     }
 ]

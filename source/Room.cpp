@@ -120,7 +120,7 @@ void Room::doDraw(sf::RenderWindow &window)
 
     player.draw(window);
 
-    for (auto &projectile : playerProjectiles)
+    for (auto &projectile : playerAttacks)
         projectile->draw(window);
 }
 
@@ -160,15 +160,15 @@ std::pair<int, std::weak_ptr<Room>> Room::doUpdate(const float &dt)
     else
         animate(0);
 
-    for (size_t i = 0; i < playerProjectiles.size();)
+    for (size_t i = 0; i < playerAttacks.size();)
     {
-        if (playerProjectiles[i]->update(dt))
-            playerProjectiles.erase(playerProjectiles.begin() + i);
+        if (playerAttacks[i]->update(dt))
+            playerAttacks.erase(playerAttacks.begin() + i);
 
         else
         {
-            if (doCheckEntityCollisions(*playerProjectiles[i]))
-                playerProjectiles.erase(playerProjectiles.begin() + i);
+            if (doCheckEntityCollisions(*playerAttacks[i]))
+                playerAttacks.erase(playerAttacks.begin() + i);
 
             else
                 i++;
@@ -184,22 +184,22 @@ std::pair<int, std::weak_ptr<Room>> Room::doUpdate(const float &dt)
         break;
 
     case 0:
-        playerProjectiles.clear();
+        playerAttacks.clear();
         return {0, up};
         break;
 
     case 1:
-        playerProjectiles.clear();
+        playerAttacks.clear();
         return {1, right};
         break;
 
     case 2:
-        playerProjectiles.clear();
+        playerAttacks.clear();
         return {2, down};
         break;
 
     case 3:
-        playerProjectiles.clear();
+        playerAttacks.clear();
         return {3, left};
         break;
 
@@ -216,12 +216,12 @@ std::pair<int, std::weak_ptr<Room>> Room::update(const float &dt)
 
 void Room::spawnPlayerProjectile(const sf::Vector2f &target)
 {
-    std::vector<std::unique_ptr<Attack>> bullets = player.fire(target);
+    std::vector<std::unique_ptr<Attack>> attacks = player.attack(target);
 
-    for (auto &bullet : bullets)
+    for (auto &bullet : attacks)
     {
-        playerProjectiles.push_back(std::move(bullet));
-        playerProjectiles.back()->load();
+        playerAttacks.push_back(std::move(bullet));
+        playerAttacks.back()->load();
     }
 }
 
@@ -307,10 +307,10 @@ void Room::printDetails(std::ostream &os) const
         os << "Left ";
     os << ")\n";
     os << "    Player Projectiles:\n";
-    os << "        Count: " << playerProjectiles.size() << "\n";
-    if (!playerProjectiles.empty())
-        for (size_t i = 0; i < playerProjectiles.size(); i++)
-            os << "        Projectile " << i + 1 << ":\n            " << playerProjectiles[i] << "\n\n";
+    os << "        Count: " << playerAttacks.size() << "\n";
+    if (!playerAttacks.empty())
+        for (size_t i = 0; i < playerAttacks.size(); i++)
+            os << "        Projectile " << i + 1 << ":\n            " << playerAttacks[i] << "\n\n";
 }
 
 std::ostream &operator<<(std::ostream &os, const Room &room)

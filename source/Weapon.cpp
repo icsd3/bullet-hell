@@ -1,7 +1,7 @@
 #include "../headers/Weapon.h"
 
-Weapon::Weapon(const std::string &nm, const int dmg, const float as, const float off, const sf::Texture &tex)
-    : name(nm), texture(&tex), sprite(*texture), damage(dmg), attackSpeed(as)
+Weapon::Weapon(const std::string &nm, const int dmg, const float as, const float off, const sf::Texture &tex, const AttackTextureType id, const float rg)
+    : name(nm), texture(&tex), sprite(*texture), damage(dmg), attackSpeed(as), attackTextureID(id), range(rg)
 {
     std::uniform_real_distribution<float> dist(0, off);
     std::mt19937 &rng = Utils::getRng();
@@ -9,7 +9,8 @@ Weapon::Weapon(const std::string &nm, const int dmg, const float as, const float
 }
 
 Weapon::Weapon(const Weapon &other)
-    : name(other.name), texture(other.texture), sprite(other.sprite), damage(other.damage), attackSpeed(other.attackSpeed), weaponClock(other.weaponClock)
+    : name(other.name), texture(other.texture), sprite(other.sprite), damage(other.damage), attackSpeed(other.attackSpeed), weaponClock(other.weaponClock),
+      attackTextureID(other.attackTextureID), range(other.range)
 {
 }
 
@@ -23,6 +24,8 @@ Weapon &Weapon::operator=(const Weapon &other)
         weaponClock = other.weaponClock;
         texture = other.texture;
         sprite = other.sprite;
+        attackTextureID = other.attackTextureID;
+        range = other.range;
     }
     return *this;
 }
@@ -31,13 +34,13 @@ void Weapon::printDetails(std::ostream &os) const
 {
     os << "Weapon (Name: " << name
        << ", Damage: " << damage
-       << ", Attack speed:" << attackSpeed << ")";
+       << ", Attack speed: " << attackSpeed
+       << ", Range: " << range << ")";
 }
 
-std::vector<std::unique_ptr<Attack>> Weapon::fire(const sf::Vector2f &position, const sf::Vector2f &target)
+std::vector<std::unique_ptr<Attack>> Weapon::attack(const sf::Vector2f &position, const sf::Vector2f &target)
 {
-    sf::Vector2f origin = position + (target - position).normalized() * 60.f; 
-    return doFire(origin, target);
+    return doAttack(position, target);
 }
 
 std::ostream &operator<<(std::ostream &os, const Weapon &weapon)
@@ -48,7 +51,7 @@ std::ostream &operator<<(std::ostream &os, const Weapon &weapon)
 
 void Weapon::load(sf::Vector2f &position)
 {
-    float scale = 50.f / static_cast<float>(texture->getSize().x);
+    float scale = 64.f / static_cast<float>(texture->getSize().x);
     sprite.setScale({scale, scale});
     sf::FloatRect bounds = sprite.getLocalBounds();
     sprite.setOrigin(sf::Vector2f(5.f, bounds.size.y - 5.f));

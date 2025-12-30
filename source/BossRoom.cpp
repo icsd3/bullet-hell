@@ -62,7 +62,7 @@ void BossRoom::doDraw(sf::RenderWindow &window)
 
     player.draw(window);
 
-    for (auto &projectile : playerProjectiles)
+    for (auto &projectile : playerAttacks)
         projectile->draw(window);
 
     for (auto &projectile : bossProjectiles)
@@ -78,10 +78,10 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
     std::pair<int, std::weak_ptr<Room>> action = Room::doUpdate(dt);
 
-    for (size_t i = 0; i < playerProjectiles.size();)
+    for (size_t i = 0; i < playerAttacks.size();)
     {
-        if (checkBossHits(*playerProjectiles[i]))
-            playerProjectiles.erase(playerProjectiles.begin() + i);
+        if (checkBossHits(*playerAttacks[i]))
+            playerAttacks.erase(playerAttacks.begin() + i);
 
         else
             i++;
@@ -94,9 +94,9 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
     if (boss)
     {
-        std::vector<std::unique_ptr<Attack>> bullets = boss->update(dt, player.getPosition(), obstacles, walls, doors, {}, grid);
+        std::vector<std::unique_ptr<Attack>> attacks = boss->update(dt, player.getPosition(), obstacles, walls, doors, {}, grid);
 
-        for (auto &bullet : bullets)
+        for (auto &bullet : attacks)
         {
             bossProjectiles.push_back(std::move(std::move(bullet)));
             bossProjectiles.back()->load();

@@ -1,8 +1,8 @@
 #include "../headers/ResourceManager.h"
-#include <unordered_set>
 
 sf::Texture ResourceManager::playerTexture;
 sf::Texture ResourceManager::playerProjectileTexture;
+sf::Texture ResourceManager::playerSlashTexture;
 
 sf::Texture ResourceManager::enemyTexture;
 sf::Texture ResourceManager::enemyProjectileTexture;
@@ -26,6 +26,7 @@ sf::Texture ResourceManager::pistolTexture;
 sf::Texture ResourceManager::shotgunTexture;
 sf::Texture ResourceManager::rifleTexture;
 sf::Texture ResourceManager::sniperTexture;
+sf::Texture ResourceManager::swordTexture;
 
 sf::Font ResourceManager::arial;
 sf::Font ResourceManager::courier;
@@ -33,7 +34,8 @@ sf::Font ResourceManager::courier;
 void ResourceManager::loadTexture(TextureType type)
 {
     static std::unordered_set<TextureType> loadedTextures;
-    if (loadedTextures.contains(type)) return;
+    if (loadedTextures.contains(type)) 
+        return;
 
     using enum TextureType;
     switch (type)
@@ -45,6 +47,10 @@ void ResourceManager::loadTexture(TextureType type)
         case PlayerProjectile:
             if(!playerProjectileTexture.loadFromFile("textures/player_projectile.png"))
                 throw TextureLoadException("Failed to load player projectile texture");
+            break;
+        case PlayerSlash:
+            if(!playerSlashTexture.loadFromFile("textures/player_slash.png"))
+                throw TextureLoadException("Failed to load player slash texture");
             break;
         case Enemy:
             if(!enemyTexture.loadFromFile("textures/enemy.png"))
@@ -118,6 +124,10 @@ void ResourceManager::loadTexture(TextureType type)
             if(!sniperTexture.loadFromFile("textures/sniper.png"))
                 throw TextureLoadException("Failed to load sniper texture");
             break;
+        case Sword:
+            if(!swordTexture.loadFromFile("textures/sword.png"))
+                throw TextureLoadException("Failed to load sword texture");
+            break;
         default:
             throw TextureLoadException("Invalid TextureType");
     }
@@ -135,6 +145,8 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return playerTexture;
         case PlayerProjectile:
             return playerProjectileTexture;
+        case PlayerSlash:
+            return playerSlashTexture;
         case Enemy:
             return enemyTexture;
         case EnemyProjectile:
@@ -171,6 +183,8 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return rifleTexture;
         case Sniper:
             return sniperTexture;
+        case Sword:
+            return swordTexture;
         default:
             throw TextureFetchException("Invalid TextureType");
     }

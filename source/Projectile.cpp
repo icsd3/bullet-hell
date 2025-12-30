@@ -1,13 +1,16 @@
 #include "../headers/Projectile.h"
 
-Projectile::Projectile(const sf::Vector2f &pos, sf::Texture &tex, float spd, const int &dmg, const sf::Vector2f &dir, const float &rn)
-    : Attack(pos, tex, spd, dmg, dir, rn)
+Projectile::Projectile(const sf::Vector2f &pos, sf::Texture &tex, float spd, const int &pierce, const int &dmg, const sf::Vector2f &dir, const float &rn)
+    : Attack(pos, tex, spd, pierce, dmg, dir, rn)
 {
 }
 
 void Projectile::doLoad()
 {
-    sf::Angle rotation = sf::radians(std::atan2(direction.y, direction.x));
+    sf::Angle rotation = sf::degrees(0);
+
+    if (direction != sf::Vector2f(0, 0))
+        rotation = direction.angle();
 
     Entity::load(35.f, {0.5f, 0.5f}, {0.5f, 0.5f}, {0.f, 0.f}, 8, {
         {3.5f / 20, 0.f},

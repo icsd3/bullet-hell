@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../headers/Room.h"
-#include "../headers/ResourceManager.h"
 
 class BossRoom : public Room
 {

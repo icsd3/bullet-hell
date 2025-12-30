@@ -1,7 +1,7 @@
 #include "../headers/Attack.h"
 
-Attack::Attack(const sf::Vector2f &pos, sf::Texture &tex, float spd, const int &dmg, const sf::Vector2f &dir, const float &rn)
-    : Entity(pos, tex, spd, 1), damage(dmg), direction(dir), origin(position), range(rn)
+Attack::Attack(const sf::Vector2f &pos, sf::Texture &tex, float spd, const int &pierce, const int &dmg, const sf::Vector2f &dir, const float &rn)
+    : Entity(pos, tex, spd, pierce), damage(dmg), direction(dir), origin(position), range(rn)
 {
 }
 
@@ -17,8 +17,14 @@ bool Attack::update(const float &dt)
 
 int Attack::doHits(const Entity &other) const
 {
+    if (hitList.contains(&other))
+        return 0;
+
     if (Entity::doHits(other))
+    {
+        hitList.insert(&other);
         return damage;
+    }
 
     return 0;
 }

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../headers/Entity.h"
 #include "../headers/Gun.h"
-#include "../headers/ResourceManager.h"
+#include "../headers/Sword.h"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -25,5 +24,5 @@ public:
     sf::Vector2i getHealthStatus() const;
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f &, const sf::Vector2f &);
-    std::vector<std::unique_ptr<Attack>> fire(const sf::Vector2f &) const;
+    std::vector<std::unique_ptr<Attack>> attack(const sf::Vector2f &) const;
 };

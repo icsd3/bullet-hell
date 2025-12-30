@@ -62,10 +62,10 @@ void EnemyRoom::doDraw(sf::RenderWindow &window)
 
     player.draw(window);
 
-    for (auto &projectile : playerProjectiles)
+    for (auto &projectile : playerAttacks)
         projectile->draw(window);
 
-    for (auto &projectile : enemyProjectiles)
+    for (auto &projectile : enemyAttacks)
         projectile->draw(window);
 }
 
@@ -78,10 +78,10 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
 
     std::pair<int, std::weak_ptr<Room>> action = Room::doUpdate(dt);
 
-    for (size_t i = 0; i < playerProjectiles.size();)
+    for (size_t i = 0; i < playerAttacks.size();)
     {
-        if (checkEnemyHits(*playerProjectiles[i]))
-            playerProjectiles.erase(playerProjectiles.begin() + i);
+        if (checkEnemyHits(*playerAttacks[i])  && playerAttacks[i]->takeDamage(1))
+            playerAttacks.erase(playerAttacks.begin() + i);
 
         else
             i++;
@@ -94,24 +94,24 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
 
     for (auto &enemy : enemies)
     {
-        std::vector<std::unique_ptr<Attack>> bullets = enemy->update(dt, player.getPosition(), obstacles, walls, doors, enemies, grid);
+        std::vector<std::unique_ptr<Attack>> attacks = enemy->update(dt, player.getPosition(), obstacles, walls, doors, enemies, grid);
 
-        for (auto &bullet : bullets)
+        for (auto &bullet : attacks)
         {
-            enemyProjectiles.push_back(std::move(bullet));
-            enemyProjectiles.back()->load();
+            enemyAttacks.push_back(std::move(bullet));
+            enemyAttacks.back()->load();
         }
     }
 
-    for (size_t i = 0; i < enemyProjectiles.size();)
+    for (size_t i = 0; i < enemyAttacks.size();)
     {
-        if (enemyProjectiles[i]->update(dt))
-            enemyProjectiles.erase(enemyProjectiles.begin() + i);
+        if (enemyAttacks[i]->update(dt))
+            enemyAttacks.erase(enemyAttacks.begin() + i);
 
         else
         {
-            if (checkPlayerHits(*enemyProjectiles[i]) || checkEntityCollisions(*enemyProjectiles[i]))
-                enemyProjectiles.erase(enemyProjectiles.begin() + i);
+            if ((checkPlayerHits(*enemyAttacks[i]) && enemyAttacks[i]->takeDamage(1)) || checkEntityCollisions(*enemyAttacks[i]))
+                enemyAttacks.erase(enemyAttacks.begin() + i);
 
             else
                 i++;
@@ -119,7 +119,7 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
     }
 
     if (action.first >= 0)
-        enemyProjectiles.clear();
+        enemyAttacks.clear();
 
     return action;
 }
@@ -237,8 +237,8 @@ void EnemyRoom::printDetails(std::ostream &os) const
         for (size_t i = 0; i < enemies.size(); i++)
             os << "        Enemy " << i + 1 << ":\n            " << *enemies[i] << "\n\n";
     os << "    Enemy Projectiles:\n";
-    os << "        Count: " << enemyProjectiles.size() << "\n";
-    if (!enemyProjectiles.empty())
-        for (size_t i = 0; i < enemyProjectiles.size(); i++)
-            os << "        Projectile " << i + 1 << ":\n            " << enemyProjectiles[i] << "\n\n";
+    os << "        Count: " << enemyAttacks.size() << "\n";
+    if (!enemyAttacks.empty())
+        for (size_t i = 0; i < enemyAttacks.size(); i++)
+            os << "        Projectile " << i + 1 << ":\n            " << enemyAttacks[i] << "\n\n";
 }

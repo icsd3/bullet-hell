@@ -3,7 +3,6 @@
 #include "../headers/Enemy.h"
 #include "../headers/Projectile.h"
 #include "../headers/Player.h"
-#include "../headers/ResourceManager.h"
 #include "../headers/Door.h"
 
 class Room
@@ -23,7 +22,7 @@ protected:
     std::weak_ptr<Room> left;
     sf::Clock animationClock;
     bool open = false;
-    std::vector<std::unique_ptr<Attack>> playerProjectiles;
+    std::vector<std::unique_ptr<Attack>> playerAttacks;
     int grid[14][7];
 
     void animate(const unsigned int &);

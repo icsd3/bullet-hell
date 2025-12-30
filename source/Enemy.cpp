@@ -3,63 +3,11 @@
 Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss)
     : Entity(pos, (boss == false) ? ResourceManager::getTexture(TextureType::Enemy) : ResourceManager::getTexture(TextureType::Boss), spd, mh), gridPosition(0, 0), target(pos)
 {
-    std::ifstream file("json/EnemyGuns.json");
-    if (!file.is_open())
-        throw ConfigurationException("Failed to open json/EnemyGuns.json");
-
-    nlohmann::json data;
-    try 
-    {
-        file >> data;
-    } 
-    catch (const nlohmann::json::exception& e) 
-    {
-        throw ConfigurationException("Failed to parse json/EnemyGuns.json: " + std::string(e.what()));
-    }
-
     std::mt19937 &rng = Utils::getRng();
-    std::uniform_int_distribution<int> range(0, data.size() - 1);
+    std::uniform_int_distribution<int> range(0, 2);
     int index = range(rng);
-    const auto &w = data[index];
 
-    try 
-    {
-        int texId = w.at("texture").get<int>();
-        sf::Texture *weaponTexture;
-        switch (texId)
-        {
-            case 0:
-                weaponTexture = &ResourceManager::getTexture(TextureType::Pistol);
-                break;
-            case 1:
-                weaponTexture = &ResourceManager::getTexture(TextureType::Shotgun);
-                break;
-            case 2:
-                weaponTexture = &ResourceManager::getTexture(TextureType::Rifle);
-                break;
-            case 3:
-                weaponTexture = &ResourceManager::getTexture(TextureType::Sniper);
-                break;
-            default:
-                throw ConfigurationException("json/EnemyGuns.json is missing required fields or has invalid types");
-                break;
-        }
-        weapon = std::make_unique<Gun>(
-            w.at("name").get<std::string>(),
-            w.at("damage").get<int>(),
-            w.at("fire_rate").get<float>(),
-            0.3f,
-            w.at("bullet_nr").get<int>(),
-            w.at("spread_angle").get<float>(),
-            w.at("range").get<float>(),
-            w.at("bullet_speed").get<float>(),
-            (boss == false) ? ProjectileTextureType::Enemy : ProjectileTextureType::Boss,
-            *weaponTexture);
-    } 
-    catch (const nlohmann::json::exception& e) 
-    {
-        throw ConfigurationException("json/EnemyGuns.json is missing required fields or has invalid types: " + std::string(e.what()));
-    }
+    weapon = std::make_unique<Gun>("json/EnemyGuns.json", index, 0.3f, (boss == false) ? AttackTextureType::Enemy : AttackTextureType::Boss);
 }
 
 void Enemy::load()
@@ -127,11 +75,11 @@ std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Ve
 
     weapon->update(position, angle);
 
-    std::vector<std::unique_ptr<Attack>> bullets;
+    std::vector<std::unique_ptr<Attack>> attacks;
 
     if (checkLineOfSight(position, playerPosition, obstacles))
     {
-        bullets = weapon->fire(position, playerPosition);
+        attacks = weapon->attack(position, playerPosition);
         updateClock.start();
         if (updateClock.getElapsedTime().asSeconds() > 0.5f)
         {
@@ -159,7 +107,7 @@ std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Ve
             grid[tGridX][tGridY] = 2;
     }
 
-    return bullets;
+    return attacks;
 }
 
 sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int grid[14][7])

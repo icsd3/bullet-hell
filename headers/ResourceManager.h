@@ -4,11 +4,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <unordered_set>
 
 enum class TextureType
 {
     Player,
     PlayerProjectile,
+    PlayerSlash,
     Enemy,
     EnemyProjectile,
     Boss,
@@ -26,7 +28,8 @@ enum class TextureType
     Pistol,
     Shotgun,
     Rifle,
-    Sniper
+    Sniper,
+    Sword
 };
 
 enum class FontType
@@ -39,7 +42,8 @@ class ResourceManager
 {
     static sf::Texture playerTexture;
     static sf::Texture playerProjectileTexture;
-
+    static sf::Texture playerSlashTexture;
+    
     static sf::Texture enemyTexture;
     static sf::Texture enemyProjectileTexture;
     static sf::Texture bossTexture;
@@ -62,6 +66,7 @@ class ResourceManager
     static sf::Texture shotgunTexture;
     static sf::Texture rifleTexture;
     static sf::Texture sniperTexture;
+    static sf::Texture swordTexture;
 
     static sf::Font arial;
     static sf::Font courier;

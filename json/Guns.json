@@ -3,50 +3,55 @@
         "name": "Basic Pistol",
         "damage": 20,
         "bullet_nr": 1,
-        "fire_rate": 1.5,
+        "attack_speed": 1.5,
         "spread_angle": 5.0,
         "range": 1000,
         "bullet_speed": 1000,
+        "pierce": 1,
         "texture": 0
     },
     {
         "name": "Basic Shotgun",
         "damage": 10,
         "bullet_nr": 5,
-        "fire_rate": 1.0,
+        "attack_speed": 1.0,
         "spread_angle": 30.0,
         "range": 600,
         "bullet_speed": 600,
+        "pierce": 1,
         "texture": 1
     },
     {
         "name": "Basic Sniper",
         "damage": 40,
         "bullet_nr": 1,
-        "fire_rate": 0.8,
+        "attack_speed": 0.8,
         "spread_angle": 1.0,
         "range": 3000,
         "bullet_speed": 1500,
+        "pierce": 2,
         "texture": 3
     },
     {
         "name": "op",
         "damage": 100,
         "bullet_nr": 1,
-        "fire_rate": 1,
+        "attack_speed": 1,
         "spread_angle": 0,
         "range": 3000,
         "bullet_speed": 3000,
+        "pierce": 5,
         "texture": 3
     },
     {
         "name": "beam",
         "damage": 10,
         "bullet_nr": 1,
-        "fire_rate": 144,
+        "attack_speed": 144,
         "spread_angle": 0,
         "range": 3000,
         "bullet_speed": 400,
+        "pierce": 1,
         "texture": 2
     }
 ]

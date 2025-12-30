@@ -1,14 +1,13 @@
 #pragma once
 
 #include "../headers/Room.h"
-#include "../headers/ResourceManager.h"
 
 class EnemyRoom : public Room
 {
     sf::Texture *obstacleTexture;
 
     std::vector<std::unique_ptr<Enemy>> enemies;
-    std::vector<std::unique_ptr<Attack>> enemyProjectiles;
+    std::vector<std::unique_ptr<Attack>> enemyAttacks;
 
     std::vector<Object> obstacles;
 

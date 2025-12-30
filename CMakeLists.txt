@@ -112,6 +112,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Exception.cpp
     headers/Attack.h
     source/Attack.cpp
+    headers/Slash.h
+    source/Slash.cpp
+    headers/Sword.h
+    source/Sword.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

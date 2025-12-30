@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../headers/Object.h"
-#include "../headers/ResourceManager.h"
 
 class Door final : public Object
 {

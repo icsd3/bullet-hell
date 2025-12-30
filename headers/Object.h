@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../headers/Collider.h"
+#include "../headers/ResourceManager.h"
 
 class Object : public Collider
 {
