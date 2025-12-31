@@ -28,7 +28,7 @@ void BossRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_pt
                 grid[x][y] = 1;
                 Object obstacle(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), *obstacleTexture);
                 obstacles.push_back(obstacle);
-                obstacles.back().load({114.f, 0.f}, {0.5f, 0.5f}, {1.f, 1.f}, {0.5f, 0.5f}, {0.f, 0.f});
+                obstacles.back().load({114.f, 0.f}, {0.5f, 0.5f}, {1.f, 0.9f}, {0.5f, 0.5f}, {0.f, 0.f});
                 break;
             }
             else
