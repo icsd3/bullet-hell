@@ -259,27 +259,42 @@ void Level::handleMovementInput(const bool &controls, const sf::RenderWindow &wi
     if (controls)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+        {
             movement += sf::Vector2f(0.f, -10.f);
+            target = movement;
+            moved = true;
+        }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+        {
             movement += sf::Vector2f(-10.f, 0.f);
+            target = movement;
+            moved = true;
+        }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+        {
             movement += sf::Vector2f(0.f, 10.f);
+            target = movement;
+            moved = true;
+        }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+        {
             movement += sf::Vector2f(10.f, 0.f);
+            target = movement;
+            moved = true;
+        }
     }
     else
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
             movement = Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+            target = movement;
+            moved = true;
         }
     }
-
-    target = movement;
-    moved = true;
 }
 
 void Level::handleShootInput(const sf::RenderWindow &window)
