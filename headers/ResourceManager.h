@@ -11,12 +11,15 @@ enum class TextureType
     Player,
     PlayerProjectile,
     PlayerSlash,
+    PlayerBeam,
     Enemy,
     EnemyProjectile,
     EnemySlash,
+    EnemyBeam,
     Boss,
     BossProjectile,
     BossSlash,
+    BossBeam,
     BaseRoom,
     DoorVertical,
     DoorHorizontal,
@@ -31,7 +34,8 @@ enum class TextureType
     Shotgun,
     Rifle,
     Sniper,
-    Sword
+    Sword,
+    Laser
 };
 
 enum class FontType
@@ -45,14 +49,17 @@ class ResourceManager
     static sf::Texture playerTexture;
     static sf::Texture playerProjectileTexture;
     static sf::Texture playerSlashTexture;
+    static sf::Texture playerBeamTexture;
 
     static sf::Texture enemyTexture;
     static sf::Texture enemyProjectileTexture;
     static sf::Texture enemySlashTexture;
+    static sf::Texture enemyBeamTexture;
 
     static sf::Texture bossTexture;
     static sf::Texture bossProjectileTexture;
     static sf::Texture bossSlashTexture;
+    static sf::Texture bossBeamTexture;
 
     static sf::Texture baseRoomTexture;
     static sf::Texture doorVerticalTexture;
@@ -72,6 +79,7 @@ class ResourceManager
     static sf::Texture rifleTexture;
     static sf::Texture sniperTexture;
     static sf::Texture swordTexture;
+    static sf::Texture laserTexture;
 
     static sf::Font arial;
     static sf::Font courier;

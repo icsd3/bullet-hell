@@ -3,14 +3,17 @@
 sf::Texture ResourceManager::playerTexture;
 sf::Texture ResourceManager::playerProjectileTexture;
 sf::Texture ResourceManager::playerSlashTexture;
+sf::Texture ResourceManager::playerBeamTexture;
 
 sf::Texture ResourceManager::enemyTexture;
 sf::Texture ResourceManager::enemyProjectileTexture;
 sf::Texture ResourceManager::enemySlashTexture;
+sf::Texture ResourceManager::enemyBeamTexture;
 
 sf::Texture ResourceManager::bossTexture;
 sf::Texture ResourceManager::bossProjectileTexture;
 sf::Texture ResourceManager::bossSlashTexture;
+sf::Texture ResourceManager::bossBeamTexture;
 
 sf::Texture ResourceManager::baseRoomTexture;
 sf::Texture ResourceManager::doorVerticalTexture;
@@ -30,6 +33,7 @@ sf::Texture ResourceManager::shotgunTexture;
 sf::Texture ResourceManager::rifleTexture;
 sf::Texture ResourceManager::sniperTexture;
 sf::Texture ResourceManager::swordTexture;
+sf::Texture ResourceManager::laserTexture;
 
 sf::Font ResourceManager::arial;
 sf::Font ResourceManager::courier;
@@ -55,6 +59,10 @@ void ResourceManager::loadTexture(TextureType type)
             if(!playerSlashTexture.loadFromFile("textures/player_slash.png"))
                 throw TextureLoadException("Failed to load player slash texture");
             break;
+        case PlayerBeam:
+            if(!playerBeamTexture.loadFromFile("textures/player_beam.png"))
+                throw TextureLoadException("Failed to load player beam texture");
+            break;
         case Enemy:
             if(!enemyTexture.loadFromFile("textures/enemy.png"))
                 throw TextureLoadException("Failed to load enemy texture");
@@ -67,6 +75,10 @@ void ResourceManager::loadTexture(TextureType type)
             if(!enemySlashTexture.loadFromFile("textures/enemy_slash.png"))
                 throw TextureLoadException("Failed to load enemy slash texture");
             break;
+        case EnemyBeam:
+            if(!enemyBeamTexture.loadFromFile("textures/enemy_beam.png"))
+                throw TextureLoadException("Failed to load enemy beam texture");
+            break;
         case Boss:
             if(!bossTexture.loadFromFile("textures/boss.png"))
                 throw TextureLoadException("Failed to load boss texture");
@@ -78,6 +90,10 @@ void ResourceManager::loadTexture(TextureType type)
         case BossSlash:
             if(!bossSlashTexture.loadFromFile("textures/boss_slash.png"))
                 throw TextureLoadException("Failed to load boss slash texture");
+            break;
+        case BossBeam:
+            if(!bossBeamTexture.loadFromFile("textures/boss_beam.png"))
+                throw TextureLoadException("Failed to load boss beam texture");
             break;
         case BaseRoom:
             if(!baseRoomTexture.loadFromFile("textures/room_background.png"))
@@ -139,6 +155,10 @@ void ResourceManager::loadTexture(TextureType type)
             if(!swordTexture.loadFromFile("textures/sword.png"))
                 throw TextureLoadException("Failed to load sword texture");
             break;
+        case Laser:
+            if(!laserTexture.loadFromFile("textures/laser.png"))
+                throw TextureLoadException("Failed to load laser texture");
+            break;
         default:
             throw TextureLoadException("Invalid TextureType");
     }
@@ -158,18 +178,24 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return playerProjectileTexture;
         case PlayerSlash:
             return playerSlashTexture;
+        case PlayerBeam:
+            return playerBeamTexture;
         case Enemy:
             return enemyTexture;
         case EnemyProjectile:
             return enemyProjectileTexture;
         case EnemySlash:
             return enemySlashTexture;
+        case EnemyBeam:
+            return enemyBeamTexture;
         case Boss:
             return bossTexture;
         case BossProjectile:
             return bossProjectileTexture;
         case BossSlash:
             return bossSlashTexture;
+        case BossBeam:
+            return bossBeamTexture;
         case BaseRoom:
             return baseRoomTexture;
         case DoorVertical:
@@ -200,6 +226,8 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return sniperTexture;
         case Sword:
             return swordTexture;
+        case Laser:
+            return laserTexture;
         default:
             throw TextureFetchException("Invalid TextureType");
     }

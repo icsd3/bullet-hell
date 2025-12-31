@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Basic Laser",
+        "damage": 10,
+        "attack_speed": 0.5,
+        "charge_up_time": 0.3,
+        "duration": 0.2,
+        "width": 30
+    }
+]

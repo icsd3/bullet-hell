@@ -50,6 +50,9 @@ void Collider::draw(sf::RenderWindow &window)
 
 bool Collider::collidesWith(const sf::ConvexShape &other) const
 {
+    if (collisionBox.getLocalBounds().size == sf::Vector2f(0, 0) || other.getLocalBounds().size == sf::Vector2f(0, 0))
+        return false;
+
     sf::Transform collisionBoxTransform = collisionBox.getTransform();
     sf::Transform otherCollisionBoxTransform = other.getTransform();
 
@@ -110,6 +113,9 @@ bool Collider::collidesWith(const sf::ConvexShape &other) const
 
 bool Collider::collidesWith(const Collider &other) const
 {
+    if (collisionBox.getLocalBounds().size == sf::Vector2f(0, 0) || other.collisionBox.getLocalBounds().size == sf::Vector2f(0, 0))
+        return false;
+
     sf::Transform collisionBoxTransform = collisionBox.getTransform();
     sf::Transform otherCollisionBoxTransform = other.collisionBox.getTransform();
 

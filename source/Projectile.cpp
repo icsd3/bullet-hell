@@ -12,7 +12,7 @@ void Projectile::doLoad()
     if (direction != sf::Vector2f(0, 0))
         rotation = direction.angle();
 
-    Entity::load(35.f, {0.5f, 0.5f}, {0.5f, 0.5f}, {0.f, 0.f}, 8, {
+    Entity::load({35.f, 0.f}, {0.5f, 0.5f}, {0.5f, 0.5f}, {0.5f, 0.5f}, {0.f, 0.f}, 8, {
         {3.5f / 20, 0.f},
         {16.5f / 20, 0.f},
         {1.f, 3.5f / 10},

@@ -12,5 +12,7 @@ class Slash : public Attack
 
 public:
     Slash(const sf::Vector2f &, sf::Texture &, const int &, const sf::Vector2f &, const float &, const float &, const float &);
-    friend std::ostream &operator<<(std::ostream &os, const Slash &slash);
+    Slash(const Slash &);
+    Slash &operator=(const Slash &);
+    friend std::ostream &operator<<(std::ostream &, const Slash &);
 };

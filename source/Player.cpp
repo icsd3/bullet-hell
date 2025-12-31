@@ -1,7 +1,7 @@
 #include "../headers/Player.h"
 
 Player::Player()
-    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, ResourceManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(4)
+    : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, ResourceManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(0)
 {
     weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 0, 0.f, AttackTextureType::Player));
     weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 1, 0.f, AttackTextureType::Player));
@@ -9,11 +9,12 @@ Player::Player()
     weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 3, 0.f, AttackTextureType::Player));
     weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 4, 0.f, AttackTextureType::Player));
     weapons.emplace_back(std::make_unique<Sword>("json/Swords.json", 0, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Laser>("json/Lasers.json", 0, 0.f, AttackTextureType::Player));
 }
 
 void Player::load()
 {
-    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
+    Entity::load({60.f, 0.f}, {0.5f, 0.5f}, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
         {4.5f / 14, 0.f}, 
         {9.5f / 14, 0.f}, 
         {1.f, 4.5f / 14}, 
@@ -25,8 +26,11 @@ void Player::load()
     if (currentWeapon >= weapons.size())
         throw OutOfBoundsException("Invalid currentWeapon index in Player::load");
 
-    weapons[currentWeapon]->load(position);
-    weapons[currentWeapon]->reset();
+    for (auto &weapon : weapons)
+    {
+        weapon->load(position);
+        weapon->reset();
+    }
 }
 
 void Player::update(const float &dt, const sf::Vector2f &target, const sf::Vector2f &mousePosition)
@@ -105,6 +109,14 @@ void Player::setPosition(const sf::Vector2f &newPos, const sf::Vector2f &mousePo
         facingLeft = false;
 
     transform(moveVec, facingLeft, sf::Angle(sf::degrees(0.f)));
+}
+
+void Player::cycleWeapon(bool forward)
+{
+    if (forward)
+        currentWeapon = (currentWeapon + 1) % weapons.size();
+    else
+        currentWeapon = (currentWeapon + weapons.size() - 1) % weapons.size();
 }
 
 std::ostream &operator<<(std::ostream &os, const Player &player)

@@ -12,7 +12,7 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss
 
 void Enemy::load()
 {
-    Entity::load(60.f, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
+    Entity::load({60.f, 0.f}, {0.5f, 0.5f}, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
         {4.5f / 14, 0.f}, 
         {9.5f / 14, 0.f}, 
         {1.f, 4.5f / 14}, 

@@ -116,6 +116,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Slash.cpp
     headers/Sword.h
     source/Sword.cpp
+    headers/Beam.h
+    source/Beam.cpp
+    headers/Laser.h
+    source/Laser.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

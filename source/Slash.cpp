@@ -5,6 +5,22 @@ Slash::Slash(const sf::Vector2f &pos, sf::Texture &tex, const int &dmg, const sf
 {
 }
 
+Slash::Slash(const Slash &other)
+    : Attack(other), duration(other.duration), arcAngle(other.arcAngle)
+{
+}
+
+Slash &Slash::operator=(const Slash &other)
+{
+    if (this != &other)
+    {
+        Attack::operator=(other);
+        duration = other.duration;
+        arcAngle = other.arcAngle;
+    }
+    return *this;
+}
+
 void Slash::doLoad()
 {
     sf::Angle angle = sf::degrees(90);
@@ -12,7 +28,7 @@ void Slash::doLoad()
     if (direction != sf::Vector2f(0, 0))
         angle += direction.angle();
 
-    Entity::load(range * 3 / 2, {0.5f, 0.2f}, {0.5f, -1.f}, {0.f, 0.f}, 7, {
+    Entity::load({range * 3 / 2, 0.f}, {0.5f, 0.5f}, {0.5f, 0.2f}, {0.5f, -1.f}, {0.f, 0.f}, 7, {
         {0.5f, 0.f},
         {1.f / 6, 1.f / 6},
         {0.f, 0.5f},

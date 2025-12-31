@@ -1,7 +1,7 @@
 #include "../headers/Gun.h"
 
-Gun::Gun(const std::string &file_path, const size_t index, const float offset, const AttackTextureType id)
-    : Weapon("", 0, 0, offset, ResourceManager::getTexture(TextureType::Pistol), id, 0), bullet_nr(0), spreadAngle(0), bulletSpeed(0)
+Gun::Gun(const std::string &file_path, const size_t index, const float offset, const AttackTextureType type)
+    : Weapon("", 0, 0, offset, ResourceManager::getTexture(TextureType::Pistol), type, 0), bullet_nr(0), spreadAngle(0), bulletSpeed(0)
 {
     std::ifstream file(file_path);
     if (!file.is_open())

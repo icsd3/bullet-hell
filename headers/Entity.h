@@ -20,7 +20,7 @@ protected:
 
     void transform(const sf::Vector2f &, const bool &, const sf::Angle &);
 
-    virtual int doHits(const Entity &other) const;
+    virtual int doHits(const Entity &) const;
 
     Entity(const sf::Vector2f &, const sf::Texture &, const float, const int);
     Entity(const Entity &);
@@ -29,7 +29,7 @@ protected:
 public:
     friend std::ostream &operator<<(std::ostream &, const Entity &);
 
-    void load(const float &, const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const int &, const std::vector<sf::Vector2f> &);
-    int hits(const Entity &other) const;
+    void load(const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const int &, const std::vector<sf::Vector2f> &);
+    int hits(const Entity &) const;
     bool takeDamage(const int &);
 };

@@ -224,7 +224,8 @@ bool Level::handleInput(const sf::Event &event, const bool &controls, const sf::
             return false;
         }
     }
-    if (event.is<sf::Event::KeyPressed>())
+
+    else if (event.is<sf::Event::KeyPressed>())
     {
         const auto *keyPressed = event.getIf<sf::Event::KeyPressed>();
 
@@ -247,6 +248,15 @@ bool Level::handleInput(const sf::Event &event, const bool &controls, const sf::
             else if (keyPressed->scancode == sf::Keyboard::Scancode::D)
                 target = player.getPosition() + sf::Vector2f(10.f, 0.f);
         }
+    }
+
+    else if (event.is<sf::Event::MouseWheelScrolled>())
+    {
+        const auto *mouseWheelScrolled = event.getIf<sf::Event::MouseWheelScrolled>();
+        if (mouseWheelScrolled->delta > 0)
+            player.cycleWeapon(true);
+        else
+            player.cycleWeapon(false);
     }
 
     return false;

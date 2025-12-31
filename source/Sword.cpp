@@ -55,7 +55,8 @@ Sword &Sword::operator=(const Sword &other)
 void Sword::printDetails(std::ostream &os) const
 {
     Weapon::printDetails(os);
-    os << ", Sword: (Duration: " << duration << ", Arc Angle: " << arcAngle << ")";
+    os << ", Sword: (Duration: " << duration 
+       << ", Arc Angle: " << arcAngle << ")";
 }
 
 std::vector<std::unique_ptr<Attack>> Sword::doAttack(const sf::Vector2f &position, const sf::Vector2f &target)

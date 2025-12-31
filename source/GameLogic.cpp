@@ -160,7 +160,7 @@ bool Game::handleInputs()
             window.setView(sf::View(visibleArea));
         }
 
-        else if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>())
+        else if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>() || event->is<sf::Event::MouseWheelScrolled>())
         {
             if (event->is<sf::Event::KeyPressed>() && event->getIf<sf::Event::KeyPressed>()->scancode == sf::Keyboard::Scancode::Backspace)
                 shouldExit = true;
