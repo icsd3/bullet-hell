@@ -5,7 +5,7 @@
 class Stab : public Attack
 {
     float duration;
-    float speed;
+    float stabSpeed;
 
     void doLoad() override;
     bool doUpdate(const float &) override;

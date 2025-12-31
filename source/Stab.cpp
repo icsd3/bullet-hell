@@ -1,12 +1,12 @@
 #include "../headers/Stab.h"
 
 Stab::Stab(const sf::Vector2f &pos, sf::Texture &tex, const int &dmg, const sf::Vector2f &dir, const float &rn, const float &dur, const float &spd)
-    : Attack(pos, tex, 0, 10, dmg, dir, rn), duration(dur), speed(spd)
+    : Attack(pos, tex, 0, 10, dmg, dir, rn), duration(dur), stabSpeed(spd)
 {
 }
 
 Stab::Stab(const Stab &other)
-    : Attack(other), duration(other.duration)
+    : Attack(other), duration(other.duration), stabSpeed(other.stabSpeed)
 {
 }
 
@@ -16,6 +16,7 @@ Stab &Stab::operator=(const Stab &other)
     {
         Attack::operator=(other);
         duration = other.duration;
+        stabSpeed = other.stabSpeed;
     }
     return *this;
 }
@@ -39,7 +40,7 @@ void Stab::doLoad()
 
 bool Stab::doUpdate(const float &dt)
 {
-    transform((speed * direction * dt), false, sf::degrees(0));
+    transform((stabSpeed * direction * dt), false, sf::degrees(0));
 
     duration -= dt;
     return duration <= 0.f;
