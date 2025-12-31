@@ -10,6 +10,7 @@ Player::Player()
     weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 4, 0.f, AttackTextureType::Player));
     weapons.emplace_back(std::make_unique<Sword>("json/Swords.json", 0, AttackTextureType::Player));
     weapons.emplace_back(std::make_unique<Laser>("json/Lasers.json", 0, 0.f, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Spear>("json/Spears.json", 0, AttackTextureType::Player));
 }
 
 void Player::load()

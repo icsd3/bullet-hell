@@ -2,6 +2,9 @@
 
 #include "../headers/Entity.h"
 #include "../headers/Gun.h"
+#include "../headers/Sword.h"
+#include "../headers/Spear.h"
+#include "../headers/Laser.h"
 #include "../headers/Door.h"
 
 #include <nlohmann/json.hpp>

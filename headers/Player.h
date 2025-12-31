@@ -2,7 +2,9 @@
 
 #include "../headers/Gun.h"
 #include "../headers/Sword.h"
+#include "../headers/Spear.h"
 #include "../headers/Laser.h"
+
 
 #include <nlohmann/json.hpp>
 #include <fstream>

@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Basic Spear",
+        "damage": 20,
+        "attack_speed": 1,
+        "duration": 0.25,
+        "stab_speed": 200,
+        "range": 100
+    }
+]

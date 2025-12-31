@@ -124,6 +124,10 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Laser.cpp
     headers/PauseMenu.h
     source/PauseMenu.cpp
+    headers/Stab.h
+    source/Stab.cpp
+    headers/Spear.h
+    source/Spear.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
