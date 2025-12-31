@@ -14,6 +14,8 @@ class Level
 
     Player &player;
     GUI &gui;
+    sf::Vector2f target;
+    bool moved = false;
 
     int map[5][7];
     std::vector<std::shared_ptr<Room>> rooms;
@@ -25,11 +27,11 @@ public:
     Level(Player &, GUI &);
     friend std::ostream &operator<<(std::ostream &, const Level &);
 
-    void update(const float &, sf::Vector2f &, const sf::Vector2f &);
+    void update(const float &, const sf::Vector2f &);
     void load(const int);
-    std::pair<int, sf::Vector2f> handleInput(const sf::Event &, const bool &, const sf::RenderWindow &);
-    sf::Vector2f handleMovementInput(const bool &, const sf::RenderWindow &);
-    static sf::Vector2f handleShootInput(const sf::RenderWindow &);
+    bool handleInput(const sf::Event &, const bool &, const sf::RenderWindow &);
+    void handleMovementInput(const bool &, const sf::RenderWindow &);
+    void handleShootInput(const sf::RenderWindow &);
     void playerFire(const sf::Vector2f &);
     void draw(sf::RenderWindow &);
 };

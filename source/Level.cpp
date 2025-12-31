@@ -1,7 +1,7 @@
 #include "../headers/Level.h"
 
 Level::Level(Player &p, GUI &g)
-    : player(p), gui(g), map{{0}}
+    : player(p), gui(g), target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)), map{{0}}
 {
 }
 
@@ -206,20 +206,22 @@ void Level::load(const int nr)
     currentRoom->start();
 }
 
-std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bool &controls, const sf::RenderWindow &window)
+bool Level::handleInput(const sf::Event &event, const bool &controls, const sf::RenderWindow &window)
 {
     if (event.is<sf::Event::MouseButtonPressed>())
     {
         const auto *mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
 
-        if (mouseEvent->button == sf::Mouse::Button::Right && !controls)
+        if (mouseEvent->button == sf::Mouse::Button::Right && !controls && !moved)
         {
-            return std::make_pair(1, Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window));
+            target = Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window);
+            return false;
         }
 
         if (mouseEvent->button == sf::Mouse::Button::Left)
         {
-            return std::make_pair(2, Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window));
+            playerFire(Utils::mapToLogical(sf::Vector2f(mouseEvent->position), window));
+            return false;
         }
     }
     if (event.is<sf::Event::KeyPressed>())
@@ -228,33 +230,34 @@ std::pair<int, sf::Vector2f> Level::handleInput(const sf::Event &event, const bo
 
         if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
         {
-            return std::make_pair(3, sf::Vector2f(-1.f, -1.f));
+            return true;
         }
 
-        else if (controls)
+        else if (controls && !moved)
         {
             if (keyPressed->scancode == sf::Keyboard::Scancode::W)
-                return std::make_pair(1, player.getPosition() + sf::Vector2f(0.f, -10.f));
+                target = player.getPosition() + sf::Vector2f(0.f, -10.f);
 
             else if (keyPressed->scancode == sf::Keyboard::Scancode::A)
-                return std::make_pair(1, player.getPosition() + sf::Vector2f(-10.f, 0.f));
+                target = player.getPosition() + sf::Vector2f(-10.f, 0.f);
 
             else if (keyPressed->scancode == sf::Keyboard::Scancode::S)
-                return std::make_pair(1, player.getPosition() + sf::Vector2f(0.f, 10.f));
+                target = player.getPosition() + sf::Vector2f(0.f, 10.f);
 
             else if (keyPressed->scancode == sf::Keyboard::Scancode::D)
-                return std::make_pair(1, player.getPosition() + sf::Vector2f(10.f, 0.f));
+                target = player.getPosition() + sf::Vector2f(10.f, 0.f);
         }
     }
 
-    return std::make_pair(0, sf::Vector2f(-1.f, -1.f));
+    return false;
 }
 
-sf::Vector2f Level::handleMovementInput(const bool &controls, const sf::RenderWindow &window)
+void Level::handleMovementInput(const bool &controls, const sf::RenderWindow &window)
 {
+    moved = false;
+    sf::Vector2f movement = player.getPosition();
     if (controls)
     {
-        sf::Vector2f movement = player.getPosition();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
             movement += sf::Vector2f(0.f, -10.f);
 
@@ -266,26 +269,23 @@ sf::Vector2f Level::handleMovementInput(const bool &controls, const sf::RenderWi
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
             movement += sf::Vector2f(10.f, 0.f);
-
-        return movement;
     }
     else
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
         {
-            return Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
+            movement = Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
         }
     }
-    return {-1.f, -1.f};
+
+    target = movement;
+    moved = true;
 }
 
-sf::Vector2f Level::handleShootInput(const sf::RenderWindow &window)
+void Level::handleShootInput(const sf::RenderWindow &window)
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-    {
-        return Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window);
-    }
-    return {-1.f, -1.f};
+        playerFire(Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window));
 }
 
 void Level::draw(sf::RenderWindow &window)
@@ -294,7 +294,7 @@ void Level::draw(sf::RenderWindow &window)
     gui.draw(window);
 }
 
-void Level::update(const float &dt, sf::Vector2f &target, const sf::Vector2f &mousePosition)
+void Level::update(const float &dt, const sf::Vector2f &mousePosition)
 {
     int moved = -1;
     sf::Vector2f oldPosition = player.getPosition();

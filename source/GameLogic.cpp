@@ -1,8 +1,7 @@
 #include "../headers/GameLogic.h"
 
 Game::Game()
-    : target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)),
-      currentState(main_menu),
+    : currentState(main_menu),
       player(std::make_unique<Player>()),
       gui(std::make_unique<GUI>()),
       augment(std::make_unique<Augment>()),
@@ -128,43 +127,11 @@ void Game::togglePause()
 bool Game::handleInputs()
 {
     bool shouldExit = false;
-    bool moved = false;
 
     if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
     {
-        sf::Vector2f move = level->handleMovementInput(controls, window);
-        sf::Vector2f shoot = level->handleShootInput(window);
-
-        if (move.x > 0 && move.x < LOGICAL_WIDTH && move.y > 0 && move.y < LOGICAL_HEIGHT)
-        {
-            target = move;
-            moved = true;
-        }
-
-        if ((move.x < 0 || move.x > LOGICAL_WIDTH) && (move.y > 0 && move.y < LOGICAL_HEIGHT))
-        {
-            if (move.x < 0)
-                move.x = 0;
-            else
-                move.x = LOGICAL_WIDTH;
-            target = move;
-            moved = true;
-        }
-
-        if ((move.y < 0 || move.y > LOGICAL_HEIGHT) && (move.x > 0 && move.x < LOGICAL_WIDTH))
-        {
-            if (move.y < 0)
-                move.y = 0;
-            else
-                move.y = LOGICAL_HEIGHT;
-            target = move;
-            moved = true;
-        }
-
-        if (shoot.x != -1 && shoot.y != -1)
-        {
-            level->playerFire(shoot);
-        }
+        level->handleMovementInput(controls, window);
+        level->handleShootInput(window);
     }
 
     while (const std::optional event = window.pollEvent())
@@ -280,27 +247,10 @@ bool Game::handleInputs()
 
             else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
             {
-                std::pair<int, sf::Vector2f> ans = level->handleInput(*event, controls, window);
-                int action = ans.first;
-
-                switch (action)
+                if (level->handleInput(*event, controls, window))
                 {
-                case 1:
-                    if (!moved && ans.second.x > 0 && ans.second.y > 0 && ans.second.x < LOGICAL_WIDTH && ans.second.y < LOGICAL_HEIGHT)
-                        target = ans.second;
-                    break;
-
-                case 2:
-                    level->playerFire(ans.second);
-                    break;
-
-                case 3:
                     togglePause();
                     openSettings = !openSettings;
-                    break;
-
-                default:
-                    break;
                 }
             }
         }
@@ -367,7 +317,7 @@ void Game::Play()
             float dt = 0;
             if (!Utils::changePaused(0))
                 dt = updateClock.restart().asSeconds();
-            level->update(dt, target, Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window));
+            level->update(dt, Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window));
         }
         draw();
     }
@@ -380,7 +330,6 @@ std::ostream &operator<<(std::ostream &os, const Game &game)
     os << *game.level << "\n";
     os << "Window size: " << game.window.getSize().x << "x" << game.window.getSize().y << "\n\n";
     os << "Current State: " << game.currentState << "\n\n";
-    os << "Target Position: (" << game.target.x << ", " << game.target.y << ")\n";
     os << "####################################################################################################################################\n\n";
     return os;
 }
