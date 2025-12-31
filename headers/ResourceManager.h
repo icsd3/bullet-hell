@@ -13,8 +13,10 @@ enum class TextureType
     PlayerSlash,
     Enemy,
     EnemyProjectile,
+    EnemySlash,
     Boss,
     BossProjectile,
+    BossSlash,
     BaseRoom,
     DoorVertical,
     DoorHorizontal,
@@ -43,11 +45,14 @@ class ResourceManager
     static sf::Texture playerTexture;
     static sf::Texture playerProjectileTexture;
     static sf::Texture playerSlashTexture;
-    
+
     static sf::Texture enemyTexture;
     static sf::Texture enemyProjectileTexture;
+    static sf::Texture enemySlashTexture;
+
     static sf::Texture bossTexture;
     static sf::Texture bossProjectileTexture;
+    static sf::Texture bossSlashTexture;
 
     static sf::Texture baseRoomTexture;
     static sf::Texture doorVerticalTexture;

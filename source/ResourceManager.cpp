@@ -6,8 +6,11 @@ sf::Texture ResourceManager::playerSlashTexture;
 
 sf::Texture ResourceManager::enemyTexture;
 sf::Texture ResourceManager::enemyProjectileTexture;
+sf::Texture ResourceManager::enemySlashTexture;
+
 sf::Texture ResourceManager::bossTexture;
 sf::Texture ResourceManager::bossProjectileTexture;
+sf::Texture ResourceManager::bossSlashTexture;
 
 sf::Texture ResourceManager::baseRoomTexture;
 sf::Texture ResourceManager::doorVerticalTexture;
@@ -60,6 +63,10 @@ void ResourceManager::loadTexture(TextureType type)
             if(!enemyProjectileTexture.loadFromFile("textures/enemy_projectile.png"))
                 throw TextureLoadException("Failed to load enemy projectile texture");
             break;
+        case EnemySlash:
+            if(!enemySlashTexture.loadFromFile("textures/enemy_slash.png"))
+                throw TextureLoadException("Failed to load enemy slash texture");
+            break;
         case Boss:
             if(!bossTexture.loadFromFile("textures/boss.png"))
                 throw TextureLoadException("Failed to load boss texture");
@@ -67,6 +74,10 @@ void ResourceManager::loadTexture(TextureType type)
         case BossProjectile:
             if(!bossProjectileTexture.loadFromFile("textures/boss_projectile.png"))
                 throw TextureLoadException("Failed to load boss projectile texture");
+            break;
+        case BossSlash:
+            if(!bossSlashTexture.loadFromFile("textures/boss_slash.png"))
+                throw TextureLoadException("Failed to load boss slash texture");
             break;
         case BaseRoom:
             if(!baseRoomTexture.loadFromFile("textures/room_background.png"))
@@ -151,10 +162,14 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return enemyTexture;
         case EnemyProjectile:
             return enemyProjectileTexture;
+        case EnemySlash:
+            return enemySlashTexture;
         case Boss:
             return bossTexture;
         case BossProjectile:
             return bossProjectileTexture;
+        case BossSlash:
+            return bossSlashTexture;
         case BaseRoom:
             return baseRoomTexture;
         case DoorVertical:

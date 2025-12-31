@@ -1,7 +1,7 @@
 #include "../headers/Sword.h"
 
-Sword::Sword(const std::string &file_path, const size_t index)
-    : Weapon("", 0, 0, 0, ResourceManager::getTexture(TextureType::Sword), AttackTextureType::Player, 0), duration(0), arcAngle(0) 
+Sword::Sword(const std::string &file_path, const size_t index, AttackTextureType type)
+    : Weapon("", 0, 0, 0, ResourceManager::getTexture(TextureType::Sword), type, 0), duration(0), arcAngle(0) 
 {
     std::ifstream file(file_path);
     if (!file.is_open())
@@ -66,13 +66,27 @@ std::vector<std::unique_ptr<Attack>> Sword::doAttack(const sf::Vector2f &positio
     {
         weaponClock.restart();
 
+        sf::Texture *slashTexture = nullptr;
+
+        if (attackTextureID == AttackTextureType::Player)
+            slashTexture = &ResourceManager::getTexture(TextureType::PlayerSlash);
+
+        else if (attackTextureID == AttackTextureType::Enemy)
+            slashTexture = &ResourceManager::getTexture(TextureType::EnemySlash);
+
+        else if (attackTextureID == AttackTextureType::Boss)
+            slashTexture = &ResourceManager::getTexture(TextureType::BossSlash);
+
+        else 
+            throw ConfigurationException("Invalid AttackTextureType in Sword::doAttack");
+
         sf::Vector2f direction = target - position;
         if (direction != sf::Vector2f(0, 0))
             direction = direction.normalized();
 
         sf::Vector2f origin = position + direction * 50.f; 
 
-        attacks.push_back(std::make_unique<Slash>(origin, ResourceManager::getTexture(TextureType::PlayerSlash), damage, direction, range, duration, arcAngle));
+        attacks.push_back(std::make_unique<Slash>(origin, *slashTexture, damage, direction, range, duration, arcAngle));
     }
     
     return attacks;
