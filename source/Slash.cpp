@@ -49,11 +49,7 @@ void Slash::doLoad()
 bool Slash::doUpdate(const float &dt)
 {
     duration -= dt;
-
-    if (duration <= 0.f)
-        return true;
-
-    return false;
+    return duration <= 0.f;
 }
 
 std::ostream &operator<<(std::ostream &os, const Slash &slash)
