@@ -311,7 +311,7 @@ void Level::draw(sf::RenderWindow &window)
 
 void Level::update(const float &dt, const sf::Vector2f &mousePosition)
 {
-    int moved = -1;
+    int movedRooms = -1;
     sf::Vector2f oldPosition = player.getPosition();
 
     player.update(dt, target, mousePosition);
@@ -351,36 +351,36 @@ void Level::update(const float &dt, const sf::Vector2f &mousePosition)
         if (action.first == 0)
         {
             player.setPosition({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT - 195.f}, mousePosition);
-            moved = 0;
+            movedRooms = 0;
         }
 
         else if (action.first == 1)
         {
             player.setPosition({195.f, LOGICAL_HEIGHT * 0.5f}, mousePosition);
-            moved = 1;
+            movedRooms = 1;
         }
 
         else if (action.first == 2)
         {
             player.setPosition({LOGICAL_WIDTH * 0.5f, 195.f}, mousePosition);
-            moved = 2;
+            movedRooms = 2;
         }
 
         else if (action.first == 3)
         {
             player.setPosition({LOGICAL_WIDTH - 195.f, LOGICAL_HEIGHT * 0.5f}, mousePosition);
-            moved = 3;
+            movedRooms = 3;
         }
         target = player.getPosition();
         currentRoom->start();
     }
 
-    gui.update(moved);
+    gui.update(movedRooms);
 }
 
-void Level::playerFire(const sf::Vector2f &target)
+void Level::playerFire(const sf::Vector2f &fireTarget)
 {
-    currentRoom->spawnPlayerProjectile(target);
+    currentRoom->spawnPlayerProjectile(fireTarget);
 }
 
 std::ostream &operator<<(std::ostream &os, const Level &level)
