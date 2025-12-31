@@ -11,8 +11,6 @@ class mainMenu
     mainMenu(const mainMenu &) = delete;
     mainMenu &operator=(const mainMenu &) = delete;
 
-
-
     sf::Sprite backgroundSprite;
     sf::Sprite startButtonSprite;
     sf::Sprite settingsButtonSprite;
