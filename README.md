@@ -15,7 +15,8 @@
 #### Gameplay
 
 - [ ] Movement - Right click / WASD
-- [ ] Fire - Left Click
+- [ ] Fire - Left click
+- [ ] Cycle weapons - Scroll wheel
 
 #### Debugging
 
