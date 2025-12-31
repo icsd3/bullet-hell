@@ -319,8 +319,11 @@ void Level::draw(sf::RenderWindow &window)
     gui.draw(window);
 }
 
-void Level::update(const float &dt, const sf::Vector2f &mousePosition)
+int Level::update(const float &dt, const sf::Vector2f &mousePosition)
 {
+    if (player.getHealthStatus().x <= 0)
+        return 1; // Defeat
+
     int movedRooms = -1;
     sf::Vector2f oldPosition = player.getPosition();
 
@@ -330,7 +333,10 @@ void Level::update(const float &dt, const sf::Vector2f &mousePosition)
         throw GameStateException("currentRoom is null in Level::update");
 
     std::pair<int, std::weak_ptr<Room>> action = currentRoom->update(dt);
-
+    
+    if (currentRoom == rooms.back() && currentRoom->isCleared())
+        return 2; // Victory
+    
     if (action.first == -2)
     {
         sf::Vector2f newPosition = player.getPosition();
@@ -386,6 +392,8 @@ void Level::update(const float &dt, const sf::Vector2f &mousePosition)
     }
 
     gui.update(movedRooms);
+    
+    return 0;
 }
 
 void Level::playerFire(const sf::Vector2f &fireTarget)

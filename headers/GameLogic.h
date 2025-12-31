@@ -4,6 +4,8 @@
 #include "../headers/Level.h"
 #include "../headers/Settings.h"
 #include "../headers/Augment.h"
+#include "../headers/PauseMenu.h"
+#include "../headers/GameOverMenu.h"
 
 enum gameStates
 {
@@ -25,8 +27,11 @@ class Game
     Game &operator=(const Game &) = delete;
 
     Settings &settings = Settings::getInstance();
+    PauseMenu &pauseMenu = PauseMenu::getInstance();
+    GameOverMenu &gameOverMenu = GameOverMenu::getInstance();
 
     bool openSettings = false;
+    bool openPauseMenu = false;
     bool fullscreen = true;
     bool controls = true; // true for WASD, false for mouse
     sf::Clock updateClock;
@@ -51,6 +56,7 @@ class Game
     void handleNewState();
 
     void togglePause();
+    void resetGame();
 
 public:
     void Play();

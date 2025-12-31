@@ -49,4 +49,5 @@ public:
     std::pair<int, std::weak_ptr<Room>> update(const float &);
     int checkPlayerCollisions();
     bool checkEntityCollisions(const Entity &);
+    virtual bool isCleared() const;
 };

@@ -35,33 +35,36 @@ void Player::load()
 
 void Player::update(const float &dt, const sf::Vector2f &target, const sf::Vector2f &mousePosition)
 {
-    sf::Vector2f dir = target - position;
-    float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
-    sf::Angle angle = sf::degrees(0);
-
-    if ((mousePosition - position) != sf::Vector2f(0, 0))
-        angle = (mousePosition - position).angle();
-
-    bool facingLeft = true;
-
-    if (angle > sf::degrees(90) || angle < sf::degrees(-90))
-        facingLeft = false;
-
-    if (distance > 5.0f)
+    if (dt > 0)
     {
-        dir /= distance;
-        sf::Vector2f moveVec(dir * speed * dt);
+        sf::Vector2f dir = target - position;
+        float distance = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+        sf::Angle angle = sf::degrees(0);
 
-        transform(moveVec, facingLeft, sf::Angle(sf::degrees(0.f)));
+        if ((mousePosition - position) != sf::Vector2f(0, 0))
+            angle = (mousePosition - position).angle();
+
+        bool facingLeft = true;
+
+        if (angle > sf::degrees(90) || angle < sf::degrees(-90))
+            facingLeft = false;
+
+        if (distance > 5.0f)
+        {
+            dir /= distance;
+            sf::Vector2f moveVec(dir * speed * dt);
+
+            transform(moveVec, facingLeft, sf::Angle(sf::degrees(0.f)));
+        }
+
+        else
+            transform({0.f, 0.f}, facingLeft, sf::Angle(sf::degrees(0.f)));
+
+        if (currentWeapon >= weapons.size())
+            throw OutOfBoundsException("Invalid currentWeapon index in Player::update");
+
+            weapons[currentWeapon]->update(position, angle);
     }
-
-    else
-        transform({0.f, 0.f}, facingLeft, sf::Angle(sf::degrees(0.f)));
-
-    if (currentWeapon >= weapons.size())
-        throw OutOfBoundsException("Invalid currentWeapon index in Player::update");
-
-    weapons[currentWeapon]->update(position, angle);
 }
 
 std::vector<std::unique_ptr<Attack>> Player::attack(const sf::Vector2f &target) const

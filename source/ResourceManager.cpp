@@ -28,6 +28,9 @@ sf::Texture ResourceManager::menuStartButtonTexture;
 sf::Texture ResourceManager::menuSettingsButtonTexture;
 sf::Texture ResourceManager::menuExitButtonTexture;
 
+sf::Texture ResourceManager::pauseResumeButtonTexture;
+sf::Texture ResourceManager::pauseMenuButtonTexture;
+
 sf::Texture ResourceManager::pistolTexture;
 sf::Texture ResourceManager::shotgunTexture;
 sf::Texture ResourceManager::rifleTexture;
@@ -135,6 +138,14 @@ void ResourceManager::loadTexture(TextureType type)
             if(!menuExitButtonTexture.loadFromFile("textures/exit_button.png"))
                 throw TextureLoadException("Failed to load menu exit button texture");
             break;
+        case PauseResumeButton:
+            if(!pauseResumeButtonTexture.loadFromFile("textures/resume_button.png"))
+                throw TextureLoadException("Failed to load pause resume button texture");
+            break;
+        case PauseMenuButton:
+            if(!pauseMenuButtonTexture.loadFromFile("textures/menu_button.png"))
+                throw TextureLoadException("Failed to load pause menu button texture");
+            break;
         case Pistol:
             if(!pistolTexture.loadFromFile("textures/pistol.png"))
                 throw TextureLoadException("Failed to load pistol texture");
@@ -216,6 +227,10 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return menuSettingsButtonTexture;
         case MenuExitButton:
             return menuExitButtonTexture;
+        case PauseResumeButton:
+            return pauseResumeButtonTexture;
+        case PauseMenuButton:
+            return pauseMenuButtonTexture;
         case Pistol:
             return pistolTexture;
         case Shotgun:

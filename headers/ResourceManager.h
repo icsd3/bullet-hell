@@ -30,6 +30,8 @@ enum class TextureType
     MenuStartButton,
     MenuSettingsButton,
     MenuExitButton,
+    PauseResumeButton,
+    PauseMenuButton,
     Pistol,
     Shotgun,
     Rifle,
@@ -73,6 +75,9 @@ class ResourceManager
     static sf::Texture menuStartButtonTexture;
     static sf::Texture menuSettingsButtonTexture;
     static sf::Texture menuExitButtonTexture;
+
+    static sf::Texture pauseResumeButtonTexture;
+    static sf::Texture pauseMenuButtonTexture;
 
     static sf::Texture pistolTexture;
     static sf::Texture shotgunTexture;

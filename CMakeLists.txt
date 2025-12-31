@@ -118,8 +118,12 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Sword.cpp
     headers/Beam.h
     source/Beam.cpp
+    headers/GameOverMenu.h
+    source/GameOverMenu.cpp
     headers/Laser.h
     source/Laser.cpp
+    headers/PauseMenu.h
+    source/PauseMenu.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

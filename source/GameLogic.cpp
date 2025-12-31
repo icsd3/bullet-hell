@@ -92,6 +92,7 @@ void Game::handleNewState()
     case level_1:
         updateClock.restart();
         level->load(1);
+        pauseMenu.load();
         break;
 
     case level_2:
@@ -103,11 +104,11 @@ void Game::handleNewState()
         break;
 
     case defeat:
-        
+        gameOverMenu.load(false);
         break;
 
     case victory:
-        
+        gameOverMenu.load(true);
         break;
 
     default:
@@ -122,6 +123,15 @@ void Game::togglePause()
 
     else
         updateClock.start();
+}
+
+void Game::resetGame()
+{
+    player = std::make_unique<Player>();
+    gui = std::make_unique<GUI>();
+    augment = std::make_unique<Augment>();
+    level = std::make_unique<Level>(*player, *gui);
+    updateClock.restart();
 }
 
 bool Game::handleInputs()
@@ -141,6 +151,17 @@ bool Game::handleInputs()
             window.close();
         }
 
+        else if ((currentState == defeat || currentState == victory) && event->is<sf::Event::MouseButtonPressed>())
+        {
+            int action = gameOverMenu.handleInput(window, *event);
+            if (action == 1) // Main Menu
+            {
+                resetGame();
+                currentState = main_menu;
+                handleNewState();
+            }
+        }
+
         else if (event->is<sf::Event::FocusLost>())
         {
             if (currentState == level_1 || currentState == level_2 || currentState == level_3)
@@ -148,7 +169,7 @@ bool Game::handleInputs()
                 if (!Utils::changePaused(0))
                 {
                     togglePause();
-                    openSettings = true;
+                    openPauseMenu = true;
                 }
             }
         }
@@ -200,7 +221,7 @@ bool Game::handleInputs()
                 case 3:
                     openSettings = false;
 
-                    if (Utils::changePaused(0))
+                    if (!openPauseMenu && Utils::changePaused(0))
                         togglePause();
 
                     break;
@@ -245,12 +266,36 @@ bool Game::handleInputs()
                 }
             }
 
+            else if (openPauseMenu)
+            {
+                int action = pauseMenu.handleInput(window, *event);
+
+                switch (action)
+                {
+                case 1: // Resume
+                    openPauseMenu = false;
+                    togglePause();
+                    break;
+
+                case 2: // Settings
+                    openSettings = true;
+                    break;
+
+                case 3: // Main Menu
+                    openPauseMenu = false;
+                    togglePause();
+                    resetGame();
+                    currentState = main_menu;
+                    break;
+                }
+            }
+
             else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
             {
                 if (level->handleInput(*event, controls, window))
                 {
                     togglePause();
-                    openSettings = !openSettings;
+                    openPauseMenu = true;
                 }
             }
         }
@@ -281,15 +326,18 @@ void Game::draw()
         break;
 
     case defeat:
-
-        break;
-
     case victory:
-
+        level->draw(window);
+        gameOverMenu.draw(window);
         break;
 
     default:
         break;
+    }
+
+    if (openPauseMenu)
+    {
+        pauseMenu.draw(window);
     }
 
     if (openSettings)
@@ -317,7 +365,18 @@ void Game::Play()
             float dt = 0;
             if (!Utils::changePaused(0))
                 dt = updateClock.restart().asSeconds();
-            level->update(dt, Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window));
+            int status = level->update(dt, Utils::mapToLogical(sf::Vector2f(sf::Mouse::getPosition(window)), window));
+            
+            if (status == 1)
+            {
+                currentState = defeat;
+                handleNewState();
+            }
+            else if (status == 2)
+            {
+                currentState = victory;
+                handleNewState();
+            }
         }
         draw();
     }

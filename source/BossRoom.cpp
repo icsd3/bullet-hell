@@ -189,6 +189,11 @@ bool BossRoom::doCheckEntityCollisions(const Entity &entity)
     return collides;
 }
 
+bool BossRoom::isCleared() const
+{
+    return !boss;
+}
+
 void BossRoom::printDetails(std::ostream &os) const
 {
     os << "Boss room:\n";

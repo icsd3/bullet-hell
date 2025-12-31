@@ -18,6 +18,7 @@ class BossRoom : public Room
     int doCheckPlayerCollisions() override;
     bool doCheckEntityCollisions(const Entity &) override;
     void printDetails(std::ostream &) const override;
+    bool isCleared() const override;
 
     bool checkBossHits(const Attack &);
     bool checkPlayerHits(const Attack &);

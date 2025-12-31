@@ -313,6 +313,11 @@ void Room::printDetails(std::ostream &os) const
             os << "        Projectile " << i + 1 << ":\n            " << playerAttacks[i] << "\n\n";
 }
 
+bool Room::isCleared() const
+{
+    return open;
+}
+
 std::ostream &operator<<(std::ostream &os, const Room &room)
 {
     room.printDetails(os);

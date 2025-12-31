@@ -13,11 +13,11 @@ Settings &Settings::getInstance()
 
 void Settings::load()
 {
-    settingsBox.setSize(sf::Vector2f(0.5f * LOGICAL_WIDTH, 0.5f * LOGICAL_HEIGHT));
+    settingsBox.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.4f * LOGICAL_HEIGHT));
     settingsBox.setOrigin(sf::Vector2f(0.5f * settingsBox.getLocalBounds().size.x, 0.5f * settingsBox.getLocalBounds().size.y));
     settingsBox.setPosition(sf::Vector2f(0.5f * LOGICAL_WIDTH, 0.5f * LOGICAL_HEIGHT));
-    settingsBox.setFillColor(sf::Color(0, 0, 0, 200));
-    settingsBox.setOutlineThickness(3.f);
+    settingsBox.setFillColor(sf::Color(0, 0, 0, 150));
+    settingsBox.setOutlineThickness(10.f);
     settingsBox.setOutlineColor(sf::Color::Black);
 
     screenButton.setSize(sf::Vector2f(0.3f * LOGICAL_WIDTH, 0.05f * LOGICAL_HEIGHT));
