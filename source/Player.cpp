@@ -63,7 +63,7 @@ void Player::update(const float &dt, const sf::Vector2f &target, const sf::Vecto
         if (currentWeapon >= weapons.size())
             throw OutOfBoundsException("Invalid currentWeapon index in Player::update");
 
-            weapons[currentWeapon]->update(position, angle);
+        weapons[currentWeapon]->update(position, angle);
     }
 }
 
