@@ -2,7 +2,7 @@
 
 #include "../headers/Object.h"
 
-class Door final : public Object
+class Door : public Object
 {
     int place;
 

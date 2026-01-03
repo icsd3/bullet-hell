@@ -1,3 +1,5 @@
+#include <exception>
+#include <iostream>
 #include "headers/GameLogic.h"
 
 int main() 
@@ -7,41 +9,13 @@ int main()
         Game& Game = Game::getInstance();
         Game.Play();
     }
-    catch (const TextureLoadException& e)
+    catch (const GeneralException& e)
     {
         std::cerr << e.what() << '\n';
     }
-    catch (const TextureFetchException& e)
+    catch (...)
     {
-        std::cerr << e.what() << '\n';
-    }
-    catch (const FontLoadException& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    catch (const FontFetchException& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    catch (const AudioLoadException& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    catch (const AudioFetchException& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    catch (const ConfigurationException& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    catch (const GameStateException& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    catch (const OutOfBoundsException& e)
-    {
-        std::cerr << e.what() << '\n';
+        std::cerr << "Unknown Exception\n";
     }
     return 0;
 }

@@ -9,7 +9,7 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 
-class Player final : public Entity
+class Player : public Entity
 {
     size_t currentWeapon;
     std::vector<std::unique_ptr<Weapon>> weapons;
