@@ -32,9 +32,8 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
             position = sf::Vector2f(((i + 1) / 2) % 2 * 1770, i / 6 * 450 + 150);
         }
 
-        Collider wall(position);
-        walls.push_back(wall);
-        walls.back().load(size);
+        walls.push_back(std::make_unique<Collider>(position));
+        walls.back()->load(size);
     }
 
     for (int i = 0; i < 4; i++)
@@ -46,9 +45,8 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         {
             size = {120, 150};
             position = {900, 0};
-            Collider wall(position);
-            walls.push_back(wall);
-            walls.back().load(size);
+            walls.push_back(std::make_unique<Collider>(position));
+            walls.back()->load(size);
             continue;
         }
 
@@ -56,9 +54,8 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         {
             size = {150, 120};
             position = {1770, 480};
-            Collider wall(position);
-            walls.push_back(wall);
-            walls.back().load(size);
+            walls.push_back(std::make_unique<Collider>(position));
+            walls.back()->load(size);
             continue;
         }
 
@@ -66,9 +63,8 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         {
             size = {120, 150};
             position = {900, 930};
-            Collider wall(position);
-            walls.push_back(wall);
-            walls.back().load(size);
+            walls.push_back(std::make_unique<Collider>(position));
+            walls.back()->load(size);
             continue;
         }
 
@@ -76,9 +72,8 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
         {
             size = {150, 120};
             position = {0, 480};
-            Collider wall(position);
-            walls.push_back(wall);
-            walls.back().load(size);
+            walls.push_back(std::make_unique<Collider>(position));
+            walls.back()->load(size);
             continue;
         }
 
@@ -93,9 +88,8 @@ void Room::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Ro
             position = sf::Vector2f((i == 1) ? 1845 : 75, 540);
         }
 
-        Door door(position, i);
-        doors.push_back(door);
-        doors.back().doorLoad(size);
+        doors.push_back(std::make_unique<Door>(position, i));
+        doors.back()->doorLoad(size);
     }
 }
 
@@ -113,10 +107,10 @@ void Room::doDraw(sf::RenderWindow &window)
     window.draw(drawBg);
 
     for (auto &door : doors)
-        door.draw(window);
+        door->draw(window);
 
     for (auto &wall : walls)
-        wall.draw(window);
+        wall->draw(window);
 
     player.draw(window);
 
@@ -133,7 +127,7 @@ void Room::animate(const unsigned int &frame)
 {
     for (auto &door : doors)
     {
-        door.update(frame);
+        door->update(frame);
     }
 }
 
@@ -228,7 +222,7 @@ void Room::spawnPlayerProjectile(const sf::Vector2f &target)
 int Room::doCheckPlayerCollisions()
 {
     for (const auto &wall : walls)
-        if (player.collidesWith(wall))
+        if (player.collidesWith(*wall))
             return -2;
 
     int doorDirections[4];
@@ -248,7 +242,7 @@ int Room::doCheckPlayerCollisions()
 
     for (int i = 0; i < doorCount; i++)
     {
-        if (player.collidesWith(doors[i]))
+        if (player.collidesWith(*doors[i]))
         {
             if (open)
                 return doorDirections[i];
@@ -268,11 +262,11 @@ int Room::checkPlayerCollisions()
 bool Room::doCheckEntityCollisions(const Entity &entity)
 {
     for (const auto &wall : walls)
-        if (entity.collidesWith(wall))
+        if (entity.collidesWith(*wall))
             return true;
 
     for (const auto &door : doors)
-        if (entity.collidesWith(door))
+        if (entity.collidesWith(*door))
             return true;
 
     return false;

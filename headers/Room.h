@@ -12,8 +12,8 @@ protected:
 
     sf::Sprite backgroundSprite;
 
-    std::vector<Collider> walls;
-    std::vector<Door> doors;
+    std::vector<std::unique_ptr<Collider>> walls;
+    std::vector<std::unique_ptr<Door>> doors;
     const sf::Texture *doorVertical;
     const sf::Texture *doorHorizontal;
     std::weak_ptr<Room> up;

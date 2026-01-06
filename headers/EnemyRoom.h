@@ -9,7 +9,7 @@ class EnemyRoom : public Room
     std::vector<std::unique_ptr<Enemy>> enemies;
     std::vector<std::unique_ptr<Attack>> enemyAttacks;
 
-    std::vector<Object> obstacles;
+    std::vector<std::unique_ptr<Object>> obstacles;
 
     const int nrOfEnemies;
 

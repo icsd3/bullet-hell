@@ -26,9 +26,8 @@ void BossRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_pt
             if ((x < 4 || x > 9) && (y < 2 || y > 4) && grid[x][y] == 0)
             {
                 grid[x][y] = 1;
-                Object obstacle(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), *obstacleTexture);
-                obstacles.push_back(obstacle);
-                obstacles.back().load({114.f, 0.f}, {0.5f, 0.5f}, {1.f, 0.9f}, {0.5f, 0.5f}, {0.f, 0.f});
+                obstacles.push_back(std::make_unique<Object>(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), *obstacleTexture));
+                obstacles.back()->load({114.f, 0.f}, {0.5f, 0.5f}, {1.f, 0.9f}, {0.5f, 0.5f}, {0.f, 0.f});
                 break;
             }
             else
@@ -49,13 +48,13 @@ void BossRoom::doDraw(sf::RenderWindow &window)
     window.draw(drawBg);
 
     for (auto &door : doors)
-        door.draw(window);
+        door->draw(window);
 
     for (auto &wall : walls)
-        wall.draw(window);
+        wall->draw(window);
 
     for (auto &obstacle : obstacles)
-        obstacle.draw(window);
+        obstacle->draw(window);
 
     if (boss)
         boss->draw(window);
@@ -172,7 +171,7 @@ int BossRoom::doCheckPlayerCollisions()
     int collides = Room::doCheckPlayerCollisions();
 
     for (const auto &obstacle : obstacles)
-        if (player.collidesWith(obstacle))
+        if (player.collidesWith(*obstacle))
             collides = -2;
 
     return collides;
@@ -183,7 +182,7 @@ bool BossRoom::doCheckEntityCollisions(const Entity &entity)
     bool collides = Room::doCheckEntityCollisions(entity);
 
     for (const auto &obstacle : obstacles)
-        if (entity.collidesWith(obstacle))
+        if (entity.collidesWith(*obstacle))
             collides = true;
 
     return collides;

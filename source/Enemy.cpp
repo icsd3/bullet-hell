@@ -67,7 +67,7 @@ void Enemy::doDraw(sf::RenderWindow &window) const
     window.draw(drawCurrentHealthBar);
 }
 
-std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[14][7])
+std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<std::unique_ptr<Object>> &obstacles, const std::vector<std::unique_ptr<Collider>> &walls, const std::vector<std::unique_ptr<Door>> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[14][7])
 {
     sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - 120.f) / 120.f), static_cast<int>((playerPosition.y - 120.f) / 120.f));
 
@@ -191,7 +191,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
     return sf::Vector2f(180.f + start.x * 120.f, 180.f + start.y * 120.f);
 }
 
-void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, const std::vector<Collider> &walls, const std::vector<Door> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, const sf::Angle &angle)
+void Enemy::enemyMove(const float &dt, const std::vector<std::unique_ptr<Object>> &obstacles, const std::vector<std::unique_ptr<Collider>> &walls, const std::vector<std::unique_ptr<Door>> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, const sf::Angle &angle)
 {
     sf::Vector2f separation(0.f, 0.f);
     int neighbors = 0;
@@ -236,13 +236,13 @@ void Enemy::enemyMove(const float &dt, const std::vector<Object> &obstacles, con
         auto checkCollision = [&]() -> bool
         {
             for (const auto &wall : walls)
-                if (collidesWith(wall))
+                if (collidesWith(*wall))
                     return true;
             for (const auto &door : doors)
-                if (collidesWith(door))
+                if (collidesWith(*door))
                     return true;
             for (const auto &obstacle : obstacles)
-                if (collidesWith(obstacle))
+                if (collidesWith(*obstacle))
                     return true;
             for (const auto &enemy : enemies)
                 if (enemy.get() != this && collidesWith(*enemy))
@@ -316,7 +316,7 @@ bool Enemy::doTakeDamage(const int &dmg)
     return false;
 }
 
-bool Enemy::checkLineOfSight(const sf::Vector2f &origin, const sf::Vector2f &playerPosition, const std::vector<Object> &obstacles) const
+bool Enemy::checkLineOfSight(const sf::Vector2f &origin, const sf::Vector2f &playerPosition, const std::vector<std::unique_ptr<Object>> &obstacles) const
 {
     sf::ConvexShape lineOfSight;
     sf::Vector2f direction = playerPosition - origin;
@@ -332,7 +332,7 @@ bool Enemy::checkLineOfSight(const sf::Vector2f &origin, const sf::Vector2f &pla
 
     for (const auto &obstacle : obstacles)
     {
-        if (obstacle.collidesWith(lineOfSight))
+        if (obstacle->collidesWith(lineOfSight))
             return false;
     }
     return true;

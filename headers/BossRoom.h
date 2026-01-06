@@ -9,7 +9,7 @@ class BossRoom : public Room
     std::unique_ptr<Enemy> boss;
     std::vector<std::unique_ptr<Attack>> bossProjectiles;
 
-    std::vector<Object> obstacles;
+    std::vector<std::unique_ptr<Object>> obstacles;
 
     void doLoad(std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>, std::weak_ptr<Room>) override;
     void doStart() override;
