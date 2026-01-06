@@ -11,25 +11,23 @@ Sword::Sword(const std::string &file_path, const size_t index, AttackTextureType
     try 
     {
         file >> data;
-    } 
-    catch (const nlohmann::json::parse_error& e) 
-    {
-        throw ConfigurationException("Failed to parse " + file_path + ": " + std::string(e.what()));
-    }
 
-    if (index >= data.size())
-        throw ConfigurationException("Invalid index " + std::to_string(index) + " for " + file_path);
+        if (index >= data.size())
+            throw ConfigurationException("Invalid index " + std::to_string(index) + " for " + file_path);
 
-    const auto &w = data[index];
-    try 
-    {
+        const auto &w = data[index];
+
         name = w.at("name").get<std::string>();
         damage = w.at("damage").get<int>();
         attackSpeed = w.at("attack_speed").get<float>();
         duration = w.at("duration").get<float>();
         arcAngle = w.at("arc_angle").get<float>();
         range = w.at("range").get<float>();
-    } 
+    }
+    catch (const nlohmann::json::parse_error& e) 
+    {
+        throw ConfigurationException("Failed to parse " + file_path + ": " + std::string(e.what()));
+    }
     catch (const nlohmann::json::exception& e) 
     {
         throw ConfigurationException(file_path + " is missing required fields or has invalid types: " + std::string(e.what()));

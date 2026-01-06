@@ -11,18 +11,12 @@ Gun::Gun(const std::string &file_path, const size_t index, const float offset, c
     try 
     {
         file >> data;
-    } 
-    catch (const nlohmann::json::parse_error& e) 
-    {
-        throw ConfigurationException("Failed to parse " + file_path + ": " + std::string(e.what()));
-    }
 
-    if (index >= data.size())
-        throw ConfigurationException("Invalid index " + std::to_string(index) + " for " + file_path);
+        if (index >= data.size())
+            throw ConfigurationException("Invalid index " + std::to_string(index) + " for " + file_path);
 
-    const auto &w = data[index];
-    try 
-    {
+        const auto &w = data[index];
+
         int texId = w.at("texture").get<int>();
         switch (texId)
         {
@@ -58,7 +52,11 @@ Gun::Gun(const std::string &file_path, const size_t index, const float offset, c
         pierce = w.at("pierce").get<int>();
         
         sprite.setTexture(*texture);
-    } 
+    }
+    catch (const nlohmann::json::parse_error& e) 
+    {
+        throw ConfigurationException("Failed to parse " + file_path + ": " + std::string(e.what()));
+    }
     catch (const nlohmann::json::exception& e) 
     {
         throw ConfigurationException(file_path + " is missing required fields or has invalid types: " + std::string(e.what()));
