@@ -48,6 +48,10 @@ void Level::generateRooms(const int n)
             {
                 int mx = nx + i.first;
                 int my = ny + i.second;
+
+                if (mx < 0 || my < 0 || mx >= 5 || my >= 7)
+                    continue;
+
                 if (map[mx][my])
                     count++;
             }
