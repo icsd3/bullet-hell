@@ -27,8 +27,6 @@ enum class TextureType
     DoorVertical,
     DoorHorizontal,
     Obstacle,
-    AugmentBackground,
-    AugmentButton,
     MenuBackground,
     MenuStartButton,
     MenuSettingsButton,
@@ -74,9 +72,6 @@ class ResourceManager
     static sf::Texture doorVerticalTexture;
     static sf::Texture doorHorizontalTexture;
     static sf::Texture obstacleTexture;
-
-    static sf::Texture augmentBackgroundTexture;
-    static sf::Texture augmentButtonTexture;
 
     static sf::Texture menuBackgroundTexture;
     static sf::Texture menuStartButtonTexture;

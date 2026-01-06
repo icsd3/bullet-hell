@@ -23,9 +23,6 @@ sf::Texture ResourceManager::doorVerticalTexture;
 sf::Texture ResourceManager::doorHorizontalTexture;
 sf::Texture ResourceManager::obstacleTexture;
 
-sf::Texture ResourceManager::augmentBackgroundTexture;
-sf::Texture ResourceManager::augmentButtonTexture;
-
 sf::Texture ResourceManager::menuBackgroundTexture;
 sf::Texture ResourceManager::menuStartButtonTexture;
 sf::Texture ResourceManager::menuSettingsButtonTexture;
@@ -130,14 +127,6 @@ void ResourceManager::loadTexture(TextureType type)
             if(!obstacleTexture.loadFromFile("textures/obstacle.png"))
                 throw TextureLoadException("Failed to load obstacle texture");
             break;
-        case AugmentBackground:
-            if(!augmentBackgroundTexture.loadFromFile("textures/augment_background.png"))
-                throw TextureLoadException("Failed to load augment background texture");
-            break;
-        case AugmentButton:
-            if(!augmentButtonTexture.loadFromFile("textures/augment_button.png"))
-                throw TextureLoadException("Failed to load augment button texture");
-            break;
         case MenuBackground:
             if(!menuBackgroundTexture.loadFromFile("textures/menu_background.png"))
                 throw TextureLoadException("Failed to load menu background texture");
@@ -241,10 +230,6 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return doorHorizontalTexture;
         case Obstacle:
             return obstacleTexture;
-        case AugmentBackground:
-            return augmentBackgroundTexture;
-        case AugmentButton:
-            return augmentButtonTexture;
         case MenuBackground:
             return menuBackgroundTexture;
         case MenuStartButton:

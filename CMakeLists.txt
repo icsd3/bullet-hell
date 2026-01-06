@@ -86,8 +86,6 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Enemy.cpp
     headers/Settings.h
     source/Settings.cpp
-    headers/Augment.h
-    source/Augment.cpp
     headers/Level.h
     source/Level.cpp
     headers/Room.h

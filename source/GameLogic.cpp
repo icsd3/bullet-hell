@@ -4,7 +4,6 @@ Game::Game()
     : currentState(main_menu),
       player(std::make_unique<Player>()),
       gui(std::make_unique<GUI>()),
-      augment(std::make_unique<Augment>()),
       level(std::make_unique<Level>(*player, *gui)),
       window(sf::VideoMode::getDesktopMode(), "BulletHell", sf::Style::Default, sf::State::Fullscreen)
 {
@@ -26,48 +25,6 @@ void Game::setup()
     window.setFramerateLimit(144);
 }
 
-void Game::selectGameState(gameStates &gameState)
-{
-    switch (gameState)
-    {
-    case main_menu:
-        gameState = level_1;
-        // gameState = augment_1;
-        break;
-
-    case augment_1:
-        gameState = level_1;
-        break;
-
-    case level_1:
-        gameState = augment_2;
-        break;
-
-    case augment_2:
-        gameState = level_2;
-        break;
-
-    case level_2:
-        gameState = augment_3;
-        break;
-
-    case augment_3:
-        gameState = level_3;
-        break;
-
-    case level_3:
-        gameState = victory;
-        break;
-
-    case defeat:
-    case victory:
-        gameState = main_menu;
-        break;
-    default:
-        throw GameStateException("Invalid game state transition requested");
-    }
-}
-
 void Game::handleNewState()
 {
     switch (currentState)
@@ -77,30 +34,10 @@ void Game::handleNewState()
         settings.load();
         break;
 
-    case augment_1:
-        augment->load();
-        break;
-
-    case augment_2:
-        augment->load();
-        break;
-
-    case augment_3:
-        augment->load();
-        break;
-
-    case level_1:
+    case combat:
         updateClock.restart();
         level->load(1);
         pauseMenu.load();
-        break;
-
-    case level_2:
-
-        break;
-
-    case level_3:
-
         break;
 
     case defeat:
@@ -129,7 +66,6 @@ void Game::resetGame()
 {
     player = std::make_unique<Player>();
     gui = std::make_unique<GUI>();
-    augment = std::make_unique<Augment>();
     level = std::make_unique<Level>(*player, *gui);
     updateClock.restart();
 }
@@ -138,7 +74,7 @@ bool Game::handleInputs()
 {
     bool shouldExit = false;
 
-    if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
+    if ((currentState == combat) && !Utils::changePaused(0))
     {
         level->handleMovementInput(controls, window);
         level->handleShootInput(window);
@@ -164,7 +100,7 @@ bool Game::handleInputs()
 
         else if (event->is<sf::Event::FocusLost>())
         {
-            if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+            if (currentState == combat)
             {
                 if (!Utils::changePaused(0))
                 {
@@ -238,7 +174,7 @@ bool Game::handleInputs()
                 switch (action)
                 {
                 case 1:
-                    selectGameState(currentState);
+                    currentState = combat;
                     handleNewState();
                     break;
 
@@ -252,17 +188,6 @@ bool Game::handleInputs()
 
                 default:
                     break;
-                }
-            }
-
-            else if (currentState == augment_1 || currentState == augment_2 || currentState == augment_3)
-            {
-                int action = augment->handleInput(window, *event);
-
-                if (action != 0)
-                {
-                    selectGameState(currentState);
-                    handleNewState();
                 }
             }
 
@@ -290,7 +215,7 @@ bool Game::handleInputs()
                 }
             }
 
-            else if ((currentState == level_1 || currentState == level_2 || currentState == level_3) && !Utils::changePaused(0))
+            else if ((currentState == combat) && !Utils::changePaused(0))
             {
                 if (level->handleInput(*event, controls, window))
                 {
@@ -313,15 +238,7 @@ void Game::draw()
         menu.draw(window);
         break;
 
-    case augment_1:
-    case augment_2:
-    case augment_3:
-        augment->draw(window);
-        break;
-
-    case level_1:
-    case level_2:
-    case level_3:
+    case combat:
         level->draw(window);
         break;
 
@@ -360,7 +277,7 @@ void Game::Play()
             break;
         }
 
-        if (currentState == level_1 || currentState == level_2 || currentState == level_3)
+        if (currentState == combat)
         {
             float dt = 0;
             if (!Utils::changePaused(0))
