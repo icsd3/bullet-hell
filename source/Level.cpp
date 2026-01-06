@@ -158,30 +158,22 @@ void Level::load(const int nr)
                 if (i - 1 >= 0 && map[i - 1][j] > 0)
                 {
                     size_t upIndex = static_cast<size_t>(map[i - 1][j] - 1);
-                    if (upIndex >= rooms.size()) 
-                        throw OutOfBoundsException("Invalid neighbor index (up) in Level::load");
-                    up = rooms[upIndex];
+                    up = rooms.at(upIndex);
                 }
                 if (i + 1 < 5 && map[i + 1][j] > 0)
                 {
                     size_t downIndex = static_cast<size_t>(map[i + 1][j] - 1);
-                    if (downIndex >= rooms.size()) 
-                        throw OutOfBoundsException("Invalid neighbor index (down) in Level::load");
-                    down = rooms[downIndex];
+                    down = rooms.at(downIndex);
                 }
                 if (j - 1 >= 0 && map[i][j - 1] > 0)
                 {
                     size_t leftIndex = static_cast<size_t>(map[i][j - 1] - 1);
-                    if (leftIndex >= rooms.size()) 
-                        throw OutOfBoundsException("Invalid neighbor index (left) in Level::load");
-                    left = rooms[leftIndex];
+                    left = rooms.at(leftIndex);
                 }
                 if (j + 1 < 7 && map[i][j + 1] > 0)
                 {
                     size_t rightIndex = static_cast<size_t>(map[i][j + 1] - 1);
-                    if (rightIndex >= rooms.size()) 
-                        throw OutOfBoundsException("Invalid neighbor index (right) in Level::load");
-                    right = rooms[rightIndex];
+                    right = rooms.at(rightIndex);
                 }
                 rooms[currentIndex]->load(up, right, down, left);
             }
