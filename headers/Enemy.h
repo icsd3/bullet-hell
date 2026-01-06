@@ -39,12 +39,12 @@ class Enemy : public Entity
     bool doTakeDamage(const int &) override;
     virtual bool checkLineOfSight(const sf::Vector2f &, const sf::Vector2f &, const std::vector<std::unique_ptr<Object>> &) const;
     void enemyMove(const float &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, const sf::Angle &);
-    sf::Vector2f nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int grid[14][7]);
+    sf::Vector2f nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int [GRID_SIZE_X][GRID_SIZE_Y]);
 
 public:
     Enemy(const sf::Vector2f &, float, const int &, const bool &);
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
 
     void load();
-    std::vector<std::unique_ptr<Attack>> update(const float &, const sf::Vector2f &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, int[14][7]);
+    std::vector<std::unique_ptr<Attack>> update(const float &, const sf::Vector2f &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, int[GRID_SIZE_X][GRID_SIZE_Y]);
 };

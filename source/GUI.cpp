@@ -12,7 +12,7 @@ std::ostream &operator<<(std::ostream &os, const GUI &gui)
     return os;
 }
 
-void GUI::load(const int map[5][7], Player &p)
+void GUI::load(const int map[MAP_SIZE_Y][MAP_SIZE_X], Player &p)
 {
     player = &p;
     maxHealthBar.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 44.f));

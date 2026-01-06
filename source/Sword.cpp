@@ -83,7 +83,9 @@ std::vector<std::unique_ptr<Attack>> Sword::doAttack(const sf::Vector2f &positio
         if (direction != sf::Vector2f(0, 0))
             direction = direction.normalized();
 
-        sf::Vector2f origin = position + direction * 50.f; 
+        float attackOriginOffset = 50.f;
+
+        sf::Vector2f origin = position + direction * attackOriginOffset;
 
         attacks.push_back(std::make_unique<Slash>(origin, *slashTexture, damage, direction, range, duration, arcAngle));
     }

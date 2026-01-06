@@ -16,7 +16,7 @@ class Level
     sf::Vector2f target;
     bool moved = false;
 
-    int map[5][7];
+    int map[MAP_SIZE_Y][MAP_SIZE_X];
     std::vector<std::shared_ptr<Room>> rooms;
     std::shared_ptr<Room> currentRoom;
 

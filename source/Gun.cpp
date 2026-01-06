@@ -106,14 +106,16 @@ std::vector<std::unique_ptr<Attack>> Gun::doAttack(const sf::Vector2f &position,
             sf::Vector2f direction = target - position;
             direction = direction.normalized();
 
-            sf::Vector2f origin = position + direction * 75.f; 
+            float attackOriginOffset = 75.f;
+
+            sf::Vector2f origin = position + direction * attackOriginOffset; 
 
             std::uniform_real_distribution<float> dist(spreadAngle * -0.5f, spreadAngle * 0.5f);
             std::mt19937 &rng = Utils::getRng();
             sf::Angle randomAngle = sf::degrees(dist(rng));
             direction = direction.rotatedBy(randomAngle);
 
-            attacks.push_back(std::make_unique<Projectile>(origin, *projectileTexture, bulletSpeed, pierce, damage, direction, range - 75.f));
+            attacks.push_back(std::make_unique<Projectile>(origin, *projectileTexture, bulletSpeed, pierce, damage, direction, range - attackOriginOffset));
         }
     }
     return attacks;

@@ -4,22 +4,32 @@ Enemy::Enemy(const sf::Vector2f &pos, float spd, const int &mh, const bool &boss
     : Entity(pos, (boss == false) ? ResourceManager::getTexture(TextureType::Enemy) : ResourceManager::getTexture(TextureType::Boss), spd, mh), gridPosition(0, 0), target(pos)
 {
     std::mt19937 &rng = Utils::getRng();
-    std::uniform_int_distribution<int> range(0, 2);
-    int index = range(rng);
+    std::uniform_int_distribution<int> enemyGunIndexRange(0, 2);
+    int enemyGunIndex = enemyGunIndexRange(rng);
+    float fireRateMaxOffset = 0.3f;
 
-    weapon = std::make_unique<Gun>("json/EnemyGuns.json", index, 0.3f, (boss == false) ? AttackTextureType::Enemy : AttackTextureType::Boss);
+    weapon = std::make_unique<Gun>("json/EnemyGuns.json", enemyGunIndex, fireRateMaxOffset, (boss == false) ? AttackTextureType::Enemy : AttackTextureType::Boss);
 }
 
 void Enemy::load()
 {
-    Entity::load({60.f, 0.f}, {0.5f, 0.5f}, {0.6f, 0.6f}, {0.5f, 1.0f}, {0.f, 0.5f}, 6, {
-        {4.5f / 14, 0.f}, 
-        {9.5f / 14, 0.f}, 
-        {1.f, 4.5f / 14}, 
+    sf::Vector2f scaleFactor = {60.f, 0.f};
+    sf::Vector2f spriteOriginFactor = {0.5f, 0.5f};
+    sf::Vector2f collisionBoxSizeFactor = {0.6f, 0.6f}; // relative to sprite dimensions
+    sf::Vector2f collisionBoxOriginFactor = {0.5f, 1.0f}; // relative to collision box
+    sf::Vector2f collisionBoxPositionFactor = {0.f, 0.5f}; // relative to sprite
+    int hitBoxPointCount = 6;
+    std::vector<sf::Vector2f> hitBoxPointFactors = { // relative to sprite dimensions (0,0) is top-left, (1,1) is bottom-right
+        {0.3f, 0.f}, 
+        {0.7f, 0.f}, 
+        {1.f, 0.3f}, 
         {1.f, 1.f}, 
         {0.f, 1.f}, 
-        {0.f, 4.5f / 14}
-    });
+        {0.f, 0.3f}
+    };
+    ObjectLoadParams params(scaleFactor, spriteOriginFactor, collisionBoxSizeFactor, collisionBoxOriginFactor, collisionBoxPositionFactor);
+
+    Entity::load(params, hitBoxPointCount, hitBoxPointFactors);
 
     maxHealthBar.setSize(sf::Vector2f(60.f, 12.f));
     maxHealthBar.setFillColor(sf::Color(75, 0, 0, 175));
@@ -33,8 +43,8 @@ void Enemy::load()
     currentHealthBar.setOrigin(sf::Vector2f(0, currentHealthBar.getLocalBounds().size.y / 2.f));
     currentHealthBar.setPosition(sf::Vector2f(maxHealthBar.getPosition().x - maxHealthBar.getSize().x / 2.f, maxHealthBar.getPosition().y));
 
-    int gridX = static_cast<int>((position.x - 120.f) / 120.f);
-    int gridY = static_cast<int>((position.y - 120.f) / 120.f);
+    int gridX = static_cast<int>((position.x - GRID_CELL_SIZE) / GRID_CELL_SIZE);
+    int gridY = static_cast<int>((position.y - GRID_CELL_SIZE) / GRID_CELL_SIZE);
     gridPosition = {gridX, gridY};
 
     weapon->load(position);
@@ -67,9 +77,9 @@ void Enemy::doDraw(sf::RenderWindow &window) const
     window.draw(drawCurrentHealthBar);
 }
 
-std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const RoomElements &elements, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[14][7])
+std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const RoomElements &elements, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[GRID_SIZE_X][GRID_SIZE_Y])
 {
-    sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - 120.f) / 120.f), static_cast<int>((playerPosition.y - 120.f) / 120.f));
+    sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - GRID_CELL_SIZE) / GRID_CELL_SIZE), static_cast<int>((playerPosition.y - GRID_CELL_SIZE) / GRID_CELL_SIZE));
 
     sf::Angle angle = (playerPosition - position).angle();
 
@@ -98,10 +108,10 @@ std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Ve
 
     grid[gridPosition.x][gridPosition.y] = 2;
 
-    int tGridX = static_cast<int>((target.x - 120.f) / 120.f);
-    int tGridY = static_cast<int>((target.y - 120.f) / 120.f);
+    int tGridX = static_cast<int>((target.x - GRID_CELL_SIZE) / GRID_CELL_SIZE);
+    int tGridY = static_cast<int>((target.y - GRID_CELL_SIZE) / GRID_CELL_SIZE);
 
-    if (tGridX >= 0 && tGridX < 14 && tGridY >= 0 && tGridY < 7)
+    if (tGridX >= 0 && tGridX < GRID_SIZE_X && tGridY >= 0 && tGridY < GRID_SIZE_Y)
     {
         if (tGridX != gridPosition.x || tGridY != gridPosition.y)
             grid[tGridX][tGridY] = 2;
@@ -110,7 +120,7 @@ std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Ve
     return attacks;
 }
 
-sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int grid[14][7])
+sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int grid[GRID_SIZE_X][GRID_SIZE_Y])
 {
     struct Node
     {
@@ -120,7 +130,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
     };
 
     auto inBounds = [&](int x, int y)
-    { return x >= 0 && x < 14 && y >= 0 && y < 7; };
+    { return x >= 0 && x < GRID_SIZE_X && y >= 0 && y < GRID_SIZE_Y; };
 
     auto heuristic = [](int x1, int y1, int x2, int y2)
     {
@@ -132,8 +142,8 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
     const std::pair<sf::Vector2i, float> directions[8] = {
         {{1, 0}, 1.f}, {{-1, 0}, 1.f}, {{0, 1}, 1.f}, {{0, -1}, 1.f}, {{1, 1}, 1.4142f}, {{1, -1}, 1.4142f}, {{-1, 1}, 1.4142f}, {{-1, -1}, 1.4142f}};
 
-    bool closed_set[7][14] = {{false}};
-    std::unique_ptr<Node> nodes[7][14];
+    bool closed_set[GRID_SIZE_X][GRID_SIZE_Y] = {{false}};
+    std::unique_ptr<Node> nodes[GRID_SIZE_X][GRID_SIZE_Y];
 
     auto cmp = [](const Node *a, const Node *b)
     {
@@ -142,8 +152,8 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
 
     std::priority_queue<Node *, std::vector<Node *>, decltype(cmp)> open_set(cmp);
 
-    nodes[start.y][start.x] = std::make_unique<Node>(Node{start.x, start.y, 0.f, heuristic(start.x, start.y, goal.x, goal.y), nullptr});
-    open_set.push(nodes[start.y][start.x].get());
+    nodes[start.x][start.y] = std::make_unique<Node>(Node{start.x, start.y, 0.f, heuristic(start.x, start.y, goal.x, goal.y), nullptr});
+    open_set.push(nodes[start.x][start.y].get());
 
     while (!open_set.empty())
     {
@@ -155,17 +165,17 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
             Node *step = current;
             while (step->parent && (step->parent->x != start.x || step->parent->y != start.y))
                 step = step->parent;
-            return sf::Vector2f(180.f + step->x * 120.f, 180.f + step->y * 120.f);
+            return sf::Vector2f(BORDER_SIZE + step->x * GRID_CELL_SIZE, BORDER_SIZE + step->y * GRID_CELL_SIZE);
         }
 
-        closed_set[current->y][current->x] = true;
+        closed_set[current->x][current->y] = true;
 
         for (auto &[dir, cost] : directions)
         {
             int nx = current->x + dir.x;
             int ny = current->y + dir.y;
 
-            if (!inBounds(nx, ny) || grid[nx][ny] == 1 || closed_set[ny][nx])
+            if (!inBounds(nx, ny) || grid[nx][ny] == 1 || closed_set[nx][ny])
                 continue;
 
             if (dir.x != 0 && dir.y != 0)
@@ -175,20 +185,20 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
             float penalty = (grid[nx][ny] >= 2) ? 10.0f : 1.0f;
             float newG = current->g + (cost * penalty);
 
-            if (!nodes[ny][nx])
+            if (!nodes[nx][ny])
             {
-                nodes[ny][nx] = std::make_unique<Node>(Node{nx, ny, newG, heuristic(nx, ny, goal.x, goal.y), current});
-                open_set.push(nodes[ny][nx].get());
+                nodes[nx][ny] = std::make_unique<Node>(Node{nx, ny, newG, heuristic(nx, ny, goal.x, goal.y), current});
+                open_set.push(nodes[nx][ny].get());
             }
-            else if (newG < nodes[ny][nx]->g)
+            else if (newG < nodes[nx][ny]->g)
             {
-                nodes[ny][nx]->g = newG;
-                nodes[ny][nx]->parent = current;
+                nodes[nx][ny]->g = newG;
+                nodes[nx][ny]->parent = current;
             }
         }
     }
 
-    return sf::Vector2f(180.f + start.x * 120.f, 180.f + start.y * 120.f);
+    return sf::Vector2f(BORDER_SIZE + start.x * GRID_CELL_SIZE, BORDER_SIZE + start.y * GRID_CELL_SIZE);
 }
 
 void Enemy::enemyMove(const float &dt, const RoomElements &elements, const std::vector<std::unique_ptr<Enemy>> &enemies, const sf::Angle &angle)
@@ -298,8 +308,8 @@ void Enemy::enemyMove(const float &dt, const RoomElements &elements, const std::
         target = position;
     }
 
-    int gridX = static_cast<int>((position.x - 120.f) / 120.f);
-    int gridY = static_cast<int>((position.y - 120.f) / 120.f);
+    int gridX = static_cast<int>((position.x - GRID_CELL_SIZE) / GRID_CELL_SIZE);
+    int gridY = static_cast<int>((position.y - GRID_CELL_SIZE) / GRID_CELL_SIZE);
     gridPosition = {gridX, gridY};
 }
 

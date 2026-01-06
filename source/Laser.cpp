@@ -80,7 +80,9 @@ std::vector<std::unique_ptr<Attack>> Laser::doAttack(const sf::Vector2f &positio
         if (direction != sf::Vector2f(0, 0))
             direction = direction.normalized();
 
-        sf::Vector2f origin = position + direction * 70.f; 
+        float attackOriginOffset = 70.f;
+
+        sf::Vector2f origin = position + direction * attackOriginOffset; 
 
         attacks.push_back(std::make_unique<Beam>(origin, *beamTexture, damage, direction, chargeUpTime, duration, width));
     }

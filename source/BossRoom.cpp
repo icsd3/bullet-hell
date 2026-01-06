@@ -24,8 +24,15 @@ void BossRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_pt
             if ((x < 4 || x > 9) && (y < 2 || y > 4) && grid[x][y] == 0)
             {
                 grid[x][y] = 1;
-                obstacles.push_back(std::make_unique<Object>(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), *obstacleTexture));
-                obstacles.back()->load({114.f, 0.f}, {0.5f, 0.5f}, {1.f, 0.9f}, {0.5f, 0.5f}, {0.f, 0.f});
+                obstacles.push_back(std::make_unique<Object>(sf::Vector2f(BORDER_SIZE + x * GRID_CELL_SIZE, BORDER_SIZE + y * GRID_CELL_SIZE), *obstacleTexture));
+                sf::Vector2f scaleFactor = {114.f, 0.f};
+                sf::Vector2f spriteOriginFactor = {0.5f, 0.5f};
+                sf::Vector2f collisionBoxSizeFactor = {1.f, 0.9f};
+                sf::Vector2f collisionBoxOriginFactor = {0.5f, 0.5f};
+                sf::Vector2f collisionBoxPositionFactor = {0.f, 0.f};
+                ObjectLoadParams params(scaleFactor, spriteOriginFactor, collisionBoxSizeFactor, collisionBoxOriginFactor, collisionBoxPositionFactor);
+
+                obstacles.back()->load(params);
                 break;
             }
             else
@@ -84,8 +91,8 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
             i++;
     }
 
-    for (int i = 0; i < 14; i++)
-        for (int j = 0; j < 7; j++)
+    for (int i = 0; i < GRID_SIZE_X; i++)
+        for (int j = 0; j < GRID_SIZE_Y; j++)
             if (grid[i][j] == 2)
                 grid[i][j] = 0;
 
@@ -148,7 +155,10 @@ void BossRoom::doStart()
         int y = yDist(rng);
 
         grid[x][y] = 2;
-        enemies.push_back(std::make_unique<Enemy>(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 1000, true));
+        
+        float speed = 100;
+        int maxHealth = 1000;
+        enemies.push_back(std::make_unique<Enemy>(sf::Vector2f(BORDER_SIZE + x * GRID_CELL_SIZE, BORDER_SIZE + y * GRID_CELL_SIZE), speed, maxHealth, true));
         enemies.front()->load();
     }
 }

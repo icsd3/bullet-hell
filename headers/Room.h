@@ -23,7 +23,7 @@ protected:
     sf::Clock animationClock;
     bool isOpen = false;
     std::vector<std::unique_ptr<Attack>> playerAttacks;
-    int grid[14][7];
+    int grid[GRID_SIZE_X][GRID_SIZE_Y];
 
     void animate(const unsigned int &);
 

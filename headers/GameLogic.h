@@ -41,7 +41,6 @@ class Game
     sf::RenderWindow window;
 
     void setup();
-    static void selectGameState(gameStates &);
 
     bool handleInputs();
 

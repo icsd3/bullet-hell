@@ -5,7 +5,7 @@ Minimap::Minimap()
 {
 }
 
-void Minimap::load(const int map[5][7])
+void Minimap::load(const int map[MAP_SIZE_Y][MAP_SIZE_X])
 {
     background.setSize({334, 150});
     background.setPosition({0, 0});
@@ -16,20 +16,20 @@ void Minimap::load(const int map[5][7])
     currentPos = {4, 3};
 
     int maxId = 0;
-    for (int i = 0; i < 5; i++)
-        for (int j = 0; j < 7; j++)
+    for (int i = 0; i < MAP_SIZE_Y; i++)
+        for (int j = 0; j < MAP_SIZE_X; j++)
             if (map[i][j] > maxId) maxId = map[i][j];
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < MAP_SIZE_Y; i++)
     {
-        for (int j = 0; j < 7; j++)
+        for (int j = 0; j < MAP_SIZE_X; j++)
         {
             mapData[i][j] = map[i][j];
             sf::RectangleShape cell;
             cell.setSize({42, 24});
             cell.setPosition(sf::Vector2f(
-                5 + j * 47,
-                5 + i * 29));
+                MAP_SIZE_Y + j * 47,
+                MAP_SIZE_Y + i * 29));
 
             if (i == currentPos.first && j == currentPos.second)
                 cell.setFillColor(sf::Color(0, 150, 0, 255));
@@ -46,7 +46,7 @@ void Minimap::load(const int map[5][7])
             revealed.push_back(false);
         }
     }
-    revealed[currentPos.first * 7 + currentPos.second] = true;
+    revealed[currentPos.first * MAP_SIZE_X + currentPos.second] = true;
     revealNeighbors(currentPos.first, currentPos.second);
 }
 
@@ -55,33 +55,33 @@ void Minimap::update(const int &moved)
     switch (moved)
     {
     case 0:
-        grid[currentPos.first * 7 + currentPos.second].setFillColor(sf::Color(100, 100, 100, 255));
+        grid[currentPos.first * MAP_SIZE_X + currentPos.second].setFillColor(sf::Color(100, 100, 100, 255));
         currentPos.first -= 1;
-        grid[currentPos.first * 7 + currentPos.second].setFillColor(sf::Color(0, 150, 0, 255));
+        grid[currentPos.first * MAP_SIZE_X + currentPos.second].setFillColor(sf::Color(0, 150, 0, 255));
         break;
 
     case 1:
-        grid[currentPos.first * 7 + currentPos.second].setFillColor(sf::Color(100, 100, 100, 255));
+        grid[currentPos.first * MAP_SIZE_X + currentPos.second].setFillColor(sf::Color(100, 100, 100, 255));
         currentPos.second += 1;
-        grid[currentPos.first * 7 + currentPos.second].setFillColor(sf::Color(0, 150, 0, 255));
+        grid[currentPos.first * MAP_SIZE_X + currentPos.second].setFillColor(sf::Color(0, 150, 0, 255));
         break;
 
     case 2:
-        grid[currentPos.first * 7 + currentPos.second].setFillColor(sf::Color(100, 100, 100, 255));
+        grid[currentPos.first * MAP_SIZE_X + currentPos.second].setFillColor(sf::Color(100, 100, 100, 255));
         currentPos.first += 1;
-        grid[currentPos.first * 7 + currentPos.second].setFillColor(sf::Color(0, 150, 0, 255));
+        grid[currentPos.first * MAP_SIZE_X + currentPos.second].setFillColor(sf::Color(0, 150, 0, 255));
         break;
 
     case 3:
-        grid[currentPos.first * 7 + currentPos.second].setFillColor(sf::Color(100, 100, 100, 255));
+        grid[currentPos.first * MAP_SIZE_X + currentPos.second].setFillColor(sf::Color(100, 100, 100, 255));
         currentPos.second -= 1;
-        grid[currentPos.first * 7 + currentPos.second].setFillColor(sf::Color(0, 150, 0, 255));
+        grid[currentPos.first * MAP_SIZE_X + currentPos.second].setFillColor(sf::Color(0, 150, 0, 255));
         break;
 
     default:
         break;
     }
-    revealed[currentPos.first * 7 + currentPos.second] = true;
+    revealed[currentPos.first * MAP_SIZE_X + currentPos.second] = true;
     revealNeighbors(currentPos.first, currentPos.second);
 }
 
@@ -122,11 +122,11 @@ void Minimap::revealNeighbors(int r, int c)
         int nr = r + dr[i];
         int nc = c + dc[i];
 
-        if (nr >= 0 && nr < 5 && nc >= 0 && nc < 7)
+        if (nr >= 0 && nr < MAP_SIZE_Y && nc >= 0 && nc < MAP_SIZE_X)
         {
             if (mapData[nr][nc] > 0)
             {
-                revealed[nr * 7 + nc] = true;
+                revealed[nr * MAP_SIZE_X + nc] = true;
             }
         }
     }

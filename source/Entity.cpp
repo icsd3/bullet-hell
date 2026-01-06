@@ -23,9 +23,9 @@ Entity &Entity::operator=(const Entity &other)
     return *this;
 }
 
-void Entity::load(const sf::Vector2f &scaleFactor, const sf::Vector2f &spriteOriginFactor, const sf::Vector2f &sizeFactor, const sf::Vector2f &originFactor, const sf::Vector2f &positionFactor, const int &pointCount, const std::vector<sf::Vector2f> &pointFactors)
+void Entity::load(const ObjectLoadParams &params, const int &pointCount, const std::vector<sf::Vector2f> &pointFactors)
 {
-    Object::load(scaleFactor, spriteOriginFactor, sizeFactor, originFactor, positionFactor);
+    Object::load(params);
 
     sf::FloatRect bounds = sprite.getLocalBounds();
     hitBox.setFillColor(sf::Color(0, 200, 0, 150));

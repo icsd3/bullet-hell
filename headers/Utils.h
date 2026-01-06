@@ -5,6 +5,13 @@
 
 constexpr float LOGICAL_WIDTH = 1920.0f;
 constexpr float LOGICAL_HEIGHT = 1080.0f;
+constexpr float GRID_CELL_SIZE = 120.f;
+constexpr float BORDER_SIZE = 180.f;
+constexpr int GRID_SIZE_X = 14;
+constexpr int GRID_SIZE_Y = 7;
+constexpr int MAP_SIZE_X = 7;
+constexpr int MAP_SIZE_Y = 5;
+
 
 class Utils
 {

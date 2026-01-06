@@ -21,28 +21,27 @@ Object &Object::operator=(const Object &other)
     return *this;
 }
 
-void Object::load(const sf::Vector2f &scaleFactor, const sf::Vector2f &spriteOriginFactor, const sf::Vector2f &sizeFactor, const sf::Vector2f &originFactor, const sf::Vector2f &positionFactor)
+void Object::load(const ObjectLoadParams &params)
 {
     sf::Vector2f scale;
 
-    if (scaleFactor.y == 0)
-        scale = {scaleFactor.x / static_cast<float>(texture->getSize().x), scaleFactor.x / static_cast<float>(texture->getSize().x)};
+    if (params.scaleFactor.y == 0)
+        scale = {params.scaleFactor.x / static_cast<float>(texture->getSize().x), params.scaleFactor.x / static_cast<float>(texture->getSize().x)};
 
     else
-        scale = {scaleFactor.x / static_cast<float>(texture->getSize().x), scaleFactor.y / static_cast<float>(texture->getSize().y)};
-
+        scale = {params.scaleFactor.x / static_cast<float>(texture->getSize().x), params.scaleFactor.y / static_cast<float>(texture->getSize().y)};
     sprite.setScale(scale);
 
-    sf::Vector2f size(scale.x * sizeFactor.x * texture->getSize().x, scale.y * sizeFactor.y * texture->getSize().y);
+    sf::Vector2f size(scale.x * params.collisionBoxSizeFactor.x * texture->getSize().x, scale.y * params.collisionBoxSizeFactor.y * texture->getSize().y);
 
     Collider::load(size);
 
-    collisionBox.setOrigin(sf::Vector2f(size.x * originFactor.x, size.y * originFactor.y));
-    collisionBox.setPosition(sf::Vector2f(position.x + scale.x * positionFactor.x * texture->getSize().x, position.y + scale.y * positionFactor.y * texture->getSize().y));
+    collisionBox.setOrigin(sf::Vector2f(size.x * params.collisionBoxOriginFactor.x, size.y * params.collisionBoxOriginFactor.y));
+    collisionBox.setPosition(sf::Vector2f(position.x + scale.x * params.collisionBoxPositionFactor.x * texture->getSize().x, position.y + scale.y * params.collisionBoxPositionFactor.y * texture->getSize().y));
 
     sf::FloatRect bounds = sprite.getLocalBounds();
 
-    sprite.setOrigin(sf::Vector2f(bounds.size.x * spriteOriginFactor.x, bounds.size.y * spriteOriginFactor.y));
+    sprite.setOrigin(sf::Vector2f(bounds.size.x * params.spriteOriginFactor.x, bounds.size.y * params.spriteOriginFactor.y));
     sprite.setPosition(position);
 }
 

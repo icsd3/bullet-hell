@@ -28,7 +28,13 @@ void Slash::doLoad()
     if (direction != sf::Vector2f(0, 0))
         angle += direction.angle();
 
-    Entity::load({range * 3 / 2, 0.f}, {0.5f, 0.5f}, {0.5f, 0.2f}, {0.5f, -1.f}, {0.f, 0.f}, 7, {
+    sf::Vector2f scaleFactor = {range * 3 / 2, 0.f};
+    sf::Vector2f spriteOriginFactor = {0.5f, 0.5f};
+    sf::Vector2f collisionBoxSizeFactor = {0.5f, 0.2f}; // relative to sprite dimensions
+    sf::Vector2f collisionBoxOriginFactor = {0.5f, -1.f}; // relative to collision box
+    sf::Vector2f collisionBoxPositionFactor = {0.f, 0.f}; // relative to sprite
+    int hitBoxPointCount = 7;
+    std::vector<sf::Vector2f> hitBoxPointFactors = { // relative to sprite dimensions (0,0) is top-left, (1,1) is bottom-right
         {0.5f, 0.f},
         {1.f / 6, 1.f / 6},
         {0.f, 0.5f},
@@ -36,7 +42,10 @@ void Slash::doLoad()
         {1.f, 1.f},
         {1.f, 0.5f},
         {5.f / 6, 1.f / 6}
-    });
+    };
+    ObjectLoadParams params(scaleFactor, spriteOriginFactor, collisionBoxSizeFactor, collisionBoxOriginFactor, collisionBoxPositionFactor);
+
+    Entity::load(params, hitBoxPointCount, hitBoxPointFactors);
 
     bool facingLeft = false;
 

@@ -29,7 +29,7 @@ protected:
 public:
     friend std::ostream &operator<<(std::ostream &, const Entity &);
 
-    void load(const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const sf::Vector2f &, const int &, const std::vector<sf::Vector2f> &);
+    void load(const ObjectLoadParams &, const int &, const std::vector<sf::Vector2f> &);
     int hits(const Entity &) const;
     bool takeDamage(const int &);
 };

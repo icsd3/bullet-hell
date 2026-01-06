@@ -36,7 +36,7 @@ void Level::generateRooms(const int n)
             int nx = x1 + d.first;
             int ny = y1 + d.second;
 
-            if (nx < 0 || ny < 0 || nx >= 5 || ny >= 7)
+            if (nx < 0 || ny < 0 || nx >= MAP_SIZE_Y || ny >= MAP_SIZE_X)
                 continue;
 
             if (map[nx][ny])
@@ -49,7 +49,7 @@ void Level::generateRooms(const int n)
                 int mx = nx + i.first;
                 int my = ny + i.second;
 
-                if (mx < 0 || my < 0 || mx >= 5 || my >= 7)
+                if (mx < 0 || my < 0 || mx >= MAP_SIZE_Y || my >= MAP_SIZE_X)
                     continue;
 
                 if (map[mx][my])
@@ -79,7 +79,7 @@ void Level::generateRooms(const int n)
     rooms.clear();
 
     std::queue<std::pair<int, int>> q;
-    bool visited[5][7] = {{false}};
+    bool visited[MAP_SIZE_Y][MAP_SIZE_X] = {{false}};
 
     q.push({4, 3});
     visited[4][3] = true;
@@ -145,9 +145,9 @@ void Level::load(const int nr)
         
     currentRoom = rooms[0];
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < MAP_SIZE_Y; i++)
     {
-        for (int j = 0; j < 7; j++)
+        for (int j = 0; j < MAP_SIZE_X; j++)
         {
             std::weak_ptr<Room> up;
             std::weak_ptr<Room> down;
@@ -164,7 +164,7 @@ void Level::load(const int nr)
                     size_t upIndex = static_cast<size_t>(map[i - 1][j] - 1);
                     up = rooms.at(upIndex);
                 }
-                if (i + 1 < 5 && map[i + 1][j] > 0)
+                if (i + 1 < MAP_SIZE_Y && map[i + 1][j] > 0)
                 {
                     size_t downIndex = static_cast<size_t>(map[i + 1][j] - 1);
                     down = rooms.at(downIndex);
@@ -174,7 +174,7 @@ void Level::load(const int nr)
                     size_t leftIndex = static_cast<size_t>(map[i][j - 1] - 1);
                     left = rooms.at(leftIndex);
                 }
-                if (j + 1 < 7 && map[i][j + 1] > 0)
+                if (j + 1 < MAP_SIZE_X && map[i][j + 1] > 0)
                 {
                     size_t rightIndex = static_cast<size_t>(map[i][j + 1] - 1);
                     right = rooms.at(rightIndex);
@@ -184,9 +184,9 @@ void Level::load(const int nr)
         }
     }
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < MAP_SIZE_Y; i++)
     {
-        for (int j = 0; j < 7; j++)
+        for (int j = 0; j < MAP_SIZE_X; j++)
         {
             if (i == 4 && j == 3)
                 map[i][j] = 2;

@@ -22,7 +22,7 @@ public:
     ~GUI() = default;
     friend std::ostream &operator<<(std::ostream &, const GUI &);
 
-    void load(const int[5][7], Player &);
+    void load(const int[MAP_SIZE_Y][MAP_SIZE_X], Player &);
     void update(const int &);
     void draw(sf::RenderWindow &);
 };
