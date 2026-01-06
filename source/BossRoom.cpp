@@ -1,10 +1,8 @@
 #include "../headers/BossRoom.h"
 
 BossRoom::BossRoom(Player &player)
-    : Room(player)
+    : EnemyRoom(1, player)
 {
-    obstacleTexture = &ResourceManager::getTexture(TextureType::Obstacle);
-    animationClock.reset();
 }
 
 void BossRoom::doLoad(std::weak_ptr<Room> u, std::weak_ptr<Room> r, std::weak_ptr<Room> d, std::weak_ptr<Room> l)
@@ -56,21 +54,21 @@ void BossRoom::doDraw(sf::RenderWindow &window)
     for (auto &obstacle : obstacles)
         obstacle->draw(window);
 
-    if (boss)
-        boss->draw(window);
+    for (auto &enemy : enemies)
+        enemy->draw(window);
 
     player.draw(window);
 
     for (auto &projectile : playerAttacks)
         projectile->draw(window);
 
-    for (auto &projectile : bossProjectiles)
+    for (auto &projectile : enemyAttacks)
         projectile->draw(window);
 }
 
 std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 {
-    bool finished = !boss;
+    bool finished = enemies.empty();
 
     if (finished)
         animationClock.start();
@@ -79,7 +77,7 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
     for (size_t i = 0; i < playerAttacks.size();)
     {
-        if (checkBossHits(*playerAttacks[i]))
+        if (checkEnemyHits(*playerAttacks[i]))
             playerAttacks.erase(playerAttacks.begin() + i);
 
         else
@@ -91,26 +89,26 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
             if (grid[i][j] == 2)
                 grid[i][j] = 0;
 
-    if (boss)
+    if (!enemies.empty())
     {
-        std::vector<std::unique_ptr<Attack>> attacks = boss->update(dt, player.getPosition(), obstacles, walls, doors, {}, grid);
+        std::vector<std::unique_ptr<Attack>> attacks = enemies.front()->update(dt, player.getPosition(), obstacles, walls, doors, {}, grid);
 
         for (auto &bullet : attacks)
         {
-            bossProjectiles.push_back(std::move(std::move(bullet)));
-            bossProjectiles.back()->load();
+            enemyAttacks.push_back(std::move(std::move(bullet)));
+            enemyAttacks.back()->load();
         }
     }
 
-    for (size_t i = 0; i < bossProjectiles.size();)
+    for (size_t i = 0; i < enemyAttacks.size();)
     {
-        if (bossProjectiles[i]->update(dt))
-            bossProjectiles.erase(bossProjectiles.begin() + i);
+        if (enemyAttacks[i]->update(dt))
+            enemyAttacks.erase(enemyAttacks.begin() + i);
 
         else
         {
-            if (checkPlayerHits(*bossProjectiles[i]) || checkEntityCollisions(*bossProjectiles[i]))
-                bossProjectiles.erase(bossProjectiles.begin() + i);
+            if (checkPlayerHits(*enemyAttacks[i]) || checkEntityCollisions(*enemyAttacks[i]))
+                enemyAttacks.erase(enemyAttacks.begin() + i);
 
             else
                 i++;
@@ -118,32 +116,21 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
     }
 
     if (action.first >= 0)
-        bossProjectiles.clear();
+        enemyAttacks.clear();
 
     return action;
 }
 
-bool BossRoom::checkBossHits(const Attack &attack)
+bool BossRoom::checkEnemyHits(const Attack &attack)
 {
-    if (boss)
+    if (!enemies.empty())
     {
-        if (int damage = attack.hits(*boss))
+        if (int damage = attack.hits(*enemies.front()))
         {
-            if (boss->takeDamage(damage))
-                boss.reset();
+            if (enemies.front()->takeDamage(damage))
+                enemies.clear();
             return true;
         }
-    }
-    return false;
-}
-
-bool BossRoom::checkPlayerHits(const Attack &attack)
-{
-    if (int damage = attack.hits(player))
-    {
-        if (player.takeDamage(damage))
-            std::cout << "game over\n";
-        return true;
     }
     return false;
 }
@@ -161,52 +148,30 @@ void BossRoom::doStart()
         int y = yDist(rng);
 
         grid[x][y] = 2;
-        boss = std::make_unique<Enemy>(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 1000, true);
-        boss->load();
+        enemies.push_back(std::make_unique<Enemy>(sf::Vector2f(180.f + x * 120.f, 180.f + y * 120.f), 100, 1000, true));
+        enemies.front()->load();
     }
-}
-
-int BossRoom::doCheckPlayerCollisions()
-{
-    int collides = Room::doCheckPlayerCollisions();
-
-    for (const auto &obstacle : obstacles)
-        if (player.collidesWith(*obstacle))
-            collides = -2;
-
-    return collides;
-}
-
-bool BossRoom::doCheckEntityCollisions(const Entity &entity)
-{
-    bool collides = Room::doCheckEntityCollisions(entity);
-
-    for (const auto &obstacle : obstacles)
-        if (entity.collidesWith(*obstacle))
-            collides = true;
-
-    return collides;
 }
 
 bool BossRoom::isCleared() const
 {
-    return !boss;
+    return enemies.empty();
 }
 
 void BossRoom::printDetails(std::ostream &os) const
 {
     os << "Boss room:\n";
     Room::printDetails(os);
-    if (boss)
+    if (!enemies.empty())
     {
         os << "    Boss:\n";
-        os << "        " << *boss << "\n\n";
+        os << "        " << *enemies.front() << "\n\n";
     }
     else
         os << "    Boss: defeated\n\n";
     os << "    Boss Projectiles:\n";
-    os << "        Count: " << bossProjectiles.size() << "\n";
-    if (!bossProjectiles.empty())
-        for (size_t i = 0; i < bossProjectiles.size(); i++)
-            os << "        Projectile " << i + 1 << ":\n            " << bossProjectiles[i] << "\n\n";
+    os << "        Count: " << enemyAttacks.size() << "\n";
+    if (!enemyAttacks.empty())
+        for (size_t i = 0; i < enemyAttacks.size(); i++)
+            os << "        Projectile " << i + 1 << ":\n            " << enemyAttacks[i] << "\n\n";
 }
