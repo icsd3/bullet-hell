@@ -21,7 +21,7 @@ protected:
     std::weak_ptr<Room> down;
     std::weak_ptr<Room> left;
     sf::Clock animationClock;
-    bool open = false;
+    bool isOpen = false;
     std::vector<std::unique_ptr<Attack>> playerAttacks;
     int grid[14][7];
 

@@ -137,7 +137,7 @@ std::pair<int, std::weak_ptr<Room>> Room::doUpdate(const float &dt)
 
     if (animationClock.getElapsedTime().asMilliseconds() >= 600)
     {
-        open = true;
+        isOpen = true;
         animationClock.stop();
         animate(4);
     }
@@ -244,7 +244,7 @@ int Room::doCheckPlayerCollisions()
     {
         if (player.collidesWith(*doors[i]))
         {
-            if (open)
+            if (isOpen)
                 return doorDirections[i];
             else
                 return -2;
@@ -279,7 +279,7 @@ bool Room::checkEntityCollisions(const Entity &entity)
 
 void Room::doStart()
 {
-    if (!open)
+    if (!isOpen)
         animationClock.start();
 }
 
@@ -290,7 +290,7 @@ void Room::start()
 
 void Room::printDetails(std::ostream &os) const
 {
-    os << "Room (Open: " << (open ? "Yes" : "No") << ", Neighbors: ";
+    os << "Room (Open: " << (isOpen ? "Yes" : "No") << ", Neighbors: ";
     if (!up.expired())
         os << "Up ";
     if (!right.expired())
@@ -309,7 +309,7 @@ void Room::printDetails(std::ostream &os) const
 
 bool Room::isCleared() const
 {
-    return open;
+    return isOpen;
 }
 
 std::ostream &operator<<(std::ostream &os, const Room &room)

@@ -132,7 +132,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
     const std::pair<sf::Vector2i, float> directions[8] = {
         {{1, 0}, 1.f}, {{-1, 0}, 1.f}, {{0, 1}, 1.f}, {{0, -1}, 1.f}, {{1, 1}, 1.4142f}, {{1, -1}, 1.4142f}, {{-1, 1}, 1.4142f}, {{-1, -1}, 1.4142f}};
 
-    bool closed[7][14] = {{false}};
+    bool closed_set[7][14] = {{false}};
     std::unique_ptr<Node> nodes[7][14];
 
     auto cmp = [](const Node *a, const Node *b)
@@ -140,15 +140,15 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
         return a->g + a->h > b->g + b->h;
     };
 
-    std::priority_queue<Node *, std::vector<Node *>, decltype(cmp)> open(cmp);
+    std::priority_queue<Node *, std::vector<Node *>, decltype(cmp)> open_set(cmp);
 
     nodes[start.y][start.x] = std::make_unique<Node>(Node{start.x, start.y, 0.f, heuristic(start.x, start.y, goal.x, goal.y), nullptr});
-    open.push(nodes[start.y][start.x].get());
+    open_set.push(nodes[start.y][start.x].get());
 
-    while (!open.empty())
+    while (!open_set.empty())
     {
-        Node *current = open.top();
-        open.pop();
+        Node *current = open_set.top();
+        open_set.pop();
 
         if (current->x == goal.x && current->y == goal.y)
         {
@@ -158,14 +158,14 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
             return sf::Vector2f(180.f + step->x * 120.f, 180.f + step->y * 120.f);
         }
 
-        closed[current->y][current->x] = true;
+        closed_set[current->y][current->x] = true;
 
         for (auto &[dir, cost] : directions)
         {
             int nx = current->x + dir.x;
             int ny = current->y + dir.y;
 
-            if (!inBounds(nx, ny) || grid[nx][ny] == 1 || closed[ny][nx])
+            if (!inBounds(nx, ny) || grid[nx][ny] == 1 || closed_set[ny][nx])
                 continue;
 
             if (dir.x != 0 && dir.y != 0)
@@ -178,7 +178,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
             if (!nodes[ny][nx])
             {
                 nodes[ny][nx] = std::make_unique<Node>(Node{nx, ny, newG, heuristic(nx, ny, goal.x, goal.y), current});
-                open.push(nodes[ny][nx].get());
+                open_set.push(nodes[ny][nx].get());
             }
             else if (newG < nodes[ny][nx]->g)
             {

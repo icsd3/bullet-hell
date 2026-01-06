@@ -153,7 +153,7 @@ bool EnemyRoom::checkPlayerHits(const Attack &attack)
 
 void EnemyRoom::doStart()
 {
-    if (!open)
+    if (!isOpen)
     {
         std::mt19937 &rng = Utils::getRng();
 

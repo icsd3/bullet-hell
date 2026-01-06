@@ -137,7 +137,7 @@ bool BossRoom::checkEnemyHits(const Attack &attack)
 
 void BossRoom::doStart()
 {
-    if (!open)
+    if (!isOpen)
     {
         std::mt19937 &rng = Utils::getRng();
 
