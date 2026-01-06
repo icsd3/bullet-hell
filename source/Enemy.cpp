@@ -67,7 +67,7 @@ void Enemy::doDraw(sf::RenderWindow &window) const
     window.draw(drawCurrentHealthBar);
 }
 
-std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const std::vector<std::unique_ptr<Object>> &obstacles, const std::vector<std::unique_ptr<Collider>> &walls, const std::vector<std::unique_ptr<Door>> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[14][7])
+std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Vector2f &playerPosition, const RoomElements &elements, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[14][7])
 {
     sf::Vector2i playerGridPosition(static_cast<int>((playerPosition.x - 120.f) / 120.f), static_cast<int>((playerPosition.y - 120.f) / 120.f));
 
@@ -77,7 +77,7 @@ std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Ve
 
     std::vector<std::unique_ptr<Attack>> attacks;
 
-    if (checkLineOfSight(position, playerPosition, obstacles))
+    if (checkLineOfSight(position, playerPosition, elements.obstacles))
     {
         attacks = weapon->attack(position, playerPosition);
         updateClock.start();
@@ -94,7 +94,7 @@ std::vector<std::unique_ptr<Attack>> Enemy::update(const float &dt, const sf::Ve
         updateClock.reset();
     }
 
-    enemyMove(dt, obstacles, walls, doors, enemies, angle);
+    enemyMove(dt, elements, enemies, angle);
 
     grid[gridPosition.x][gridPosition.y] = 2;
 
@@ -191,7 +191,7 @@ sf::Vector2f Enemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector2i 
     return sf::Vector2f(180.f + start.x * 120.f, 180.f + start.y * 120.f);
 }
 
-void Enemy::enemyMove(const float &dt, const std::vector<std::unique_ptr<Object>> &obstacles, const std::vector<std::unique_ptr<Collider>> &walls, const std::vector<std::unique_ptr<Door>> &doors, const std::vector<std::unique_ptr<Enemy>> &enemies, const sf::Angle &angle)
+void Enemy::enemyMove(const float &dt, const RoomElements &elements, const std::vector<std::unique_ptr<Enemy>> &enemies, const sf::Angle &angle)
 {
     sf::Vector2f separation(0.f, 0.f);
     int neighbors = 0;
@@ -235,13 +235,13 @@ void Enemy::enemyMove(const float &dt, const std::vector<std::unique_ptr<Object>
 
         auto checkCollision = [&]() -> bool
         {
-            for (const auto &wall : walls)
+            for (const auto &wall : elements.walls)
                 if (collidesWith(*wall))
                     return true;
-            for (const auto &door : doors)
+            for (const auto &door : elements.doors)
                 if (collidesWith(*door))
                     return true;
-            for (const auto &obstacle : obstacles)
+            for (const auto &obstacle : elements.obstacles)
                 if (collidesWith(*obstacle))
                     return true;
             for (const auto &enemy : enemies)

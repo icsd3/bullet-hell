@@ -93,7 +93,7 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
 
     for (auto &enemy : enemies)
     {
-        std::vector<std::unique_ptr<Attack>> attacks = enemy->update(dt, player.getPosition(), obstacles, walls, doors, enemies, grid);
+        std::vector<std::unique_ptr<Attack>> attacks = enemy->update(dt, player.getPosition(), RoomElements(obstacles, walls, doors), enemies, grid);
 
         for (auto &bullet : attacks)
         {

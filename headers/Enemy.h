@@ -11,6 +11,21 @@
 #include <queue>
 #include <fstream>
 
+struct RoomElements
+{
+    RoomElements(
+        const std::vector<std::unique_ptr<Object>> &o,
+        const std::vector<std::unique_ptr<Collider>> &w,
+        const std::vector<std::unique_ptr<Door>> &d)
+        : obstacles(o), walls(w), doors(d)
+    {
+    }
+
+    const std::vector<std::unique_ptr<Object>> &obstacles;
+    const std::vector<std::unique_ptr<Collider>> &walls;
+    const std::vector<std::unique_ptr<Door>> &doors;
+};
+
 class Enemy : public Entity
 {
     std::unique_ptr<Weapon> weapon;
@@ -23,7 +38,7 @@ class Enemy : public Entity
     void doDraw(sf::RenderWindow &) const override;
     bool doTakeDamage(const int &) override;
     virtual bool checkLineOfSight(const sf::Vector2f &, const sf::Vector2f &, const std::vector<std::unique_ptr<Object>> &) const;
-    void enemyMove(const float &, const std::vector<std::unique_ptr<Object>> &, const std::vector<std::unique_ptr<Collider>> &, const std::vector<std::unique_ptr<Door>> &, const std::vector<std::unique_ptr<Enemy>> &, const sf::Angle &);
+    void enemyMove(const float &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, const sf::Angle &);
     sf::Vector2f nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int grid[14][7]);
 
 public:
@@ -31,5 +46,5 @@ public:
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
 
     void load();
-    std::vector<std::unique_ptr<Attack>> update(const float &, const sf::Vector2f &, const std::vector<std::unique_ptr<Object>> &, const std::vector<std::unique_ptr<Collider>> &, const std::vector<std::unique_ptr<Door>> &, const std::vector<std::unique_ptr<Enemy>> &, int[14][7]);
+    std::vector<std::unique_ptr<Attack>> update(const float &, const sf::Vector2f &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, int[14][7]);
 };

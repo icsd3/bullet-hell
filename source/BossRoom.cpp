@@ -91,7 +91,7 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
     if (!enemies.empty())
     {
-        std::vector<std::unique_ptr<Attack>> attacks = enemies.front()->update(dt, player.getPosition(), obstacles, walls, doors, {}, grid);
+        std::vector<std::unique_ptr<Attack>> attacks = enemies.front()->update(dt, player.getPosition(), RoomElements(obstacles, walls, doors), enemies, grid);
 
         for (auto &bullet : attacks)
         {
