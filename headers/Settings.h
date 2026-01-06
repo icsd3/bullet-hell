@@ -14,9 +14,11 @@ class Settings
     sf::RectangleShape settingsBox;
     sf::RectangleShape screenButton;
     sf::RectangleShape controlsButton;
+    sf::RectangleShape framerateButton;
 
     sf::Text screenText;
     sf::Text controlsText;
+    sf::Text framerateText;
 
 public:
     static Settings &getInstance();

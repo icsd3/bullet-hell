@@ -28,6 +28,7 @@ class Game
     bool openPauseMenu = false;
     bool fullscreen = true;
     bool controls = true; // true for WASD, false for mouse
+    int currentFramerate = 144;
     sf::Clock updateClock;
     gameStates currentState;
 

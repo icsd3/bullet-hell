@@ -162,6 +162,20 @@ bool Game::handleInputs()
 
                     break;
 
+                case 4:
+                    if (currentFramerate == 60)
+                        currentFramerate = 75;
+                    else if (currentFramerate == 75)
+                        currentFramerate = 90;
+                    else if (currentFramerate == 90)
+                        currentFramerate = 120;
+                    else if (currentFramerate == 120)
+                        currentFramerate = 144;
+                    else
+                        currentFramerate = 60;
+                    window.setFramerateLimit(currentFramerate);
+                    break;
+
                 default:
                     break;
                 }
