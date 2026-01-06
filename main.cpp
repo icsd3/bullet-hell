@@ -13,9 +13,5 @@ int main()
     {
         std::cerr << e.what() << '\n';
     }
-    catch (...)
-    {
-        std::cerr << "Unknown Exception\n";
-    }
     return 0;
 }
