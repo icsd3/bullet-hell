@@ -25,6 +25,7 @@ protected:
     virtual bool checkEnemyHits(const Attack &);
     
     bool checkPlayerHits(const Attack &);
+    void meleeInteraction(const Attack &);
 
 public:
     EnemyRoom(const int, Player &);

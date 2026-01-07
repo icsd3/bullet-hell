@@ -3,12 +3,12 @@
 Player::Player()
     : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, ResourceManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(0)
 {
-    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 0, 0.f, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 0, 0.f, AttackTextureType::Player)); // actual starting weapon
     weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 1, 0.f, AttackTextureType::Player));
     weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 2, 0.f, AttackTextureType::Player));
-    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 3, 0.f, AttackTextureType::Player));
-    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 4, 0.f, AttackTextureType::Player));
-    weapons.emplace_back(std::make_unique<Sword>("json/Swords.json", 0, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 3, 0.f, AttackTextureType::Player)); // testing only
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 4, 0.f, AttackTextureType::Player)); // testing only
+    weapons.emplace_back(std::make_unique<Sword>("json/Swords.json", 0, AttackTextureType::Player)); //actual starting weapon
     weapons.emplace_back(std::make_unique<Laser>("json/Lasers.json", 0, 0.f, AttackTextureType::Player));
     weapons.emplace_back(std::make_unique<Spear>("json/Spears.json", 0, AttackTextureType::Player));
 }
@@ -22,7 +22,7 @@ void Player::load()
     sf::Vector2f collisionBoxPositionFactor = {0.f, 0.5f}; // relative to sprite
     int hitBoxPointCount = 6;
     std::vector<sf::Vector2f> hitBoxPointFactors = { // relative to sprite dimensions (0,0) is top-left, (1,1) is bottom-right
-        {0.3f, 0.f}, 
+        {0.3f, 0.f},
         {0.7f, 0.f}, 
         {1.f, 0.3f}, 
         {1.f, 1.f}, 

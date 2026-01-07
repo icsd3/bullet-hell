@@ -114,8 +114,8 @@ void Room::doDraw(sf::RenderWindow &window)
 
     player.draw(window);
 
-    for (auto &projectile : playerAttacks)
-        projectile->draw(window);
+    for (auto &attack : playerAttacks)
+        attack.first->draw(window);
 }
 
 void Room::draw(sf::RenderWindow &window)
@@ -156,12 +156,12 @@ std::pair<int, std::weak_ptr<Room>> Room::doUpdate(const float &dt)
 
     for (size_t i = 0; i < playerAttacks.size();)
     {
-        if (playerAttacks[i]->update(dt))
+        if (playerAttacks[i].first->update(dt))
             playerAttacks.erase(playerAttacks.begin() + i);
 
         else
         {
-            if (doCheckEntityCollisions(*playerAttacks[i]))
+            if (doCheckEntityCollisions(*playerAttacks[i].first))
                 playerAttacks.erase(playerAttacks.begin() + i);
 
             else
@@ -212,10 +212,13 @@ void Room::spawnPlayerProjectile(const sf::Vector2f &target)
 {
     std::vector<std::unique_ptr<Attack>> attacks = player.attack(target);
 
-    for (auto &bullet : attacks)
+    for (auto &attack : attacks)
     {
-        playerAttacks.push_back(std::move(bullet));
-        playerAttacks.back()->load();
+        if (dynamic_cast<Slash *>(attack.get()) != nullptr || dynamic_cast<Stab *>(attack.get()) != nullptr)
+            playerAttacks.push_back(std::make_pair(std::move(attack), true));
+        else
+            playerAttacks.push_back(std::make_pair(std::move(attack), false));
+        playerAttacks.back().first->load();
     }
 }
 
@@ -304,7 +307,7 @@ void Room::printDetails(std::ostream &os) const
     os << "        Count: " << playerAttacks.size() << "\n";
     if (!playerAttacks.empty())
         for (size_t i = 0; i < playerAttacks.size(); i++)
-            os << "        Projectile " << i + 1 << ":\n            " << playerAttacks[i] << "\n\n";
+            os << "        Projectile " << i + 1 << ":\n            " << playerAttacks[i].first << "\n\n";
 }
 
 bool Room::isCleared() const

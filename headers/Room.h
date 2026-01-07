@@ -22,7 +22,7 @@ protected:
     std::weak_ptr<Room> left;
     sf::Clock animationClock;
     bool isOpen = false;
-    std::vector<std::unique_ptr<Attack>> playerAttacks;
+    std::vector<std::pair<std::unique_ptr<Attack>, bool>> playerAttacks; // bool indicates that the attack is melee for projectile interactions
     int grid[GRID_SIZE_X][GRID_SIZE_Y];
 
     void animate(const unsigned int &);

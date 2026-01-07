@@ -66,8 +66,8 @@ void BossRoom::doDraw(sf::RenderWindow &window)
 
     player.draw(window);
 
-    for (auto &projectile : playerAttacks)
-        projectile->draw(window);
+    for (auto &attack : playerAttacks)
+        attack.first->draw(window);
 
     for (auto &projectile : enemyAttacks)
         projectile->draw(window);
@@ -84,7 +84,10 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
     for (size_t i = 0; i < playerAttacks.size();)
     {
-        if (checkEnemyHits(*playerAttacks[i]))
+        if (playerAttacks[i].second)
+            meleeInteraction(*playerAttacks[i].first);
+            
+        if (checkEnemyHits(*playerAttacks[i].first))
             playerAttacks.erase(playerAttacks.begin() + i);
 
         else

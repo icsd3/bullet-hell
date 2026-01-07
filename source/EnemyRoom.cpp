@@ -68,8 +68,8 @@ void EnemyRoom::doDraw(sf::RenderWindow &window)
 
     player.draw(window);
 
-    for (auto &projectile : playerAttacks)
-        projectile->draw(window);
+    for (auto &attack : playerAttacks)
+        attack.first->draw(window);
 
     for (auto &projectile : enemyAttacks)
         projectile->draw(window);
@@ -86,7 +86,10 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
 
     for (size_t i = 0; i < playerAttacks.size();)
     {
-        if (checkEnemyHits(*playerAttacks[i])  && playerAttacks[i]->takeDamage(1))
+        if (playerAttacks[i].second)
+            meleeInteraction(*playerAttacks[i].first);
+
+        if (checkEnemyHits(*playerAttacks[i].first)  && playerAttacks[i].first->takeDamage(1))
             playerAttacks.erase(playerAttacks.begin() + i);
 
         else
@@ -145,6 +148,21 @@ bool EnemyRoom::checkEnemyHits(const Attack &attack)
             i++;
     }
     return false;
+}
+
+void EnemyRoom::meleeInteraction(const Attack &attack)
+{
+    for (size_t i = 0; i < enemyAttacks.size();)
+    {
+        if (int damage = attack.hits(*enemyAttacks[i]))
+        {
+            if (enemyAttacks[i]->takeDamage(damage))
+                enemyAttacks.erase(enemyAttacks.begin() + i);
+        }
+
+        else
+            i++;
+    }
 }
 
 bool EnemyRoom::checkPlayerHits(const Attack &attack)

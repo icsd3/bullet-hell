@@ -2,9 +2,9 @@
     {
         "name": "Basic Spear",
         "damage": 20,
-        "attack_speed": 1,
+        "attack_speed": 0.75,
         "duration": 0.25,
-        "stab_speed": 200,
-        "range": 100
+        "stab_speed": 300,
+        "range": 200
     }
 ]
