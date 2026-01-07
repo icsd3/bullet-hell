@@ -77,6 +77,14 @@ The core of the game's entity system is built upon an inheritance chain that pro
 
 Weapons are inventory items that generate `Attack`s.
 
+```mermaid
+    flowchart TD
+        A[Weapon] -->B[Gun]
+        A --> C[Laser]
+        A --> D[Sword]
+        A --> E[Spear]
+```
+
     class Weapon (abstract)
     {
         Abstract base class defining attack speed, damage, and the attack() interface.
@@ -105,6 +113,12 @@ Weapons are inventory items that generate `Attack`s.
 ## Room System
 
 The game world is composed of interconnected rooms.
+
+```mermaid
+    flowchart TD
+        A[Room] -->B[EnemyRoom]
+        B --> C[BossRoom]
+```
 
     class Room
     {
