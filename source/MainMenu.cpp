@@ -8,12 +8,6 @@ mainMenu::mainMenu()
 {
 }
 
-mainMenu &mainMenu::getInstance()
-{
-    static mainMenu instance;
-    return instance;
-}
-
 void mainMenu::load()
 {
     backgroundSprite.setScale(sf::Vector2f(

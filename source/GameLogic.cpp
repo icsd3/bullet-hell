@@ -10,12 +10,6 @@ Game::Game()
     setup();
 }
 
-Game &Game::getInstance()
-{
-    static Game instance;
-    return instance;
-}
-
 void Game::setup()
 {
     window.clear(sf::Color::Black);

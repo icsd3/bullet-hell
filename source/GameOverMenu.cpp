@@ -6,12 +6,6 @@ GameOverMenu::GameOverMenu()
 {
 }
 
-GameOverMenu &GameOverMenu::getInstance()
-{
-    static GameOverMenu instance;
-    return instance;
-}
-
 void GameOverMenu::load(bool victory)
 {
     backgroundBox.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.4f * LOGICAL_HEIGHT));

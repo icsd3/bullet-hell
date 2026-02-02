@@ -2,14 +2,14 @@
 
 #include "../headers/Utils.h"
 #include "../headers/ResourceManager.h"
+#include "../headers/Singleton.h"
 
 #include <iostream>
 
-class PauseMenu
+class PauseMenu : public Singleton<PauseMenu>
 {
+    friend PauseMenu& Singleton<PauseMenu>::getInstance();
     PauseMenu();
-    PauseMenu(const PauseMenu &) = delete;
-    PauseMenu &operator=(const PauseMenu &) = delete;
 
     sf::RectangleShape pauseBox;
     sf::Sprite resumeButtonSprite;
@@ -17,9 +17,6 @@ class PauseMenu
     sf::Sprite mainMenuButtonSprite;
 
 public:
-    static PauseMenu &getInstance();
-    ~PauseMenu() = default;
-
     void load();
     void draw(sf::RenderWindow &);
     int handleInput(const sf::RenderWindow &, const sf::Event &);

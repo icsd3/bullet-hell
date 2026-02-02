@@ -2,14 +2,14 @@
 
 #include "../headers/Utils.h"
 #include "../headers/ResourceManager.h"
+#include "../headers/Singleton.h"
 
 #include <iostream>
 
-class Settings
+class Settings : public Singleton<Settings>
 {
+    friend Settings& Singleton<Settings>::getInstance();
     Settings();
-    Settings(const Settings &) = delete;
-    Settings &operator=(const Settings &) = delete;
 
     sf::RectangleShape settingsBox;
     sf::RectangleShape screenButton;
@@ -21,9 +21,6 @@ class Settings
     sf::Text framerateText;
 
 public:
-    static Settings &getInstance();
-    ~Settings() = default;
-
     void load();
     void draw(sf::RenderWindow &);
     int handleInput(const sf::RenderWindow &, const sf::Event &);

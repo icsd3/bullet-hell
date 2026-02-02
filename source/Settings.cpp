@@ -5,12 +5,6 @@ Settings::Settings()
 {
 }
 
-Settings &Settings::getInstance()
-{
-    static Settings instance;
-    return instance;
-}
-
 void Settings::load()
 {
     settingsBox.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.4f * LOGICAL_HEIGHT));

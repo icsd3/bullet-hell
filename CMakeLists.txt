@@ -77,7 +77,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     headers/ResourceManager.h
     source/ResourceManager.cpp
     headers/Exception.h
-    source/Exception.cpp    
+    source/Exception.cpp
+    headers/Singleton.h 
 
     #meniuri si interfete
 

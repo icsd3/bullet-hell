@@ -7,12 +7,6 @@ PauseMenu::PauseMenu()
 {
 }
 
-PauseMenu &PauseMenu::getInstance()
-{
-    static PauseMenu instance;
-    return instance;
-}
-
 void PauseMenu::load()
 {
     pauseBox.setSize(sf::Vector2f(0.3f * LOGICAL_WIDTH, 0.8f * LOGICAL_HEIGHT));

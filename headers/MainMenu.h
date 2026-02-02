@@ -2,14 +2,14 @@
 
 #include "../headers/Utils.h"
 #include "../headers/ResourceManager.h"
+#include "../headers/Singleton.h"
 
 #include <iostream>
 
-class mainMenu
+class mainMenu : public Singleton<mainMenu>
 {
+    friend mainMenu& Singleton<mainMenu>::getInstance();
     mainMenu();
-    mainMenu(const mainMenu &) = delete;
-    mainMenu &operator=(const mainMenu &) = delete;
 
     sf::Sprite backgroundSprite;
     sf::Sprite startButtonSprite;
@@ -17,9 +17,6 @@ class mainMenu
     sf::Sprite exitButtonSprite;
 
 public:
-    static mainMenu &getInstance();
-    ~mainMenu() = default;
-
     void load();
     void draw(sf::RenderWindow &);
     int handleInput(const sf::RenderWindow &, const sf::Event &);

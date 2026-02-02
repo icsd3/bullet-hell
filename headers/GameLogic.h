@@ -5,6 +5,7 @@
 #include "../headers/Settings.h"
 #include "../headers/PauseMenu.h"
 #include "../headers/GameOverMenu.h"
+#include "../headers/Singleton.h"
 
 enum gameStates
 {
@@ -14,11 +15,10 @@ enum gameStates
     victory = 4
 };
 
-class Game
+class Game : public Singleton<Game>
 {
+    friend Game& Singleton<Game>::getInstance();
     Game();
-    Game(const Game &) = delete;
-    Game &operator=(const Game &) = delete;
 
     Settings &settings = Settings::getInstance();
     PauseMenu &pauseMenu = PauseMenu::getInstance();
@@ -53,8 +53,6 @@ class Game
 
 public:
     void Play();
-    static Game &getInstance();
-    ~Game() = default;
 
     friend std::ostream &operator<<(std::ostream &, const Game &);
 };
