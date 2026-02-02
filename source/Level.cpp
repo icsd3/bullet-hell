@@ -99,14 +99,14 @@ void Level::generateRooms(const int n)
         std::shared_ptr<Room> room;
 
         if (rooms.size() == 0)
-            room = std::make_shared<Room>(player);
+            room = RoomFactory::createRoom(RoomType::Start, player);
         else if (rooms.size() < static_cast<size_t>(n - 1))
         {
             std::uniform_int_distribution<int> nrOfEnemiesDist(4, 6);
-            room = std::make_shared<EnemyRoom>(nrOfEnemiesDist(rng), player);
+            room = RoomFactory::createRoom(RoomType::Enemy, player, nrOfEnemiesDist(rng));
         }
         else
-            room = std::make_shared<BossRoom>(player);
+            room = RoomFactory::createRoom(RoomType::Boss, player);
 
         rooms.push_back(room);
 

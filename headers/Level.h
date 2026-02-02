@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../headers/EnemyRoom.h"
-#include "../headers/BossRoom.h"
+#include "../headers/RoomFactory.h"
 #include "../headers/GUI.h"
 #include "../headers/Player.h"
 #include <queue>

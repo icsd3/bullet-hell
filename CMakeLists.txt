@@ -65,65 +65,83 @@ endif()
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
 add_executable(${MAIN_EXECUTABLE_NAME}
+    #main, manager, level, resurse si logica jocului
+
     main.cpp
     headers/GameLogic.h
     source/GameLogic.cpp
+    headers/Level.h
+    source/Level.cpp
+    headers/Utils.h
+    source/Utils.cpp
+    headers/ResourceManager.h
+    source/ResourceManager.cpp
+    headers/Exception.h
+    source/Exception.cpp    
+
+    #meniuri si interfete
+
     headers/MainMenu.h
     source/MainMenu.cpp
+    headers/GUI.h
+    source/GUI.cpp
+    headers/Settings.h
+    source/Settings.cpp
+    headers/Minimap.h
+    source/Minimap.cpp
+    headers/GameOverMenu.h
+    source/GameOverMenu.cpp
+    headers/PauseMenu.h
+    source/PauseMenu.cpp
+
+    #ierarhie obiecte, entitati
+
+    headers/Collider.h
+    source/Collider.cpp
     headers/Object.h
     source/Object.cpp
+    headers/Door.h
+    source/Door.cpp
     headers/Entity.h
     source/Entity.cpp
     headers/Player.h
     source/Player.cpp
-    headers/Weapon.h
-    source/Weapon.cpp
-    headers/GUI.h
-    source/GUI.cpp
-    headers/Projectile.h
-    source/Projectile.cpp
     headers/Enemy.h
     source/Enemy.cpp
-    headers/Settings.h
-    source/Settings.cpp
-    headers/Level.h
-    source/Level.cpp
+
+    headers/Attack.h
+    source/Attack.cpp
+    headers/Projectile.h
+    source/Projectile.cpp
+    headers/Slash.h
+    source/Slash.cpp
+    headers/Beam.h
+    source/Beam.cpp
+    headers/Stab.h
+    source/Stab.cpp
+
+    #camere
+
+
     headers/Room.h
     source/Room.cpp
+    headers/RoomFactory.h
+    source/RoomFactory.cpp
     headers/EnemyRoom.h
     source/EnemyRoom.cpp
     headers/BossRoom.h
     source/BossRoom.cpp
-    headers/Minimap.h
-    source/Minimap.cpp
-    headers/Utils.h
-    source/Utils.cpp
-    headers/Door.h
-    source/Door.cpp
-    headers/Collider.h
-    source/Collider.cpp
+
+    #arme
+
+    headers/Weapon.h
+    source/Weapon.cpp
     headers/Gun.h
     source/Gun.cpp
-    headers/ResourceManager.h
-    source/ResourceManager.cpp
-    headers/Exception.h
-    source/Exception.cpp
-    headers/Attack.h
-    source/Attack.cpp
-    headers/Slash.h
-    source/Slash.cpp
     headers/Sword.h
     source/Sword.cpp
-    headers/Beam.h
-    source/Beam.cpp
-    headers/GameOverMenu.h
-    source/GameOverMenu.cpp
     headers/Laser.h
     source/Laser.cpp
-    headers/PauseMenu.h
-    source/PauseMenu.cpp
-    headers/Stab.h
-    source/Stab.cpp
     headers/Spear.h
     source/Spear.cpp
 )
