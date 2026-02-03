@@ -16,7 +16,8 @@ enum class SoundType
     PickupDrop,
     ClickButton,
     GameOver,
-    Win
+    Win,
+    LevelMusic
 };
 
 enum class TextureType

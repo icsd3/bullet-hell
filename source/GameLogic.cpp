@@ -1,4 +1,5 @@
 #include "../headers/GameLogic.h"
+#include "../headers/SoundManager.h"
 
 Game::Game()
     : currentState(main_menu),
@@ -50,10 +51,15 @@ void Game::handleNewState()
 void Game::togglePause()
 {
     if (Utils::changePaused(1))
+    {
         updateClock.stop();
-
+        SoundManager::pauseMusic();
+    }
     else
+    {
         updateClock.start();
+        SoundManager::resumeMusic();
+    }
 }
 
 void Game::resetGame()
@@ -62,6 +68,7 @@ void Game::resetGame()
     gui = std::make_unique<GUI>();
     level = std::make_unique<Level>(*player, *gui);
     updateClock.restart();
+    SoundManager::stopMusic();
 }
 
 bool Game::handleInputs()

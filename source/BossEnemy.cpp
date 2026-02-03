@@ -1,11 +1,12 @@
 #include "../headers/BossEnemy.h"
 
 BossEnemy::BossEnemy(const sf::Vector2f &pos, float spd, const int &mh)
-    : Enemy(pos, spd, mh, ResourceManager::getTexture(TextureType::Boss)), cannon(nullptr), laser(nullptr), offset(sf::degrees(0.f))
+    : Enemy(pos, spd, mh, ResourceManager::getTexture(TextureType::Boss)),
+      cannon(std::make_unique<Gun>("json/EnemyGuns.json", 4, 0.0f, AttackTextureType::Boss)),
+      laser(std::make_unique<Laser>("json/EnemyLasers.json", 1, 0.0f, AttackTextureType::Boss)), 
+      offset(sf::degrees(0.f))
 {
     weapon = std::make_unique<Gun>("json/EnemyGuns.json", 3, 0.0f, AttackTextureType::Boss);
-    cannon = std::make_unique<Gun>("json/EnemyGuns.json", 4, 0.0f, AttackTextureType::Boss);
-    laser = std::make_unique<Laser>("json/EnemyLasers.json", 1, 0.0f, AttackTextureType::Boss);
 }
 
 void BossEnemy::doLoad()

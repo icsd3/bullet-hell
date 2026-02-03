@@ -366,6 +366,9 @@ void ResourceManager::loadSound(SoundType type)
             if(!winBuffer.loadFromFile("audio/win.wav"))
                 throw AudioLoadException("Failed to load win sound");
             break;
+        case LevelMusic:
+            // Music is handled separately in SoundManager
+            break;
         default:
             throw AudioLoadException("Invalid SoundType");
     }
@@ -395,6 +398,8 @@ sf::SoundBuffer &ResourceManager::getSound(SoundType type)
             return gameOverBuffer;
         case Win:
             return winBuffer;
+        case LevelMusic:
+            throw AudioFetchException("Use SoundManager for music playback");
         default:
             throw AudioFetchException("Invalid SoundType");
     }

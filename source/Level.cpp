@@ -1,4 +1,5 @@
 #include "../headers/Level.h"
+#include "../headers/SoundManager.h"
 
 Level::Level(Player &p, GUI &g)
     : player(p), gui(g), target(sf::Vector2f(LOGICAL_WIDTH / 2.f, LOGICAL_HEIGHT * 0.8f)), map{{0}}
@@ -199,6 +200,8 @@ void Level::load(const int nr)
     player.load();
     gui.load(map, player);
     currentRoom->start();
+    
+    SoundManager::playMusic(SoundType::LevelMusic);
 }
 
 bool Level::handleInput(const sf::Event &event, const bool &controls, const sf::RenderWindow &window)
