@@ -31,5 +31,27 @@
         "bullet_speed": 150,
         "pierce": 1,
         "texture": 2
+    },
+    {
+        "name": "Boss Shotgun",
+        "damage": 5,
+        "bullet_nr": 40,
+        "attack_speed": 0.2,
+        "spread_angle": 360.0,
+        "range": 3000,
+        "bullet_speed": 150,
+        "pierce": 1,
+        "texture": 1
+    },
+    {
+        "name": "Boss Cannon",
+        "damage": 50,
+        "bullet_nr": 1,
+        "attack_speed": 0.5,
+        "spread_angle": 0.0,
+        "range": 3000,
+        "bullet_speed": 200,
+        "pierce": 1,
+        "texture": 3
     }
 ]

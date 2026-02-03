@@ -111,6 +111,12 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Player.cpp
     headers/Enemy.h
     source/Enemy.cpp
+    headers/GunEnemy.h
+    source/GunEnemy.cpp
+    headers/LaserEnemy.h
+    source/LaserEnemy.cpp
+    headers/BossEnemy.h
+    source/BossEnemy.cpp
 
     headers/Attack.h
     source/Attack.cpp

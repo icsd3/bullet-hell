@@ -251,9 +251,17 @@ void EnemyRoom::doStart()
                 {
                     grid[x][y] = 2;
                     
-                    float speed = 100;
+                    float speed = 75;
                     int maxHealth = 100;
-                    enemies.push_back(std::make_unique<Enemy>(sf::Vector2f(BORDER_SIZE + x * GRID_CELL_SIZE, BORDER_SIZE + y * GRID_CELL_SIZE), speed, maxHealth, false));
+                    
+                    std::uniform_int_distribution<int> enemyTypeDist(0, 2);
+                    int enemyType = enemyTypeDist(rng);
+
+                    if (enemyType == 0)
+                        enemies.push_back(std::make_unique<LaserEnemy>(sf::Vector2f(BORDER_SIZE + x * GRID_CELL_SIZE, BORDER_SIZE + y * GRID_CELL_SIZE), speed, maxHealth));
+                    else
+                        enemies.push_back(std::make_unique<GunEnemy>(sf::Vector2f(BORDER_SIZE + x * GRID_CELL_SIZE, BORDER_SIZE + y * GRID_CELL_SIZE), speed, maxHealth));
+                    
                     enemies.back()->load();
                     break;
                 }

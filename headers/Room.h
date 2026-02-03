@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../headers/Enemy.h"
+#include "../headers/GunEnemy.h"
+#include "../headers/LaserEnemy.h"
 #include "../headers/Projectile.h"
 #include "../headers/Player.h"
 #include "../headers/Door.h"

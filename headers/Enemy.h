@@ -28,6 +28,7 @@ struct RoomElements
 
 class Enemy : public Entity
 {
+protected:
     std::unique_ptr<Weapon> weapon;
     sf::RectangleShape maxHealthBar;
     sf::RectangleShape currentHealthBar;
@@ -37,12 +38,14 @@ class Enemy : public Entity
 
     void doDraw(sf::RenderWindow &) const override;
     bool doTakeDamage(const int &) override;
-    virtual bool checkLineOfSight(const sf::Vector2f &, const sf::Vector2f &, const std::vector<std::unique_ptr<Object>> &) const;
+    virtual std::vector<std::unique_ptr<Attack>> doUpdate(const float &, const sf::Vector2f &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, int[GRID_SIZE_X][GRID_SIZE_Y]) = 0;
+    virtual void doLoad();
+    
     void enemyMove(const float &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, const sf::Angle &);
-    sf::Vector2f nextPathPoint(const sf::Vector2i &start, const sf::Vector2i &goal, const int [GRID_SIZE_X][GRID_SIZE_Y]);
 
 public:
-    Enemy(const sf::Vector2f &, float, const int &, const bool &);
+    virtual ~Enemy() = default;
+    Enemy(const sf::Vector2f &, float, const int &, const sf::Texture &);
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
 
     void load();

@@ -120,7 +120,7 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
         else
         {
-            if (checkPlayerHits(*enemyAttacks[i]) || checkEntityCollisions(*enemyAttacks[i]))
+            if ((checkPlayerHits(*enemyAttacks[i]) && enemyAttacks[i]->takeDamage(1)) || checkEntityCollisions(*enemyAttacks[i]))
                 enemyAttacks.erase(enemyAttacks.begin() + i);
 
             else
@@ -174,9 +174,9 @@ void BossRoom::doStart()
 
         grid[x][y] = 2;
         
-        float speed = 100;
-        int maxHealth = 1000;
-        enemies.push_back(std::make_unique<Enemy>(sf::Vector2f(BORDER_SIZE + x * GRID_CELL_SIZE, BORDER_SIZE + y * GRID_CELL_SIZE), speed, maxHealth, true));
+        float speed = 75;
+        int maxHealth = 500;
+        enemies.push_back(std::make_unique<BossEnemy>(sf::Vector2f(BORDER_SIZE + x * GRID_CELL_SIZE, BORDER_SIZE + y * GRID_CELL_SIZE), speed, maxHealth));
         enemies.front()->load();
     }
 }
