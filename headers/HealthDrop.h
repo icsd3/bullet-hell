@@ -8,5 +8,5 @@ class HealthDrop : public Drop
     bool doApplyEffect(Player &) override;
 
 public:
-    HealthDrop(const sf::Vector2f &);
+    explicit HealthDrop(const sf::Vector2f &);
 };

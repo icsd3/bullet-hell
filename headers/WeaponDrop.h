@@ -8,7 +8,7 @@ class WeaponDrop : public Drop
     bool doApplyEffect(Player &) override;
 
 public:
-    WeaponDrop(const sf::Vector2f &);
+    explicit WeaponDrop(const sf::Vector2f &);
     
     void load() override; 
 };
