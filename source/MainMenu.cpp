@@ -86,14 +86,17 @@ int mainMenu::handleInput(const sf::RenderWindow &window, const sf::Event &event
 
             if (startButtonBounds.contains(mousePos))
             {
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 1; // Start game
             }
             else if (settingsButtonBounds.contains(mousePos))
             {
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 2; // Open settings
             }
             else if (exitButtonBounds.contains(mousePos))
             {
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 3; // Exit game
             }
         }

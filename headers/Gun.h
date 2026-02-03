@@ -2,6 +2,7 @@
 
 #include "../headers/Projectile.h"
 #include "../headers/Weapon.h"
+#include "../headers/SoundManager.h"
 
 class Gun : public Weapon
 {

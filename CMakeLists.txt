@@ -76,6 +76,8 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Utils.cpp
     headers/ResourceManager.h
     source/ResourceManager.cpp
+    headers/SoundManager.h
+    source/SoundManager.cpp
     headers/Exception.h
     source/Exception.cpp
     headers/Singleton.h 
@@ -177,7 +179,7 @@ set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
 # target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${SFML_SOURCE_DIR}/include ${nlohmann_json_SOURCE_DIR}/include)
 target_link_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${SFML_BINARY_DIR}/lib)
-target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System Threads::Threads nlohmann_json::nlohmann_json)
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System SFML::Audio Threads::Threads nlohmann_json::nlohmann_json)
 
 if(APPLE)
 elseif(UNIX)
@@ -193,4 +195,4 @@ if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-copy_files(FILES tastatura.txt DIRECTORY textures fonts json COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+copy_files(FILES tastatura.txt DIRECTORY textures fonts json audio COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})

@@ -153,7 +153,10 @@ bool BossRoom::checkEnemyHits(const Attack &attack)
         if (int damage = attack.hits(*enemies.front()))
         {
             if (enemies.front()->takeDamage(damage))
+            {
                 enemies.clear();
+                SoundManager::playSound(SoundType::Win, 75.f);
+            }
             return true;
         }
     }

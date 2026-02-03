@@ -137,6 +137,7 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
                 {
                     screenText.setString("Window Mode: Fullscreen");
                 }
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 1; // Change window mode
             }
             if (controlsButtonBounds.contains(mousePos))
@@ -149,6 +150,7 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
                 {
                     controlsText.setString("Controls: WASD");
                 }
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 2; // Change controls
             }
             if (framerateButtonBounds.contains(mousePos))
@@ -163,6 +165,7 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
                     framerateText.setString("Framerate: 144");
                 else
                     framerateText.setString("Framerate: 60");
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 4; // Change framerate
             }
         }
@@ -172,6 +175,7 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
         const auto *keyboardEvent = event.getIf<sf::Event::KeyPressed>();
         if (keyboardEvent->scancode == sf::Keyboard::Scancode::Escape)
         {
+            SoundManager::playSound(SoundType::ClickButton, 50.f);
             return 3; // Close settings
         }
     }

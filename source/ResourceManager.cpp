@@ -45,6 +45,17 @@ sf::Texture ResourceManager::weaponTexture;
 sf::Font ResourceManager::arial;
 sf::Font ResourceManager::courier;
 
+sf::SoundBuffer ResourceManager::shootBuffer;
+sf::SoundBuffer ResourceManager::meleeBuffer;
+sf::SoundBuffer ResourceManager::hitBuffer;
+sf::SoundBuffer ResourceManager::laserFireBuffer;
+sf::SoundBuffer ResourceManager::pickupDropBuffer;
+sf::SoundBuffer ResourceManager::clickButtonBuffer;
+sf::SoundBuffer ResourceManager::gameOverBuffer;
+sf::SoundBuffer ResourceManager::winBuffer;
+
+
+
 void ResourceManager::loadTexture(TextureType type)
 {
     static std::unordered_set<TextureType> loadedTextures;
@@ -311,5 +322,80 @@ sf::Font &ResourceManager::getFont(FontType type)
             return courier;
         default:
             throw FontFetchException("Invalid FontType");
+    }
+}
+
+void ResourceManager::loadSound(SoundType type)
+{
+    static std::unordered_set<SoundType> loadedSounds;
+    if (loadedSounds.contains(type))
+        return;
+
+    using enum SoundType;
+    switch (type)
+    {
+        case Shoot:
+            if(!shootBuffer.loadFromFile("audio/shoot.wav"))
+                throw AudioLoadException("Failed to load shoot sound");
+            break;
+        case Melee:
+            if(!meleeBuffer.loadFromFile("audio/melee.wav"))
+                throw AudioLoadException("Failed to load melee sound");
+            break;
+        case Hit:
+            if(!hitBuffer.loadFromFile("audio/hit.wav"))
+                throw AudioLoadException("Failed to load hit sound");
+            break;
+        case LaserFire:
+            if(!laserFireBuffer.loadFromFile("audio/laser.wav"))
+                throw AudioLoadException("Failed to load laser fire sound");
+            break;
+        case PickupDrop:
+            if(!pickupDropBuffer.loadFromFile("audio/item_pickup.wav"))
+                throw AudioLoadException("Failed to load pickup drop sound");
+            break;
+        case ClickButton:
+            if(!clickButtonBuffer.loadFromFile("audio/button_click.wav"))
+                throw AudioLoadException("Failed to load click button sound");
+            break;
+        case GameOver:
+            if(!gameOverBuffer.loadFromFile("audio/game_over.wav"))
+                throw AudioLoadException("Failed to load game over sound");
+            break;
+        case Win:
+            if(!winBuffer.loadFromFile("audio/win.wav"))
+                throw AudioLoadException("Failed to load win sound");
+            break;
+        default:
+            throw AudioLoadException("Invalid SoundType");
+    }
+
+    loadedSounds.insert(type);
+}
+
+sf::SoundBuffer &ResourceManager::getSound(SoundType type)
+{
+    loadSound(type);
+    using enum SoundType;
+    switch (type)
+    {
+        case Shoot:
+            return shootBuffer;
+        case Melee:
+            return meleeBuffer;
+        case Hit:
+            return hitBuffer;
+        case LaserFire:
+            return laserFireBuffer;
+        case PickupDrop:
+            return pickupDropBuffer;
+        case ClickButton:
+            return clickButtonBuffer;
+        case GameOver:
+            return gameOverBuffer;
+        case Win:
+            return winBuffer;
+        default:
+            throw AudioFetchException("Invalid SoundType");
     }
 }

@@ -205,7 +205,12 @@ bool EnemyRoom::checkPlayerHits(const Attack &attack)
     if (int damage = attack.hits(player))
     {
         if (player.takeDamage(damage))
+        {
+            SoundManager::playSound(SoundType::GameOver, 75.f);
             std::cout << "game over\n";
+        }
+        else
+            SoundManager::playSound(SoundType::Hit, 50.f);
         return true;
     }
     return false;

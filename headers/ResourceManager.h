@@ -3,8 +3,21 @@
 #include "../headers/Exception.h"
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <unordered_set>
+
+enum class SoundType
+{
+    Shoot,
+    Melee,
+    Hit,
+    LaserFire,
+    PickupDrop,
+    ClickButton,
+    GameOver,
+    Win
+};
 
 enum class TextureType
 {
@@ -97,10 +110,22 @@ class ResourceManager
     static sf::Font arial;
     static sf::Font courier;
 
+    static sf::SoundBuffer shootBuffer;
+    static sf::SoundBuffer meleeBuffer;
+    static sf::SoundBuffer hitBuffer;
+    static sf::SoundBuffer laserFireBuffer;
+    static sf::SoundBuffer pickupDropBuffer;
+    static sf::SoundBuffer clickButtonBuffer;
+    static sf::SoundBuffer gameOverBuffer;
+    static sf::SoundBuffer winBuffer;
+
 public:
     static void loadTexture(TextureType type);
     static sf::Texture &getTexture(TextureType type);
 
     static void loadFont(FontType type);
     static sf::Font &getFont(FontType type);
+
+    static void loadSound(SoundType type);
+    static sf::SoundBuffer &getSound(SoundType type);
 };

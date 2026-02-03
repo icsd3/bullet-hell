@@ -213,3 +213,6 @@ The game world is composed of interconnected rooms.
 - https://en.wikipedia.org/wiki/Hyperplane_separation_theorem
 - https://dyn4j.org/2010/01/sat/
 - https://www.geeksforgeeks.org/cpp/implementation-of-singleton-class-in-cpp/
+- https://freesound.org/people/JoelAudio/sounds/77611/
+- https://freesound.org/people/nfrae/sounds/691824/
+- https://freesound.org/people/MusicLegends/sounds/344312/

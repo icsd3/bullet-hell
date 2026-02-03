@@ -64,6 +64,7 @@ std::vector<std::unique_ptr<Attack>> Sword::doAttack(const sf::Vector2f &positio
     if (weaponClock.getElapsedTime().asSeconds() >= (1 / attackSpeed))
     {
         weaponClock.restart();
+        SoundManager::playSound(SoundType::Melee, 50.f);
 
         sf::Texture *slashTexture = nullptr;
 

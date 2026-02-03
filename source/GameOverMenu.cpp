@@ -82,6 +82,7 @@ int GameOverMenu::handleInput(const sf::RenderWindow &window, const sf::Event &e
 
             if (mainMenuButtonBounds.contains(mousePos))
             {
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 1; // Main Menu
             }
         }

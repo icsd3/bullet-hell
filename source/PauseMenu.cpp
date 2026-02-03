@@ -90,14 +90,17 @@ int PauseMenu::handleInput(const sf::RenderWindow &window, const sf::Event &even
 
             if (resumeButtonBounds.contains(mousePos))
             {
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 1; // Resume
             }
             else if (settingsButtonBounds.contains(mousePos))
             {
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 2; // Settings
             }
             else if (mainMenuButtonBounds.contains(mousePos))
             {
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 3; // Main Menu
             }
         }

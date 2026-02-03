@@ -87,6 +87,10 @@ std::vector<std::unique_ptr<Attack>> Gun::doAttack(const sf::Vector2f &position,
     if (weaponClock.getElapsedTime().asSeconds() >= (1 / attackSpeed))
     {
         weaponClock.restart();
+        
+        if (attackSpeed < 20.f)
+            SoundManager::playSound(SoundType::Shoot, 40.f);
+
         sf::Texture *projectileTexture = nullptr;
 
         if (attackTextureID == AttackTextureType::Player)

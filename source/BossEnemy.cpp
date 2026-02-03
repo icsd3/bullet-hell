@@ -91,10 +91,10 @@ std::vector<std::unique_ptr<Attack>> BossEnemy::doUpdate(const float &dt, const 
         std::vector<sf::Vector2i> validCells;
         const sf::Vector2i directions[4] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
-        for (const auto &dir : directions)
+        for (const auto &dire : directions)
         {
-            int nx = gridPosition.x + dir.x;
-            int ny = gridPosition.y + dir.y;
+            int nx = gridPosition.x + dire.x;
+            int ny = gridPosition.y + dire.y;
 
             if (nx >= 0 && nx < GRID_SIZE_X && ny >= 0 && ny < GRID_SIZE_Y && grid[nx][ny] != 1)
             {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../headers/Drop.h"
+#include "../headers/SoundManager.h"
 
 class HealthDrop : public Drop
 {

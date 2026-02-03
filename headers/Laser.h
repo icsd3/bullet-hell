@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../headers/Weapon.h"
+#include "../headers/SoundManager.h"
 #include "../headers/Beam.h"
 
 class Laser : public Weapon

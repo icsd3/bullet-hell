@@ -61,5 +61,6 @@ void WeaponDrop::load()
 bool WeaponDrop::doApplyEffect(Player &player)
 {
     player.addWeapon(std::move(weapon));
+    SoundManager::playSound(SoundType::PickupDrop, 50.f);
     return true;
 }

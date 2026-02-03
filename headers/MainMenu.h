@@ -3,6 +3,7 @@
 #include "../headers/Utils.h"
 #include "../headers/ResourceManager.h"
 #include "../headers/Singleton.h"
+#include "../headers/SoundManager.h"
 
 #include <iostream>
 

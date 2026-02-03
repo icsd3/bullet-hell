@@ -2,6 +2,7 @@
 
 #include "../headers/Slash.h"
 #include "../headers/Weapon.h"
+#include "../headers/SoundManager.h"
 
 class Sword : public Weapon
 {

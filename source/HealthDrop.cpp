@@ -13,6 +13,7 @@ bool HealthDrop::doApplyEffect(Player &player)
     if (player.getHealthStatus().x < player.getHealthStatus().y)
     {
         player.heal(healAmount);
+        SoundManager::playSound(SoundType::PickupDrop, 50.f);
         return true;
     }
     return false;
