@@ -2,7 +2,7 @@
 
 ## Description
 
-  A game inspired by titles such as Soul Knight and The Binding of Isaac. A top-down, mouse-aimed shooter that takes place in a dungeon with randomly generated rooms, accessible one at a time (free access through a room is unlocked after all enemies are eliminated). The last generated room will contain a Boss that must be defeated in order to win the game. The main point of the game is dodging enemy bullets, with HP being the only limited resource and difficult to recover.
+  A game inspired by titles such as Soul Knight and The Binding of Isaac. A top-down, mouse-aimed shooter that takes place in a dungeon with randomly generated rooms, accessible one at a time (free access through a room is unlocked after all enemies are eliminated). The last generated room will contain a Boss that must be defeated in order to win the game. The main point of the game is dodging enemy bullets, with HP being the only limited resource and difficult to recover. Killing an enemy has a 10% chance to drop 5-15 HP and 10% to drop a completely random weapon.
 
 ## Controls
 
@@ -188,23 +188,6 @@ The game world is composed of interconnected rooms.
 - **`Utils`**: Static helper functions (math, random generation, coordinate mapping) and some constants.
 - **`Settings`, `MainMenu`, `PauseMenu`, `GameOverMenu`**: UI classes handling specific game states.
 
-# TO DO
-
-## Add an actual boss
-
-## Item drops so the weapons make sense
-
-## Tema 3
-
-#### Cerințe
-- [ ] 2 șabloane de proiectare (design patterns)
-- [ ] o clasă șablon cu sens; minim **2 instanțieri**
-  - [ ] preferabil și o funcție șablon (template) cu sens; minim 2 instanțieri
-- [ ] minim 85% din codul propriu să fie C++
-<!-- - [ ] o specializare pe funcție/clasă șablon -->
-- [ ] tag de `git` pe commit cu **toate bifele**: de exemplu `v0.3` sau `v1.0`
-- [ ] code review #3 2 proiecte
-
 # Resources
 <!-- renovate: datasource=github-tags depName=SFML/SFML versioning=loose -->
 - [SFML](https://github.com/SFML/SFML/tree/3.0.2) (Zlib)
@@ -216,3 +199,4 @@ The game world is composed of interconnected rooms.
 - https://freesound.org/people/JoelAudio/sounds/77611/
 - https://freesound.org/people/nfrae/sounds/691824/
 - https://freesound.org/people/MusicLegends/sounds/344312/
+- https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6

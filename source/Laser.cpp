@@ -62,7 +62,7 @@ std::vector<std::unique_ptr<Attack>> Laser::doAttack(const sf::Vector2f &positio
     if (weaponClock.getElapsedTime().asSeconds() >= (1 / attackSpeed))
     {
         weaponClock.restart();
-        SoundManager::playSound(SoundType::LaserFire, 50.f);
+        SoundManager::playSound(SoundType::LaserFire, 40.f);
         sf::Texture *beamTexture = nullptr;
 
         if (attackTextureID == AttackTextureType::Player)

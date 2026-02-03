@@ -13,10 +13,14 @@ class Settings : public Singleton<Settings>
     sf::RectangleShape screenButton;
     sf::RectangleShape controlsButton;
     sf::RectangleShape framerateButton;
+    sf::RectangleShape sfxButton;
+    sf::RectangleShape musicButton;
 
     sf::Text screenText;
     sf::Text controlsText;
     sf::Text framerateText;
+    sf::Text sfxText;
+    sf::Text musicText;
 
 protected:
     Settings();

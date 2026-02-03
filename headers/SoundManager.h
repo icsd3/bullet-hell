@@ -13,12 +13,19 @@ class SoundManager
     
     static sf::Music music;
     static bool musicLoaded;
+    static bool sfxEnabled;
+    static bool musicEnabled;
 
 public:
-    static void playSound(SoundType type, float volume = 100.f);
+    static void playSound(SoundType type, float volume = 50.f);
     
-    static void playMusic(SoundType type, float volume = 100.f);
+    static void playMusic(SoundType type, float volume = 50.f);
     static void pauseMusic();
     static void resumeMusic();
     static void stopMusic();
+    
+    static void setSFXEnabled(bool enabled);
+    static void setMusicEnabled(bool enabled);
+    static bool isSFXEnabled();
+    static bool isMusicEnabled();
 };

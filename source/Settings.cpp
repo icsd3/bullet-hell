@@ -1,13 +1,17 @@
 #include "../headers/Settings.h"
 
 Settings::Settings()
-    : screenText(ResourceManager::getFont(FontType::Courier)), controlsText(ResourceManager::getFont(FontType::Courier)), framerateText(ResourceManager::getFont(FontType::Courier))
+    : screenText(ResourceManager::getFont(FontType::Courier)), 
+      controlsText(ResourceManager::getFont(FontType::Courier)), 
+      framerateText(ResourceManager::getFont(FontType::Courier)),
+      sfxText(ResourceManager::getFont(FontType::Courier)),
+      musicText(ResourceManager::getFont(FontType::Courier))
 {
 }
 
 void Settings::load()
 {
-    settingsBox.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.4f * LOGICAL_HEIGHT));
+    settingsBox.setSize(sf::Vector2f(0.4f * LOGICAL_WIDTH, 0.5f * LOGICAL_HEIGHT));
     settingsBox.setOrigin(sf::Vector2f(0.5f * settingsBox.getLocalBounds().size.x, 0.5f * settingsBox.getLocalBounds().size.y));
     settingsBox.setPosition(sf::Vector2f(0.5f * LOGICAL_WIDTH, 0.5f * LOGICAL_HEIGHT));
     settingsBox.setFillColor(sf::Color(0, 0, 0, 150));
@@ -17,7 +21,7 @@ void Settings::load()
     screenButton.setSize(sf::Vector2f(0.3f * LOGICAL_WIDTH, 0.05f * LOGICAL_HEIGHT));
     screenButton.setOrigin(sf::Vector2f(screenButton.getLocalBounds().position.x + 0.5f * screenButton.getLocalBounds().size.x,
                                         screenButton.getLocalBounds().position.y + 0.5f * screenButton.getLocalBounds().size.y));
-    screenButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y - 100.f));
+    screenButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y - 200.f));
     screenButton.setFillColor(sf::Color::Black);
     screenButton.setOutlineThickness(3.f);
     screenButton.setOutlineColor(sf::Color::White);
@@ -25,7 +29,7 @@ void Settings::load()
     controlsButton.setSize(sf::Vector2f(0.3f * LOGICAL_WIDTH, 0.05f * LOGICAL_HEIGHT));
     controlsButton.setOrigin(sf::Vector2f(controlsButton.getLocalBounds().position.x + 0.5f * controlsButton.getLocalBounds().size.x,
                                           controlsButton.getLocalBounds().position.y + 0.5f * controlsButton.getLocalBounds().size.y));
-    controlsButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y));
+    controlsButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y - 100.f));
     controlsButton.setFillColor(sf::Color::Black);
     controlsButton.setOutlineThickness(3.f);
     controlsButton.setOutlineColor(sf::Color::White);
@@ -33,10 +37,26 @@ void Settings::load()
     framerateButton.setSize(sf::Vector2f(0.3f * LOGICAL_WIDTH, 0.05f * LOGICAL_HEIGHT));
     framerateButton.setOrigin(sf::Vector2f(framerateButton.getLocalBounds().position.x + 0.5f * framerateButton.getLocalBounds().size.x,
                                           framerateButton.getLocalBounds().position.y + 0.5f * framerateButton.getLocalBounds().size.y));
-    framerateButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y + 100.f));
+    framerateButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y));
     framerateButton.setFillColor(sf::Color::Black);
     framerateButton.setOutlineThickness(3.f);
     framerateButton.setOutlineColor(sf::Color::White);
+
+    sfxButton.setSize(sf::Vector2f(0.3f * LOGICAL_WIDTH, 0.05f * LOGICAL_HEIGHT));
+    sfxButton.setOrigin(sf::Vector2f(sfxButton.getLocalBounds().position.x + 0.5f * sfxButton.getLocalBounds().size.x,
+                                     sfxButton.getLocalBounds().position.y + 0.5f * sfxButton.getLocalBounds().size.y));
+    sfxButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y + 100.f));
+    sfxButton.setFillColor(sf::Color::Black);
+    sfxButton.setOutlineThickness(3.f);
+    sfxButton.setOutlineColor(sf::Color::White);
+
+    musicButton.setSize(sf::Vector2f(0.3f * LOGICAL_WIDTH, 0.05f * LOGICAL_HEIGHT));
+    musicButton.setOrigin(sf::Vector2f(musicButton.getLocalBounds().position.x + 0.5f * musicButton.getLocalBounds().size.x,
+                                       musicButton.getLocalBounds().position.y + 0.5f * musicButton.getLocalBounds().size.y));
+    musicButton.setPosition(sf::Vector2f(settingsBox.getPosition().x, settingsBox.getPosition().y + 200.f));
+    musicButton.setFillColor(sf::Color::Black);
+    musicButton.setOutlineThickness(3.f);
+    musicButton.setOutlineColor(sf::Color::White);
 
     screenText.setCharacterSize(30);
     screenText.setFillColor(sf::Color::White);
@@ -58,6 +78,20 @@ void Settings::load()
     framerateText.setOrigin(sf::Vector2f(framerateText.getLocalBounds().position.x + 0.5f * framerateText.getLocalBounds().size.x,
                                         framerateText.getLocalBounds().position.y + 0.5f * framerateText.getLocalBounds().size.y));
     framerateText.setPosition(framerateButton.getPosition());
+
+    sfxText.setCharacterSize(30);
+    sfxText.setFillColor(sf::Color::White);
+    sfxText.setString(SoundManager::isSFXEnabled() ? "SFX: On" : "SFX: Off");
+    sfxText.setOrigin(sf::Vector2f(sfxText.getLocalBounds().position.x + 0.5f * sfxText.getLocalBounds().size.x,
+                                   sfxText.getLocalBounds().position.y + 0.5f * sfxText.getLocalBounds().size.y));
+    sfxText.setPosition(sfxButton.getPosition());
+
+    musicText.setCharacterSize(30);
+    musicText.setFillColor(sf::Color::White);
+    musicText.setString(SoundManager::isMusicEnabled() ? "Music: On" : "Music: Off");
+    musicText.setOrigin(sf::Vector2f(musicText.getLocalBounds().position.x + 0.5f * musicText.getLocalBounds().size.x,
+                                     musicText.getLocalBounds().position.y + 0.5f * musicText.getLocalBounds().size.y));
+    musicText.setPosition(musicButton.getPosition());
 }
 
 void Settings::draw(sf::RenderWindow &window)
@@ -112,6 +146,34 @@ void Settings::draw(sf::RenderWindow &window)
                                             drawFramerateText.getLocalBounds().position.y + 0.5f * drawFramerateText.getLocalBounds().size.y));
     drawFramerateText.setScale(scaleFactor);
     window.draw(drawFramerateText);
+
+    sf::RectangleShape drawSfxButton = sfxButton;
+    drawSfxButton.setPosition(Utils::mapToScreen(sfxButton.getPosition(), window));
+    drawSfxButton.setSize(sf::Vector2f(sfxButton.getSize().x * scaleFactor.x, sfxButton.getSize().y * scaleFactor.y));
+    drawSfxButton.setOrigin(sf::Vector2f(drawSfxButton.getSize().x / 2.f, drawSfxButton.getSize().y / 2.f));
+    drawSfxButton.setOutlineThickness(sfxButton.getOutlineThickness() * scaleFactor.x);
+    window.draw(drawSfxButton);
+
+    sf::RectangleShape drawMusicButton = musicButton;
+    drawMusicButton.setPosition(Utils::mapToScreen(musicButton.getPosition(), window));
+    drawMusicButton.setSize(sf::Vector2f(musicButton.getSize().x * scaleFactor.x, musicButton.getSize().y * scaleFactor.y));
+    drawMusicButton.setOrigin(sf::Vector2f(drawMusicButton.getSize().x / 2.f, drawMusicButton.getSize().y / 2.f));
+    drawMusicButton.setOutlineThickness(musicButton.getOutlineThickness() * scaleFactor.x);
+    window.draw(drawMusicButton);
+
+    sf::Text drawSfxText = sfxText;
+    drawSfxText.setPosition(Utils::mapToScreen(sfxText.getPosition(), window));
+    drawSfxText.setOrigin(sf::Vector2f(drawSfxText.getLocalBounds().position.x + 0.5f * drawSfxText.getLocalBounds().size.x,
+                                       drawSfxText.getLocalBounds().position.y + 0.5f * drawSfxText.getLocalBounds().size.y));
+    drawSfxText.setScale(scaleFactor);
+    window.draw(drawSfxText);
+
+    sf::Text drawMusicText = musicText;
+    drawMusicText.setPosition(Utils::mapToScreen(musicText.getPosition(), window));
+    drawMusicText.setOrigin(sf::Vector2f(drawMusicText.getLocalBounds().position.x + 0.5f * drawMusicText.getLocalBounds().size.x,
+                                         drawMusicText.getLocalBounds().position.y + 0.5f * drawMusicText.getLocalBounds().size.y));
+    drawMusicText.setScale(scaleFactor);
+    window.draw(drawMusicText);
 }
 
 int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event)
@@ -126,6 +188,8 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
             const auto screenButtonBounds = screenButton.getGlobalBounds();
             const auto controlsButtonBounds = controlsButton.getGlobalBounds();
             const auto framerateButtonBounds = framerateButton.getGlobalBounds();
+            const auto sfxButtonBounds = sfxButton.getGlobalBounds();
+            const auto musicButtonBounds = musicButton.getGlobalBounds();
 
             if (screenButtonBounds.contains(mousePos))
             {
@@ -167,6 +231,22 @@ int Settings::handleInput(const sf::RenderWindow &window, const sf::Event &event
                     framerateText.setString("Framerate: 60");
                 SoundManager::playSound(SoundType::ClickButton, 50.f);
                 return 4; // Change framerate
+            }
+            if (sfxButtonBounds.contains(mousePos))
+            {
+                bool sfxEnabled = SoundManager::isSFXEnabled();
+                SoundManager::setSFXEnabled(!sfxEnabled);
+                sfxText.setString(!sfxEnabled ? "SFX: On" : "SFX: Off");
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
+                return 5; // Toggle SFX
+            }
+            if (musicButtonBounds.contains(mousePos))
+            {
+                bool musicEnabled = SoundManager::isMusicEnabled();
+                SoundManager::setMusicEnabled(!musicEnabled);
+                musicText.setString(!musicEnabled ? "Music: On" : "Music: Off");
+                SoundManager::playSound(SoundType::ClickButton, 50.f);
+                return 6; // Toggle Music
             }
         }
     }
