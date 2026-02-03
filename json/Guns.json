@@ -33,17 +33,6 @@
         "texture": 3
     },
     {
-        "name": "op",
-        "damage": 100,
-        "bullet_nr": 1,
-        "attack_speed": 1,
-        "spread_angle": 0,
-        "range": 3000,
-        "bullet_speed": 3000,
-        "pierce": 5,
-        "texture": 3
-    },
-    {
         "name": "beam",
         "damage": 10,
         "bullet_nr": 1,

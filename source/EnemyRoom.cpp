@@ -73,6 +73,9 @@ void EnemyRoom::doDraw(sf::RenderWindow &window)
 
     for (auto &projectile : enemyAttacks)
         projectile->draw(window);
+
+    for (auto &drop : drops)
+        drop->draw(window);
 }
 
 std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
@@ -127,6 +130,18 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
         }
     }
 
+    for (size_t i = 0; i < drops.size();)
+    {
+        if (drops[i]->collidesWith(player) && drops[i]->applyEffect(player))
+        {
+            drops.erase(drops.begin() + i);
+        }
+        else
+        {
+            i++;
+        }
+    }
+
     if (action.first >= 0)
         enemyAttacks.clear();
 
@@ -140,7 +155,27 @@ bool EnemyRoom::checkEnemyHits(const Attack &attack)
         if (int damage = attack.hits(*enemies[i]))
         {
             if (enemies[i]->takeDamage(damage))
+            {
+                std::mt19937 &rng = Utils::getRng();
+                std::uniform_int_distribution<int> dropChance(0, 9);
+                
+                if (dropChance(rng) == 0)
+                {
+                    sf::Vector2f enemyPos = enemies[i]->getPosition();
+                    auto healthDrop = std::make_unique<HealthDrop>(enemyPos);
+                    healthDrop->load();
+                    drops.push_back(std::move(healthDrop));
+                }
+                else if (dropChance(rng) == 1)
+                {
+                    sf::Vector2f enemyPos = enemies[i]->getPosition();
+                    auto weaponDrop = std::make_unique<WeaponDrop>(enemyPos);
+                    weaponDrop->load();
+                    drops.push_back(std::move(weaponDrop));
+                }
+                
                 enemies.erase(enemies.begin() + i);
+            }
             return true;
         }
 

@@ -47,4 +47,5 @@ public:
 
     void load();
     std::vector<std::unique_ptr<Attack>> update(const float &, const sf::Vector2f &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, int[GRID_SIZE_X][GRID_SIZE_Y]);
+    sf::Vector2f getPosition() const;
 };

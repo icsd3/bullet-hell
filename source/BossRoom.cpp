@@ -71,6 +71,9 @@ void BossRoom::doDraw(sf::RenderWindow &window)
 
     for (auto &projectile : enemyAttacks)
         projectile->draw(window);
+
+    for (auto &drop : drops)
+        drop->draw(window);
 }
 
 std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
@@ -122,6 +125,18 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
 
             else
                 i++;
+        }
+    }
+
+    for (size_t i = 0; i < drops.size();)
+    {
+        if (drops[i]->collidesWith(player) && drops[i]->applyEffect(player))
+        {
+            drops.erase(drops.begin() + i);
+        }
+        else
+        {
+            i++;
         }
     }
 

@@ -145,6 +145,15 @@ add_executable(${MAIN_EXECUTABLE_NAME}
     source/Laser.cpp
     headers/Spear.h
     source/Spear.cpp
+
+    #iteme
+
+    headers/Drop.h
+    source/Drop.cpp
+    headers/HealthDrop.h
+    source/HealthDrop.cpp
+    headers/WeaponDrop.h
+    source/WeaponDrop.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )

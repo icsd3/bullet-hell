@@ -39,6 +39,9 @@ sf::Texture ResourceManager::swordTexture;
 sf::Texture ResourceManager::spearTexture;
 sf::Texture ResourceManager::laserTexture;
 
+sf::Texture ResourceManager::heartTexture;
+sf::Texture ResourceManager::weaponTexture;
+
 sf::Font ResourceManager::arial;
 sf::Font ResourceManager::courier;
 
@@ -179,6 +182,14 @@ void ResourceManager::loadTexture(TextureType type)
             if(!laserTexture.loadFromFile("textures/laser.png"))
                 throw TextureLoadException("Failed to load laser texture");
             break;
+        case Heart:
+            if(!heartTexture.loadFromFile("textures/heart.png"))
+                throw TextureLoadException("Failed to load heart texture");
+            break;
+        case Weapon:
+            if(!weaponTexture.loadFromFile("textures/weapon.png"))
+                throw TextureLoadException("Failed to load weapon texture");
+            break;
         default:
             throw TextureLoadException("Invalid TextureType");
     }
@@ -256,6 +267,10 @@ sf::Texture &ResourceManager::getTexture(TextureType type)
             return spearTexture;
         case Laser:
             return laserTexture;
+        case Heart:
+            return heartTexture;
+        case Weapon:
+            return weaponTexture;
         default:
             throw TextureFetchException("Invalid TextureType");
     }

@@ -114,8 +114,14 @@ void Room::doDraw(sf::RenderWindow &window)
 
     player.draw(window);
 
+    for (const auto &drop : drops)
+        drop->draw(window);
+
     for (auto &attack : playerAttacks)
         attack.first->draw(window);
+
+    for (auto &drop : drops)
+        drop->draw(window);
 }
 
 void Room::draw(sf::RenderWindow &window)
@@ -166,6 +172,18 @@ std::pair<int, std::weak_ptr<Room>> Room::doUpdate(const float &dt)
 
             else
                 i++;
+        }
+    }
+
+    for (size_t i = 0; i < drops.size();)
+    {
+        if (drops[i]->collidesWith(player) && drops[i]->applyEffect(player))
+        {
+            drops.erase(drops.begin() + i);
+        }
+        else
+        {
+            i++;
         }
     }
 

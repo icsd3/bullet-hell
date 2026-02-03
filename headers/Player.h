@@ -29,4 +29,6 @@ public:
     void setPosition(const sf::Vector2f &, const sf::Vector2f &);
     void cycleWeapon(bool);
     std::vector<std::unique_ptr<Attack>> attack(const sf::Vector2f &) const;
+    void heal(int amount);
+    void addWeapon(std::unique_ptr<Weapon> weapon);
 };

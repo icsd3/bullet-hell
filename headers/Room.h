@@ -4,6 +4,9 @@
 #include "../headers/Projectile.h"
 #include "../headers/Player.h"
 #include "../headers/Door.h"
+#include "../headers/HealthDrop.h"
+#include "../headers/WeaponDrop.h"
+#include "../headers/ResourceManager.h"
 
 class Room
 {
@@ -23,6 +26,7 @@ protected:
     sf::Clock animationClock;
     bool isOpen = false;
     std::vector<std::pair<std::unique_ptr<Attack>, bool>> playerAttacks; // bool indicates that the attack is melee for projectile interactions
+    std::vector<std::unique_ptr<Drop>> drops;
     int grid[GRID_SIZE_X][GRID_SIZE_Y];
 
     void animate(const unsigned int &);

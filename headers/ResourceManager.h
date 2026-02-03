@@ -39,7 +39,9 @@ enum class TextureType
     Sniper,
     Sword,
     Spear,
-    Laser
+    Laser,
+    Heart,
+    Weapon
 };
 
 enum class FontType
@@ -88,6 +90,9 @@ class ResourceManager
     static sf::Texture swordTexture;
     static sf::Texture spearTexture;
     static sf::Texture laserTexture;
+
+    static sf::Texture heartTexture;
+    static sf::Texture weaponTexture;
 
     static sf::Font arial;
     static sf::Font courier;

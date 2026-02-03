@@ -348,6 +348,11 @@ bool Enemy::checkLineOfSight(const sf::Vector2f &origin, const sf::Vector2f &pla
     return true;
 }
 
+sf::Vector2f Enemy::getPosition() const
+{
+    return position;
+}
+
 std::ostream &operator<<(std::ostream &os, const Enemy &enemy)
 {
     os << static_cast<const Entity &>(enemy);
