@@ -13,5 +13,4 @@ class SoundManager
 
 public:
     static void playSound(SoundType type, float volume = 100.f);
-    static void setMasterVolume(float volume);
 };

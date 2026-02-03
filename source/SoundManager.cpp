@@ -30,14 +30,3 @@ void SoundManager::playSound(SoundType type, float volume)
         throw ConfigurationException("Failed to play sound");
     }
 }
-
-void SoundManager::setMasterVolume(float volume)
-{
-    for (auto& sound : soundPool)
-    {
-        if (sound.getStatus() == sf::SoundSource::Status::Playing)
-        {
-            sound.setVolume(sound.getVolume() * (volume / 100.f));
-        }
-    }
-}

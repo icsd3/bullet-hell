@@ -29,12 +29,12 @@ struct RoomElements
 class Enemy : public Entity
 {
 protected:
-    std::unique_ptr<Weapon> weapon;
     sf::RectangleShape maxHealthBar;
     sf::RectangleShape currentHealthBar;
     sf::Vector2i gridPosition;
     sf::Vector2f target;
     sf::Clock updateClock;
+    std::unique_ptr<Weapon> weapon;
 
     void doDraw(sf::RenderWindow &) const override;
     bool doTakeDamage(const int &) override;
@@ -44,7 +44,6 @@ protected:
     void enemyMove(const float &, const RoomElements &, const std::vector<std::unique_ptr<Enemy>> &, const sf::Angle &);
 
 public:
-    virtual ~Enemy() = default;
     Enemy(const sf::Vector2f &, float, const int &, const sf::Texture &);
     friend std::ostream &operator<<(std::ostream &, const Enemy &);
 

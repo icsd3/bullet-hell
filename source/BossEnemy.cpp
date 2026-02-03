@@ -1,7 +1,7 @@
 #include "../headers/BossEnemy.h"
 
 BossEnemy::BossEnemy(const sf::Vector2f &pos, float spd, const int &mh)
-    : Enemy(pos, spd, mh, ResourceManager::getTexture(TextureType::Boss))
+    : Enemy(pos, spd, mh, ResourceManager::getTexture(TextureType::Boss)), cannon(nullptr), laser(nullptr), offset(sf::degrees(0.f))
 {
     weapon = std::make_unique<Gun>("json/EnemyGuns.json", 3, 0.0f, AttackTextureType::Boss);
     cannon = std::make_unique<Gun>("json/EnemyGuns.json", 4, 0.0f, AttackTextureType::Boss);
@@ -51,8 +51,6 @@ void BossEnemy::doLoad()
     laser->load(position);
     laser->reset();
     updateClock.restart();
-
-    offset = sf::degrees(0.f);
 }
 
 std::vector<std::unique_ptr<Attack>> BossEnemy::doUpdate(const float &dt, const sf::Vector2f &playerPosition, const RoomElements &elements, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[GRID_SIZE_X][GRID_SIZE_Y])
