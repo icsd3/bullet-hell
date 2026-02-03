@@ -31,4 +31,6 @@ public:
     std::vector<std::unique_ptr<Attack>> attack(const sf::Vector2f &) const;
     void heal(int amount);
     void addWeapon(std::unique_ptr<Weapon> weapon);
+    const std::vector<std::unique_ptr<Weapon>>& getWeapons() const;
+    std::string getCurrentWeaponName() const;
 };

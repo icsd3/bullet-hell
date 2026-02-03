@@ -40,4 +40,16 @@ public:
     void reset();
     void update(sf::Vector2f &, const sf::Angle &);
     void draw(sf::RenderWindow &);
+    
+    struct WeaponStats
+    {
+        std::string name;
+        int damage;
+        float attackSpeed;
+        float range;
+        const sf::Texture* texture;
+    };
+
+    WeaponStats getStats() const;
+    std::string getName() const;
 };

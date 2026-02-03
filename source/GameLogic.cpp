@@ -31,6 +31,7 @@ void Game::handleNewState()
         updateClock.restart();
         level->load(1);
         pauseMenu.load();
+        inventory.load();
         break;
 
     case defeat:
@@ -223,6 +224,19 @@ bool Game::handleInputs()
 
             else if ((currentState == combat) && !Utils::changePaused(0))
             {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Tab) && event->is<sf::Event::KeyPressed>())
+                {
+                    const auto* keyEvent = event->getIf<sf::Event::KeyPressed>();
+                    if (keyEvent->scancode == sf::Keyboard::Scancode::Right)
+                    {
+                         inventory.changePage(true, player->getWeapons().size());
+                    }
+                    else if (keyEvent->scancode == sf::Keyboard::Scancode::Left)
+                    {
+                         inventory.changePage(false, player->getWeapons().size());
+                    }
+                }
+
                 if (level->handleInput(*event, controls, window))
                 {
                     togglePause();
@@ -262,7 +276,10 @@ void Game::draw()
     {
         pauseMenu.draw(window);
     }
-
+    if (currentState == combat && !openPauseMenu && sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Tab))
+    {
+        inventory.draw(window, player->getWeapons());
+    }
     if (openSettings)
     {
         settings.draw(window);

@@ -5,7 +5,7 @@ WeaponDrop::WeaponDrop(const sf::Vector2f &pos)
 {
     std::mt19937 &rng = Utils::getRng();
     
-    auto getRandomWeaponIndex = [&rng](const std::string& file_path) -> size_t 
+    auto getRandomWeaponIndex = [&rng](const int& startIdx, const std::string& file_path) -> size_t 
     {
         std::ifstream file(file_path);
         if (!file.is_open())
@@ -15,7 +15,7 @@ WeaponDrop::WeaponDrop(const sf::Vector2f &pos)
         file >> data;
         size_t weaponCount = data.size();
         
-        std::uniform_int_distribution<size_t> weaponDist(0, weaponCount - 1);
+        std::uniform_int_distribution<size_t> weaponDist(startIdx, weaponCount - 1);
         return weaponDist(rng);
     };
     
@@ -28,19 +28,19 @@ WeaponDrop::WeaponDrop(const sf::Vector2f &pos)
     {
     case 0:
         weaponFile = "json/Guns.json";
-        weapon = std::make_unique<Gun>(weaponFile, getRandomWeaponIndex(weaponFile), 0.f, AttackTextureType::Player);
+        weapon = std::make_unique<Gun>(weaponFile, getRandomWeaponIndex(1, weaponFile), 0.f, AttackTextureType::Player);
         break;
     case 1:
         weaponFile = "json/Lasers.json";
-        weapon = std::make_unique<Laser>(weaponFile, getRandomWeaponIndex(weaponFile), 0.f, AttackTextureType::Player);
+        weapon = std::make_unique<Laser>(weaponFile, getRandomWeaponIndex(0, weaponFile), 0.f, AttackTextureType::Player);
         break;
     case 2:
         weaponFile = "json/Spears.json";
-        weapon = std::make_unique<Spear>(weaponFile, getRandomWeaponIndex(weaponFile), AttackTextureType::Player);
+        weapon = std::make_unique<Spear>(weaponFile, getRandomWeaponIndex(0, weaponFile), AttackTextureType::Player);
         break;
     case 3:
         weaponFile = "json/Swords.json";
-        weapon = std::make_unique<Sword>(weaponFile, getRandomWeaponIndex(weaponFile), AttackTextureType::Player);
+        weapon = std::make_unique<Sword>(weaponFile, getRandomWeaponIndex(1, weaponFile), AttackTextureType::Player);
         break;
     default:
         throw ConfigurationException("Invalid weapon type");

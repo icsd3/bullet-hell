@@ -1,7 +1,9 @@
 #include "../headers/GUI.h"
 
 GUI::GUI()
-    : health(ResourceManager::getFont(FontType::Arial)), fps(ResourceManager::getFont(FontType::Arial))
+    : health(ResourceManager::getFont(FontType::Arial)), 
+      weaponName(ResourceManager::getFont(FontType::Arial)),
+      fps(ResourceManager::getFont(FontType::Arial))
 {
 }
 
@@ -32,6 +34,18 @@ void GUI::load(const int map[MAP_SIZE_Y][MAP_SIZE_X], Player &p)
     health.setOutlineThickness(2.f);
     health.setOutlineColor(sf::Color::Black);
 
+    weaponNameBox.setSize(sf::Vector2f(maxHealthBar.getSize().x * 0.5f, maxHealthBar.getSize().y));
+    weaponNameBox.setOrigin(sf::Vector2f(weaponNameBox.getSize().x * 0.5f, weaponNameBox.getSize().y * 0.5f));
+    weaponNameBox.setPosition(sf::Vector2f(maxHealthBar.getPosition().x, maxHealthBar.getPosition().y - maxHealthBar.getSize().y * 0.5f - weaponNameBox.getSize().y * 0.5f));
+    weaponNameBox.setFillColor(sf::Color(0, 0, 0, 150));
+    weaponNameBox.setOutlineThickness(-3.f);
+    weaponNameBox.setOutlineColor(sf::Color::Black);
+    
+    weaponName.setCharacterSize(30);
+    weaponName.setFillColor(sf::Color::White);
+    weaponName.setOutlineThickness(2.f);
+    weaponName.setOutlineColor(sf::Color::Black);
+
     fps.setCharacterSize(20);
     fps.setFillColor(sf::Color::Green);
     fps.setPosition(sf::Vector2f(LOGICAL_WIDTH - 100.f, 10.f));
@@ -47,6 +61,11 @@ void GUI::update(const int &moved)
     health.setString("HP: " + std::to_string(HP.x) + " / " + std::to_string(HP.y));
     health.setOrigin(sf::Vector2f(health.getLocalBounds().position.x + 0.5f * health.getLocalBounds().size.x, health.getLocalBounds().position.y + 0.5f * health.getLocalBounds().size.y));
     health.setPosition(maxHealthBar.getPosition());
+
+    weaponName.setString(player->getCurrentWeaponName());
+    sf::FloatRect wBounds = weaponName.getLocalBounds();
+    weaponName.setOrigin(sf::Vector2f(wBounds.position.x + wBounds.size.x * 0.5f, wBounds.position.y + wBounds.size.y * 0.5f));
+    weaponName.setPosition(weaponNameBox.getPosition());
 
     if (fpsClock.getElapsedTime().asSeconds() >= 1.f)
     {
@@ -85,6 +104,18 @@ void GUI::draw(sf::RenderWindow &window)
     drawHealth.setPosition(Utils::mapToScreen(health.getPosition(), window));
     drawHealth.setScale(scaleFactor);
     window.draw(drawHealth);
+
+    sf::RectangleShape drawWeaponBox = weaponNameBox;
+    drawWeaponBox.setPosition(Utils::mapToScreen(weaponNameBox.getPosition(), window));
+    drawWeaponBox.setSize(sf::Vector2f(weaponNameBox.getSize().x * scaleFactor.x, weaponNameBox.getSize().y * scaleFactor.y));
+    drawWeaponBox.setOrigin(sf::Vector2f(drawWeaponBox.getSize().x * 0.5f, drawWeaponBox.getSize().y * 0.5f));
+    drawWeaponBox.setOutlineThickness(weaponNameBox.getOutlineThickness() * scaleFactor.x);
+    window.draw(drawWeaponBox);
+
+    sf::Text drawWeaponName = weaponName;
+    drawWeaponName.setPosition(Utils::mapToScreen(weaponName.getPosition(), window));
+    drawWeaponName.setScale(scaleFactor);
+    window.draw(drawWeaponName);
 
     sf::Text drawFps = fps;
     drawFps.setPosition(Utils::mapToScreen(fps.getPosition(), window));

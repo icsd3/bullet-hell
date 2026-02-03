@@ -95,3 +95,13 @@ void Weapon::draw(sf::RenderWindow &window)
     drawSprite.scale(scaleFactor);
     window.draw(drawSprite);
 }
+
+Weapon::WeaponStats Weapon::getStats() const
+{
+    return {name, damage, attackSpeed, range, texture};
+}
+
+std::string Weapon::getName() const
+{
+    return name;
+}

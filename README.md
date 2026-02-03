@@ -11,6 +11,7 @@
 - [ ] Exit - Backspace
 - [ ] Start (in menu) - Enter
 - [ ] Pause - Escape
+- [ ] Inventory - Tab (hold) ---> L/R arrow keys to cycle pages if needed
 
 #### Gameplay
 

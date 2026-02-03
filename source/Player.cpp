@@ -155,3 +155,15 @@ void Player::addWeapon(std::unique_ptr<Weapon> weapon)
     weapon->reset();
     weapons.push_back(std::move(weapon));
 }
+
+const std::vector<std::unique_ptr<Weapon>>& Player::getWeapons() const
+{
+    return weapons;
+}
+
+std::string Player::getCurrentWeaponName() const
+{
+    if (weapons.empty()) return "None";
+    if (currentWeapon >= weapons.size()) return "Unknown";
+    return weapons[currentWeapon]->getName();
+}

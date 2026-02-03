@@ -5,7 +5,7 @@
 #include "../headers/Settings.h"
 #include "../headers/PauseMenu.h"
 #include "../headers/GameOverMenu.h"
-#include "../headers/Singleton.h"
+#include "../headers/Inventory.h"
 
 enum gameStates
 {
@@ -20,6 +20,7 @@ class Game : public Singleton<Game>
     Settings &settings = Settings::getInstance();
     PauseMenu &pauseMenu = PauseMenu::getInstance();
     GameOverMenu &gameOverMenu = GameOverMenu::getInstance();
+    Inventory &inventory = Inventory::getInstance();
 
     bool openSettings = false;
     bool openPauseMenu = false;

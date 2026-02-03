@@ -8,6 +8,10 @@ class GUI
     sf::Text health;
     sf::RectangleShape maxHealthBar;
     sf::RectangleShape currentHealthBar;
+    
+    sf::Text weaponName;
+    sf::RectangleShape weaponNameBox;
+
     Player *player = nullptr;
 
     sf::Text fps;
