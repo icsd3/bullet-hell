@@ -10,6 +10,10 @@ enum class RoomType {
 };
 
 class RoomFactory {
+    Player& player;
+
 public:
-    static std::shared_ptr<Room> createRoom(RoomType type, Player& player, int nrOfEnemies = 0);
+    explicit RoomFactory(Player& p);
+    
+    std::shared_ptr<Room> createRoom(RoomType type);
 };

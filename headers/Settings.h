@@ -8,9 +8,6 @@
 
 class Settings : public Singleton<Settings>
 {
-    friend Settings& Singleton<Settings>::getInstance();
-    Settings();
-
     sf::RectangleShape settingsBox;
     sf::RectangleShape screenButton;
     sf::RectangleShape controlsButton;
@@ -19,6 +16,9 @@ class Settings : public Singleton<Settings>
     sf::Text screenText;
     sf::Text controlsText;
     sf::Text framerateText;
+
+protected:
+    Settings();
 
 public:
     void load();

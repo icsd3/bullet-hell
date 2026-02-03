@@ -8,14 +8,14 @@
 
 class mainMenu : public Singleton<mainMenu>
 {
-    friend mainMenu& Singleton<mainMenu>::getInstance();
-    mainMenu();
-
     sf::Sprite backgroundSprite;
     sf::Sprite startButtonSprite;
     sf::Sprite settingsButtonSprite;
     sf::Sprite exitButtonSprite;
 
+protected:
+    mainMenu();
+    
 public:
     void load();
     void draw(sf::RenderWindow &);

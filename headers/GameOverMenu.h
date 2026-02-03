@@ -8,12 +8,12 @@
 
 class GameOverMenu : public Singleton<GameOverMenu>
 {
-    friend GameOverMenu& Singleton<GameOverMenu>::getInstance();
-    GameOverMenu();
-
     sf::RectangleShape backgroundBox;
     sf::Text titleText;
     sf::Sprite mainMenuButtonSprite;
+
+protected:
+    GameOverMenu();
 
 public:
     void load(bool victory);

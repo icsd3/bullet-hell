@@ -7,6 +7,8 @@ Level::Level(Player &p, GUI &g)
 
 void Level::generateRooms(const int n)
 {
+    RoomFactory factory(player);
+
     map[4][3] = 1;
 
     std::vector<std::pair<int, int>> frontier;
@@ -97,16 +99,13 @@ void Level::generateRooms(const int n)
         map[i][j] = rooms.size() + 1;
 
         std::shared_ptr<Room> room;
-
+        
         if (rooms.size() == 0)
-            room = RoomFactory::createRoom(RoomType::Start, player);
+            room = factory.createRoom(RoomType::Start);
         else if (rooms.size() < static_cast<size_t>(n - 1))
-        {
-            std::uniform_int_distribution<int> nrOfEnemiesDist(4, 6);
-            room = RoomFactory::createRoom(RoomType::Enemy, player, nrOfEnemiesDist(rng));
-        }
+            room = factory.createRoom(RoomType::Enemy);
         else
-            room = RoomFactory::createRoom(RoomType::Boss, player);
+            room = factory.createRoom(RoomType::Boss);
 
         rooms.push_back(room);
 

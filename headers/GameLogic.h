@@ -17,9 +17,6 @@ enum gameStates
 
 class Game : public Singleton<Game>
 {
-    friend Game& Singleton<Game>::getInstance();
-    Game();
-
     Settings &settings = Settings::getInstance();
     PauseMenu &pauseMenu = PauseMenu::getInstance();
     GameOverMenu &gameOverMenu = GameOverMenu::getInstance();
@@ -50,6 +47,9 @@ class Game : public Singleton<Game>
 
     void togglePause();
     void resetGame();
+
+protected:
+    Game();
 
 public:
     void Play();

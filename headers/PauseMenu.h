@@ -8,13 +8,13 @@
 
 class PauseMenu : public Singleton<PauseMenu>
 {
-    friend PauseMenu& Singleton<PauseMenu>::getInstance();
-    PauseMenu();
-
     sf::RectangleShape pauseBox;
     sf::Sprite resumeButtonSprite;
     sf::Sprite settingsButtonSprite;
     sf::Sprite mainMenuButtonSprite;
+
+protected:
+    PauseMenu();
 
 public:
     void load();
