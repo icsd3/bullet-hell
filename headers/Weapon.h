@@ -51,5 +51,5 @@ public:
     };
 
     WeaponStats getStats() const;
-    std::string getName() const;
+    const std::string& getName() const;
 };

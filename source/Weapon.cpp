@@ -101,7 +101,7 @@ Weapon::WeaponStats Weapon::getStats() const
     return {name, damage, attackSpeed, range, texture};
 }
 
-std::string Weapon::getName() const
+const std::string& Weapon::getName() const
 {
     return name;
 }
