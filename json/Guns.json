@@ -5,16 +5,49 @@
         "bullet_nr": 1,
         "attack_speed": 1.5,
         "spread_angle": 5.0,
+        "range": 800,
+        "bullet_speed": 900,
+        "pierce": 1,
+        "texture": 0
+    },
+    {
+        "name": "Glock 30",
+        "damage": 25,
+        "bullet_nr": 1,
+        "attack_speed": 1.6,
+        "spread_angle": 4.0,
+        "range": 800,
+        "bullet_speed": 800,
+        "pierce": 1,
+        "texture": 0
+    },
+    {
+        "name": "Desert Eagle",
+        "damage": 40,
+        "bullet_nr": 1,
+        "attack_speed": 0.8,
+        "spread_angle": 2.0,
+        "range": 1200,
+        "bullet_speed": 1200,
+        "pierce": 2,
+        "texture": 0
+    },
+    {
+        "name": "Revolver",
+        "damage": 50,
+        "bullet_nr": 1,
+        "attack_speed": 0.6,
+        "spread_angle": 15.0,
         "range": 1000,
         "bullet_speed": 1000,
-        "pierce": 1,
+        "pierce": 3,
         "texture": 0
     },
     {
         "name": "Basic Shotgun",
         "damage": 10,
-        "bullet_nr": 5,
-        "attack_speed": 1.0,
+        "bullet_nr": 4,
+        "attack_speed": 0.8,
         "spread_angle": 30.0,
         "range": 600,
         "bullet_speed": 600,
@@ -22,8 +55,96 @@
         "texture": 1
     },
     {
+        "name": "Double Barrel",
+        "damage": 10,
+        "bullet_nr": 8,
+        "attack_speed": 0.6,
+        "spread_angle": 50.0,
+        "range": 700,
+        "bullet_speed": 500,
+        "pierce": 1,
+        "texture": 1
+    },
+    {
+        "name": "Hunting Shotgun",
+        "damage": 15,
+        "bullet_nr": 3,
+        "attack_speed": 1.0,
+        "spread_angle": 20.0,
+        "range": 800,
+        "bullet_speed": 700,
+        "pierce": 2,
+        "texture": 1
+    },
+    {
+        "name": "Birdshot",
+        "damage": 5,
+        "bullet_nr": 12,
+        "attack_speed": 0.7,
+        "spread_angle": 60.0,
+        "range": 500,
+        "bullet_speed": 400,
+        "pierce": 1,
+        "texture": 1
+    },
+    {
+        "name": "Basic Rifle",
+        "damage": 10,
+        "bullet_nr": 1,
+        "attack_speed": 3.0,
+        "spread_angle": 5.0,
+        "range": 2000,
+        "bullet_speed": 1000,
+        "pierce": 1,
+        "texture": 2
+    },
+    {
+        "name": "M4A4",
+        "damage": 15,
+        "bullet_nr": 1,
+        "attack_speed": 3.5,
+        "spread_angle": 4.0,
+        "range": 1800,
+        "bullet_speed": 1100,
+        "pierce": 1,
+        "texture": 2
+    },
+    {
+        "name": "AK-47",
+        "damage": 20,
+        "bullet_nr": 1,
+        "attack_speed": 3.0,
+        "spread_angle": 6.0,
+        "range": 2000,
+        "bullet_speed": 1200,
+        "pierce": 2,
+        "texture": 2
+    },
+    {
+        "name": "P90",
+        "damage": 6,
+        "bullet_nr": 1,
+        "attack_speed": 6.0,
+        "spread_angle": 15.0,
+        "range": 1500,
+        "bullet_speed": 1000,
+        "pierce": 1,
+        "texture": 2
+    },
+    {
+        "name": "Negev",
+        "damage": 5,
+        "bullet_nr": 1,
+        "attack_speed": 10.0,
+        "spread_angle": 25.0,
+        "range": 1800,
+        "bullet_speed": 1200,
+        "pierce": 2,
+        "texture": 2
+    },
+    {
         "name": "Basic Sniper",
-        "damage": 40,
+        "damage": 35,
         "bullet_nr": 1,
         "attack_speed": 0.8,
         "spread_angle": 1.0,
@@ -33,14 +154,47 @@
         "texture": 3
     },
     {
-        "name": "beam",
-        "damage": 10,
+        "name": "Scout",
+        "damage": 50,
         "bullet_nr": 1,
-        "attack_speed": 144,
-        "spread_angle": 0,
+        "attack_speed": 0.8,
+        "spread_angle": 0.5,
         "range": 3000,
-        "bullet_speed": 400,
+        "bullet_speed": 1600,
         "pierce": 1,
-        "texture": 2
+        "texture": 3
+    },
+    {
+        "name": "Scar-20",
+        "damage": 40,
+        "bullet_nr": 1,
+        "attack_speed": 1.8,
+        "spread_angle": 10.0,
+        "range": 2500,
+        "bullet_speed": 1200,
+        "pierce": 1,
+        "texture": 3
+    },
+    {
+        "name": "AWP",
+        "damage": 90,
+        "bullet_nr": 1,
+        "attack_speed": 0.5,
+        "spread_angle": 0.2,
+        "range": 3000,
+        "bullet_speed": 2000,
+        "pierce": 2,
+        "texture": 3
+    },
+    {
+        "name": "20mm Anti-Tank",
+        "damage": 120,
+        "bullet_nr": 1,
+        "attack_speed": 0.2,
+        "spread_angle": 0.1,
+        "range": 3000,
+        "bullet_speed": 2500,
+        "pierce": 10,
+        "texture": 3
     }
 ]

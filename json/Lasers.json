@@ -14,5 +14,29 @@
         "charge_up_time": 0.1,
         "duration": 0.1,
         "width": 10
+    },
+    {
+        "name": "Heavy Beam",
+        "damage": 25,
+        "attack_speed": 0.3,
+        "charge_up_time": 0.5,
+        "duration": 0.4,
+        "width": 50
+    },
+    {
+        "name": "The Sun",
+        "damage": 50,
+        "attack_speed": 0.2,
+        "charge_up_time": 1.0,
+        "duration": 0.5,
+        "width": 80
+    },
+    {
+        "name": "RAY OF GOD",
+        "damage": 100,
+        "attack_speed": 0.05,
+        "charge_up_time": 2.0,
+        "duration": 1.0,
+        "width": 100
     }
 ]

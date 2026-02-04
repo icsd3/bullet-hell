@@ -7,7 +7,6 @@
 class Sword : public Weapon
 {
     float duration;
-    float arcAngle;
 
     void printDetails(std::ostream &) const override;
     std::vector<std::unique_ptr<Attack>> doAttack(const sf::Vector2f &, const sf::Vector2f &) override;

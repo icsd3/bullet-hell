@@ -1,7 +1,7 @@
 #include "../headers/Sword.h"
 
 Sword::Sword(const std::string &file_path, const size_t index, AttackTextureType type)
-    : Weapon("", 0, 0, 0, ResourceManager::getTexture(TextureType::Sword), type, 0), duration(0), arcAngle(0) 
+    : Weapon("", 0, 0, 0, ResourceManager::getTexture(TextureType::Sword), type, 0), duration(0)
 {
     std::ifstream file(file_path);
     if (!file.is_open())
@@ -21,7 +21,6 @@ Sword::Sword(const std::string &file_path, const size_t index, AttackTextureType
         damage = w.at("damage").get<int>();
         attackSpeed = w.at("attack_speed").get<float>();
         duration = w.at("duration").get<float>();
-        arcAngle = w.at("arc_angle").get<float>();
         range = w.at("range").get<float>();
     }
     catch (const nlohmann::json::parse_error& e) 
@@ -35,7 +34,7 @@ Sword::Sword(const std::string &file_path, const size_t index, AttackTextureType
 }
 
 Sword::Sword(const Sword &other)
-    : Weapon(other), duration(other.duration), arcAngle(other.arcAngle)
+    : Weapon(other), duration(other.duration)
 {
 }
 
@@ -45,7 +44,6 @@ Sword &Sword::operator=(const Sword &other)
     {
         Weapon::operator=(other);
         duration = other.duration;
-        arcAngle = other.arcAngle;
     }
     return *this;
 }
@@ -53,8 +51,7 @@ Sword &Sword::operator=(const Sword &other)
 void Sword::printDetails(std::ostream &os) const
 {
     Weapon::printDetails(os);
-    os << ", Sword: (Duration: " << duration 
-       << ", Arc Angle: " << arcAngle << ")";
+    os << ", Sword: (Duration: " << duration << ")";
 }
 
 std::vector<std::unique_ptr<Attack>> Sword::doAttack(const sf::Vector2f &position, const sf::Vector2f &target)
@@ -88,7 +85,7 @@ std::vector<std::unique_ptr<Attack>> Sword::doAttack(const sf::Vector2f &positio
 
         sf::Vector2f origin = position + direction * attackOriginOffset;
 
-        attacks.push_back(std::make_unique<Slash>(origin, *slashTexture, damage, direction, range, duration, arcAngle));
+        attacks.push_back(std::make_unique<Slash>(origin, *slashTexture, damage, direction, range, duration));
     }
     
     return attacks;

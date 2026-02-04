@@ -92,7 +92,7 @@ std::pair<int, std::weak_ptr<Room>> EnemyRoom::doUpdate(const float &dt)
         if (playerAttacks[i].second)
             meleeInteraction(*playerAttacks[i].first);
 
-        if (checkEnemyHits(*playerAttacks[i].first)  && playerAttacks[i].first->takeDamage(1))
+        if (checkEnemyHits(*playerAttacks[i].first) && playerAttacks[i].first->takeDamage(1))
             playerAttacks.erase(playerAttacks.begin() + i);
 
         else
@@ -157,7 +157,7 @@ bool EnemyRoom::checkEnemyHits(const Attack &attack)
             if (enemies[i]->takeDamage(damage))
             {
                 std::mt19937 &rng = Utils::getRng();
-                std::uniform_int_distribution<int> dropChance(0, 9);
+                std::uniform_int_distribution<int> dropChance(0, 4); // 0-4, 0 and 1 mean drop (40% chance total)
                 
                 if (dropChance(rng) == 0)
                 {

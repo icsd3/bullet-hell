@@ -1,7 +1,7 @@
 #include "../headers/Stab.h"
 
 Stab::Stab(const sf::Vector2f &pos, sf::Texture &tex, const int &dmg, const sf::Vector2f &dir, const float &rn, const float &dur, const float &spd)
-    : Attack(pos, tex, 0, 10, dmg, dir, rn), duration(dur), stabSpeed(spd)
+    : Attack(pos, tex, 0, 5, dmg, dir, rn), duration(dur), stabSpeed(spd)
 {
 }
 
@@ -30,8 +30,8 @@ void Stab::doLoad()
 
     sf::Vector2f scaleFactor = {range, 0.f};
     sf::Vector2f spriteOriginFactor = {0.5f, 0.5f};
-    sf::Vector2f collisionBoxSizeFactor = {0.f, 0.f}; // relative to sprite dimensions
-    sf::Vector2f collisionBoxOriginFactor = {0.f, 0.f}; // relative to collision box
+    sf::Vector2f collisionBoxSizeFactor = {0.4f, 0.2f}; // relative to sprite dimensions
+    sf::Vector2f collisionBoxOriginFactor = {0.75f, 0.5f}; // relative to collision box
     sf::Vector2f collisionBoxPositionFactor = {0.f, 0.f}; // relative to sprite
     int hitBoxPointCount = 4;
     std::vector<sf::Vector2f> hitBoxPointFactors = { // relative to sprite dimensions (0,0) is top-left, (1,1) is bottom-right

@@ -90,7 +90,7 @@ std::pair<int, std::weak_ptr<Room>> BossRoom::doUpdate(const float &dt)
         if (playerAttacks[i].second)
             meleeInteraction(*playerAttacks[i].first);
             
-        if (checkEnemyHits(*playerAttacks[i].first))
+        if (checkEnemyHits(*playerAttacks[i].first) && playerAttacks[i].first->takeDamage(1))
             playerAttacks.erase(playerAttacks.begin() + i);
 
         else
@@ -178,7 +178,7 @@ void BossRoom::doStart()
         grid[x][y] = 2;
         
         float speed = 75;
-        int maxHealth = 500;
+        int maxHealth = 1000;
         enemies.push_back(std::make_unique<BossEnemy>(sf::Vector2f(BORDER_SIZE + x * GRID_CELL_SIZE, BORDER_SIZE + y * GRID_CELL_SIZE), speed, maxHealth));
         enemies.front()->load();
     }

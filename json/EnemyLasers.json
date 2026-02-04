@@ -10,9 +10,17 @@
     {
         "name": "Boss Laser",
         "damage": 30,
-        "attack_speed": 1.0,
-        "charge_up_time": 0.5,
+        "attack_speed": 1.5,
+        "charge_up_time": 0.75,
         "duration": 0.5,
         "width": 50
+    },
+    {
+        "name": "Boss Laser Anticamp",
+        "damage": 50,
+        "attack_speed": 0.2,
+        "charge_up_time": 1.0,
+        "duration": 0.2,
+        "width": 80
     }
 ]

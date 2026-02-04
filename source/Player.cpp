@@ -3,9 +3,8 @@
 Player::Player()
     : Entity({LOGICAL_WIDTH * 0.5f, LOGICAL_HEIGHT * 0.8f}, ResourceManager::getTexture(TextureType::Player), 400.f, 100), currentWeapon(0)
 {
-    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 0, 0.f, AttackTextureType::Player)); // actual starting weapon
-    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 3, 0.f, AttackTextureType::Player)); // testing only
-    weapons.emplace_back(std::make_unique<Sword>("json/Swords.json", 0, AttackTextureType::Player)); //actual starting weapon
+    weapons.emplace_back(std::make_unique<Gun>("json/Guns.json", 0, 0.f, AttackTextureType::Player));
+    weapons.emplace_back(std::make_unique<Sword>("json/Swords.json", 0, AttackTextureType::Player));
 }
 
 void Player::load()

@@ -21,7 +21,7 @@ std::vector<std::unique_ptr<Attack>> GunEnemy::doUpdate(const float &dt, const s
 
     std::vector<std::unique_ptr<Attack>> attacks;
 
-    if (checkLineOfSight(position, playerPosition, elements.obstacles))
+    if (checkLineOfSight(playerPosition, elements.obstacles))
     {
         attacks = weapon->attack(position, playerPosition);
         
@@ -158,19 +158,19 @@ sf::Vector2f GunEnemy::nextPathPoint(const sf::Vector2i &start, const sf::Vector
     return sf::Vector2f(BORDER_SIZE + start.x * GRID_CELL_SIZE, BORDER_SIZE + start.y * GRID_CELL_SIZE);
 }
 
-bool GunEnemy::checkLineOfSight(const sf::Vector2f &origin, const sf::Vector2f &playerPosition, const std::vector<std::unique_ptr<Object>> &obstacles) const
+bool GunEnemy::checkLineOfSight(const sf::Vector2f &playerPosition, const std::vector<std::unique_ptr<Object>> &obstacles) const
 {
     sf::ConvexShape lineOfSight;
-    sf::Vector2f direction = playerPosition - origin;
+    sf::Vector2f direction = playerPosition - position;
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
     direction /= distance;
     lineOfSight.setPointCount(6);
-    lineOfSight.setPoint(0, origin);
-    lineOfSight.setPoint(1, origin + 5.f * (direction + direction.rotatedBy(sf::degrees(-90.f))));
+    lineOfSight.setPoint(0, position);
+    lineOfSight.setPoint(1, position + 5.f * (direction + direction.rotatedBy(sf::degrees(-90.f))));
     lineOfSight.setPoint(2, playerPosition - 5.f * (direction + direction.rotatedBy(sf::degrees(90.f))));
     lineOfSight.setPoint(3, playerPosition);
     lineOfSight.setPoint(4, playerPosition - 5.f * (direction + direction.rotatedBy(sf::degrees(-90.f))));
-    lineOfSight.setPoint(5, origin + 5.f * (direction + direction.rotatedBy(sf::degrees(90.f))));
+    lineOfSight.setPoint(5, position + 5.f * (direction + direction.rotatedBy(sf::degrees(90.f))));
 
     for (const auto &obstacle : obstacles)
     {

@@ -1,12 +1,12 @@
 #include "../headers/Slash.h"
 
-Slash::Slash(const sf::Vector2f &pos, sf::Texture &tex, const int &dmg, const sf::Vector2f &dir, const float &rn, const float &dur, const float &ang)
-    : Attack(pos, tex, 0, 10, dmg, dir, rn), duration(dur), arcAngle(sf::degrees(ang))
+Slash::Slash(const sf::Vector2f &pos, sf::Texture &tex, const int &dmg, const sf::Vector2f &dir, const float &rn, const float &dur)
+    : Attack(pos, tex, 0, 10, dmg, dir, rn), duration(dur)
 {
 }
 
 Slash::Slash(const Slash &other)
-    : Attack(other), duration(other.duration), arcAngle(other.arcAngle)
+    : Attack(other), duration(other.duration)
 {
 }
 
@@ -16,7 +16,6 @@ Slash &Slash::operator=(const Slash &other)
     {
         Attack::operator=(other);
         duration = other.duration;
-        arcAngle = other.arcAngle;
     }
     return *this;
 }
@@ -30,7 +29,7 @@ void Slash::doLoad()
 
     sf::Vector2f scaleFactor = {range * 3 / 2, 0.f};
     sf::Vector2f spriteOriginFactor = {0.5f, 0.5f};
-    sf::Vector2f collisionBoxSizeFactor = {0.5f, 0.2f}; // relative to sprite dimensions
+    sf::Vector2f collisionBoxSizeFactor = {0.2f, 0.2f}; // relative to sprite dimensions
     sf::Vector2f collisionBoxOriginFactor = {0.5f, -1.f}; // relative to collision box
     sf::Vector2f collisionBoxPositionFactor = {0.f, 0.f}; // relative to sprite
     int hitBoxPointCount = 7;

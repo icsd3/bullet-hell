@@ -3,7 +3,8 @@
 BossEnemy::BossEnemy(const sf::Vector2f &pos, float spd, const int &mh)
     : Enemy(pos, spd, mh, ResourceManager::getTexture(TextureType::Boss)),
       cannon(std::make_unique<Gun>("json/EnemyGuns.json", 4, 0.0f, AttackTextureType::Boss)),
-      laser(std::make_unique<Laser>("json/EnemyLasers.json", 1, 0.0f, AttackTextureType::Boss)), 
+      laser(std::make_unique<Laser>("json/EnemyLasers.json", 1, 0.0f, AttackTextureType::Boss)),
+      antiCampLaser(std::make_unique<Laser>("json/EnemyLasers.json", 2, 0.0f, AttackTextureType::Boss)),
       offset(sf::degrees(0.f))
 {
     weapon = std::make_unique<Gun>("json/EnemyGuns.json", 3, 0.0f, AttackTextureType::Boss);
@@ -52,6 +53,7 @@ void BossEnemy::doLoad()
     laser->load(position);
     laser->reset();
     updateClock.restart();
+    antiCampClock.reset();
 }
 
 std::vector<std::unique_ptr<Attack>> BossEnemy::doUpdate(const float &dt, const sf::Vector2f &playerPosition, const RoomElements &elements, const std::vector<std::unique_ptr<Enemy>> &enemies, int grid[GRID_SIZE_X][GRID_SIZE_Y])
@@ -75,6 +77,22 @@ std::vector<std::unique_ptr<Attack>> BossEnemy::doUpdate(const float &dt, const 
     newAttacks = laser->attack(position, position + offsetVector.rotatedBy(offset));
     std::move(newAttacks.begin(), newAttacks.end(), std::back_inserter(attacks));
 
+    if (!antiCampClock.isRunning() && !checkLineOfSight(playerPosition, elements.obstacles))
+    {
+        antiCampClock.start();
+    }
+    else if (antiCampClock.isRunning() && checkLineOfSight(playerPosition, elements.obstacles))
+    {
+        antiCampClock.reset();
+    }
+
+    if (antiCampClock.getElapsedTime().asSeconds() >= 5.f)
+    {
+        antiCampLaser->update(position, angle);
+        newAttacks = antiCampLaser->attack(position, playerPosition);
+        std::move(newAttacks.begin(), newAttacks.end(), std::back_inserter(attacks));
+    }
+
     if (newAttacks.size() > 0)
     {
         offset += sf::degrees(30.f);
@@ -84,7 +102,7 @@ std::vector<std::unique_ptr<Attack>> BossEnemy::doUpdate(const float &dt, const 
     sf::Vector2f dir = target - position;
     float distToTarget = std::sqrt(dir.x * dir.x + dir.y * dir.y);
 
-    if (distToTarget < 30.0f || updateClock.getElapsedTime().asSeconds() > 5.0f)
+    if (distToTarget < 50.0f || updateClock.getElapsedTime().asSeconds() > 5.0f)
     {
         updateClock.restart();
         std::vector<sf::Vector2i> validCells;
@@ -117,4 +135,26 @@ std::vector<std::unique_ptr<Attack>> BossEnemy::doUpdate(const float &dt, const 
     gridPosition = {gridX, gridY};
 
     return attacks;
+}
+
+bool BossEnemy::checkLineOfSight(const sf::Vector2f &playerPosition, const std::vector<std::unique_ptr<Object>> &obstacles) const
+{
+    sf::ConvexShape lineOfSight;
+    sf::Vector2f direction = playerPosition - position;
+    float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    direction /= distance;
+    lineOfSight.setPointCount(6);
+    lineOfSight.setPoint(0, position);
+    lineOfSight.setPoint(1, position + 20.f * (direction + direction.rotatedBy(sf::degrees(-90.f))));
+    lineOfSight.setPoint(2, playerPosition - 20.f * (direction + direction.rotatedBy(sf::degrees(90.f))));
+    lineOfSight.setPoint(3, playerPosition);
+    lineOfSight.setPoint(4, playerPosition - 20.f * (direction + direction.rotatedBy(sf::degrees(-90.f))));
+    lineOfSight.setPoint(5, position + 20.f * (direction + direction.rotatedBy(sf::degrees(90.f))));
+
+    for (const auto &obstacle : obstacles)
+    {
+        if (obstacle->collidesWith(lineOfSight))
+            return false;
+    }
+    return true;
 }
